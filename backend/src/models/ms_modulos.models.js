@@ -34,13 +34,22 @@ export const getModuloIdM = async (id) => {
 }
 
 
+export const getIdModulosM = async () => {
+    try {
+        const { rows } = await pool.query(`SELECT id FROM ms_modulos ORDER BY id ASC`)
+        return rows;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 export const postModuloM = async (modulo, descripcion, creadopor) => {
     try {
         const { rows } = await pool.query(`
             INSERT INTO ms_modulos 
             (modulo, descripcion, creadopor, fechacreacion, modificadopor, fechamodificacion) 
-            VALUES ($1, $2, $3, CURRENT_TIMESTAMP, null, null) RETURNING *`, 
+            VALUES ($1, $2, $3, CURRENT_TIMESTAMP, null, null) RETURNING *`,
             [modulo, descripcion, creadopor]);
         return rows;
     } catch (error) {

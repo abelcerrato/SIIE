@@ -41,13 +41,13 @@ export const postRolesM = async (rol, estado, descripcion, creadopor) => {
     }
 }
 
-export const putRolesM = async (rol,  estado, descripcion, modificadopor, id) => {
+export const putRolesM = async (rol, estado, descripcion, modificadopor, id) => {
     try {
         const { rows } = await pool.query(`
             UPDATE ms_roles 
             SET 
             rol=$1, estado=$2, descripcion=$3, modificadopor=$4, fechamodificacion=CURRENT_TIMESTAMP 
-            WHERE id=$5 RETURNING *`, [rol,  estado, descripcion, modificadopor, id]);
+            WHERE id=$5 RETURNING *`, [rol, estado, descripcion, modificadopor, id]);
         return rows;
     } catch (error) {
         console.error('Error al actualizar el Rol:', error);

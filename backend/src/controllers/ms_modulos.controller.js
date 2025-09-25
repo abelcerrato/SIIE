@@ -1,5 +1,5 @@
 
-import { getModuloIdM, getModulosM, postModuloM, putModuloM } from "../models/ms_modulos.models.js";
+import { getIdModulosM, getModuloIdM, getModulosM, postModuloM, putModuloM } from "../models/ms_modulos.models.js";
 
 
 export const getModulosC = async (req, res) => {
@@ -31,6 +31,18 @@ export const getModuloIdC = async (req, res) => {
     }
 }
 
+export const getIdModulosC = async (req, res) => {
+    try {
+        const modulos = await getIdModulosM();
+        res.json(modulos)
+    } catch (error) {
+        console.error('Error al obtener modulos:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+}
+
+
+
 
 export const postModuloC = async (req, res) => {
     try {
@@ -56,7 +68,7 @@ export const postModuloC = async (req, res) => {
 export const putModuloC = async (req, res) => {
     try {
         const { id } = req.params;
-        const { modulo, descripcion, modificadopor} = req.body;
+        const { modulo, descripcion, modificadopor } = req.body;
 
         if (!modulo) {
             console.log("Faltan datos en la solicitud");
