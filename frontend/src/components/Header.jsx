@@ -1,22 +1,19 @@
 import React from "react";
-import siieLogo from "../img/SIIE.png"; 
+import { AppBar, Toolbar, Box } from "@mui/material";
+import siieLogo from "../img/SIIE.png";
+
 const Header = () => {
   return (
-    <header
-      style={{
-        background: "#88CFE0",
-        color: "white",
-        //padding: "1rem",
-        textAlign: "center",
-      }}
-    >
-      <img
-        src={siieLogo}
-        alt="siieLogo"
-        style={{ width: "10%", height: "auto" }}
-      />
-
-    </header>
+    <AppBar position="static" sx={{ backgroundColor: "#88CFE0" }}>
+      <Toolbar sx={{ justifyContent: "center" }}>
+        <Box
+          component="img"
+          src={siieLogo}
+          alt="SIIE Logo"
+          sx={{ width: { xs: "20%", sm: "15%", md: "10%" }, height: "auto" }}
+        />
+      </Toolbar>
+    </AppBar>
   );
 };
 

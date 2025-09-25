@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
 
-import Header from "../components/Header";
-import Navbar from "../components/Navbar";
+import Header from "./Header";
+import Navbar from "./Navbar";
 import React from "react";
 
-const Dashboard = ({ children }) => {
+const Layout = ({ children }) => {
   return (
     <Box sx={{ display: "flex", height: "100vh" }}>
       {/* Pasa openDrawer como prop 'open' al AppBarComponent */}
@@ -28,4 +28,4 @@ const Dashboard = ({ children }) => {
   );
 };
 
-export default Dashboard;
+export default Layout;
