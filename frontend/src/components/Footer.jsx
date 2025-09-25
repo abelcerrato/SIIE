@@ -1,19 +1,35 @@
 import React from "react";
+import { Box, Typography, Container, Stack } from "@mui/material";
+import foto from "../img/H_blanca.png";
 
 const Footer = () => {
   return (
-    <footer
-      style={{
-        textAlign: "center",
-        padding: "1rem",
-        backgroundColor: "#88CFE0",
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: "#88CFE0",
+        py: 2,
+        mt: 4,
       }}
     >
-      <p>
-        &copy; {new Date().getFullYear()} Sistema Integrado de Información
-        Educativa SIIE. Todos los derechos reservados.
-      </p>
-    </footer>
+      <Container maxWidth="md">
+        <Stack direction="column" spacing={1} alignItems="center">
+          <Box
+            component="img"
+            src={foto}
+            alt="Logo"
+            sx={{
+              height: 50,
+              objectFit: "contain",
+            }}
+          />
+          <Typography variant="body2" align="center" color="text.primary">
+            © {new Date().getFullYear()} Sistema Integrado de Información
+            Educativa SIIE. Todos los derechos reservados.
+          </Typography>
+        </Stack>
+      </Container>
+    </Box>
   );
 };
 
