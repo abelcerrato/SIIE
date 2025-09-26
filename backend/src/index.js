@@ -5,6 +5,8 @@ import rolesRoutes from './routes/ms_roles.routes.js'
 import modulosRoutes from "./routes/ms_modulos.routes.js"
 import rolesypermisosRoutes from "./routes/ms_rolesypermisos.routes.js"
 
+import seducRoutes from "./routes/seduc.routes.js"
+
 
 import cors from "cors"
 
@@ -21,6 +23,8 @@ app.use(userRoutes)
 app.use(rolesRoutes)
 app.use(modulosRoutes)
 app.use(rolesypermisosRoutes)
+
+app.use(seducRoutes)
 
 
 console.log("DB_USER:", process.env.DB_USER); // Prueba si se está cargando correctamente
