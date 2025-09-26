@@ -60,7 +60,7 @@ const Header = () => {
         {!isMobile && (
           <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
             <NavButton component={NavLink} to="/">
-              INICIO
+              PORTAL SIIE
             </NavButton>
             <NavButton component={NavLink} to="/Dashboard/Seguridad">
               Seguridad
@@ -112,7 +112,7 @@ const Header = () => {
               : {},
           }}
         >
-          {/* Mostrar INICIO en móvil si es necesario */}
+          {/* Mostrar PORTAL SIIE en móvil si es necesario */}
           {isMobile && (
             <>
               <NavButton
@@ -120,7 +120,7 @@ const Header = () => {
                 to="/"
                 sx={{ "&.active::after": { display: "none" } }}
               >
-                INICIO
+                PORTAL SIIE
               </NavButton>
               <NavButton component={NavLink} to="/Seguridad">
                 Seguridad
