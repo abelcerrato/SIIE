@@ -86,7 +86,7 @@ export const getSeduc_nivelesacademicosdepartamentoM = async () => {
     const { rows } = await pool.query(`
              SELECT 
                 "Periodo", "Departamento", 
-                "MatriculaMujerPrebasica", "MatriculaHombrePrebasica", "MatrciulaTotalPrebasica", 
+                "MatriculaMujerPrebasica", "MatriculaHombrePrebasica", "MatrciulaTotalPrebasica" as MatriculaTotalPrebasica, 
                 "MatriculaMujerBasica", "MatriculaHombreBasica", "MatriculaTotalBasica", 
                 "MatriculaMujerMedia", "MatriculaHombreMedia", "MatriculaTotalMedia", 
                 "MatriculaTotalGeneral", 
