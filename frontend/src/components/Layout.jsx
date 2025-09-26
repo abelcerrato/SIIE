@@ -1,28 +1,14 @@
-import { Box, Typography } from "@mui/material";
-
+import { Box } from "@mui/material";
 import Header from "./Header";
-import Navbar from "./Navbar";
 import React from "react";
+import { Outlet } from "react-router-dom";
 
-const Layout = ({ children }) => {
+const Layout = () => {
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
-      {/* Pasa openDrawer como prop 'open' al AppBarComponent */}
-
+    <Box sx={{ display: "flex", height: "100vh", flexDirection: "column" }}>
       <Header />
-      <Navbar />
-      <Box component="main">
-        {children}
-
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          align="center"
-          sx={{ mt: 5, py: 2 }}
-        >
-          {"Copyright © "}
-          Propiedad Intelectual del Estado de Honduras
-        </Typography>
+      <Box sx={{ flex: 1, p: 2, overflow: "auto" }}>
+        <Outlet />  {/* Aquí se van a mostrar las vistas hijas */}
       </Box>
     </Box>
   );

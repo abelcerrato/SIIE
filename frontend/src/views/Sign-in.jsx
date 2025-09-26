@@ -15,11 +15,10 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../Components/UserContext";
+import { useUser } from "../components/UserContext";
 import Swal from "sweetalert2";
-import LogoCONED from "../Components/img/logos_CONED.png";
-import LogoDGDP from "../Components/img/Logo_DGDP.png";
-import { color } from "../Components/color";
+import siieLogo from "../img/Logos.png";
+
 
 const theme = createTheme();
 
@@ -51,13 +50,11 @@ export default function SignIn() {
 
         // Obtener permisos
         const permisosResponse = await axios.get(
-          `${process.env.REACT_APP_API_URL}/permisos/${idrol}`
+          `${process.env.REACT_APP_API_URL}/permiso/${idrol}`
         );
 
         if (permisosResponse.status === 200) {
           const permisos = permisosResponse.data.map((p) => ({
-            idobjeto: p.idobjeto,
-            objeto: p.objeto,
             idmodulo: p.idmodulo,
             consultar: p.consultar,
             insertar: p.insertar,
@@ -74,7 +71,7 @@ export default function SignIn() {
           showConfirmButton: false,
         });
 
-        navigate("/dashboard");
+        navigate("/Dashboard");
       }
     } catch (error) {
       const msg =
@@ -102,22 +99,14 @@ export default function SignIn() {
             onSubmit={handleSubmit}
             sx={{ p: 5, boxShadow: 5, borderRadius: 3, width: "100%" }}
           >
-            <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={6}>
-                <img
-                  src={LogoCONED}
-                  alt="Logo CONED"
-                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <img
-                  src={LogoDGDP}
-                  alt="Logo DGDP"
-                  style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                />
-              </Grid>
-            </Grid>
+
+            <img
+              src={siieLogo}
+              alt="Logo CONED"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+
+
 
             <TextField
               margin="normal"
@@ -154,20 +143,13 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2, backgroundColor: color.primary.azul }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "#88CFE0" }}
             >
               Ingresar
             </Button>
           </Card>
 
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            sx={{ mt: 5 }}
-          >
-            © {new Date().getFullYear()} Propiedad Intelectual del Estado de Honduras
-          </Typography>
+
         </Box>
       </Container>
     </ThemeProvider>

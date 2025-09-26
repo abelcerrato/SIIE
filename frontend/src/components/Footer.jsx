@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, Typography, Container, Stack } from "@mui/material";
 import foto from "../img/H_blanca.png";
+import { useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
   return (
     <Box
       component="footer"
@@ -22,6 +24,7 @@ const Footer = () => {
               height: 50,
               objectFit: "contain",
             }}
+            onClick={() => navigate("/Login")} 
           />
           <Typography variant="body2" align="center" color="text.primary">
             © {new Date().getFullYear()} Sistema Integrado de Información
