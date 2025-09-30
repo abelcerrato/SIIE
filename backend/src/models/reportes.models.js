@@ -1,5 +1,8 @@
 import { pool } from "../db.js";
 
+
+/*_________________________________________________ SEDUC ________________________________________________-*/
+
 export const getSeducM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -241,5 +244,122 @@ export const getAllSeducM = async () => {
     throw error;
   } finally {
     client.release();
+  }
+};
+
+
+
+
+/*_________________________________________________ INFOP ________________________________________________-*/
+
+// Consulta para infop por departamentos y municipios
+export const getInfop_capacitados_por_departamentos_y_municipiosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              anio, departamento, municipio, 
+              horas_impartidas, cursos_finalizados, 
+              matriculados_hombre, matriculados_mujer, matriculados_total, 
+              aprobados_hombre, aprobados_mujer, aprobados_total, 
+              desertores_hombre, desertores_mujer, desertores_total, 
+              reprobados_hombre, reprobados_mujer, reprobados_total
+             FROM infop_capacitados_por_departamentos_y_municipios;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Consulta para infop por modos de formación
+export const getInfop_capacitados_por_modos_de_formacionM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              anio, regionales, 
+              modos_de_formacion, horas_accion_formativa, accion_formativa_inicio, accion_formativa_final, 
+              matriculados_hombre, matriculados_mujer, matriculados_total, 
+              aprobados_hombre, aprobados_mujer, aprobados_total, 
+              desertores_hombre, desertores_mujer, desertores_total, 
+              reprobados_hombre, reprobados_mujer, reprobados_total
+             FROM infop_capacitados_por_modos_de_formacion;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para infop por programas
+export const getInfop_capacitados_por_programasM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              anio, "Programa", 
+              horas_accion_formativa, accion_formativa_inicio, accion_formativa_final, 
+              matriculados_hombre, matriculados_mujer, matriculados_total, 
+              aprobados_hombre, aprobados_mujer, aprobados_total, 
+              desertores_hombre, desertores_mujer, desertores_total
+             FROM infop_capacitados_por_programas;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para infop por regional
+export const getInfop_capacitados_por_regionalM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              anio, nombre, 
+              horas_accion_formativa, accion_formativa_inicio, accion_formativa_final, 
+              matriculados_hombre, matriculados_mujer, matriculados_total, 
+              aprobados_hombre, aprobados_mujer, aprobados_total, 
+              desertores_hombre, desertores_mujer, desertores_total, 
+              reprobados_hombre, reprobados_mujer, reprobados_total
+             FROM infop_capacitados_por_regional;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para infop por sector economico
+export const getInfop_capacitados_por_sector_economicoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              anio, regionales, sector, 
+              horas_accion_formativa, accion_formativa_inicio, accion_formativa_final, 
+              matriculados_hombre, matriculados_mujer, matriculados_total, 
+              aprobados_hombre, aprobados_mujer, aprobados_total, 
+              desertores_hombre, desertores_mujer, desertores_total, 
+              reprobados_hombre, reprobados_mujer, reprobados_total
+             FROM infop_capacitados_por_sector_economico;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para regiones de infop
+export const getInfop_regionesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "REGION", "DEPARTAMENTO"
+             FROM infop_regiones;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
   }
 };
