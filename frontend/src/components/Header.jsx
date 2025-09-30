@@ -1,7 +1,7 @@
 import React from "react";
 
 import siieLogo from "../img/SIIE.png";
-import conedLogo from "../img/logos-CONED.png";
+import conedLogo from "../img/LOGOCONED_Blanco.png";
 
 import { NavLink } from "react-router-dom";
 import {
@@ -128,7 +128,7 @@ const Header = () => {
 
             </>
           )}
-          <NavButton component={NavLink} to="/SEDUC">
+          <NavButton component={NavLink} to="/Dashboard/Descargas/SEDU">
             SEDUC
           </NavButton>
           <NavButton component={NavLink} to="/INFOP">

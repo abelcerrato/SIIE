@@ -14,6 +14,8 @@ import Layout from "./components/Layout";
 import TablaSeguridad from "./views/Seguridad/Permisos/TablaPermisos";
 import CrearRolyPermisos from "./views/Seguridad/Permisos/RolyPermisos";
 import ModificarRolyPermisos from "./views/Seguridad/Permisos/ModificarRolyPermisos";
+
+import SEDUCD from "./views/Descargas/SEDUC-D";
 import "./App.css";
 
 function App() {
@@ -57,6 +59,7 @@ function App() {
             path="Seguridad/ModificarRolyPermisos/:id"
             element={<ModificarRolyPermisos />}
           />
+          <Route path="Descargas/SEDU" element={<SEDUCD />} />
         </Route>
       </Routes>
 
