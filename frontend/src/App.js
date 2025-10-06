@@ -6,16 +6,15 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import INFOPTABLERO from "./views/Tableros/INFOP";
 import SEDUC from "./views/Tableros/SEDUC";
 import AcercaDe from "./views/AcercaDe";
+import SEDUCD from "./views/Descargas/SEDUC-D";
 import CONEANFOTABLERO from "./views/Tableros/CONEANFO";
 import DESUNAH from "./views/Tableros/DesUnah";
 import INICIO from "./views/Tableros/Inicio";
 import Login from "./views/Sign-in";
 import Layout from "./components/Layout";
 import TablaSeguridad from "./views/Seguridad/Permisos/TablaPermisos";
-import CrearRolyPermisos from "./views/Seguridad/Permisos/RolyPermisos";
-import ModificarRolyPermisos from "./views/Seguridad/Permisos/ModificarRolyPermisos";
+import Usuarios from "./views/Seguridad/Usuarios/TablaUsuarios";
 
-import SEDUCD from "./views/Descargas/SEDUC-D";
 import "./App.css";
 
 function App() {
@@ -50,15 +49,8 @@ function App() {
 
         {/* Rutas con Layout interno (Dashboard) */}
         <Route path="/Dashboard" element={<Layout />}>
-          <Route path="Seguridad" element={<TablaSeguridad />} />
-          <Route
-            path="Seguridad/CrearRolyPermisos"
-            element={<CrearRolyPermisos />}
-          />
-          <Route
-            path="Seguridad/ModificarRolyPermisos/:id"
-            element={<ModificarRolyPermisos />}
-          />
+          <Route path="Administracion/Usuarios" element={<Usuarios />} />
+          <Route path="Administracion/RolesyPermisos" element={<TablaSeguridad />}/>
           <Route path="Descargas/SEDU" element={<SEDUCD />} />
         </Route>
       </Routes>

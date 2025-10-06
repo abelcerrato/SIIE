@@ -1,35 +1,27 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TextField,
   Button,
   Grid,
-  Paper,
-  Typography,
+  FormControl,
+  InputLabel,
   Select,
   MenuItem,
-  FormControl,
-  Box,
-  InputLabel,
-  RadioGroup,
-  FormControlLabel,
-  Tab,
-  Tabs,
-  FormHelperText,
+  Box
 } from "@mui/material";
-
-import { color } from "../../Components/color";
 import SaveIcon from "@mui/icons-material/Save";
-import { useNavigate, useLocation } from "react-router-dom";
-import Dashboard from "../../Dashboard/Dashboard";
-import { useUser } from "../../Components/UserContext";
-
+import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 import Swal from "sweetalert2";
+import { useUser } from "../../../components/UserContext";
 
-const Usuario = () => {
+export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
   const { user } = useUser();
   const [roles, setRoles] = useState([]);
-  const [fieldErrors, setFieldErrors] = useState({});
   const [formData, setFormData] = useState({
     nombre: "",
     usuario: "",
@@ -40,187 +32,145 @@ const Usuario = () => {
     creadopor: user.id,
   });
 
-  const navigate = useNavigate();
-  const handleRedirect = () => {
-    navigate("/Seguridad/Usuarios");
-  };
-
-  // Manejar cambios en campos de texto y selects
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    const sanitizedValue = value === null ? "" : value;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: sanitizedValue,
-    }));
-  };
-
+  // Obtener roles
   useEffect(() => {
-    const obtenerRoles = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/roles`
-        );
-        setRoles(response.data);
-      } catch (error) {
-        console.error("Error al obtener los roles", error);
-      }
-    };
-    obtenerRoles();
+    axios.get(`${process.env.REACT_APP_API_URL}/roles`).then((res) => setRoles(res.data));
   }, []);
 
-  const handleSave = async () => {
-    const requiredFields = ["nombre", "usuario", "idrol", "contraseña"];
-    const newErrors = {};
-
-    requiredFields.forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = "Este campo es obligatorio";
-      }
-    });
-
-    if (Object.keys(newErrors).length > 0) {
-      setFieldErrors(newErrors);
-      Swal.fire({
-        title: "Campos obligatorios",
-        text: "Por favor complete todos los campos",
-        icon: "warning",
-        confirmButtonColor: color.primary.rojo,
+  // Si es edición, traer datos del usuario
+  useEffect(() => {
+    if (usuarioId) {
+      axios.get(`${process.env.REACT_APP_API_URL}/usuario/${usuarioId}`)
+        .then((res) => setFormData(res.data))
+        .catch((err) => console.error("Error al obtener usuario:", err));
+    } else {
+      // resetear para creación
+      setFormData({
+        nombre: "",
+        usuario: "",
+        correo: "",
+        contraseña: "",
+        idrol: "",
+        estado: "Nuevo",
+        creadopor: user.id,
       });
-      return;
     }
+  }, [usuarioId]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API_URL}/insertarUsuarios`,
-        formData,
-        { headers: { "Content-Type": "application/json" } }
-      );
-
-      await Swal.fire({
-        title: "¡Registro!",
-        text: "El usuario ha sido registrado correctamente.",
-        icon: "success",
-        confirmButtonColor: "#88CFE0",
-      });
-      handleRedirect();
-    } catch (error) {
-      console.error("Error al guardar los datos", error);
-      Swal.fire("¡Error!", "Error al guardar datos", "error");
+      if (usuarioId) {
+        // Editar
+        await axios.put(`${process.env.REACT_APP_API_URL}/usuario/${usuarioId}`, formData);
+        Swal.fire("¡Actualizado!", "Usuario actualizado correctamente.", "success");
+      } else {
+        // Crear
+        await axios.post(`${process.env.REACT_APP_API_URL}/usuario`, formData);
+        Swal.fire("¡Creado!", "Usuario creado correctamente.", "success");
+      }
+      onSaved(); // refresca tabla y cierra modal
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Ocurrió un error al guardar", "error");
     }
   };
 
   return (
-    <>
-      <Dashboard>
-        <Paper sx={{ padding: 3, marginBottom: 3 }}>
-          <Grid container spacing={2} alignItems="center" sx={{ mb: 5 }}>
-            <Grid size={{ xs: 12, md: 8 }}>
-              <Typography
-                variant="h4"
-                sx={{ fontWeight: "bold", color: "#88CFE0" }}
-              >
-                Registro de Usuarios
-              </Typography>
-            </Grid>
-            <Grid
-              size={{ xs: 12, md: 4 }}
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button
-                variant="outlined"
-                sx={{
-                  borderColor: color.primary.rojo,
-                  color: color.primary.rojo,
-                }}
-                onClick={() => handleRedirect()}
-              >
-                Cerrar
-              </Button>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ marginTop: 2 }}>
-            <Grid item xs={12} size={6}>
-              <TextField
-                label="Nombres"
-                name="nombre"
-                value={formData.nombre || ""}
-                onChange={handleChange}
-                fullWidth
-                error={!!fieldErrors.nombre}
-                helperText={fieldErrors.nombre}
-              />
-            </Grid>
-            <Grid item xs={12} size={6}>
-              <TextField
-                label="Identidad"
-                name="contraseña"
-                value={formData.contraseña || ""}
-                onChange={handleChange}
-                fullWidth
-                error={!!fieldErrors.contraseña}
-                helperText={fieldErrors.contraseña}
-              />
-            </Grid>
-            <Grid item xs={12} size={6}>
-              <TextField
-                label="Correo Electrónico"
-                name="correo"
-                value={formData.correo || ""}
-                onChange={handleChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} size={6}>
-              <TextField
-                label="Usuario"
-                name="usuario"
-                value={formData.usuario || ""}
-                onChange={handleChange}
-                fullWidth
-                error={!!fieldErrors.usuario}
-                helperText={fieldErrors.usuario}
-              />
-            </Grid>
-            <Grid item xs={12} size={6}>
-              <FormControl fullWidth error={!!fieldErrors.idrol}>
-                <InputLabel id="demo-simple-select-label">Rol</InputLabel>
-                <Select
-                  name="idrol"
-                  value={formData.idrol || ""}
-                  onChange={handleChange}
-                  label="Rol"
-                >
-                  <MenuItem value="">Seleccionar rol</MenuItem>
-                  {roles.map((dep) => (
-                    <MenuItem key={dep.id} value={dep.id}>
-                      {dep.rol}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {fieldErrors.idrol && (
-                  <FormHelperText>{fieldErrors.idrol}</FormHelperText>
-                )}
-              </FormControl>
-            </Grid>
-          </Grid>
-          <Box
-            sx={{ marginTop: 5, display: "flex", justifyContent: "flex-end" }}
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        <Grid container justifyContent="space-between">
+          {usuarioId ? "Editar Usuario" : "Nuevo Usuario"}
+          <Button
+            onClick={onClose}
+            sx={{ color: "red", minWidth: "auto" }}
+            startIcon={<CloseIcon />}
           >
-            <Button
-              variant="contained"
-              sx={{ backgroundColor: "#88CFE0", ml: 5 }}
-              startIcon={<SaveIcon />}
-              onClick={handleSave}
-            >
-              Guardar
-            </Button>
-          </Box>
-        </Paper>
-      </Dashboard>
-    </>
-  );
-};
+          </Button>
+        </Grid>
+      </DialogTitle>
+      <DialogContent>
+        <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Grid size={{ sx: 12, md: 6 }}>
+            <TextField
+              label="Nombre"
+              name="nombre"
+              value={formData.nombre || ""}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
 
-export default Usuario;
+          <Grid size={{ sx: 12, md: 6 }}>
+            <TextField
+              label="Correo"
+              name="correo"
+              value={formData.correo || ""}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid size={{ sx: 12, md: 6 }}>
+            <TextField
+              label="Usuario"
+              name="usuario"
+              value={formData.usuario || ""}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid size={{ sx: 12, md: 6 }}>
+            <TextField
+              label="Contraseña"
+              name="contraseña"
+              type="password"
+              value={formData.contraseña || ""}
+              onChange={handleChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid size={{ sx: 12, md: 6 }}>
+
+            <FormControl fullWidth>
+              <InputLabel>Rol</InputLabel>
+              <Select
+                label="Rol"
+                name="idrol"
+                value={formData.idrol || ""}
+                onChange={handleChange}>
+                <MenuItem value="">Seleccionar rol</MenuItem>
+                {roles.map((r) => (
+                  <MenuItem key={r.id} value={r.id}>{r.rol}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid size={{ sx: 12, md: 6 }}>
+            <FormControl fullWidth>
+              <InputLabel>Estado</InputLabel>
+              <Select
+                label="Estado"
+                name="estado"
+                value={formData.estado || "Nuevo"}
+                onChange={handleChange}>
+                <MenuItem value="">Seleccionar estado</MenuItem>
+                <MenuItem value="Activo">Activo</MenuItem>
+                <MenuItem value="Inactivo">Inactivo</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+
+        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: "#88CFE0" }}>
+          Guardar
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
