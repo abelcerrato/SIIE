@@ -28,9 +28,22 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
     correo: "",
     contraseña: "",
     idrol: "",
-    estado: "Nuevo",
-    creadopor: user.id,
+    estado: "",
+    creadopor: user?.id || 0,
+    modificadopor: user?.id || 0,
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        creadopor: user.id,
+        modificadopor: user.id,
+      }));
+    }
+  }, [user]);
+
+
 
   // Obtener roles
   useEffect(() => {
@@ -51,8 +64,9 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
         correo: "",
         contraseña: "",
         idrol: "",
-        estado: "Nuevo",
-        creadopor: user.id,
+        estado: "",
+        creadopor: user?.id || 0,
+        modificadopor: user?.id || 0,
       });
     }
   }, [usuarioId]);

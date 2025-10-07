@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { flushSync } from "react-dom";
+
 import {
   AppBar,
   Toolbar,
@@ -11,7 +13,7 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-
+import { useUser } from "./UserContext";
 import siieLogo from "../img/SIIE.png";
 import conedLogo from "../img/LOGOCONED_Blanco.png";
 
@@ -46,6 +48,9 @@ const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout, permissions } = useUser();
+
 
   // Estado para el submenú ADMINISTRACIÓN
   const [anchorEl, setAnchorEl] = useState(null);
@@ -56,6 +61,18 @@ const Header = () => {
 
   // Verifica si la ruta pertenece a ADMINISTRACIÓN
   const isAdminActive = location.pathname.startsWith("/Dashboard/Administracion");
+
+
+
+  const handleLogout = () => {
+    handleMenuClose();
+    flushSync(() => logout());
+    navigate("/");
+  };
+
+
+  const tienePermiso = (idmodulo) => permissions?.find(p => p.idmodulo === idmodulo)?.consultar;
+  const mostrarAdministracion = tienePermiso(5) || tienePermiso(6);
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "white" }}>
@@ -71,62 +88,73 @@ const Header = () => {
         {/* Izquierda */}
         {!isMobile && (
           <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
+
             <NavButton
-              component={NavLink}
-              to="/"
-              className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={handleLogout}
             >
               PORTAL SIIE
             </NavButton>
 
+
+
             {/* Menú ADMINISTRACIÓN */}
-            <NavButton
-              onClick={handleMenuOpen}
-              className={isAdminActive ? "active" : ""}
-            >
-              ADMINISTRACIÓN
-            </NavButton>
+            {mostrarAdministracion && (
+              <>
+                <NavButton
+                  onClick={handleMenuOpen}
+                  className={isAdminActive ? "active" : ""}
+                >
+                  ADMINISTRACIÓN
+                </NavButton>
 
-            <Menu
-              id="admin-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleMenuClose}
-              MenuListProps={{ "aria-labelledby": "admin-button" }}
-              sx={{
-                "& .MuiPaper-root": {
-                  backgroundColor: "#f9f9f9",
-                },
-              }}
-            >
-              <MenuItem
-                component={NavLink}
-                to="/Dashboard/Administracion/Usuarios"
-                onClick={handleMenuClose}
-                sx={{
-                  color:
-                    location.pathname === "/Dashboard/Administracion/Usuarios"
-                      ? "#88CFE0"
-                      : "inherit",
-                }}
-              >
-                Usuarios
-              </MenuItem>
+                <Menu
+                  id="admin-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleMenuClose}
+                  MenuListProps={{ "aria-labelledby": "admin-button" }}
+                  sx={{
+                    "& .MuiPaper-root": {
+                      backgroundColor: "#f9f9f9",
+                    },
+                  }}
+                >
+                  {tienePermiso(6) && (
+                    <MenuItem
+                      component={NavLink}
+                      to="/Dashboard/Administracion/Usuarios"
+                      onClick={handleMenuClose}
+                      sx={{
+                        color:
+                          location.pathname === "/Dashboard/Administracion/Usuarios"
+                            ? "#88CFE0"
+                            : "inherit",
+                      }}
+                    >
+                      Usuarios
+                    </MenuItem>
+                  )}
 
-              <MenuItem
-                component={NavLink}
-                to="/Dashboard/Administracion/RolesyPermisos"
-                onClick={handleMenuClose}
-                sx={{
-                  color:
-                    location.pathname === "/Dashboard/Administracion/RolesyPermisos"
-                      ? "#88CFE0"
-                      : "inherit",
-                }}
-              >
-                Roles y Permisos
-              </MenuItem>
-            </Menu>
+                  {tienePermiso(5) && (
+                    <MenuItem
+                      component={NavLink}
+                      to="/Dashboard/Administracion/RolesyPermisos"
+                      onClick={handleMenuClose}
+                      sx={{
+                        color:
+                          location.pathname ===
+                            "/Dashboard/Administracion/RolesyPermisos"
+                            ? "#88CFE0"
+                            : "inherit",
+                      }}
+                    >
+                      Roles y Permisos
+                    </MenuItem>
+                  )}
+                </Menu>
+              </>
+            )}
+
           </Box>
         )}
 
@@ -142,8 +170,8 @@ const Header = () => {
             src={siieLogo}
             alt="SIIE Logo"
             style={{
-              height: isMobile ? "" : "140px",
-              width: isMobile ? "90%" : "",
+              height: isMobile ? "" : "120px",
+              width: isMobile ? "80%" : "",
             }}
           />
           <img
@@ -151,7 +179,7 @@ const Header = () => {
             alt="CONED Logo"
             style={{
               height: isMobile ? "" : "140px",
-              width: isMobile ? "90%" : "",
+              width: isMobile ? "80%" : "",
             }}
           />
         </Box>
@@ -177,76 +205,101 @@ const Header = () => {
               </NavButton>
 
               {/* ADMINISTRACIÓN en móvil */}
-              <NavButton
-                onClick={handleMenuOpen}
-                className={isAdminActive ? "active" : ""}
-              >
-                ADMINISTRACIÓN
-              </NavButton>
-              <Menu
-                id="admin-menu-mobile"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleMenuClose}
-              >
-                <MenuItem
-                  component={NavLink}
-                  to="/Dashboard/Administracion/Usuarios"
-                  onClick={handleMenuClose}
-                  sx={{
-                    color:
-                      location.pathname === "/Dashboard/Administracion/Usuarios"
-                        ? "#88CFE0"
-                        : "inherit",
-                  }}
-                >
-                  Usuarios
-                </MenuItem>
-                <MenuItem
-                  component={NavLink}
-                  to="/Dashboard/Administracion/RolesyPermisos"
-                  onClick={handleMenuClose}
-                  sx={{
-                    color:
-                      location.pathname === "/Dashboard/Administracion/RolesyPermisos"
-                        ? "#88CFE0"
-                        : "inherit",
-                  }}
-                >
-                  Roles y Permisos
-                </MenuItem>
-              </Menu>
+              {mostrarAdministracion && (
+                <>
+                  <NavButton
+                    onClick={handleMenuOpen}
+                    className={isAdminActive ? "active" : ""}
+                  >
+                    ADMINISTRACIÓN
+                  </NavButton>
+
+                  <Menu
+                    id="admin-menu"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleMenuClose}
+                    MenuListProps={{ "aria-labelledby": "admin-button" }}
+                    sx={{
+                      "& .MuiPaper-root": {
+                        backgroundColor: "#f9f9f9",
+                      },
+                    }}
+                  >
+                    {tienePermiso(6) && (
+                      <MenuItem
+                        component={NavLink}
+                        to="/Dashboard/Administracion/Usuarios"
+                        onClick={handleMenuClose}
+                        sx={{
+                          color:
+                            location.pathname === "/Dashboard/Administracion/Usuarios"
+                              ? "#88CFE0"
+                              : "inherit",
+                        }}
+                      >
+                        Usuarios
+                      </MenuItem>
+                    )}
+
+                    {tienePermiso(5) && (
+                      <MenuItem
+                        component={NavLink}
+                        to="/Dashboard/Administracion/RolesyPermisos"
+                        onClick={handleMenuClose}
+                        sx={{
+                          color:
+                            location.pathname ===
+                              "/Dashboard/Administracion/RolesyPermisos"
+                              ? "#88CFE0"
+                              : "inherit",
+                        }}
+                      >
+                        Roles y Permisos
+                      </MenuItem>
+                    )}
+                  </Menu>
+                </>
+              )}
+
             </>
           )}
-
-          <NavButton
-            component={NavLink}
-            to="/Dashboard/Descargas/SEDU"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            SEDUC
-          </NavButton>
-          <NavButton
-            component={NavLink}
-            to="/INFOP"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            INFOP
-          </NavButton>
-          <NavButton
-            component={NavLink}
-            to="/CONEANFO"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            CONEANFO
-          </NavButton>
-          <NavButton
-            component={NavLink}
-            to="/DES-UNAH"
-            className={({ isActive }) => (isActive ? "active" : "")}
-          >
-            DES-UNAH
-          </NavButton>
+          {tienePermiso(1) && (
+            <NavButton
+              component={NavLink}
+              to="/Dashboard/Descargas/SEDU"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              SEDUC
+            </NavButton>
+          )}
+          {tienePermiso(2) && (
+            <NavButton
+              component={NavLink}
+              to="/Dashboard/Descargas/INFOP"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              INFOP
+            </NavButton>
+          )}
+          {tienePermiso(3) && (
+            <NavButton
+              component={NavLink}
+              to="/CONEANFO"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              CONEANFO
+            </NavButton>
+          )}
+          {tienePermiso(4) && (
+            <NavButton
+              component={NavLink}
+              to="/Dashboard/Descargas/DES-UNAH"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              DES-UNAH
+            </NavButton>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

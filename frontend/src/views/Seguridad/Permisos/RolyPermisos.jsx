@@ -38,9 +38,19 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     descripcion: "",
     estado: true,
     permisos: [],
-    creadopor: user.id,
-    modificadopor: user.id,
+    creadopor: user?.id || 0,
+    modificadopor: user?.id || 0,
   });
+
+  useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        creadopor: user.id,
+        modificadopor: user.id,
+      }));
+    }
+  }, [user]);
 
 
   // Obtener módulos
@@ -72,6 +82,7 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
 
   useEffect(() => {
     const initForm = async () => {
+      if (!user) return;
       if (rolId) {
         // Edición: traer datos del rol
         try {
@@ -127,8 +138,7 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
               insertar: false,
               actualizar: false,
             })),
-            creadopor: user.id,
-            modificadopor: user.id,
+
           });
         } catch (err) {
           console.error("Error al obtener módulos:", err);
@@ -137,7 +147,7 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     };
 
     initForm();
-  }, [rolId, user.id]);
+  }, [rolId, user]);
 
   // Manejo de cambios
   const handleChange = (e) => {
@@ -211,8 +221,9 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
         descripcion: formData.descripcion,
         estado: formData.estado,
         permisos: permisosFormateados,
-        ...(rolId ? { modificadopor: user.id, idrol: rolId } : { creadopor: user.id }),
+        ...(rolId ? { modificadopor: user?.id || 0, idrol: rolId } : { creadopor: user?.id || 0 }),
       };
+
 
       if (rolId) {
         await axios.put(`${process.env.REACT_APP_API_URL}/permisos`, dataToSend);

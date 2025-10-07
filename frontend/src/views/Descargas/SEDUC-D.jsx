@@ -29,7 +29,7 @@ import {
 import { Download, FilterList, ChevronLeft, ChevronRight, ArrowCircleLeftOutlined } from "@mui/icons-material";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-
+import { useUser } from "../../components/UserContext";
 import LogoCONED from "../../img/logos-CONED.png";
 import LogoSIIE from "../../img/SIIE.png";
 
@@ -53,6 +53,8 @@ const ReportesSeduc = () => {
     const [filters, setFilters] = useState({});
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(50);
+    const { permissions } = useUser();
+
 
     // Configuración específica para cada reporte
     const reportes = [
@@ -129,47 +131,7 @@ const ReportesSeduc = () => {
                     "MatriculaBruta",
                     "MatriculaNeta",
                     "EdadMatriculatotal",
-                    "TasadeMatriculaBruta",
-                    "TasadeMatriculaNeta",
-                    "TasadecoberturaBrutaPrebasica",
-                    "TasadecoberturaNetaPrebasica",
-                    "TasaCoberturaBrutaBasica",
-                    "TasadecoberturaNetaBasica",
-                    "TasadecoberturaBrutaMedia",
-                    "TasadecoberturaNetaMedia",
-                    "TBA3PB",
-                    "TNA3PB",
-                    "TNA1Grado",
-                    "TBMICiclo",
-                    "TBMIICiclo",
-                    "TBMIIICiclo",
-                    "TNMICiclo",
-                    "TNMIICiclo",
-                    "TNMIIICiclo",
-                    "TBM1Grado",
-                    "TBM2Grdo",
-                    "TBM3Grado",
-                    "TBM4Grado",
-                    "TBM5Grado",
-                    "TBM6Grado",
-                    "TBM7",
-                    "TBM8Grado",
-                    "TBM9Grado",
-                    "TBM10Grado",
-                    "TBM11Grado",
-                    "TBM12Grado",
-                    "TNM1Grado",
-                    "TNM2Grado",
-                    "TNM3Grado",
-                    "TNM4Grado",
-                    "TNM5Grado",
-                    "TNM6Grado",
-                    "TNM7Grado",
-                    "TNM8Grado",
-                    "TNM9Grado",
-                    "TNM10Grado",
-                    "TNM11Grado",
-                    "TNM12Grado"],
+                ],
 
 
                 encabezados: {
@@ -242,47 +204,6 @@ const ReportesSeduc = () => {
                     "MatriculaBruta": "Matrícula Bruta",
                     "MatriculaNeta": "Matrícula Neta",
                     "EdadMatriculatotal": "Edad Matrícula Total",
-                    "TasadeMatriculaBruta": "Tasa de Matrícula Bruta",
-                    "TasadeMatriculaNeta": "Tasa de Matrícula Neta",
-                    "TasadecoberturaBrutaPrebasica": "Tasa de Cobertura Bruta Prebásica",
-                    "TasadecoberturaNetaPrebasica": "Tasa de Cobertura Neta Prebásica",
-                    "TasaCoberturaBrutaBasica": "Tasa de Cobertura Bruta Básica",
-                    "TasadecoberturaNetaBasica": "Tasa de Cobertura Neta Básica",
-                    "TasadecoberturaBrutaMedia": "Tasa de Cobertura Bruta Media",
-                    "TasadecoberturaNetaMedia": "Tasa de Cobertura Neta Media",
-                    "TBA3PB": "Tasa Bruta de Asistencia 3 años Prebásica",
-                    "TNA3PB": "Tasa Neta de Asistencia 3 años Prebásica",
-                    "TNA1Grado": "Tasa Neta de Asistencia 1er Grado",
-                    "TBMICiclo": "Tasa Bruta de Matrícula I Ciclo",
-                    "TBMIICiclo": "Tasa Bruta de Matrícula II Ciclo",
-                    "TBMIIICiclo": "Tasa Bruta de Matrícula III Ciclo",
-                    "TNMICiclo": "Tasa Neta de Matrícula I Ciclo",
-                    "TNMIICiclo": "Tasa Neta de Matrícula II Ciclo",
-                    "TNMIIICiclo": "Tasa Neta de Matrícula III Ciclo",
-                    "TBM1Grado": "Tasa Bruta de Matrícula 1er Grado",
-                    "TBM2Grdo": "Tasa Bruta de Matrícula 2do Grado",
-                    "TBM3Grado": "Tasa Bruta de Matrícula 3er Grado",
-                    "TBM4Grado": "Tasa Bruta de Matrícula 4to Grado",
-                    "TBM5Grado": "Tasa Bruta de Matrícula 5to Grado",
-                    "TBM6Grado": "Tasa Bruta de Matrícula 6to Grado",
-                    "TBM7": "Tasa Bruta de Matrícula 7mo Grado",
-                    "TBM8Grado": "Tasa Bruta de Matrícula 8vo Grado",
-                    "TBM9Grado": "Tasa Bruta de Matrícula 9no Grado",
-                    "TBM10Grado": "Tasa Bruta de Matrícula 10mo Grado",
-                    "TBM11Grado": "Tasa Bruta de Matrícula 11mo Grado",
-                    "TBM12Grado": "Tasa Bruta de Matrícula 12vo Grado",
-                    "TNM1Grado": "Tasa Neta de Matrícula 1er Grado",
-                    "TNM2Grado": "Tasa Neta de Matrícula 2do Grado",
-                    "TNM3Grado": "Tasa Neta de Matrícula 3er Grado",
-                    "TNM4Grado": "Tasa Neta de Matrícula 4to Grado",
-                    "TNM5Grado": "Tasa Neta de Matrícula 5to Grado",
-                    "TNM6Grado": "Tasa Neta de Matrícula 6to Grado",
-                    "TNM7Grado": "Tasa Neta de Matrícula 7mo Grado",
-                    "TNM8Grado": "Tasa Neta de Matrícula 8vo Grado",
-                    "TNM9Grado": "Tasa Neta de Matrícula 9no Grado",
-                    "TNM10Grado": "Tasa Neta de Matrícula 10mo Grado",
-                    "TNM11Grado": "Tasa Neta de Matrícula 11mo Grado",
-                    "TNM12Grado": "Tasa Neta de Matrícula 12vo Grado"
                 }
             }
         },
@@ -785,6 +706,7 @@ const ReportesSeduc = () => {
     const paginatedData = getPaginatedData();
     const dataToUse = reporteSeleccionado === "niveles" ? filteredDataNiveles : filteredData;
 
+
     const downloadExcel = async () => {
         let datosParaExcel = [];
         let nombreArchivo = "";
@@ -846,20 +768,20 @@ const ReportesSeduc = () => {
         });
 
         // Insertar las imágenes en el archivo Excel
-        worksheet.addImage(image1, "A1:A7");
-        worksheet.addImage(image2, "E1:F5");
+        worksheet.addImage(image1, "A1:B9");
+        worksheet.addImage(image2, "F2:H8");
 
 
 
 
-        worksheet.mergeCells("C1", "H1");
-        const titleCell = worksheet.getCell("C1");
+        worksheet.mergeCells("C5", "E5");
+        const titleCell = worksheet.getCell("C5");
         titleCell.value = tituloReporte;
-        titleCell.font = { size: 16, bold: true, color: { argb: "004080" } };
+        titleCell.font = { size: 16, bold: true, color: { argb: "88CFE0" } };
         titleCell.alignment = { horizontal: "center", vertical: "middle" };
 
-        worksheet.mergeCells("C2", "H2");
-        const dateCell = worksheet.getCell("C2");
+        worksheet.mergeCells("C6", "E6");
+        const dateCell = worksheet.getCell("C6");
         dateCell.value = `Generado el: ${fechaHora}`;
         dateCell.alignment = { horizontal: "center" };
 
@@ -902,6 +824,7 @@ const ReportesSeduc = () => {
             });
 
             // Ajuste de ancho de columnas automático
+
             worksheet.columns.forEach((column) => {
                 let maxLength = 0;
                 column.eachCell({ includeEmpty: true }, (cell) => {
@@ -910,12 +833,19 @@ const ReportesSeduc = () => {
                 });
                 column.width = maxLength < 12 ? 12 : maxLength + 2;
             });
+
+            // Asegurar ancho fijo del bloque del título
+            worksheet.getColumn(3).width = 25; // C
+            worksheet.getColumn(4).width = 25; // D
+            worksheet.getColumn(5).width = 25; // E
+
         }
 
         // 💾 Generar archivo
         const buffer = await workbook.xlsx.writeBuffer();
-        saveAs(new Blob([buffer]), nombreArchivo);
+        saveAs(new Blob([buffer]), "SEDUC_" + nombreArchivo);
     };
+
 
     const activeFiltersCount = Object.values(filters).filter(val => val !== "").length;
 
@@ -1013,30 +943,22 @@ const ReportesSeduc = () => {
 
         return (
             <Paper sx={{ p: 3 }}>
+                <Tooltip title="Volver">
+                    <IconButton
+                        aria-label="Volver"
 
+                        onClick={() => {
+                            setReporteSeleccionado("");
+                            setData([]);
+                            setFilters({});
+                        }}>
+                        <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
+                    </IconButton>
+                </Tooltip>
 
-
-                <Grid container spacing={2}>
-                    <Grid size={{ xs: 2, sm: 2, md: 2, lg: 2 }} >
-                        <Tooltip title="Volver">
-                            <IconButton
-                                aria-label="Volver"
-
-                                onClick={() => {
-                                    setReporteSeleccionado("");
-                                    setData([]);
-                                    setFilters({});
-                                }}>
-                                <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                    <Grid size={{ xs: 10, sm: 10, md: 10, lg: 10 }} >
-                        <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", color: "#88CFE0", textAlign: 'center' }}>
-                            Niveles Académicos por Departamento
-                        </Typography></Grid>
-
-                </Grid>
+                <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", color: "#88CFE0", textAlign: 'center' }}>
+                    Niveles Académicos por Departamento
+                </Typography>
 
                 {/* Filtros para niveles académicos */}
                 <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5" }}>
@@ -1339,37 +1261,33 @@ const ReportesSeduc = () => {
 
             <>
                 {/* 🔹 Encabezado con botón volver y título */}
-                <Grid container alignItems="center" spacing={2}>
-                    <Grid size={{ xs: 2, sm: 2, md: 2, lg: 2 }}>
-                        <Tooltip title="Volver">
-                            <IconButton
-                                aria-label="Volver"
-                                onClick={() => {
-                                    setReporteSeleccionado("");
-                                    setData([]);
-                                    setFilters({});
-                                }}
-                            >
-                                <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
 
-                    <Grid size={{ xs: 10, sm: 10, md: 10, lg: 10 }}>
-                        <Typography
-                            variant="h4"
-                            component="h1"
-                            sx={{
-                                fontWeight: "bold",
-                                color: "#88CFE0",
-                                textAlign: "center",
-                                wordWrap: "break-word"
-                            }}
-                        >
-                            {config.titulo}
-                        </Typography>
-                    </Grid>
-                </Grid>
+                <Tooltip title="Volver">
+                    <IconButton
+                        aria-label="Volver"
+                        onClick={() => {
+                            setReporteSeleccionado("");
+                            setData([]);
+                            setFilters({});
+                        }}
+                    >
+                        <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
+                    </IconButton>
+                </Tooltip>
+
+                <Typography
+                    variant="h4"
+                    component="h1"
+                    sx={{
+                        fontWeight: "bold",
+                        color: "#88CFE0",
+                        textAlign: "center",
+                        wordWrap: "break-word",
+                        mb: 2
+                    }}
+                >
+                    {config.titulo}
+                </Typography>
 
                 {/* 🔹 Filtros */}
                 <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f1f1f1ff" }}>
@@ -1546,48 +1464,78 @@ const ReportesSeduc = () => {
         );
     };
 
+
+    const tienePermiso = (idmodulo) => permissions?.find(p => p.idmodulo === idmodulo)?.consultar;
     return (
-        <Paper sx={{ p: 3 }}>
-            {/* Selección de Reporte */}
-            {!reporteSeleccionado && (
-                <Box sx={{ textAlign: "center", py: 8 }}>
+        <>
+            {tienePermiso(1) && (
+                <Paper sx={{ p: 3, background: "#f5f7fa", boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
 
+                    {/* Selección de Reporte */}
+                    {!reporteSeleccionado && (
+                        <Box
+                            sx={{
+                                p: 3,
+                               
+                                display: "flex",
+                                justifyContent: "center",   // centra horizontalmente
+                                alignItems: "center",       // centra verticalmente
+                                minHeight: "70vh",          // altura mínima para centrar verticalmente
+                            }}
+                        >
+                            <Grid container spacing={2} justifyContent="center">
+                                {reportes.map((reporte) => (
+                                    <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }} key={reporte.value}>
+                                        <Card
+                                            sx={{
+                                                cursor: "pointer",
+                                                borderRadius: 2,
+                                                transition: "all 0.3s",
+                                                backgroundColor: "#fff",
+                                                width: 250,
+                                                height: 250,
+                                                "&:hover": {
+                                                    transform: "translateY(-5px)",
+                                                    backgroundColor: "#88CFE0",
+                                                    color: "#fff"
+                                                }
+                                            }}
+                                            onClick={() => setReporteSeleccionado(reporte.value)}
+                                        >
+                                            <CardContent
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",  
+                                                    alignItems: "center",    
+                                                    height: "100%",    
+                                                    textAlign: "center",
+                                                }}
+                                            >
 
-                    <Grid container spacing={3} justifyContent="center">
-                        {reportes.map((reporte) => (
-                            <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }} key={reporte.value}>
-                                <Card
-                                    sx={{
-                                        cursor: "pointer",
-                                        transition: "all 0.3s",
-                                        "&:hover": {
-                                            transform: "translateY(-4px)",
-                                            boxShadow: 3
-                                        }
-                                    }}
-                                    onClick={() => setReporteSeleccionado(reporte.value)}
-                                >
-                                    <CardContent sx={{ textAlign: "center", py: 4 }}>
-                                        <Typography variant="h6" component="div" gutterBottom color="#88CFE0">
-                                            {reporte.label}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Generar reporte
-                                        </Typography>
-                                    </CardContent>
-                                </Card>
+                                                <Typography variant="h6" component="div" gutterBottom >
+                                                    {reporte.label}
+                                                </Typography>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Generar reporte
+                                                </Typography>
+                                            </CardContent>
+
+                                        </Card>
+                                    </Grid>
+                                ))}
                             </Grid>
-                        ))}
-                    </Grid>
-                </Box>
+                        </Box>
+                    )}
+
+                    {/* Vista del Reporte de Niveles Académicos */}
+                    {reporteSeleccionado === "niveles" && renderNivelesAcademicos()}
+
+                    {/* Vista para otros reportes */}
+                    {reporteSeleccionado && reporteSeleccionado !== "niveles" && renderReporteNormal()}
+                </Paper>
             )}
-
-            {/* Vista del Reporte de Niveles Académicos */}
-            {reporteSeleccionado === "niveles" && renderNivelesAcademicos()}
-
-            {/* Vista para otros reportes */}
-            {reporteSeleccionado && reporteSeleccionado !== "niveles" && renderReporteNormal()}
-        </Paper>
+        </>
     );
 };
 
