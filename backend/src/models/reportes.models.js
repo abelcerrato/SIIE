@@ -363,3 +363,104 @@ export const getInfop_regionesM = async () => {
     throw error;
   }
 };
+
+
+
+/*_________________________________________________ DES _________________________________________________*/
+// Consulta para DES matrícula por grado académico
+export const getDES_matricula_por_grado_academicoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, gradoacademico, publico, privado, total
+             FROM des_matricula_por_grado_academico;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Consulta para DES matrícula por institución
+export const getDES_matricula_por_institucionM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, ies, administracion, femenino, masculino, total
+             FROM des_matricula_por_institucion;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para DES matrícula por sexo
+export const getDES_matricula_por_sexoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, gradoacademico, femenino, masculino, total
+             FROM des_matricula_por_sexo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+
+/*_________________________________________________ SIIE _________________________________________________*/
+
+
+// Consulta para SIIE matrícula por departamento
+export const getSIIE_matricula_por_departamentoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, departamento, matriculaseduc, matriculainfop, matriculaconeanfo, matriculatotal, matriculadesunah
+             FROM siie_matricula_por_departamento;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para SIIE matrícula por institución
+export const getSIIE_matricula_por_institucionM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, seduc, infop, coneanfo, des, matriculatotal
+             FROM siie_matricula_por_institucion;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para SIIE matrícula por sexo
+export const getSIIE_matricula_por_sexoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              año, 
+              mujerseduc, hombreseduc, 
+              mujerinfop, hombreinfop, 
+              mujerconeanfo, hombreconeanfo, 
+              totalmujeres, totalhombres
+             FROM siie_matricula_por_sexo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};

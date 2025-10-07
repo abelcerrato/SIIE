@@ -1,5 +1,5 @@
 
-import {getAllSeducM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad } from "../models/reportes.models.js";
+import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad } from "../models/reportes.models.js";
 
 
 /* SEDUC */
@@ -186,6 +186,77 @@ export const getInfop_regionesC = async (req, res) => {
     res.json(infop);
   } catch (error) {
     console.error("Error al obtener las regiones de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+/* DES */
+// Controlador para mostrar la matricula por grado academico de DES
+export const getDES_matricula_por_grado_academicoC = async (req, res) => {
+  try {
+    const des = await getDES_matricula_por_grado_academicoM();
+    res.json(des);
+  } catch (error) {
+    console.error("Error al obtener la matricula por grado academico de DES:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para mostrar la matricula por institucion de DES
+export const getDES_matricula_por_institucionC = async (req, res) => {
+  try {
+    const des = await getDES_matricula_por_institucionM();
+    res.json(des);
+  } catch (error) {
+    console.error("Error al obtener la matricula por institucion de DES:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+// Controlador para mostrar la matricula por sexo de DES
+export const getDES_matricula_por_sexoC = async (req, res) => {
+  try {
+    const des = await getDES_matricula_por_sexoM();
+    res.json(des);
+  } catch (error) {
+    console.error("Error al obtener la matricula por sexo de DES:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+/* SIIE */
+// Controlador para mostrar la matricula por departamento de SIIE
+export const getSIIE_matricula_por_departamentoC = async (req, res) => {
+  try {
+    const siie = await getSIIE_matricula_por_departamentoM();
+    res.json(siie);
+  } catch (error) {
+    console.error("Error al obtener la matricula por departamento de SIIE:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para mostrar la matricula por institucion de SIIE
+export const getSIIE_matricula_por_institucionC = async (req, res) => {
+  try {
+    const siie = await getSIIE_matricula_por_institucionM();
+    res.json(siie);
+  } catch (error) {
+    console.error("Error al obtener la matricula por institución de SIIE:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para mostrar la matricula por sexo de SIIE
+export const getSIIE_matricula_por_sexoC = async (req, res) => {
+  try {
+    const siie = await getSIIE_matricula_por_sexoM();
+    res.json(siie);
+  } catch (error) {
+    console.error("Error al obtener la matricula por sexo de SIIE:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
