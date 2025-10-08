@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM } from "../models/reportes.models.js";
+import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM } from "../models/reportes.models.js";
 
 
 /* SEDUC */
@@ -374,15 +374,10 @@ export const getseduc_coberturabrutaniveleseducativosC = async (req, res) => {
 
 export const getseduc_cobertura_neta_brutaiveleseducativosC = async (req, res) => {
   try {
-    const neta = await getseduc_coberturanetaniveleseducativosM();
-    const bruta = await getseduc_coberturabrutaniveleseducativosM();
-
-    res.json({
-      coberturaNeta: neta,
-      coberturaBruta: bruta,
-    });
+    const tasa = await getseduc_cobertura_neta_bruta_niveleseducativosM();
+    res.json(tasa);
   } catch (error) {
-    console.error("Error al obtener las tasas enta y bruta de cobertura SEDUC:", error);
+    console.error("Error al obtener las tasas neta y bruta de cobertura SEDUC:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
@@ -432,13 +427,9 @@ export const getseduc_matriculabrutagradoC = async (req, res) => {
 
 export const getseduc_matricula_neta_bruta_gradoC = async (req, res) => {
   try {
-    const neta = await getseduc_matriculanetagradoM();
-    const bruta = await getseduc_matriculabrutagradoM();
-
-    res.json({
-      matriculaNeta: neta,
-      matriculaBruta: bruta,
-    });
+    const tasa = await getseduc_matriculanetagradoM();
+   
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de matricula SEDUC:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -469,13 +460,8 @@ export const getseduc_tasabrutaacceso3prebasicaC = async (req, res) => {
 
 export const getseduc_tasa_neta_bruta_acceso3prebasicaC = async (req, res) => {
   try {
-    const neta = await getseduc_tasanetaacceso3prebasicaM();
-    const bruta = await getseduc_tasabrutaacceso3prebasicaM();
-
-    res.json({
-      tasaNeta: neta,
-      tasaBruta: bruta,
-    });
+    const neta = await getseduc_tasa_neta_bruta_acceso3prebasicaM();
+      res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -507,13 +493,8 @@ export const getseduc_tasabrutaaccesoprimergradobasicaC = async (req, res) => {
 
 export const getseduc_tasa_neta_bruta_accesoprimergradobasicaC = async (req, res) => {
   try {
-    const neta = await getseduc_tasanetaaccesoprimergradobasicaM();
-    const bruta = await getseduc_tasabrutaaccesoprimergradobasicaM();
-
-    res.json({
-      tasaNeta: neta,
-      tasaBruta: bruta,
-    });
+    const tasa = await getseduc_tasa_neta_bruta_accesoprimergradobasicaM();
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -546,13 +527,8 @@ export const getseduc_tasabrutaciclosC = async (req, res) => {
 
 export const getseduc_tasa_neta_bruta_ciclosC = async (req, res) => {
   try {
-    const neta = await getseduc_tasanetaciclosM();
-    const bruta = await getseduc_tasabrutaciclosM();
-
-    res.json({
-      tasaNeta: neta,
-      tasaBruta: bruta,
-    });
+    const tasa = await getseduc_tasa_neta_bruta_ciclosM();
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -584,13 +560,9 @@ export const getseduc_tasabrutamatriculagradosC = async (req, res) => {
 
 export const getseduc_tasa_neta_bruta_matriculagradosC = async (req, res) => {
   try {
-    const neta = await getseduc_tasanetamatriculagradosM();
-    const bruta = await getseduc_tasabrutamatriculagradosM();
+    const tasa = await getseduc_tasa_neta_bruta_matriculagradosM();
 
-    res.json({
-      tasaNeta: neta,
-      tasaBruta: bruta,
-    });
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });

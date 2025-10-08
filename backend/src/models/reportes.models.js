@@ -608,6 +608,18 @@ export const getseduc_cancelacionpivotgradoM = async () => {
 };
 
 
+export const getseduc_coberturanetaniveleseducativosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT "Año", nivel, matricula, poblacion, tcn
+            FROM seduc_coberturanetaniveleseducativos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getseduc_coberturabrutaniveleseducativosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -622,17 +634,29 @@ export const getseduc_coberturabrutaniveleseducativosM = async () => {
 };
 
 
-export const getseduc_coberturanetaniveleseducativosM = async () => {
+export const getseduc_cobertura_neta_bruta_niveleseducativosM = async () => {
   try {
     const { rows } = await pool.query(`
-            SELECT "Año", nivel, matricula, poblacion, tcn
-            FROM seduc_coberturanetaniveleseducativos;
+        SELECT 
+            n."Año",
+            n.nivel,
+            n.matricula AS matricula_neta,
+            n.poblacion AS poblacion_neta,
+            n.tcn AS tasa_cobertura_neta,
+            b.matricula AS matricula_bruta,
+            b.poblacion AS poblacion_bruta,
+            b.tcb AS tasa_cobertura_bruta
+        FROM seduc_coberturanetaniveleseducativos AS n
+        JOIN seduc_coberturabrutaniveleseducativos AS b 
+            ON n."Año" = b."Año" AND n.nivel = b.nivel;
         `);
     return rows;
   } catch (error) {
     throw error;
   }
 };
+
+
 
 
 export const getseduc_desercionpivotgradoM = async () => {
@@ -664,6 +688,21 @@ export const getseduc_escolarizcionporedadesM = async () => {
 
 
 
+export const getseduc_matriculanetagradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaPrebasica3", "MatriculaGrado1", "MatriculaGrado2", "MatriculaGrado3", "MatriculaGrado4", 
+              "MatriculaGrado5", "MatriculaGrado6", "MatriculaGrado7", "MatriculaGrado8", "MatriculaGrado9", "MatriculaGrado10", 
+              "MatriculaGrado11", "MatriculaGrado12"
+             FROM seduc_matriculanetagrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getseduc_matriculabrutagradoM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -683,14 +722,13 @@ export const getseduc_matriculabrutagradoM = async () => {
 
 
 
-export const getseduc_matriculanetagradoM = async () => {
+
+export const getseduc_tasanetaacceso3prebasicaM = async () => {
   try {
     const { rows } = await pool.query(`
              SELECT 
-              "Periodo", "MatriculaPrebasica3", "MatriculaGrado1", "MatriculaGrado2", "MatriculaGrado3", "MatriculaGrado4", 
-              "MatriculaGrado5", "MatriculaGrado6", "MatriculaGrado7", "MatriculaGrado8", "MatriculaGrado9", "MatriculaGrado10", 
-              "MatriculaGrado11", "MatriculaGrado12"
-             FROM seduc_matriculanetagrado;
+              "Año", "Matrícula", "Población", "TBA"
+             FROM seduc_tasanetaacceso3prebasica;
         `);
     return rows;
   } catch (error) {
@@ -712,6 +750,45 @@ export const getseduc_tasabrutaacceso3prebasicaM = async () => {
   }
 };
 
+export const getseduc_tasa_neta_bruta_acceso3prebasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+                n."Año",
+                n."Matrícula" AS "Matricula_Neta",
+                b."Matrícula" AS "Matricula_Bruta",
+                n."Población" AS "Poblacion_Neta",
+                b."Población" AS "Poblacion_Bruta",
+                n."TBA" AS "tasa_acceso_3_prebasica_neta",
+                b."TBA" AS "tasa_acceso_3_prebasica_bruta"
+            FROM seduc_tasanetaacceso3prebasica AS n
+            JOIN seduc_tasabrutaacceso3prebasica AS b
+                ON n."Año" = b."Año";
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+
+
+
+export const getseduc_tasanetaaccesoprimergradobasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Matrícula", "Población", "TBA1GB"
+             FROM seduc_tasanetaaccesoprimergradobasica;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getseduc_tasabrutaaccesoprimergradobasicaM = async () => {
   try {
@@ -727,6 +804,43 @@ export const getseduc_tasabrutaaccesoprimergradobasicaM = async () => {
 };
 
 
+
+export const getseduc_tasa_neta_bruta_accesoprimergradobasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+        SELECT 
+            n."Año",
+            n."Matrícula" AS "Matricula_Neta",
+            b."Matrícula" AS "Matricula_Bruta",
+            n."Población" AS "Poblacion_Neta",
+            b."Población" AS "Poblacion_Bruta",
+            n."TBA1GB" AS "tasa_acceso_primer_grado_neta",
+            b."TBA1GB" AS "tasa_acceso_primer_grado_bruta"
+        FROM seduc_tasanetaaccesoprimergradobasica AS n
+        JOIN seduc_tasabrutaaccesoprimergradobasica AS b
+            ON n."Año" = b."Año";
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasanetaciclosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaICiclo", "EdadOportunaICiclo", "TNCI", "MatriculaIICiclo", 
+              "EdadOportunaIICiclo", "TNCII", "MatriculaIIICiclo", "EdadOportunaIIICiclo", "TNCIII"
+             FROM seduc_tasanetaciclos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getseduc_tasabrutaciclosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -734,6 +848,64 @@ export const getseduc_tasabrutaciclosM = async () => {
               "Periodo", "MatriculaICiclo", "EdadOportunaICiclo", "TBCI", "MatriculaIICiclo", 
               "EdadOportunaIICiclo", "TBCII", "MatriculaIIICiclo", "EdadOportunaIIICiclo", "TBCIII"
              FROM seduc_tasabrutaciclos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getseduc_tasa_neta_bruta_ciclosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              n."Periodo",
+
+              n."MatriculaICiclo" AS "MatriculaICiclo_Neta",
+              b."MatriculaICiclo" AS "MatriculaICiclo_Bruta",
+              n."EdadOportunaICiclo" AS "EdadOportunaICiclo_Neta",
+              b."EdadOportunaICiclo" AS "EdadOportunaICiclo_Bruta",
+              n."TNCI" AS "tasa_neta_ciclo_I",
+              b."TBCI" AS "tasa_bruta_ciclo_I",
+
+              n."MatriculaIICiclo" AS "MatriculaIICiclo_Neta",
+              b."MatriculaIICiclo" AS "MatriculaIICiclo_Bruta",
+              n."EdadOportunaIICiclo" AS "EdadOportunaIICiclo_Neta",
+              b."EdadOportunaIICiclo" AS "EdadOportunaIICiclo_Bruta",
+              n."TNCII" AS "tasa_neta_ciclo_II",
+              b."TBCII" AS "tasa_bruta_ciclo_II",
+
+              n."MatriculaIIICiclo" AS "MatriculaIIICiclo_Neta",
+              b."MatriculaIIICiclo" AS "MatriculaIIICiclo_Bruta",
+              n."EdadOportunaIIICiclo" AS "EdadOportunaIIICiclo_Neta",
+              b."EdadOportunaIIICiclo" AS "EdadOportunaIIICiclo_Bruta",
+              n."TNCIII" AS "tasa_neta_ciclo_III",
+              b."TBCIII" AS "tasa_bruta_ciclo_III"
+
+          FROM seduc_tasanetaciclos AS n
+          JOIN seduc_tasabrutaciclos AS b
+              ON n."Periodo" = b."Periodo";
+
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasanetamatriculagradosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaPrebasica3", "EdadOportunaPrebasica3", "TBMPB3", "MatriculaGrado1", 
+              "EdadOportunaGrado1", "TBMG1", "MatriculaGrado2", "EdadOportunaGrado2", "TBMG2", "MatriculaGrado3", 
+              "EdadOportunaGrado3", "TBMG3", "MatriculaGrado4", "EdadOportunaGrado4", "TBMG4", "MatriculaGrado5", 
+              "EdadOportunaGrado5", "TBMG5", "MatriculaGrado6", "EdadOportunaGrado6", "TBMG6", "MatriculaGrado7", 
+              "EdadOportunaGrado7", "TBMG7", "MatriculaGrado8", "EdadOportunaGrado8", "TBMG8", "MatriculaGrado9", 
+              "EdadOportunaGrado9", "TBMG9", "MatriculaGrado10", "EdadOportunaGrado10", "TBMG10", "MatriculaGrado11", 
+              "EdadOportunaGrado11", "TBMG11", "MatriculaGrado12", "EdadOportunaGrado12", "TBMG12"
+             FROM seduc_tasanetamatriculagrados;
         `);
     return rows;
   } catch (error) {
@@ -762,72 +934,115 @@ export const getseduc_tasabrutamatriculagradosM = async () => {
 };
 
 
-export const getseduc_tasanetaacceso3prebasicaM = async () => {
+export const getseduc_tasa_neta_bruta_matriculagradosM = async () => {
   try {
     const { rows } = await pool.query(`
              SELECT 
-              "Año", "Matrícula", "Población", "TBA"
-             FROM seduc_tasanetaacceso3prebasica;
+                n."Periodo",
+
+                -- Prebásica
+                n."MatriculaPrebasica3" AS "MatriculaPrebasica3_Neta",
+                b."MatriculaPrebasica3" AS "MatriculaPrebasica3_Bruta",
+                n."EdadOportunaPrebasica3" AS "EdadOportunaPrebasica3_Neta",
+                b."EdadOportunaPrebasica3" AS "EdadOportunaPrebasica3_Bruta",
+                n."TBMPB3" AS "tasa_neta_matricula_prebasica3",
+                b."TBMPB3" AS "tasa_bruta_matricula_prebasica3",
+
+                -- Grado 1 al 12
+                n."MatriculaGrado1" AS "MatriculaGrado1_Neta",
+                b."MatriculaGrado1" AS "MatriculaGrado1_Bruta",
+                n."EdadOportunaGrado1" AS "EdadOportunaGrado1_Neta",
+                b."EdadOportunaGrado1" AS "EdadOportunaGrado1_Bruta",
+                n."TBMG1" AS "tasa_neta_matricula_grado1",
+                b."TBMG1" AS "tasa_bruta_matricula_grado1",
+
+                n."MatriculaGrado2" AS "MatriculaGrado2_Neta",
+                b."MatriculaGrado2" AS "MatriculaGrado2_Bruta",
+                n."EdadOportunaGrado2" AS "EdadOportunaGrado2_Neta",
+                b."EdadOportunaGrado2" AS "EdadOportunaGrado2_Bruta",
+                n."TBMG2" AS "tasa_neta_matricula_grado2",
+                b."TBMG2" AS "tasa_bruta_matricula_grado2",
+
+                n."MatriculaGrado3" AS "MatriculaGrado3_Neta",
+                b."MatriculaGrado3" AS "MatriculaGrado3_Bruta",
+                n."EdadOportunaGrado3" AS "EdadOportunaGrado3_Neta",
+                b."EdadOportunaGrado3" AS "EdadOportunaGrado3_Bruta",
+                n."TBMG3" AS "tasa_neta_matricula_grado3",
+                b."TBMG3" AS "tasa_bruta_matricula_grado3",
+
+                n."MatriculaGrado4" AS "MatriculaGrado4_Neta",
+                b."MatriculaGrado4" AS "MatriculaGrado4_Bruta",
+                n."EdadOportunaGrado4" AS "EdadOportunaGrado4_Neta",
+                b."EdadOportunaGrado4" AS "EdadOportunaGrado4_Bruta",
+                n."TBMG4" AS "tasa_neta_matricula_grado4",
+                b."TBMG4" AS "tasa_bruta_matricula_grado4",
+
+                n."MatriculaGrado5" AS "MatriculaGrado5_Neta",
+                b."MatriculaGrado5" AS "MatriculaGrado5_Bruta",
+                n."EdadOportunaGrado5" AS "EdadOportunaGrado5_Neta",
+                b."EdadOportunaGrado5" AS "EdadOportunaGrado5_Bruta",
+                n."TBMG5" AS "tasa_neta_matricula_grado5",
+                b."TBMG5" AS "tasa_bruta_matricula_grado5",
+
+                n."MatriculaGrado6" AS "MatriculaGrado6_Neta",
+                b."MatriculaGrado6" AS "MatriculaGrado6_Bruta",
+                n."EdadOportunaGrado6" AS "EdadOportunaGrado6_Neta",
+                b."EdadOportunaGrado6" AS "EdadOportunaGrado6_Bruta",
+                n."TBMG6" AS "tasa_neta_matricula_grado6",
+                b."TBMG6" AS "tasa_bruta_matricula_grado6",
+
+                n."MatriculaGrado7" AS "MatriculaGrado7_Neta",
+                b."MatriculaGrado7" AS "MatriculaGrado7_Bruta",
+                n."EdadOportunaGrado7" AS "EdadOportunaGrado7_Neta",
+                b."EdadOportunaGrado7" AS "EdadOportunaGrado7_Bruta",
+                n."TBMG7" AS "tasa_neta_matricula_grado7",
+                b."TBMG7" AS "tasa_bruta_matricula_grado7",
+
+                n."MatriculaGrado8" AS "MatriculaGrado8_Neta",
+                b."MatriculaGrado8" AS "MatriculaGrado8_Bruta",
+                n."EdadOportunaGrado8" AS "EdadOportunaGrado8_Neta",
+                b."EdadOportunaGrado8" AS "EdadOportunaGrado8_Bruta",
+                n."TBMG8" AS "tasa_neta_matricula_grado8",
+                b."TBMG8" AS "tasa_bruta_matricula_grado8",
+
+                n."MatriculaGrado9" AS "MatriculaGrado9_Neta",
+                b."MatriculaGrado9" AS "MatriculaGrado9_Bruta",
+                n."EdadOportunaGrado9" AS "EdadOportunaGrado9_Neta",
+                b."EdadOportunaGrado9" AS "EdadOportunaGrado9_Bruta",
+                n."TBMG9" AS "tasa_neta_matricula_grado9",
+                b."TBMG9" AS "tasa_bruta_matricula_grado9",
+
+                n."MatriculaGrado10" AS "MatriculaGrado10_Neta",
+                b."MatriculaGrado10" AS "MatriculaGrado10_Bruta",
+                n."EdadOportunaGrado10" AS "EdadOportunaGrado10_Neta",
+                b."EdadOportunaGrado10" AS "EdadOportunaGrado10_Bruta",
+                n."TBMG10" AS "tasa_neta_matricula_grado10",
+                b."TBMG10" AS "tasa_bruta_matricula_grado10",
+
+                n."MatriculaGrado11" AS "MatriculaGrado11_Neta",
+                b."MatriculaGrado11" AS "MatriculaGrado11_Bruta",
+                n."EdadOportunaGrado11" AS "EdadOportunaGrado11_Neta",
+                b."EdadOportunaGrado11" AS "EdadOportunaGrado11_Bruta",
+                n."TBMG11" AS "tasa_neta_matricula_grado11",
+                b."TBMG11" AS "tasa_bruta_matricula_grado11",
+
+                n."MatriculaGrado12" AS "MatriculaGrado12_Neta",
+                b."MatriculaGrado12" AS "MatriculaGrado12_Bruta",
+                n."EdadOportunaGrado12" AS "EdadOportunaGrado12_Neta",
+                b."EdadOportunaGrado12" AS "EdadOportunaGrado12_Bruta",
+                n."TBMG12" AS "tasa_neta_matricula_grado12",
+                b."TBMG12" AS "tasa_bruta_matricula_grado12"
+
+            FROM seduc_tasanetamatriculagrados AS n
+            JOIN seduc_tasabrutamatriculagrados AS b
+                ON n."Periodo" = b."Periodo";
+
         `);
     return rows;
   } catch (error) {
     throw error;
   }
 };
-
-
-export const getseduc_tasanetaaccesoprimergradobasicaM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              "Año", "Matrícula", "Población", "TBA1GB"
-             FROM seduc_tasanetaaccesoprimergradobasica;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-
-
-export const getseduc_tasanetaciclosM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              "Periodo", "MatriculaICiclo", "EdadOportunaICiclo", "TNCI", "MatriculaIICiclo", 
-              "EdadOportunaIICiclo", "TNCII", "MatriculaIIICiclo", "EdadOportunaIIICiclo", "TNCIII"
-             FROM seduc_tasanetaciclos;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-
-
-export const getseduc_tasanetamatriculagradosM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              "Periodo", "MatriculaPrebasica3", "EdadOportunaPrebasica3", "TBMPB3", "MatriculaGrado1", 
-              "EdadOportunaGrado1", "TBMG1", "MatriculaGrado2", "EdadOportunaGrado2", "TBMG2", "MatriculaGrado3", 
-              "EdadOportunaGrado3", "TBMG3", "MatriculaGrado4", "EdadOportunaGrado4", "TBMG4", "MatriculaGrado5", 
-              "EdadOportunaGrado5", "TBMG5", "MatriculaGrado6", "EdadOportunaGrado6", "TBMG6", "MatriculaGrado7", 
-              "EdadOportunaGrado7", "TBMG7", "MatriculaGrado8", "EdadOportunaGrado8", "TBMG8", "MatriculaGrado9", 
-              "EdadOportunaGrado9", "TBMG9", "MatriculaGrado10", "EdadOportunaGrado10", "TBMG10", "MatriculaGrado11", 
-              "EdadOportunaGrado11", "TBMG11", "MatriculaGrado12", "EdadOportunaGrado12", "TBMG12"
-             FROM seduc_tasanetamatriculagrados;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
 
 
 export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () => {

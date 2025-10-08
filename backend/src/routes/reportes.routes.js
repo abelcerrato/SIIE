@@ -113,18 +113,18 @@ router.get("/infoptasasmatriculassectoreconomico", getinfop_tasasmatriculassecto
 
 /* SEDUC */
 router.get("/seducaccesoprimergrado", getseduc_accesoprimergradoC); 
-router.get("/seduccancelacionpivotgrado", getseduc_cancelacionpivotgradoC);
+//router.get("/seduccancelacionpivotgrado", getseduc_cancelacionpivotgradoC);
 
 router.get("/seduccoberturabrutaniveleseducativos", getseduc_coberturabrutaniveleseducativosC);
 router.get("/seduccoberturanetaniveleseducativos", getseduc_coberturanetaniveleseducativosC);
 router.get("/seduccoberturanetabrutaniveleseducativos", getseduc_cobertura_neta_brutaiveleseducativosC); //NETA Y BRUTA NIVELES
 
-router.get("/seducdesercionpivotgrado", getseduc_desercionpivotgradoC);
+//router.get("/seducdesercionpivotgrado", getseduc_desercionpivotgradoC);
 router.get("/seducescolarizcionporedades", getseduc_escolarizcionporedadesC);
 
 router.get("/seducmatriculabrutagrado", getseduc_matriculabrutagradoC);
 router.get("/seducmatriculanetagrado", getseduc_matriculanetagradoC);
-router.get("/seducmatriculanetabrutagrado", getseduc_matricula_neta_bruta_gradoC); //Matricula neta y bruta por grado
+router.get("/seducmatriculanetabrutagrado", getseduc_matricula_neta_bruta_gradoC); //Matricula neta y bruta por grado, esta no es tasa
 
 router.get("/seductasabrutaacceso3prebasica", getseduc_tasabrutaacceso3prebasicaC);
 router.get("/seductasanetaacceso3prebasica",  getseduc_tasanetaacceso3prebasicaC);
