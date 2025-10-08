@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad } from "../models/reportes.models.js";
+import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM } from "../models/reportes.models.js";
 
 
 /* SEDUC */
@@ -257,6 +257,70 @@ export const getSIIE_matricula_por_sexoC = async (req, res) => {
     res.json(siie);
   } catch (error) {
     console.error("Error al obtener la matricula por sexo de SIIE:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+
+/*
+  ######################################################################
+  ############################### VISTAS ###############################
+  ######################################################################
+*/
+
+/* INFOP */
+// Controlador para la tasa de matriculas de infop
+export const getinfop_tasasmatriculasC = async (req, res) => {
+  try {
+    const infop = await getinfop_tasasmatriculasM();
+    res.json(infop);
+  } catch (error) {
+    console.error("Error al obtener la tasa de matricula de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para la tasa de matriculas por modos de formación de infop
+export const getinfop_tasasmatriculasmodosformacionC = async (req, res) => {
+  try {
+    const infop = await getinfop_tasasmatriculasmodosformacionM();
+    res.json(infop);
+  } catch (error) {
+    console.error("Error al obtener la tasa por modos de formación de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para la tasa de matriculas por programas de infop
+export const getinfop_tasasmatriculasprogramasC = async (req, res) => {
+  try {
+    const infop = await getinfop_tasasmatriculasprogramasM();
+    res.json(infop);
+  } catch (error) {
+    console.error("Error al obtener la tasa por programas de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para la tasa de matriculas por regionales de infop
+export const getinfop_tasasmatriculasregionalesC = async (req, res) => {
+  try {
+    const infop = await getinfop_tasasmatriculasregionalesM();
+    res.json(infop);
+  } catch (error) {
+    console.error("Error al obtener la tasa por regionales de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+// Controlador para la tasa de matriculas por sector económico de infop
+export const getinfop_tasasmatriculassectoreconomicoC = async (req, res) => {
+  try {
+    const infop = await getinfop_tasasmatriculassectoreconomicoM();
+    res.json(infop);
+  } catch (error) {
+    console.error("Error al obtener la tasa por sector económico de infop:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };

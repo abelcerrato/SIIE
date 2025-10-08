@@ -1,6 +1,12 @@
 import { pool } from "../db.js";
 
 
+/*
+  ######################################################################
+  ############################### TABLAS ###############################
+  ######################################################################
+*/
+
 /*_________________________________________________ SEDUC ________________________________________________-*/
 
 export const getSeducM = async () => {
@@ -458,6 +464,112 @@ export const getSIIE_matricula_por_sexoM = async () => {
               mujerconeanfo, hombreconeanfo, 
               totalmujeres, totalhombres
              FROM siie_matricula_por_sexo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+
+/*
+  ######################################################################
+  ############################### VISTAS ###############################
+  ######################################################################
+*/
+
+/*_________________________________________________ INFOP _________________________________________________*/
+
+// Consulta para vista de tasas de matriculas de infop
+export const getinfop_tasasmatriculasM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", departamento, municipio, 
+              matriculados_hombre, aprobados_hombre, tasa_aprobados_hombres, 
+              matriculados_mujer, aprobados_mujer, tasa_aprobados_mujeres, 
+              matriculados_total, aprobados_total, tasa_aprobados_total, 
+              reprobados_hombre, tasa_reprobados_hombres, reprobados_mujer, tasa_reprobados_mujeres, reprobados_total, 
+              tasa_reprobados_total, desertores_hombre, tasa_desertores_hombres, desertores_mujer, tasa_desertores_mujeres, desertores_total, tasa_desertores_total
+             FROM infop_tasasmatriculas;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para vista de tasas de matriculas de infop por modos de formación
+export const getinfop_tasasmatriculasmodosformacionM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", regionales, modos_de_formacion, 
+              matriculados_hombre, aprobados_hombre, tasa_aprobados_hombres,
+              matriculados_mujer, aprobados_mujer, tasa_aprobados_mujeres, 
+              matriculados_total, aprobados_total, tasa_aprobados_total, 
+              reprobados_hombre, tasa_reprobados_hombres, reprobados_mujer, 
+              tasa_reprobados_mujeres, reprobados_total, tasa_reprobados_total, 
+              desertores_hombre, tasa_desertores_hombres, desertores_mujer, tasa_desertores_mujeres, 
+              desertores_total, tasa_desertores_total
+             FROM infop_tasasmatriculasmodosformacion;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para vista de tasas de matriculas de infop por programas
+export const getinfop_tasasmatriculasprogramasM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Programa", 
+              matriculados_hombre, aprobados_hombre, tasa_aprobados_hombres, aprobados_total, tasa_aprobados_total,
+              matriculados_mujer, aprobados_mujer, tasa_aprobados_mujeres, matriculados_total,  
+              desertores_hombre, tasa_desertores_hombres, desertores_mujer, tasa_desertores_mujeres, desertores_total, tasa_desertores_total
+             FROM infop_tasasmatriculasprogramas;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Consulta para vista de tasas de matriculas de infop por regionales
+export const getinfop_tasasmatriculasregionalesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+      SELECT 
+        "Año", nombre, 
+        matriculados_hombre, aprobados_hombre, tasa_aprobados_hombres, matriculados_mujer, aprobados_mujer, tasa_aprobados_mujeres, 
+        matriculados_total, aprobados_total, tasa_aprobados_total, reprobados_hombre, tasa_reprobados_hombres, reprobados_mujer, 
+        tasa_reprobados_mujeres, reprobados_total, tasa_reprobados_total, desertores_hombre, tasa_desertores_hombres, desertores_mujer, 
+        tasa_desertores_mujeres, desertores_total, tasa_desertores_total
+      FROM infop_tasasmatriculasregionales;`);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+// Consulta para vista de tasas de matriculas de infop por sector economico
+export const getinfop_tasasmatriculassectoreconomicoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", regionales, sector, 
+              matriculados_hombre, aprobados_hombre, tasa_aprobados_hombres, matriculados_mujer, aprobados_mujer, tasa_aprobados_mujeres, matriculados_total, 
+              aprobados_total, tasa_aprobados_total, reprobados_hombre, tasa_reprobados_hombres, reprobados_mujer, tasa_reprobados_mujeres, reprobados_total, 
+              tasa_reprobados_total, desertores_hombre, tasa_desertores_hombres, desertores_mujer, tasa_desertores_mujeres, desertores_total, tasa_desertores_total
+             FROM infop_tasasmatriculassectoreconomico;
         `);
     return rows;
   } catch (error) {

@@ -21,11 +21,21 @@ import {
     getDES_matricula_por_sexoC,
     getSIIE_matricula_por_departamentoC,
     getSIIE_matricula_por_institucionC,
-    getSIIE_matricula_por_sexoC
+    getSIIE_matricula_por_sexoC,
+    getinfop_tasasmatriculasC,
+    getinfop_tasasmatriculasmodosformacionC,
+    getinfop_tasasmatriculasprogramasC,
+    getinfop_tasasmatriculasregionalesC,
+    getinfop_tasasmatriculassectoreconomicoC
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
 
+/*
+  ######################################################################
+  ############################### TABLAS ###############################
+  ######################################################################
+*/
 
 /* SEDUC */
 router.get("/seduc", getSeducC); //no trae los datos
@@ -59,8 +69,27 @@ router.get("/desmatriculaporsexo", getDES_matricula_por_sexoC);
 
 
 /* SIIE */
-router.get("/siiematriculapordepartamento", getSIIE_matricula_por_departamentoC); 
+router.get("/siiematriculapordepartamento", getSIIE_matricula_por_departamentoC);
 router.get("/siiematriculaporinstitucion", getSIIE_matricula_por_institucionC);
 router.get("/siiematriculaporsexo", getSIIE_matricula_por_sexoC);
+
+
+
+/*
+  ######################################################################
+  ############################### TASAS ###############################
+  ######################################################################
+*/
+
+/* INFOP */
+router.get("/infoptasasmatriculas", getinfop_tasasmatriculasC);
+router.get("/infoptasasmatriculasmodosformacion", getinfop_tasasmatriculasmodosformacionC);
+router.get("/infoptasasmatriculasprogramas", getinfop_tasasmatriculasprogramasC);
+router.get("/infoptasasmatriculasprogramas", getinfop_tasasmatriculasregionalesC);
+router.get("/infoptasasmatriculassectoreconomico", getinfop_tasasmatriculassectoreconomicoC);
+
+
+
+
 
 export default router;
