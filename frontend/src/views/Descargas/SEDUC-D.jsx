@@ -387,6 +387,346 @@ const ReportesSeduc = () => {
 
             }
         },
+        {
+            value: "seducaccesoprimergrado",
+            label: "Tasa de Acceso a Primer Grado",
+            endpoint: "/seducaccesoprimergrado",
+            config: {
+                titulo: "Tasa de Acceso a Primer Grado",
+                filtros: ["Periodo", "Edad"],
+                columnasBase: ["Periodo", "Edad", "matricula", "repitencia", "poblacion", "tasa_a1b"],
+                encabezados: {
+                    "Periodo": "Periodo",
+                    "Edad": "Edad",
+                    "matricula": "Matrícula",
+                    "repitencia": "Repitencia",
+                    "poblacion": "Población",
+                    "tasa_a1b": "Tasa de Acceso a Primer Grado"
+                },
+            }
+        },
+        {
+            value: "seduccoberturanetabrutaniveleseducativos",
+            label: "Tasa de Cobertura Bruta  y Neta por Niveles Educativos",
+            endpoint: "/seduccoberturanetabrutaniveleseducativos",
+            config: {
+                titulo: "Tasa de Cobertura Bruta  y Neta por Niveles Educativos",
+                filtros: ["Año", "nivel",],
+                columnasBase: ["Año", "nivel", "matricula_bruta", "poblacion_bruta", "tasa_cobertura_bruta", "matricula_neta", "poblacion_neta", "tasa_cobertura_neta"],
+                encabezados: {
+                    "Año": "Año",
+                    "nivel": "Nivel Educativo",
+                    "matricula_bruta": "Matrícula Bruta",
+                    "poblacion_bruta": "Población Bruta",
+                    "tasa_cobertura_bruta": "Tasa de Cobertura Bruta",
+
+                    "matricula_neta": "Matrícula Neta",
+                    "poblacion_neta": "Población Neta",
+                    "tasa_cobertura_neta": "Tasa de Cobertura Neta",
+                },
+            }
+        },
+        {
+            value: "seductasanetabrutaacceso3prebasica",
+            label: "Tasa de Cobertura Bruta y Neta de Acceso a 3° de Prebásica",
+            endpoint: "/seductasanetabrutaacceso3prebasica",
+            config: {
+                titulo: "Tasa de Cobertura Bruta y Neta de Acceso a 3° de Prebásica",
+                filtros: ["Año"],
+                columnasBase: ["Año", "Matricula_Bruta", "Poblacion_Bruta", "tasa_acceso_3_prebasica_bruta", "Matricula_Neta", "Poblacion_Neta", "tasa_acceso_3_prebasica_neta"],
+                encabezados: {
+                    "Año": "Año",
+                    "nivel": "Nivel Educativo",
+                    "Matricula_Bruta": "Matrícula Bruta",
+                    "Poblacion_Bruta": "Población Bruta",
+                    "tasa_acceso_3_prebasica_bruta": "Tasa de Acceso a 3° de Prebásica Bruta",
+
+                    "Matricula_Neta": "Matrícula Neta",
+                    "Poblacion_Neta": "Población Neta",
+                    "tasa_acceso_3_prebasica_neta": "Tasa de Acceso a 3° de Prebásica Neta",
+                },
+            }
+        },
+        {
+            value: "seductasanetabrutaaccesoprimergradobasica",
+            label: "Tasa de Cobertura Bruta y Neta de Acceso a Primer Grado de Básica",
+            endpoint: "/seductasanetabrutaaccesoprimergradobasica",
+            config: {
+                titulo: "Tasa de Cobertura Bruta y Neta de Acceso a Primer Grado de Básica",
+                filtros: ["Año"],
+                columnasBase: ["Año", "Matricula_Bruta", "Poblacion_Bruta", "tasa_acceso_primer_grado_bruta", "Matricula_Neta", "Poblacion_Neta", "tasa_acceso_primer_grado_neta"],
+                encabezados: {
+                    "Año": "Año",
+                    "nivel": "Nivel Educativo",
+                    "Matricula_Bruta": "Matrícula Bruta",
+                    "Poblacion_Bruta": "Población Bruta",
+                    "tasa_acceso_primer_grado_bruta": "Tasa de Acceso a Primer Grado Bruta",
+
+                    "Matricula_Neta": "Matrícula Neta",
+                    "Poblacion_Neta": "Población Neta",
+                    "tasa_acceso_primer_grado_neta": "Tasa de Acceso a Primer Grado Neta",
+                },
+            }
+        },
+        {
+            value: "seductasanetabrutaciclos",
+            label: "Tasa de Cobertura Bruta y Neta por Ciclos",
+            endpoint: "/seductasanetabrutaciclos",
+            config: {
+                titulo: "Tasa de Cobertura Bruta y Neta por Ciclos",
+                filtros: ["Periodo"],
+                columnasBase: ["Periodo",
+                    "MatriculaICiclo_Bruta",
+                    "EdadOportunaICiclo_Bruta",
+                    "tasa_bruta_ciclo_I",
+
+                    "MatriculaICiclo_Neta",
+                    "EdadOportunaICiclo_Neta",
+                    "tasa_neta_ciclo_I",
+
+                    "MatriculaIICiclo_Bruta",
+                    "EdadOportunaIICiclo_Bruta",
+                    "tasa_bruta_ciclo_II",
+
+                    "MatriculaIICiclo_Neta",
+                    "EdadOportunaIICiclo_Neta",
+                    "tasa_neta_ciclo_II",
+
+                    "MatriculaIIICiclo_Bruta",
+                    "EdadOportunaIIICiclo_Bruta",
+                    "tasa_bruta_ciclo_III",
+
+                    "MatriculaIIICiclo_Neta",
+                    "EdadOportunaIIICiclo_Neta",
+                    "tasa_neta_ciclo_III",
+                ],
+                encabezados: {
+                    "Periodo": "Periodo",
+                    "MatriculaICiclo_Neta": "Matrícula I Ciclo Neta",
+                    "MatriculaICiclo_Bruta": "Matrícula I Ciclo Bruta",
+                    "EdadOportunaICiclo_Neta": "Edad Oportuna I Ciclo Neta",
+                    "EdadOportunaICiclo_Bruta": "Edad Oportuna I Ciclo Bruta",
+                    "tasa_neta_ciclo_I": "Tasa Neta Ciclo I",
+                    "tasa_bruta_ciclo_I": "Tasa Bruta Ciclo I",
+                    "MatriculaIICiclo_Neta": "Matrícula II Ciclo Neta",
+                    "MatriculaIICiclo_Bruta": "Matrícula II Ciclo Bruta",
+                    "EdadOportunaIICiclo_Neta": "Edad Oportuna II Ciclo Neta",
+                    "EdadOportunaIICiclo_Bruta": "Edad Oportuna II Ciclo Bruta",
+                    "tasa_neta_ciclo_II": "Tasa Neta Ciclo II",
+                    "tasa_bruta_ciclo_II": "Tasa Bruta Ciclo II",
+                    "MatriculaIIICiclo_Neta": "Matrícula III Ciclo Neta",
+                    "MatriculaIIICiclo_Bruta": "Matrícula III Ciclo Bruta",
+                    "EdadOportunaIIICiclo_Neta": "Edad Oportuna III Ciclo Neta",
+                    "EdadOportunaIIICiclo_Bruta": "Edad Oportuna III Ciclo Bruta",
+                    "tasa_neta_ciclo_III": "Tasa Neta Ciclo III",
+                    "tasa_bruta_ciclo_III": "Tasa Bruta Ciclo III"
+                }
+            }
+        },
+        {
+            value: "seducmatriculanetabrutamatriculagrados",
+            label: "Tasa de Matrícula Neta y Bruta por Grados",
+            endpoint: "/seducmatriculanetabrutamatriculagrados",
+            config: {
+                titulo: "Tasa de Matrícula Neta y Bruta por Grados",
+                filtros: ["Periodo"],
+                columnasBase: ["Periodo",
+                    "MatriculaPrebasica3_Bruta",
+                    "EdadOportunaPrebasica3_Bruta",
+                    "tasa_bruta_matricula_prebasica3",
+
+                    "MatriculaPrebasica3_Neta",
+                    "EdadOportunaPrebasica3_Neta",
+                    "tasa_neta_matricula_prebasica3",
+
+                    "MatriculaGrado1_Bruta",
+                    "EdadOportunaGrado1_Bruta",
+                    "tasa_bruta_matricula_grado1",
+
+                    "MatriculaGrado1_Neta",
+                    "EdadOportunaGrado1_Neta",
+                    "tasa_neta_matricula_grado1",
+
+                    "MatriculaGrado2_Bruta",
+                    "EdadOportunaGrado2_Bruta",
+                    "tasa_bruta_matricula_grado2",
+
+                    "MatriculaGrado2_Neta",
+                    "EdadOportunaGrado2_Neta",
+                    "tasa_neta_matricula_grado2",
+
+                    "MatriculaGrado3_Bruta",
+                    "EdadOportunaGrado3_Bruta",
+                    "tasa_bruta_matricula_grado3",
+
+                    "MatriculaGrado3_Neta",
+                    "EdadOportunaGrado3_Neta",
+                    "tasa_neta_matricula_grado3",
+
+                    "MatriculaGrado4_Bruta",
+                    "EdadOportunaGrado4_Bruta",
+                    "tasa_bruta_matricula_grado4",
+
+                    "MatriculaGrado4_Neta",
+                    "EdadOportunaGrado4_Neta",
+                    "tasa_neta_matricula_grado4",
+
+                    "MatriculaGrado5_Bruta",
+                    "EdadOportunaGrado5_Bruta",
+                    "tasa_bruta_matricula_grado5",
+
+                    "MatriculaGrado5_Neta",
+                    "EdadOportunaGrado5_Neta",
+                    "tasa_neta_matricula_grado5",
+
+                    "MatriculaGrado6_Bruta",
+                    "EdadOportunaGrado6_Bruta",
+                    "tasa_bruta_matricula_grado6",
+
+                    "MatriculaGrado6_Neta",
+                    "EdadOportunaGrado6_Neta",
+                    "tasa_neta_matricula_grado6",
+
+                    "MatriculaGrado7_Bruta",
+                    "EdadOportunaGrado7_Bruta",
+                    "tasa_bruta_matricula_grado7",
+
+                    "MatriculaGrado7_Neta",
+                    "EdadOportunaGrado7_Neta",
+                    "tasa_neta_matricula_grado7",
+
+                    "MatriculaGrado8_Bruta",
+                    "EdadOportunaGrado8_Bruta",
+                    "tasa_bruta_matricula_grado8",
+
+                    "MatriculaGrado8_Neta",
+                    "EdadOportunaGrado8_Neta",
+                    "tasa_neta_matricula_grado8",
+
+                    "MatriculaGrado9_Bruta",
+                    "EdadOportunaGrado9_Bruta",
+                    "tasa_bruta_matricula_grado9",
+
+                    "MatriculaGrado9_Neta",
+                    "EdadOportunaGrado9_Neta",
+                    "tasa_neta_matricula_grado9",
+
+                    "MatriculaGrado10_Bruta",
+                    "EdadOportunaGrado10_Bruta",
+                    "tasa_bruta_matricula_grado10",
+
+                    "MatriculaGrado10_Neta",
+                    "EdadOportunaGrado10_Neta",
+                    "tasa_neta_matricula_grado10",
+
+                    "MatriculaGrado11_Bruta",
+                    "EdadOportunaGrado11_Bruta",
+                    "tasa_bruta_matricula_grado11",
+
+                    "MatriculaGrado11_Neta",
+                    "EdadOportunaGrado11_Neta",
+                    "tasa_neta_matricula_grado11",
+                ],
+                encabezados: {
+                    "Periodo": "Periodo",
+                    "MatriculaPrebasica3_Bruta": "Matrícula Prebásica 3° Bruta",    
+                    "EdadOportunaPrebasica3_Bruta": "Edad Oportuna Prebásica 3° Bruta", 
+                    "tasa_bruta_matricula_prebasica3": "Tasa Bruta Matrícula Prebásica 3°",  
+
+                    "MatriculaPrebasica3_Neta": "Matrícula Prebásica 3° Neta", 
+                    "EdadOportunaPrebasica3_Neta": "Edad Oportuna Prebásica 3° Neta",  
+                    "tasa_neta_matricula_prebasica3": "Tasa Neta Matrícula Prebásica 3°",   
+
+                    "MatriculaGrado1_Bruta": "Matrícula 1er Grado Bruta",
+                    "EdadOportunaGrado1_Bruta": "Edad Oportuna 1er Grado Bruta",
+                    "tasa_bruta_matricula_grado1": "Tasa Bruta Matrícula 1er Grado",
+
+                    "MatriculaGrado1_Neta": "Matrícula 1er Grado Neta",
+                    "EdadOportunaGrado1_Neta": "Edad Oportuna 1er Grado Neta",
+                    "tasa_neta_matricula_grado1": "Tasa Neta Matrícula 1er Grado",
+
+                    "MatriculaGrado2_Bruta": "Matrícula 2do Grado Bruta",   
+                    "EdadOportunaGrado2_Bruta": "Edad Oportuna 2do Grado Bruta",
+                    "tasa_bruta_matricula_grado2": "Tasa Bruta Matrícula 2do Grado",
+
+                    "MatriculaGrado2_Neta": "Matrícula 2do Grado Neta",
+                    "EdadOportunaGrado2_Neta": "Edad Oportuna 2do Grado Neta",
+                    "tasa_neta_matricula_grado2": "Tasa Neta Matrícula 2do Grado",
+
+                    "MatriculaGrado3_Bruta": "Matrícula 3er Grado Bruta",
+                    "EdadOportunaGrado3_Bruta": "Edad Oportuna 3er Grado Bruta",
+                    "tasa_bruta_matricula_grado3": "Tasa Bruta Matrícula 3er Grado",
+
+                    "MatriculaGrado3_Neta": "Matrícula 3er Grado Neta",
+                    "EdadOportunaGrado3_Neta": "Edad Oportuna 3er Grado Neta",
+                    "tasa_neta_matricula_grado3": "Tasa Neta Matrícula 3er Grado",
+
+                    "MatriculaGrado4_Bruta": "Matrícula 4to Grado Bruta",
+                    "EdadOportunaGrado4_Bruta": "Edad Oportuna 4to Grado Bruta",
+                    "tasa_bruta_matricula_grado4": "Tasa Bruta Matrícula 4to Grado",
+
+                    "MatriculaGrado4_Neta": "Matrícula 4to Grado Neta",
+                    "EdadOportunaGrado4_Neta": "Edad Oportuna 4to Grado Neta",
+                    "tasa_neta_matricula_grado4": "Tasa Neta Matrícula 4to Grado",
+
+                    "MatriculaGrado5_Bruta": "Matrícula 5to Grado Bruta",
+                    "EdadOportunaGrado5_Bruta": "Edad Oportuna 5to Grado Bruta",
+                    "tasa_bruta_matricula_grado5": "Tasa Bruta Matrícula 5to Grado",
+
+                    "MatriculaGrado5_Neta": "Matrícula 5to Grado Neta",
+                    "EdadOportunaGrado5_Neta": "Edad Oportuna 5to Grado Neta",
+                    "tasa_neta_matricula_grado5": "Tasa Neta Matrícula 5to Grado",
+
+                    "MatriculaGrado6_Bruta": "Matrícula 6to Grado Bruta",
+                    "EdadOportunaGrado6_Bruta": "Edad Oportuna 6to Grado Bruta",
+                    "tasa_bruta_matricula_grado6": "Tasa Bruta Matrícula 6to Grado",
+
+                    "MatriculaGrado6_Neta": "Matrícula 6to Grado Neta",
+                    "EdadOportunaGrado6_Neta": "Edad Oportuna 6to Grado Neta",
+                    "tasa_neta_matricula_grado6": "Tasa Neta Matrícula 6to Grado",
+
+                    "MatriculaGrado7_Bruta": "Matrícula 7mo Grado Bruta",   
+                    "EdadOportunaGrado7_Bruta": "Edad Oportuna 7mo Grado Bruta",
+                    "tasa_bruta_matricula_grado7": "Tasa Bruta Matrícula 7mo Grado",
+
+                    "MatriculaGrado7_Neta": "Matrícula 7mo Grado Neta",
+                    "EdadOportunaGrado7_Neta": "Edad Oportuna 7mo Grado Neta",
+                    "tasa_neta_matricula_grado7": "Tasa Neta Matrícula 7mo Grado",
+
+                    "MatriculaGrado8_Bruta": "Matrícula 8vo Grado Bruta",
+                    "EdadOportunaGrado8_Bruta": "Edad Oportuna 8vo Grado Bruta",
+                    "tasa_bruta_matricula_grado8": "Tasa Bruta Matrícula 8vo Grado",
+
+                    "MatriculaGrado8_Neta": "Matrícula 8vo Grado Neta",
+                    "EdadOportunaGrado8_Neta": "Edad Oportuna 8vo Grado Neta",
+                    "tasa_neta_matricula_grado8": "Tasa Neta Matrícula 8vo Grado",
+
+                    "MatriculaGrado9_Bruta": "Matrícula 9no Grado Bruta",
+                    "EdadOportunaGrado9_Bruta": "Edad Oportuna 9no Grado Bruta",
+                    "tasa_bruta_matricula_grado9": "Tasa Bruta Matrícula 9no Grado",
+
+                    "MatriculaGrado9_Neta": "Matrícula 9no Grado Neta",
+                    "EdadOportunaGrado9_Neta": "Edad Oportuna 9no Grado Neta",
+                    "tasa_neta_matricula_grado9": "Tasa Neta Matrícula 9no Grado",
+
+                    "MatriculaGrado10_Bruta": "Matrícula 10mo Grado Bruta",
+                    "EdadOportunaGrado10_Bruta": "Edad Oportuna 10mo Grado Bruta",
+                    "tasa_bruta_matricula_grado10": "Tasa Bruta Matrícula 10mo Grado",
+
+                    "MatriculaGrado10_Neta": "Matrícula 10mo Grado Neta",
+                    "EdadOportunaGrado10_Neta": "Edad Oportuna 10mo Grado Neta",
+                    "tasa_neta_matricula_grado10": "Tasa Neta Matrícula 10mo Grado",
+
+                    "MatriculaGrado11_Bruta": "Matrícula 11mo Grado Bruta",
+                    "EdadOportunaGrado11_Bruta": "Edad Oportuna 11mo Grado Bruta",
+                    "tasa_bruta_matricula_grado11": "Tasa Bruta Matrícula 11mo Grado",
+
+                    "MatriculaGrado11_Neta": "Matrícula 11mo Grado Neta",
+                    "EdadOportunaGrado11_Neta": "Edad Oportuna 11mo Grado Neta",
+                    "tasa_neta_matricula_grado11": "Tasa Neta Matrícula 11mo Grado",
+                }
+            }
+        },
     ];
 
     // Obtener configuración del reporte actual
@@ -447,12 +787,127 @@ const ReportesSeduc = () => {
         }
     }, [reporteSeleccionado]);
 
-    // Obtener valores únicos para los filtros
+
     // Obtener valores únicos para los filtros
     const getValoresUnicos = (campo) => {
-        return [...new Set(data.map(item => item[campo]))]
-            .filter(val => val != null && val !== "") // Filtrar null, undefined y vacíos
+        let datosFiltrados = data;
+
+        // Aplicar filtros existentes excepto el campo actual
+        const filtrosAplicar = { ...filters };
+        delete filtrosAplicar[campo];
+
+        // Normalizar el campo actual
+        const campoNormalizado = campo.toLowerCase();
+        const config = getConfigReporte();
+
+        // Si estamos obteniendo municipios y hay un departamento seleccionado, aplicar ese filtro primero
+        if (campoNormalizado === 'municipio') {
+            const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
+
+            if (campoDepartamento && filters[campoDepartamento]) {
+                datosFiltrados = data.filter(item =>
+                    item[campoDepartamento] === filters[campoDepartamento]
+                );
+            }
+        }
+
+        // Si estamos obteniendo aldeas y hay municipio o departamento seleccionado, aplicar esos filtros
+        if (campoNormalizado === 'aldea') {
+            const campoMunicipio = config.filtros?.find(f => f.toLowerCase() === 'municipio');
+            const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
+
+            if (filters[campoMunicipio]) {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[campoMunicipio] === filters[campoMunicipio]
+                );
+            } else if (filters[campoDepartamento]) {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[campoDepartamento] === filters[campoDepartamento]
+                );
+            }
+        }
+
+        // Aplicar otros filtros existentes
+        Object.keys(filtrosAplicar).forEach(key => {
+            if (filtrosAplicar[key] && key !== 'valor') {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[key] === filtrosAplicar[key]
+                );
+            }
+        });
+
+        return [...new Set(datosFiltrados.map(item => item[campo]))]
+            .filter(val => val != null && val !== "")
             .sort();
+    };
+    // Función específica para obtener municipios basados en departamento
+
+    const getMunicipiosFiltrados = (campoMunicipio = 'municipio') => {
+        // Encontrar el campo de departamento correspondiente
+        const config = getConfigReporte();
+        const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
+
+        if (campoDepartamento && filters[campoDepartamento]) {
+            // Filtrar municipios por departamento seleccionado
+            const municipiosPorDepartamento = data
+                .filter(item => item[campoDepartamento] === filters[campoDepartamento])
+                .map(item => item[campoMunicipio]);
+
+            return [...new Set(municipiosPorDepartamento)]
+                .filter(val => val != null && val !== "")
+                .sort();
+        } else {
+            // Si no hay departamento seleccionado, mostrar todos los municipios
+            return [...new Set(data.map(item => item[campoMunicipio]))]
+                .filter(val => val != null && val !== "")
+                .sort();
+        }
+    };
+
+    // Función específica para obtener aldeas basadas en municipio
+
+    const getAldeasFiltradas = () => {
+        const config = getConfigReporte();
+        const campoMunicipio = config.filtros?.find(f => f.toLowerCase() === 'municipio');
+        const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
+        const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
+
+        if (!campoAldea) return []; // Si el reporte no tiene campo aldea, retornar vacío
+
+        if (filters[campoMunicipio]) {
+            // Filtrar aldeas por municipio seleccionado
+            let datosFiltrados = data;
+
+            // Aplicar filtro de departamento si existe
+            if (filters[campoDepartamento]) {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[campoDepartamento] === filters[campoDepartamento]
+                );
+            }
+
+            // Aplicar filtro de municipio
+            const aldeasPorMunicipio = datosFiltrados
+                .filter(item => item[campoMunicipio] === filters[campoMunicipio])
+                .map(item => item[campoAldea]);
+
+            return [...new Set(aldeasPorMunicipio)]
+                .filter(val => val != null && val !== "")
+                .sort();
+        } else {
+            // Si no hay municipio seleccionado, mostrar todas las aldeas
+            let datosFiltrados = data;
+
+            // Aplicar filtro de departamento si existe
+            if (filters[campoDepartamento]) {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[campoDepartamento] === filters[campoDepartamento]
+                );
+            }
+
+            return [...new Set(datosFiltrados.map(item => item[campoAldea]))]
+                .filter(val => val != null && val !== "")
+                .sort();
+        }
     };
 
 
@@ -659,13 +1114,38 @@ const ReportesSeduc = () => {
 
 
 
+    // Actualizar la función handleFilterChange para manejar diferentes capitalizaciones
+
     const handleFilterChange = (field, value) => {
-        setFilters(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setFilters(prev => {
+            const nuevosFiltros = { ...prev, [field]: value };
+
+            // Normalizar el nombre del campo para las comparaciones
+            const campoNormalizado = field.toLowerCase();
+            const config = getConfigReporte();
+
+            // Limpiar dependencias cuando se cambia el filtro padre
+            if (campoNormalizado === 'departamento') {
+                // Encontrar los campos correspondientes (pueden estar en mayúsculas)
+                const campoMunicipio = config.filtros?.find(f => f.toLowerCase() === 'municipio');
+                const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
+
+                // Si cambia el departamento, limpiar municipio y aldea
+                if (campoMunicipio) nuevosFiltros[campoMunicipio] = "";
+                if (campoAldea) nuevosFiltros[campoAldea] = "";
+            } else if (campoNormalizado === 'municipio') {
+                // Encontrar el campo de aldea correspondiente
+                const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
+
+                // Si cambia el municipio, limpiar aldea
+                if (campoAldea) nuevosFiltros[campoAldea] = "";
+            }
+
+            return nuevosFiltros;
+        });
         setPage(1);
     };
+
 
     const clearFilters = () => {
         const config = getConfigReporte();
@@ -688,6 +1168,7 @@ const ReportesSeduc = () => {
         setFilters(nuevosFiltros);
         setPage(1);
     };
+
 
     // Paginación
     const getPaginatedData = () => {
@@ -895,7 +1376,111 @@ const ReportesSeduc = () => {
                 );
             }
 
-            // Filtro dinámico basado en datos
+            // Normalizar el nombre del campo para comparaciones
+            const campoNormalizado = filtro.toLowerCase();
+
+            // Para DEPARTAMENTO (en cualquier capitalización) - siempre mostrar todos los departamentos disponibles
+            if (campoNormalizado === 'departamento') {
+                const departamentosUnicos = [...new Set(data.map(item => item[filtro]))]
+                    .filter(val => val != null && val !== "")
+                    .sort();
+
+                return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <Select
+                                value={filters[filtro] || ""}
+                                onChange={(e) => handleFilterChange(filtro, e.target.value)}
+                                label={getEncabezado(filtro)}
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                {departamentosUnicos.map(departamento => (
+                                    <MenuItem key={departamento} value={departamento}>
+                                        {departamento}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                );
+            }
+
+            // Manejo especial para municipio (depende de departamento) - en cualquier capitalización
+            if (campoNormalizado === 'municipio' && config.filtros?.some(f => f.toLowerCase() === 'departamento')) {
+                const municipiosFiltrados = getMunicipiosFiltrados(filtro);
+                const todosLosMunicipios = [...new Set(data.map(item => item[filtro]))]
+                    .filter(val => val != null && val !== "")
+                    .sort();
+
+                // Encontrar el campo de departamento correspondiente (puede estar en mayúsculas)
+                const campoDepartamento = config.filtros.find(f => f.toLowerCase() === 'departamento');
+
+                return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <Select
+                                value={filters[filtro] || ""}
+                                onChange={(e) => handleFilterChange(filtro, e.target.value)}
+                                label={getEncabezado(filtro)}
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                {municipiosFiltrados.map(municipio => (
+                                    <MenuItem key={municipio} value={municipio}>
+                                        {municipio}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        {filters[campoDepartamento] && (
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                                {municipiosFiltrados.length} municipio(s) en {filters[campoDepartamento]}
+                            </Typography>
+                        )}
+                    </Grid>
+                );
+            }
+
+            // Manejo especial para aldea (depende de municipio y departamento) - MANTENIDO para otros reportes
+            if (campoNormalizado === 'aldea' && config.filtros?.some(f => f.toLowerCase() === 'municipio')) {
+                const aldeasFiltradas = getAldeasFiltradas();
+                const todasLasAldeas = [...new Set(data.map(item => item[filtro]))]
+                    .filter(val => val != null && val !== "")
+                    .sort();
+
+                // Encontrar los campos correspondientes
+                const campoMunicipio = config.filtros.find(f => f.toLowerCase() === 'municipio');
+                const campoDepartamento = config.filtros.find(f => f.toLowerCase() === 'departamento');
+
+                return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <Select
+                                value={filters[filtro] || ""}
+                                onChange={(e) => handleFilterChange(filtro, e.target.value)}
+                                label={getEncabezado(filtro)}
+                                disabled={aldeasFiltradas.length === 0}
+                            >
+                                <MenuItem value="">Todas</MenuItem>
+                                {aldeasFiltradas.map(aldea => (
+                                    <MenuItem key={aldea} value={aldea}>
+                                        {aldea}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        {(filters[campoDepartamento] || filters[campoMunicipio]) && (
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                                {aldeasFiltradas.length} aldea(s) disponibles
+                            </Typography>
+                        )}
+                    </Grid>
+                );
+            }
+
+            // Filtro dinámico basado en datos (para otros campos)
             const valoresUnicos = getValoresUnicos(filtro);
 
             return (
@@ -1388,18 +1973,29 @@ const ReportesSeduc = () => {
                                     ))}
                                 </TableRow>
                             </TableHead>
-
                             <TableBody>
                                 {paginatedData.map((item, index) => (
                                     <TableRow key={index} hover>
-                                        {columnasAMostrar.map((columna) => (
-                                            <TableCell key={`${columna}-${index}`}>
-                                                {item[columna] ?? "-"}
-                                            </TableCell>
-                                        ))}
+                                        {columnasAMostrar.map((columna) => {
+                                            const valor = item[columna];
+                                            const esTasa = columna.startsWith("tasa_");
+                                            const valorFormateado =
+                                                valor === null || valor === undefined
+                                                    ? "-"
+                                                    : esTasa
+                                                        ? `${(valor * 100).toFixed(2)} %`  // convierte 0.85 → 85.00 %
+                                                        : valor;
+
+                                            return (
+                                                <TableCell key={`${columna}-${index}`}>
+                                                    {valorFormateado}
+                                                </TableCell>
+                                            );
+                                        })}
                                     </TableRow>
                                 ))}
                             </TableBody>
+
                         </Table>
                     </TableContainer>
 
@@ -1476,7 +2072,7 @@ const ReportesSeduc = () => {
                         <Box
                             sx={{
                                 p: 3,
-                               
+
                                 display: "flex",
                                 justifyContent: "center",   // centra horizontalmente
                                 alignItems: "center",       // centra verticalmente
@@ -1506,9 +2102,9 @@ const ReportesSeduc = () => {
                                                 sx={{
                                                     display: "flex",
                                                     flexDirection: "column",
-                                                    justifyContent: "center",  
-                                                    alignItems: "center",    
-                                                    height: "100%",    
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    height: "100%",
                                                     textAlign: "center",
                                                 }}
                                             >

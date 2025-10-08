@@ -285,7 +285,7 @@ const Header = () => {
           {tienePermiso(3) && (
             <NavButton
               component={NavLink}
-              to="/CONEANFO"
+              to="/Dashboard/Descargas/CONEANFO"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
               CONEANFO

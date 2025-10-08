@@ -460,7 +460,7 @@ export const getseduc_tasabrutaacceso3prebasicaC = async (req, res) => {
 
 export const getseduc_tasa_neta_bruta_acceso3prebasicaC = async (req, res) => {
   try {
-    const neta = await getseduc_tasa_neta_bruta_acceso3prebasicaM();
+    const tasa = await getseduc_tasa_neta_bruta_acceso3prebasicaM();
       res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);

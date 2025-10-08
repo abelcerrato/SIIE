@@ -253,6 +253,368 @@ const ReportesInfop = () => {
                 },
             }
         },
+        {
+            value: "infoptasasmatriculas",
+            label: "Tasas de Matrículas",
+            endpoint: "/infoptasasmatriculas",
+            config: {
+                titulo: "Tasas de Matrículas",
+                filtros: ["Año", "departamento", "municipio"],
+                columnasBase: [
+                    "Año",
+                    "departamento",
+                    "municipio",
+
+                    "matriculados_hombre",
+                    "matriculados_mujer",
+                    "matriculados_total",
+
+                    "aprobados_hombre",
+                    "aprobados_mujer",
+                    "aprobados_total",
+
+                    "tasa_aprobados_hombres",
+                    "tasa_aprobados_mujeres",
+                    "tasa_aprobados_total",
+
+                    "reprobados_hombre",
+                    "reprobados_mujer",
+                    "reprobados_total",
+
+                    "tasa_reprobados_hombres",
+                    "tasa_reprobados_mujeres",
+                    "tasa_reprobados_total",
+
+                    "desertores_hombre",
+                    "desertores_mujer",
+                    "desertores_total",
+
+                    "tasa_desertores_hombres",
+                    "tasa_desertores_mujeres",
+                    "tasa_desertores_total"
+                ],
+                encabezados: {
+                    "Año": "Año",
+                    "departamento": "Departamento",
+                    "municipio": "Municipio",
+
+                    "matriculados_hombre": "Matriculados Hombre",
+                    "matriculados_mujer": "Matriculados Mujer",
+                    "matriculados_total": "Matriculados Total",
+
+
+                    "aprobados_hombre": "Aprobados Hombre",
+                    "aprobados_mujer": "Aprobados Mujer",
+                    "aprobados_total": "Aprobados Total",
+
+                    "tasa_aprobados_hombres": "Tasa Aprobados Hombres",
+                    "tasa_aprobados_mujeres": "Tasa Aprobados Mujeres",
+                    "tasa_aprobados_total": "Tasa Aprobados Total",
+
+                    "reprobados_hombre": "Reprobados Hombre",
+                    "reprobados_mujer": "Reprobados Mujer",
+                    "reprobados_total": "Reprobados Total",
+                    "tasa_reprobados_hombres": "Tasa Reprobados Hombres",
+                    "tasa_reprobados_mujeres": "Tasa Reprobados Mujeres",
+                    "tasa_reprobados_total": "Tasa Reprobados Total",
+
+
+                    "desertores_hombre": "Desertores Hombre",
+                    "desertores_mujer": "Desertores Mujer",
+                    "desertores_total": "Desertores Total",
+                    "tasa_desertores_hombres": "Tasa Desertores Hombres",
+                    "tasa_desertores_mujeres": "Tasa Desertores Mujeres",
+                    "tasa_desertores_total": "Tasa Desertores Total"
+                }
+            }
+        },
+        {
+            value: "infoptasasmatriculasmodosformacion",
+            label: "Tasas de Matrículas por Modos de Formación",
+            endpoint: "/infoptasasmatriculasmodosformacion",
+            config: {
+                titulo: "Tasas de Matrículas por Modos de Formación",
+                filtros: ["Año", "regionales", "modos_de_formacion"],
+                columnasBase: [
+                    "Año",
+                    "regionales",
+                    "modos_de_formacion",
+
+                    "matriculados_hombre",
+                    "matriculados_mujer",
+                    "matriculados_total",
+
+                    "aprobados_hombre",
+                    "aprobados_mujer",
+                    "aprobados_total",
+
+                    "tasa_aprobados_hombres",
+                    "tasa_aprobados_mujeres",
+                    "tasa_aprobados_total",
+
+                    "reprobados_hombre",
+                    "reprobados_mujer",
+                    "reprobados_total",
+
+                    "tasa_reprobados_hombres",
+                    "tasa_reprobados_mujeres",
+                    "tasa_reprobados_total",
+
+                    "desertores_hombre",
+                    "desertores_mujer",
+                    "desertores_total",
+
+                    "tasa_desertores_hombres",
+                    "tasa_desertores_mujeres",
+                    "tasa_desertores_total"
+                ],
+                encabezados: {
+                    "Año": "Año",
+                    "regionales": "Regional",
+                    "modos_de_formacion": "Modos de Formación",
+
+                    "matriculados_hombre": "Matriculados Hombre",
+                    "matriculados_mujer": "Matriculados Mujer",
+                    "matriculados_total": "Matriculados Total",
+
+
+                    "aprobados_hombre": "Aprobados Hombre",
+                    "aprobados_mujer": "Aprobados Mujer",
+                    "aprobados_total": "Aprobados Total",
+
+                    "tasa_aprobados_hombres": "Tasa Aprobados Hombres",
+                    "tasa_aprobados_mujeres": "Tasa Aprobados Mujeres",
+                    "tasa_aprobados_total": "Tasa Aprobados Total",
+
+                    "reprobados_hombre": "Reprobados Hombre",
+                    "reprobados_mujer": "Reprobados Mujer",
+                    "reprobados_total": "Reprobados Total",
+                    "tasa_reprobados_hombres": "Tasa Reprobados Hombres",
+                    "tasa_reprobados_mujeres": "Tasa Reprobados Mujeres",
+                    "tasa_reprobados_total": "Tasa Reprobados Total",
+
+
+                    "desertores_hombre": "Desertores Hombre",
+                    "desertores_mujer": "Desertores Mujer",
+                    "desertores_total": "Desertores Total",
+                    "tasa_desertores_hombres": "Tasa Desertores Hombres",
+                    "tasa_desertores_mujeres": "Tasa Desertores Mujeres",
+                    "tasa_desertores_total": "Tasa Desertores Total"
+                }
+            }
+        },
+        {
+            value: "infoptasasmatriculasprogramas",
+            label: "Tasas de Matrículas por Programas",
+            endpoint: "/infoptasasmatriculasprogramas",
+            config: {
+                titulo: "Tasas de Matrículas por Programas",
+                filtros: ["Año", "Programa"],
+                columnasBase: ["Año",
+                    "Programa",
+                    "matriculados_hombre",
+                    "matriculados_mujer",
+                    "matriculados_total",
+
+                    "aprobados_hombre",
+                    "aprobados_mujer",
+                    "aprobados_total",
+
+                    "tasa_aprobados_hombres",
+                    "tasa_aprobados_mujeres",
+                    "tasa_aprobados_total",
+
+                    "reprobados_hombre",
+                    "reprobados_mujer",
+                    "reprobados_total",
+
+                    "tasa_reprobados_hombres",
+                    "tasa_reprobados_mujeres",
+                    "tasa_reprobados_total",
+
+                    "desertores_hombre",
+                    "desertores_mujer",
+                    "desertores_total",
+
+                    "tasa_desertores_hombres",
+                    "tasa_desertores_mujeres",
+                    "tasa_desertores_total"],
+                encabezados: {
+                    "anio": "Año",
+                    "Programa": "Programa",
+                    "matriculados_hombre": "Matriculados Hombre",
+                    "matriculados_mujer": "Matriculados Mujer",
+                    "matriculados_total": "Matriculados Total",
+
+
+                    "aprobados_hombre": "Aprobados Hombre",
+                    "aprobados_mujer": "Aprobados Mujer",
+                    "aprobados_total": "Aprobados Total",
+
+                    "tasa_aprobados_hombres": "Tasa Aprobados Hombres",
+                    "tasa_aprobados_mujeres": "Tasa Aprobados Mujeres",
+                    "tasa_aprobados_total": "Tasa Aprobados Total",
+
+                    "reprobados_hombre": "Reprobados Hombre",
+                    "reprobados_mujer": "Reprobados Mujer",
+                    "reprobados_total": "Reprobados Total",
+                    "tasa_reprobados_hombres": "Tasa Reprobados Hombres",
+                    "tasa_reprobados_mujeres": "Tasa Reprobados Mujeres",
+                    "tasa_reprobados_total": "Tasa Reprobados Total",
+
+
+                    "desertores_hombre": "Desertores Hombre",
+                    "desertores_mujer": "Desertores Mujer",
+                    "desertores_total": "Desertores Total",
+                    "tasa_desertores_hombres": "Tasa Desertores Hombres",
+                    "tasa_desertores_mujeres": "Tasa Desertores Mujeres",
+                    "tasa_desertores_total": "Tasa Desertores Total"
+
+                },
+            }
+        },
+        {
+            value: "infoptasasmatriculasregionales",
+            label: "Tasas de Matrículas por Regionales",
+            endpoint: "/infoptasasmatriculasregionales",
+            config: {
+                titulo: "Tasas de Matrículas por Regionales",
+                filtros: ["Año", "nombre"],
+                columnasBase: ["Año",
+                    "nombre",
+                    "matriculados_hombre",
+                    "matriculados_mujer",
+                    "matriculados_total",
+
+                    "aprobados_hombre",
+                    "aprobados_mujer",
+                    "aprobados_total",
+
+                    "tasa_aprobados_hombres",
+                    "tasa_aprobados_mujeres",
+                    "tasa_aprobados_total",
+
+                    "reprobados_hombre",
+                    "reprobados_mujer",
+                    "reprobados_total",
+
+                    "tasa_reprobados_hombres",
+                    "tasa_reprobados_mujeres",
+                    "tasa_reprobados_total",
+
+                    "desertores_hombre",
+                    "desertores_mujer",
+                    "desertores_total",
+
+                    "tasa_desertores_hombres",
+                    "tasa_desertores_mujeres",
+                    "tasa_desertores_total"],
+                encabezados: {
+                    "anio": "Año",
+                    "nombre": "Regional",
+                    "matriculados_hombre": "Matriculados Hombre",
+                    "matriculados_mujer": "Matriculados Mujer",
+                    "matriculados_total": "Matriculados Total",
+
+
+                    "aprobados_hombre": "Aprobados Hombre",
+                    "aprobados_mujer": "Aprobados Mujer",
+                    "aprobados_total": "Aprobados Total",
+
+                    "tasa_aprobados_hombres": "Tasa Aprobados Hombres",
+                    "tasa_aprobados_mujeres": "Tasa Aprobados Mujeres",
+                    "tasa_aprobados_total": "Tasa Aprobados Total",
+
+                    "reprobados_hombre": "Reprobados Hombre",
+                    "reprobados_mujer": "Reprobados Mujer",
+                    "reprobados_total": "Reprobados Total",
+                    "tasa_reprobados_hombres": "Tasa Reprobados Hombres",
+                    "tasa_reprobados_mujeres": "Tasa Reprobados Mujeres",
+                    "tasa_reprobados_total": "Tasa Reprobados Total",
+
+
+                    "desertores_hombre": "Desertores Hombre",
+                    "desertores_mujer": "Desertores Mujer",
+                    "desertores_total": "Desertores Total",
+                    "tasa_desertores_hombres": "Tasa Desertores Hombres",
+                    "tasa_desertores_mujeres": "Tasa Desertores Mujeres",
+                    "tasa_desertores_total": "Tasa Desertores Total"
+
+                },
+            }
+        },
+        {
+            value: "infoptasasmatriculassectoreconomico",
+            label: "Tasas de Matrículas por Sector Económico",
+            endpoint: "/infoptasasmatriculassectoreconomico",
+            config: {
+                titulo: "Tasas de Matrículas por Sector Económico",
+                filtros: ["Año", "regionales", "sector"],
+                columnasBase: ["Año",
+                    "regionales",
+                    "sector",
+                    "matriculados_hombre",
+                    "matriculados_mujer",
+                    "matriculados_total",
+
+                    "aprobados_hombre",
+                    "aprobados_mujer",
+                    "aprobados_total",
+
+                    "tasa_aprobados_hombres",
+                    "tasa_aprobados_mujeres",
+                    "tasa_aprobados_total",
+
+                    "reprobados_hombre",
+                    "reprobados_mujer",
+                    "reprobados_total",
+
+                    "tasa_reprobados_hombres",
+                    "tasa_reprobados_mujeres",
+                    "tasa_reprobados_total",
+
+                    "desertores_hombre",
+                    "desertores_mujer",
+                    "desertores_total",
+
+                    "tasa_desertores_hombres",
+                    "tasa_desertores_mujeres",
+                    "tasa_desertores_total"],
+                encabezados: {
+                    "anio": "Año",
+                    "regionales": "Regional",
+                    "sector": "Sector Económico",
+                    "matriculados_hombre": "Matriculados Hombre",
+                    "matriculados_mujer": "Matriculados Mujer",
+                    "matriculados_total": "Matriculados Total",
+
+
+                    "aprobados_hombre": "Aprobados Hombre",
+                    "aprobados_mujer": "Aprobados Mujer",
+                    "aprobados_total": "Aprobados Total",
+
+                    "tasa_aprobados_hombres": "Tasa Aprobados Hombres",
+                    "tasa_aprobados_mujeres": "Tasa Aprobados Mujeres",
+                    "tasa_aprobados_total": "Tasa Aprobados Total",
+
+                    "reprobados_hombre": "Reprobados Hombre",
+                    "reprobados_mujer": "Reprobados Mujer",
+                    "reprobados_total": "Reprobados Total",
+                    "tasa_reprobados_hombres": "Tasa Reprobados Hombres",
+                    "tasa_reprobados_mujeres": "Tasa Reprobados Mujeres",
+                    "tasa_reprobados_total": "Tasa Reprobados Total",
+
+
+                    "desertores_hombre": "Desertores Hombre",
+                    "desertores_mujer": "Desertores Mujer",
+                    "desertores_total": "Desertores Total",
+                    "tasa_desertores_hombres": "Tasa Desertores Hombres",
+                    "tasa_desertores_mujeres": "Tasa Desertores Mujeres",
+                    "tasa_desertores_total": "Tasa Desertores Total"
+
+                },
+            }
+        },
     ];
 
     // Obtener configuración del reporte actual
@@ -306,9 +668,58 @@ const ReportesInfop = () => {
 
     // Obtener valores únicos para los filtros
     const getValoresUnicos = (campo) => {
-        return [...new Set(data.map(item => item[campo]))]
-            .filter(val => val != null && val !== "") // Filtrar null, undefined y vacíos
+        let datosFiltrados = data;
+
+        // Aplicar filtros existentes excepto el campo actual
+        const filtrosAplicar = { ...filters };
+        delete filtrosAplicar[campo];
+
+        // SOLO aplicar filtros para campos que NO sean departamento cuando estamos obteniendo departamentos
+        // Esto evita que el departamento se filtre por el municipio seleccionado
+        if (campo === 'departamento') {
+            // Para departamento, NO aplicar filtro de municipio
+            delete filtrosAplicar.municipio;
+        }
+
+        // Si estamos obteniendo municipios y hay un departamento seleccionado, 
+        // aplicar ese filtro primero
+        if (campo === 'municipio' && filters.departamento) {
+            datosFiltrados = data.filter(item =>
+                item.departamento === filters.departamento
+            );
+        }
+
+        // Aplicar otros filtros existentes (excepto los que ya manejamos arriba)
+        Object.keys(filtrosAplicar).forEach(key => {
+            if (filtrosAplicar[key] && key !== 'valor') {
+                datosFiltrados = datosFiltrados.filter(item =>
+                    item[key] === filtrosAplicar[key]
+                );
+            }
+        });
+
+        return [...new Set(datosFiltrados.map(item => item[campo]))]
+            .filter(val => val != null && val !== "")
             .sort();
+    };
+
+    // Función específica para obtener municipios basados en departamento
+    const getMunicipiosFiltrados = () => {
+        if (filters.departamento) {
+            // Filtrar municipios por departamento seleccionado
+            const municipiosPorDepartamento = data
+                .filter(item => item.departamento === filters.departamento)
+                .map(item => item.municipio);
+
+            return [...new Set(municipiosPorDepartamento)]
+                .filter(val => val != null && val !== "")
+                .sort();
+        } else {
+            // Si no hay departamento seleccionado, mostrar todos los municipios
+            return [...new Set(data.map(item => item.municipio))]
+                .filter(val => val != null && val !== "")
+                .sort();
+        }
     };
 
     // Filtrar datos
@@ -330,13 +741,18 @@ const ReportesInfop = () => {
     });
 
     const handleFilterChange = (field, value) => {
-        setFilters(prev => ({
-            ...prev,
-            [field]: value
-        }));
+        setFilters(prev => {
+            const nuevosFiltros = { ...prev, [field]: value };
+
+            // Si se cambia el departamento, limpiar el municipio seleccionado
+            if (field === 'departamento' && value !== prev.departamento) {
+                nuevosFiltros.municipio = "";
+            }
+
+            return nuevosFiltros;
+        });
         setPage(1);
     };
-
     const clearFilters = () => {
         const config = getConfigReporte();
         const nuevosFiltros = {};
@@ -532,7 +948,65 @@ const ReportesInfop = () => {
                 );
             }
 
-            // Filtro dinámico basado en datos
+            // Para DEPARTAMENTO - siempre mostrar TODOS los departamentos disponibles
+            if (filtro === 'departamento') {
+                const departamentosUnicos = [...new Set(data.map(item => item.departamento))]
+                    .filter(val => val != null && val !== "")
+                    .sort();
+
+                return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <Select
+                                value={filters[filtro] || ""}
+                                onChange={(e) => handleFilterChange(filtro, e.target.value)}
+                                label={getEncabezado(filtro)}
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                {departamentosUnicos.map(departamento => (
+                                    <MenuItem key={departamento} value={departamento}>
+                                        {departamento}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                );
+            }
+
+            // Manejo especial para municipio (depende de departamento)
+            if (filtro === 'municipio' && config.filtros?.includes('departamento')) {
+                const municipiosFiltrados = getMunicipiosFiltrados();
+
+                return (
+                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <Select
+                                value={filters[filtro] || ""}
+                                onChange={(e) => handleFilterChange(filtro, e.target.value)}
+                                label={getEncabezado(filtro)}
+                                disabled={municipiosFiltrados.length === 0}
+                            >
+                                <MenuItem value="">Todos</MenuItem>
+                                {municipiosFiltrados.map(municipio => (
+                                    <MenuItem key={municipio} value={municipio}>
+                                        {municipio}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        {filters.departamento && (
+                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                                {municipiosFiltrados.length} municipio(s) en {filters.departamento}
+                            </Typography>
+                        )}
+                    </Grid>
+                );
+            }
+
+            // Filtro dinámico basado en datos (para otros campos)
             const valoresUnicos = getValoresUnicos(filtro);
 
             return (
@@ -709,14 +1183,26 @@ const ReportesInfop = () => {
                             <TableBody>
                                 {paginatedData.map((item, index) => (
                                     <TableRow key={index} hover>
-                                        {columnasAMostrar.map((columna) => (
-                                            <TableCell key={`${columna}-${index}`}>
-                                                {item[columna] ?? "-"}
-                                            </TableCell>
-                                        ))}
+                                        {columnasAMostrar.map((columna) => {
+                                            const valor = item[columna];
+                                            const esTasa = columna.startsWith("tasa_");
+                                            const valorFormateado =
+                                                valor === null || valor === undefined
+                                                    ? "-"
+                                                    : esTasa
+                                                        ? `${(valor * 100).toFixed(2)} %`
+                                                        : valor;
+
+                                            return (
+                                                <TableCell key={`${columna}-${index}`} >
+                                                    {valorFormateado}
+                                                </TableCell>
+                                            );
+                                        })}
                                     </TableRow>
                                 ))}
                             </TableBody>
+
                         </Table>
                     </TableContainer>
 
@@ -785,10 +1271,10 @@ const ReportesInfop = () => {
     return (
         <>
             {tienePermiso(2) && (
-               <Paper sx={{ p: 3, background: "#f5f7fa", boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
+                <Paper sx={{ p: 3, background: "#f5f7fa", boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
                     {/* Selección de Reporte */}
                     {!reporteSeleccionado && (
-                        <Box 
+                        <Box
                             sx={{
                                 p: 3,
                                 display: "flex",
@@ -799,7 +1285,7 @@ const ReportesInfop = () => {
                         >
                             <Grid container spacing={2} justifyContent="center" >
                                 {reportes.map((reporte) => (
-                                    <Grid size={{ xs: 12, sm: 6, md:3, lg:3 }} key={reporte.value}>
+                                    <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }} key={reporte.value}>
                                         <Card
                                             sx={{
                                                 cursor: "pointer",
@@ -816,15 +1302,15 @@ const ReportesInfop = () => {
                                             }}
                                             onClick={() => setReporteSeleccionado(reporte.value)}
                                         >
-                                            <CardContent 
-                                            sx={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                height: "100%",
-                                                textAlign: "center",
-                                            }}
+                                            <CardContent
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    height: "100%",
+                                                    textAlign: "center",
+                                                }}
                                             >
                                                 <Typography variant="h6" component="div" gutterBottom>
                                                     {reporte.label}
