@@ -585,7 +585,7 @@ export const getseduc_accesoprimergradoM = async () => {
   try {
     const { rows } = await pool.query(`
              SELECT 
-              "Periodo", "Edad", matricula, repitencia, poblacion, "TA1B"
+              "Periodo", "Edad", matricula, repitencia, poblacion, "TA1B" as tasa_a1b
              FROM seduc_accesoprimergrado;
         `);
     return rows;
