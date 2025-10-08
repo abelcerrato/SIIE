@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM } from "../models/reportes.models.js";
+import { getAllSeducM, getDES_matricula_por_grado_academicoM, getDES_matricula_por_institucionM, getDES_matricula_por_sexoM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM } from "../models/reportes.models.js";
 
 
 /* SEDUC */
@@ -270,6 +270,7 @@ export const getSIIE_matricula_por_sexoC = async (req, res) => {
 */
 
 /* INFOP */
+
 // Controlador para la tasa de matriculas de infop
 export const getinfop_tasasmatriculasC = async (req, res) => {
   try {
@@ -321,6 +322,192 @@ export const getinfop_tasasmatriculassectoreconomicoC = async (req, res) => {
     res.json(infop);
   } catch (error) {
     console.error("Error al obtener la tasa por sector económico de infop:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+/* SEDUC */
+
+export const getseduc_accesoprimergradoC = async (req, res) => {
+  try {
+    const seduc = await getseduc_accesoprimergradoM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getseduc_cancelacionpivotgradoC = async (req, res) => {
+  try {
+    const seduc = await getseduc_cancelacionpivotgradoM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getseduc_coberturabrutaniveleseducativosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_coberturabrutaniveleseducativosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_coberturanetaniveleseducativosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_coberturanetaniveleseducativosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getseduc_desercionpivotgradoC = async (req, res) => {
+  try {
+    const seduc = await getseduc_desercionpivotgradoM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_escolarizcionporedadesC = async (req, res) => {
+  try {
+    const seduc = await getseduc_escolarizcionporedadesM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_matriculabrutagradoC = async (req, res) => {
+  try {
+    const seduc = await getseduc_matriculabrutagradoM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_matriculanetagradoC = async (req, res) => {
+  try {
+    const seduc = await getseduc_matriculanetagradoM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasabrutaacceso3prebasicaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasabrutaacceso3prebasicaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasabrutaaccesoprimergradobasicaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasabrutaaccesoprimergradobasicaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasabrutaciclosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasabrutaciclosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasabrutamatriculagradosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasabrutamatriculagradosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+export const getseduc_tasanetaacceso3prebasicaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasanetaacceso3prebasicaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasanetaaccesoprimergradobasicaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasanetaaccesoprimergradobasicaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasanetaciclosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasanetaciclosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+export const getseduc_tasanetamatriculagradosC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasanetamatriculagradosM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+
+export const getseduc_variacioninteranualprebasicagradoobligatorioC = async (req, res) => {
+  try {
+    const seduc = await getseduc_variacioninteranualprebasicagradoobligatorioM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };

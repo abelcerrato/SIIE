@@ -576,3 +576,269 @@ export const getinfop_tasasmatriculassectoreconomicoM = async () => {
     throw error;
   }
 };
+
+
+/*_________________________________________________ SEDUC _________________________________________________*/
+
+
+export const getseduc_accesoprimergradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "Edad", matricula, repitencia, poblacion, "TA1B"
+             FROM seduc_accesoprimergrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getseduc_cancelacionpivotgradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "PB1", "PB2", "PB3", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11", "G12"
+             FROM seduc_cancelacionpivotgrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_coberturabrutaniveleseducativosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT 
+              "Año", nivel, matricula, poblacion, tcb
+            FROM seduc_coberturabrutaniveleseducativos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_coberturanetaniveleseducativosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT "Año", nivel, matricula, poblacion, tcn
+            FROM seduc_coberturanetaniveleseducativos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_desercionpivotgradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "PB1", "PB2", "PB3", "G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9", "G10", "G11", "G12"
+             FROM seduc_desercionpivotgrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_escolarizcionporedadesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "Edad", matricula, poblacion, "TEE"
+             FROM seduc_escolarizcionporedades;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const getseduc_matriculabrutagradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", 
+              "MatriculaPrebasica3", 
+              "MatriculaGrado1", "MatriculaGrado2", "MatriculaGrado3", "MatriculaGrado4", 
+              "MatriculaGrado5", "MatriculaGrado6", "MatriculaGrado7", "MatriculaGrado8", "MatriculaGrado9", 
+              "MatriculaGrado10", "MatriculaGrado11", "MatriculaGrado12"
+             FROM seduc_matriculabrutagrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const getseduc_matriculanetagradoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaPrebasica3", "MatriculaGrado1", "MatriculaGrado2", "MatriculaGrado3", "MatriculaGrado4", 
+              "MatriculaGrado5", "MatriculaGrado6", "MatriculaGrado7", "MatriculaGrado8", "MatriculaGrado9", "MatriculaGrado10", 
+              "MatriculaGrado11", "MatriculaGrado12"
+             FROM seduc_matriculanetagrado;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasabrutaacceso3prebasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Matrícula", "Población", "TBA"
+             FROM seduc_tasabrutaacceso3prebasica;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasabrutaaccesoprimergradobasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Matrícula", "Población", "TBA1GB"
+             FROM seduc_tasabrutaaccesoprimergradobasica;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasabrutaciclosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaICiclo", "EdadOportunaICiclo", "TBCI", "MatriculaIICiclo", 
+              "EdadOportunaIICiclo", "TBCII", "MatriculaIIICiclo", "EdadOportunaIIICiclo", "TBCIII"
+             FROM seduc_tasabrutaciclos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasabrutamatriculagradosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaPrebasica3", "EdadOportunaPrebasica3", "TBMPB3", "MatriculaGrado1", 
+              "EdadOportunaGrado1", "TBMG1", "MatriculaGrado2", "EdadOportunaGrado2", "TBMG2", "MatriculaGrado3", 
+              "EdadOportunaGrado3", "TBMG3", "MatriculaGrado4", "EdadOportunaGrado4", "TBMG4", "MatriculaGrado5", 
+              "EdadOportunaGrado5", "TBMG5", "MatriculaGrado6", "EdadOportunaGrado6", "TBMG6", "MatriculaGrado7", 
+              "EdadOportunaGrado7", "TBMG7", "MatriculaGrado8", "EdadOportunaGrado8", "TBMG8", "MatriculaGrado9", 
+              "EdadOportunaGrado9", "TBMG9", "MatriculaGrado10", "EdadOportunaGrado10", "TBMG10", "MatriculaGrado11", 
+              "EdadOportunaGrado11", "TBMG11", "MatriculaGrado12", "EdadOportunaGrado12", "TBMG12"
+             FROM seduc_tasabrutamatriculagrados;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasanetaacceso3prebasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Matrícula", "Población", "TBA"
+             FROM seduc_tasanetaacceso3prebasica;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getseduc_tasanetaaccesoprimergradobasicaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "Matrícula", "Población", "TBA1GB"
+             FROM seduc_tasanetaaccesoprimergradobasica;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+export const getseduc_tasanetaciclosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaICiclo", "EdadOportunaICiclo", "TNCI", "MatriculaIICiclo", 
+              "EdadOportunaIICiclo", "TNCII", "MatriculaIIICiclo", "EdadOportunaIIICiclo", "TNCIII"
+             FROM seduc_tasanetaciclos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+
+export const getseduc_tasanetamatriculagradosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Periodo", "MatriculaPrebasica3", "EdadOportunaPrebasica3", "TBMPB3", "MatriculaGrado1", 
+              "EdadOportunaGrado1", "TBMG1", "MatriculaGrado2", "EdadOportunaGrado2", "TBMG2", "MatriculaGrado3", 
+              "EdadOportunaGrado3", "TBMG3", "MatriculaGrado4", "EdadOportunaGrado4", "TBMG4", "MatriculaGrado5", 
+              "EdadOportunaGrado5", "TBMG5", "MatriculaGrado6", "EdadOportunaGrado6", "TBMG6", "MatriculaGrado7", 
+              "EdadOportunaGrado7", "TBMG7", "MatriculaGrado8", "EdadOportunaGrado8", "TBMG8", "MatriculaGrado9", 
+              "EdadOportunaGrado9", "TBMG9", "MatriculaGrado10", "EdadOportunaGrado10", "TBMG10", "MatriculaGrado11", 
+              "EdadOportunaGrado11", "TBMG11", "MatriculaGrado12", "EdadOportunaGrado12", "TBMG12"
+             FROM seduc_tasanetamatriculagrados;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              "Año", "MatriculaActual", "MatriCulaAnterior", "VIMAOPB"
+             FROM seduc_variacioninteranualprebasicagradoobligatorio;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};

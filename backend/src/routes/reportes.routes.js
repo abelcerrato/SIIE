@@ -26,7 +26,24 @@ import {
     getinfop_tasasmatriculasmodosformacionC,
     getinfop_tasasmatriculasprogramasC,
     getinfop_tasasmatriculasregionalesC,
-    getinfop_tasasmatriculassectoreconomicoC
+    getinfop_tasasmatriculassectoreconomicoC,
+    getseduc_accesoprimergradoC,
+    getseduc_coberturabrutaniveleseducativosC,
+    getseduc_cancelacionpivotgradoC,
+    getseduc_coberturanetaniveleseducativosC,
+    getseduc_desercionpivotgradoC,
+    getseduc_escolarizcionporedadesC,
+    getseduc_matriculabrutagradoC,
+    getseduc_matriculanetagradoC,
+    getseduc_tasabrutaacceso3prebasicaC,
+    getseduc_tasabrutaaccesoprimergradobasicaC,
+    getseduc_tasabrutaciclosC,
+    getseduc_tasabrutamatriculagradosC,
+    getseduc_tasanetaacceso3prebasicaC,
+    getseduc_tasanetaaccesoprimergradobasicaC,
+    getseduc_tasanetaciclosC,
+    getseduc_tasanetamatriculagradosC,
+    getseduc_variacioninteranualprebasicagradoobligatorioC
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -85,11 +102,27 @@ router.get("/siiematriculaporsexo", getSIIE_matricula_por_sexoC);
 router.get("/infoptasasmatriculas", getinfop_tasasmatriculasC);
 router.get("/infoptasasmatriculasmodosformacion", getinfop_tasasmatriculasmodosformacionC);
 router.get("/infoptasasmatriculasprogramas", getinfop_tasasmatriculasprogramasC);
-router.get("/infoptasasmatriculasprogramas", getinfop_tasasmatriculasregionalesC);
+router.get("/infoptasasmatriculasregionales", getinfop_tasasmatriculasregionalesC);
 router.get("/infoptasasmatriculassectoreconomico", getinfop_tasasmatriculassectoreconomicoC);
 
-
-
+/* SEDUC */
+router.get("/seducaccesoprimergrado", getseduc_accesoprimergradoC); 
+router.get("/seduccancelacionpivotgrado", getseduc_cancelacionpivotgradoC);
+router.get("/seduccoberturabrutaniveleseducativos", getseduc_coberturabrutaniveleseducativosC);
+router.get("/seduccoberturanetaniveleseducativos", getseduc_coberturanetaniveleseducativosC);
+router.get("/seducdesercionpivotgrado", getseduc_desercionpivotgradoC);
+router.get("/seducescolarizcionporedades", getseduc_escolarizcionporedadesC);
+router.get("/seducmatriculabrutagrado", getseduc_matriculabrutagradoC);
+router.get("/seducmatriculanetagrado", getseduc_matriculanetagradoC);
+router.get("/seductasabrutaacceso3prebasica", getseduc_tasabrutaacceso3prebasicaC);
+router.get("/seductasabrutaaccesoprimergradobasica", getseduc_tasabrutaaccesoprimergradobasicaC );
+router.get("/seductasabrutaciclos",  getseduc_tasabrutaciclosC);
+router.get("/seductasabrutamatriculagrados",  getseduc_tasabrutamatriculagradosC);
+router.get("/seductasanetaacceso3prebasica",  getseduc_tasanetaacceso3prebasicaC);
+router.get("/seductasanetaaccesoprimergradobasica",  getseduc_tasanetaaccesoprimergradobasicaC);
+router.get("/seductasanetaciclos", getseduc_tasanetaciclosC );
+router.get("/seductasanetamatriculagrados",  getseduc_tasanetamatriculagradosC);
+router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_variacioninteranualprebasicagradoobligatorioC);
 
 
 export default router;
