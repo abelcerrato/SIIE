@@ -9,6 +9,27 @@ import { pool } from "../db.js";
 
 /*_________________________________________________ SEDUC ________________________________________________-*/
 
+export const getConeanfoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+          SELECT 
+            año, procesoeducativo, cecap, curricula, proyecto, modulos, fechainicial, fechafinal, 
+            departamento, municipio, totalhoras, modalidad, lugar, identidad, nombredelestudiante, 
+            fechanacimiento, nacimiento2, edad, rangoetario, sexo, nacionalidad, etnia, discapacidad, 
+            estadocivil, niveleducativo, gradoalcanzado, estudiaensistemaformal, trabajaactualmente, 
+            estudiantedepartamento, estudiantemunicipio, estudiantealdea, concluyoformacion, fechadesercion, 
+            motivodesalida, certificadoconstancia, sehaincorporadolaboralmente, empleabilidad, trabajaenelareaqueseformo
+          FROM coneanfo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+/*_________________________________________________ SEDUC ________________________________________________-*/
+
 export const getSeducM = async () => {
   try {
     const { rows } = await pool.query(`

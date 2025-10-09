@@ -49,7 +49,8 @@ import {
     getseduc_tasa_neta_bruta_accesoprimergradobasicaC,
     getseduc_tasa_neta_bruta_ciclosC,
     getseduc_tasa_neta_bruta_matriculagradosC,
-    getseduc_cobertura_neta_brutaiveleseducativosC
+    getseduc_cobertura_neta_brutaiveleseducativosC,
+    getConeanfoC
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -59,6 +60,9 @@ const router = Router();
   ############################### TABLAS ###############################
   ######################################################################
 */
+
+/* CONEANFO */
+router.get("/coneanfo", getConeanfoC); 
 
 /* SEDUC */
 router.get("/seduc", getSeducC); //no trae los datos
