@@ -1078,3 +1078,21 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () =
     throw error;
   }
 };
+
+
+
+
+/*_________________________________________________ CONEANFO _________________________________________________*/
+
+export const getconeanfo_reportesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+              categoria, valor, total_atenciones
+             FROM coneanfo_reportes;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
