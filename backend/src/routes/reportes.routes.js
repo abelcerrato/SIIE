@@ -52,6 +52,7 @@ import {
     getseduc_cobertura_neta_brutaiveleseducativosC,
     getConeanfoC,
     getconeanfo_atenciones_proyecto_sexoC,
+    getconeanfo_atenciones_año_sexoC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -159,6 +160,7 @@ router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_varia
 
 /* CONEANFO */
 router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); 
+router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC)
 
 
 

@@ -1096,3 +1096,18 @@ export const getconeanfo_atenciones_proyecto_sexoM = async () => {
     throw error;
   }
 };
+
+
+
+export const getconeanfo_atenciones_año_sexoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT 
+              año, femenino, masculino, total_atenciones
+            FROM coneanfo_atenciones_año_sexo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
