@@ -1098,6 +1098,20 @@ export const getconeanfo_atencionesM = async () => {
   }
 };
 
+export const getconeanfo_participantesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+           SELECT 
+              año, departamento, proyecto, identidad, discapacidad_proyecto, etnia, sexo, rangoetario
+           FROM coneanfo_participante;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 export const getconeanfo_atenciones_proyecto_sexoM = async () => {
   try {
