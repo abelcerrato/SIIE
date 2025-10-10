@@ -1084,18 +1084,12 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () =
 
 /*_________________________________________________ CONEANFO _________________________________________________*/
 
-export const getconeanfo_atencionesM = async () => {
+export const getconeanfo_atenciones_proyecto_sexoM = async () => {
   try {
     const { rows } = await pool.query(`
             SELECT 
-              "PROYECTO FORMACIÓN DE EDUCADORES", "PROYECTO EDUCACIÓN INFANTIL TEMPRANA", "PROYECTO EDUCACIÓN PARA EL DESARROLLO SOSTENIBLE", "PROYECTO FORMACIÓN EN COMPETENCIAS LABORALES Y EMPRENDIMIENTO", "TOTAL ATENCIONES POR PROYECTOS", 
-              "DISCAPACIDAD Física (parálisis cerebral, amputaciones, etc.)", "DISCAPACIDAD Sin discapacidad", "DISCAPACIDAD Discapacidad auditiva", "DISCAPACIDAD Discapacidad múltiple", "DISCAPACIDAD Discapacidad del habla", "DISCAPACIDAD Visual", 
-              "DISCAPACIDAD Discapacidad motora", "DISCAPACIDAD Discapacidad cognitiva/intelectual", "DISCAPACIDAD Auditiva", "DISCAPACIDAD Intelectual (síndrome de Down, autismo y retardo)", "DISCAPACIDAD Discapacidad visual", 
-              "DISCAPACIDAD Otra discapacidad", "DISCAPACIDAD Múltiple (cuando existen más discapacidades)", "DISCAPACIDAD Discapacidad psicosocial/mental", "DISCAPACIDAD Ninguna", "TOTAL ATENCIONES POR DISCAPACIDAD", 
-              "SEXO FEMENINO", "SEXO MASCULINO", "TOTAL ATENCIONES POR SEXO", 
-              "AÑO 2019", "AÑO 2020",  "AÑO 2021", "AÑO 2022", "AÑO 2023",  "AÑO 2024", "AÑO 2025", "TOTAL ATENCIONES POR AÑO", 
-              "ETNIA Negro Inglés", "ETNIA Tolupanes", "ETNIA Misquitos", "ETNIA Mestizo", "ETNIA Garífuna", "ETNIA Otro", "ETNIA Lenca", "ETNIA Maya - Chortí", "ETNIA Isleños", "ETNIA Pech", "TOTAL ATENCIONES POR ETNIA"
-            FROM coneanfo_atenciones;
+              proyecto, femenino, masculino, total_atenciones
+            FROM coneanfo_atenciones_proyecto_sexo;
         `);
     return rows;
   } catch (error) {
