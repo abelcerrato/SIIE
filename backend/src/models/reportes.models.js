@@ -1089,7 +1089,7 @@ export const getconeanfo_atencionesM = async () => {
   try {
     const { rows } = await pool.query(`
             SELECT 
-              año, departamento, proyecto, discapacidad_proyecto, etnia, rangoetario, femenino, masculino, total_atenciones
+              año, upper, proyecto, discapacidad_proyecto, etnia, rangoetario, femenino, masculino, total_atenciones
             FROM coneanfo_atenciones;
         `);
     return rows;
