@@ -1084,6 +1084,21 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () =
 
 /*_________________________________________________ CONEANFO _________________________________________________*/
 
+
+export const getconeanfo_atencionesM = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT 
+            año, departamento, proyecto, discapacidad_proyecto, etnia, femenino, masculino, total_atenciones
+            FROM coneanfo_atenciones;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 export const getconeanfo_atenciones_proyecto_sexoM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -1117,8 +1132,23 @@ export const getconeanfo_atenciones_discapacidadM = async () => {
   try {
     const { rows } = await pool.query(`
            SELECT 
-              discapacidad, total_atenciones
+            proyecto, discapacidad_proyecto, total_atenciones
            FROM coneanfo_atenciones_discapacidad;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+export const getconeanfo_atenciones_etniaM = async () => {
+  try {
+    const { rows } = await pool.query(`
+           SELECT 
+            etnia, total_atenciones
+           FROM coneanfo_atenciones_etnia;
         `);
     return rows;
   } catch (error) {
