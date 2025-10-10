@@ -1111,3 +1111,17 @@ export const getconeanfo_atenciones_año_sexoM = async () => {
     throw error;
   }
 };
+
+
+export const getconeanfo_atenciones_discapacidadM = async () => {
+  try {
+    const { rows } = await pool.query(`
+           SELECT 
+              discapacidad, total_atenciones
+           FROM coneanfo_atenciones_discapacidad;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};

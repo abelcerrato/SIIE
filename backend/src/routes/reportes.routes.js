@@ -53,6 +53,7 @@ import {
     getConeanfoC,
     getconeanfo_atenciones_proyecto_sexoC,
     getconeanfo_atenciones_año_sexoC,
+    getgetconeanfo_atenciones_discapacidadC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -161,6 +162,7 @@ router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_varia
 /* CONEANFO */
 router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); 
 router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC)
+router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC);
 
 
 
