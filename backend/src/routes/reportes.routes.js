@@ -51,7 +51,7 @@ import {
     getseduc_tasa_neta_bruta_matriculagradosC,
     getseduc_cobertura_neta_brutaiveleseducativosC,
     getConeanfoC,
-    getconeanfo_reportesC
+    getconeanfo_atencionesC
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -158,7 +158,7 @@ router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_varia
 
 
 /* CONEANFO */
-router.get("/coneanforeportes", getconeanfo_reportesC); 
+router.get("/coneanforeportes", getconeanfo_atencionesC); 
 
 
 

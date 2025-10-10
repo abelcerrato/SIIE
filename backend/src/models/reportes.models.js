@@ -1084,7 +1084,7 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () =
 
 /*_________________________________________________ CONEANFO _________________________________________________*/
 
-export const getconeanfo_reportesM = async () => {
+export const getconeanfo_atencionesM = async () => {
   try {
     const { rows } = await pool.query(`
             SELECT 
@@ -1095,7 +1095,7 @@ export const getconeanfo_reportesM = async () => {
               "SEXO FEMENINO", "SEXO MASCULINO", "TOTAL ATENCIONES POR SEXO", 
               "AÑO 2019", "AÑO 2020",  "AÑO 2021", "AÑO 2022", "AÑO 2023",  "AÑO 2024", "AÑO 2025", "TOTAL ATENCIONES POR AÑO", 
               "ETNIA Negro Inglés", "ETNIA Tolupanes", "ETNIA Misquitos", "ETNIA Mestizo", "ETNIA Garífuna", "ETNIA Otro", "ETNIA Lenca", "ETNIA Maya - Chortí", "ETNIA Isleños", "ETNIA Pech", "TOTAL ATENCIONES POR ETNIA"
-            FROM coneanfo_reportes_resumen;
+            FROM coneanfo_atenciones;
         `);
     return rows;
   } catch (error) {
