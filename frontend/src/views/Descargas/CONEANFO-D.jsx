@@ -119,7 +119,7 @@ const ReporteConeanfo = () => {
             endpoint: "/coneanfoatenciones",
             config: {
                 titulo: "Reporte de CONEANFO Atenciones ",
-                filtros: ["año","proyecto", "departamento", "discapacidad_proyecto", "etnia", "rangoetario"],
+                filtros: ["año", "proyecto", "departamento", "discapacidad_proyecto", "etnia", "rangoetario"],
                 columnasBase: [
                     "año", "departamento", "proyecto", "discapacidad_proyecto", "etnia", "rangoetario", "femenino", "masculino", "total_atenciones"
                 ],
@@ -576,7 +576,7 @@ const ReporteConeanfo = () => {
 
 
 
-    
+
     // Renderizar vista para reportes
     const renderReporte = () => {
         const config = getConfigReporte();
@@ -598,28 +598,18 @@ const ReporteConeanfo = () => {
             );
         }
 
-        // Dentro de renderReporte() antes del return
-        let columnasTotales = [];
+        // Columnas que realmente existen en los datos y queremos totalizar
+        const columnasNumericas = ["femenino", "masculino", "total_atenciones"];
 
-        // Definir columnas de totales según reporte actual
-        if (reporteSeleccionado === "coneanfoatenciones") {
-            columnasTotales = ["femenino", "masculino", "total_atenciones"];
-        } else if (reporteSeleccionado === "coneanfoparticipantes") {
-            columnasTotales = ["femeninop", "masculinop", "total_participantes"];
-        }
-
-        // Filtrar columnas que realmente existan en columnasBase
-        columnasTotales = columnasTotales.filter(col => config.columnasBase.includes(col));
-
-        // Calcular totales
         const totales = {};
-        columnasTotales.forEach(col => {
-            totales[col] = filteredData.reduce(
-                (sum, item) => sum + (Number(item[col]) || 0),
-                0
-            );
+        columnasNumericas.forEach(col => {
+            if (config.columnasBase.includes(col)) { // solo sumar si la columna está en la data
+                totales[col] = filteredData.reduce(
+                    (sum, item) => sum + (Number(item[col]) || 0),
+                    0
+                );
+            }
         });
-
 
 
         return (
@@ -774,7 +764,7 @@ const ReporteConeanfo = () => {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                            {/* 🔹 Fila de totales generales */}
+                            {reporteSeleccionado === "coneanfoatenciones" && (
                             <TableRow sx={{ backgroundColor: "#e3f2fd", fontWeight: "bold" }}>
                                 {columnasAMostrar.map((columna, index) => {
                                     if (totales[columna] !== undefined) {
@@ -792,6 +782,7 @@ const ReporteConeanfo = () => {
                                 })}
                             </TableRow>
 
+                            )}
                         </Table>
                     </TableContainer>
 
@@ -872,9 +863,9 @@ const ReporteConeanfo = () => {
                                 minHeight: "70vh",          // altura mínima para centrar verticalmente
                             }}
                         >
-                            <Grid container spacing={2} justifyContent="center" >
+                            <Grid container spacing={3} justifyContent="center">
                                 {reportes.map((reporte) => (
-                                    <Grid size={{ xs: 12, sm: 6, md: 3, lg: 3 }} key={reporte.value}>
+                                    <Grid size={{ xs: 12, sm: 6, md: 4, lg: 4 }} key={reporte.value}>
                                         <Card
                                             sx={{
                                                 cursor: "pointer",
@@ -901,7 +892,7 @@ const ReporteConeanfo = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                <Typography variant="h6" component="div" gutterBottom>
+                                                <Typography variant="h6" component="div" gutterBottom >
                                                     {reporte.label}
                                                 </Typography>
                                                 <Typography variant="body2" color="text.secondary">
