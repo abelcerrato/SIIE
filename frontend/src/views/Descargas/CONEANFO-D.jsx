@@ -144,7 +144,7 @@ const ReporteConeanfo = () => {
                 titulo: "Reporte de CONEANFO Participantes ",
                 filtros: ["año", "proyecto", "departamento", "discapacidad_proyecto", "etnia", "rangoetario"],
                 columnasBase: [
-                    "año", "departamento", "proyecto", "discapacidad_proyecto", "etnia", "rangoetario", "femeninop", "masculinop", "total_participantes"
+                    "año", "departamento", "proyecto", "discapacidad_proyecto", "etnia", "rangoetario", "participantes_femeninos", "participantes_masculinos", "total_participantes","total_por_proyecto"
                 ],
                 encabezados: {
                     "año": "Año",
@@ -153,9 +153,10 @@ const ReporteConeanfo = () => {
                     "discapacidad_proyecto": "Discapacidad Proyecto",
                     "etnia": "Etnia",
                     "rangoetario": "Rango Etario",
-                    "femeninop": "Femenino",
-                    "masculinop": "Masculino",
-                    "total_participantes": "Total Participantes"
+                    "participantes_femeninos": "Femenino",
+                    "participantes_masculinos": "Masculino",
+                    "total_participantes": "Total Participantes",
+                    "total_por_proyecto": "Total por Proyecto"
                 }
             }
         },
