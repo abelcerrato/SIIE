@@ -165,10 +165,10 @@ router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_varia
 /* CONEANFO */
 router.get("/coneanfoatenciones", getconeanfo_atencionesC);
 router.get("/coneanfoparticipantes", getconeanfo_participantesC);
-router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); 
-router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC)
-router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC);
-router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC);
+router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); //no estan en uso
+router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) //no esta en uso
+router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no esta en uso
+router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no esta en uso
 
 
 
