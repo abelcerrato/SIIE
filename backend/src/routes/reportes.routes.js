@@ -168,10 +168,10 @@ router.get("/coneanfoatenciones", getconeanfo_atencionesC);
 router.get("/coneanfoparticipantes", getconeanfo_participantesC);
 router.get("/coneanfoprocesoeducativo", getconeanfo_atenciones_prticipantes_proceso_educativosC);
 
-router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); 
-router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC)
-router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC);
-router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC);
+router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); //no se usa
+router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) // no se usa
+router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no se usa
+router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no se usa
 
 
 export default router;
