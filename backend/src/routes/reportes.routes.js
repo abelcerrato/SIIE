@@ -174,5 +174,4 @@ router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapac
 router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC);
 
 
-
 export default router;

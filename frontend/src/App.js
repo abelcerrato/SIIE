@@ -20,6 +20,7 @@ import Usuarios from "./views/Seguridad/Usuarios/TablaUsuarios";
 import SEDUCD from "./views/Descargas/SEDUC-D";
 import INFOPD from "./views/Descargas/INFOP-D";
 import DESUNAHD from "./views/Descargas/DESUNAH-D";
+import CONEANFOD from "./views/Descargas/CONEANFO-D";
 import "./App.css";
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
           <Route path="Descargas/SEDU" element={<SEDUCD />} />
           <Route path="Descargas/INFOP" element={<INFOPD />} />
           <Route path="Descargas/DES-UNAH" element={<DESUNAHD />} />
+          <Route path="Descargas/CONEANFO" element={<CONEANFOD />} />
         </Route>
       </Routes>
 

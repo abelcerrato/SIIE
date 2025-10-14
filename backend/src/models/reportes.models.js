@@ -1,6 +1,5 @@
 import { pool } from "../db.js";
 
-
 /*
   ######################################################################
   ############################### TABLAS ###############################
@@ -27,7 +26,6 @@ export const getConeanfoM = async () => {
   }
 };
 
-
 /*_________________________________________________ SEDUC ________________________________________________-*/
 
 export const getSeducM = async () => {
@@ -49,8 +47,6 @@ export const getSeducM = async () => {
     throw error;
   }
 };
-
-
 
 export const getSeduc_2014_2025M = async () => {
   try {
@@ -79,7 +75,6 @@ export const getSeduc_2014_2025M = async () => {
   }
 };
 
-
 export const getSeduc_centros_educativosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -96,7 +91,6 @@ export const getSeduc_centros_educativosM = async () => {
   }
 };
 
-
 export const getSeduc_matriculagradoedadM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -109,7 +103,6 @@ export const getSeduc_matriculagradoedadM = async () => {
     throw error;
   }
 };
-
 
 export const getSeduc_nivelesacademicosdepartamentoM = async () => {
   try {
@@ -152,7 +145,6 @@ export const getSeduc_nivelesacademicosdepartamentoM = async () => {
   }
 };
 
-
 export const getSeduc_niños_con_discapacidadM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -169,7 +161,6 @@ export const getSeduc_niños_con_discapacidadM = async () => {
   }
 };
 
-
 export const getSseduc_repitenciagradoedad = async () => {
   try {
     const { rows } = await pool.query(`
@@ -184,8 +175,6 @@ export const getSseduc_repitenciagradoedad = async () => {
   }
 };
 
-
-
 export const getSeduc_servicios_basicosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -199,8 +188,6 @@ export const getSeduc_servicios_basicosM = async () => {
     throw error;
   }
 };
-
-
 
 export const getServicios_docentesM = async () => {
   try {
@@ -217,9 +204,6 @@ export const getServicios_docentesM = async () => {
   }
 };
 
-
-
-
 export const getAllSeducM = async () => {
   const client = await pool.connect();
   try {
@@ -233,15 +217,24 @@ export const getAllSeducM = async () => {
     `);
 
     // Leer y cerrar cursores
-    const seduc = await client.query("FETCH ALL FROM c1"); await client.query("CLOSE c1");
-    const seduc2014 = await client.query("FETCH ALL FROM c2"); await client.query("CLOSE c2");
-    const centros = await client.query("FETCH ALL FROM c3"); await client.query("CLOSE c3");
-    const matricula = await client.query("FETCH ALL FROM c4"); await client.query("CLOSE c4");
-    const niveles = await client.query("FETCH ALL FROM c5"); await client.query("CLOSE c5");
-    const discapacidad = await client.query("FETCH ALL FROM c6"); await client.query("CLOSE c6");
-    const repitencia = await client.query("FETCH ALL FROM c7"); await client.query("CLOSE c7");
-    const servicios = await client.query("FETCH ALL FROM c8"); await client.query("CLOSE c8");
-    const docentes = await client.query("FETCH ALL FROM c9"); await client.query("CLOSE c9");
+    const seduc = await client.query("FETCH ALL FROM c1");
+    await client.query("CLOSE c1");
+    const seduc2014 = await client.query("FETCH ALL FROM c2");
+    await client.query("CLOSE c2");
+    const centros = await client.query("FETCH ALL FROM c3");
+    await client.query("CLOSE c3");
+    const matricula = await client.query("FETCH ALL FROM c4");
+    await client.query("CLOSE c4");
+    const niveles = await client.query("FETCH ALL FROM c5");
+    await client.query("CLOSE c5");
+    const discapacidad = await client.query("FETCH ALL FROM c6");
+    await client.query("CLOSE c6");
+    const repitencia = await client.query("FETCH ALL FROM c7");
+    await client.query("CLOSE c7");
+    const servicios = await client.query("FETCH ALL FROM c8");
+    await client.query("CLOSE c8");
+    const docentes = await client.query("FETCH ALL FROM c9");
+    await client.query("CLOSE c9");
 
     await client.query("COMMIT");
 
@@ -274,15 +267,13 @@ export const getAllSeducM = async () => {
   }
 };
 
-
-
-
 /*_________________________________________________ INFOP ________________________________________________-*/
 
 // Consulta para infop por departamentos y municipios
-export const getInfop_capacitados_por_departamentos_y_municipiosM = async () => {
-  try {
-    const { rows } = await pool.query(`
+export const getInfop_capacitados_por_departamentos_y_municipiosM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
              SELECT 
               anio, departamento, municipio, 
               horas_impartidas, cursos_finalizados, 
@@ -292,11 +283,11 @@ export const getInfop_capacitados_por_departamentos_y_municipiosM = async () => 
               reprobados_hombre, reprobados_mujer, reprobados_total
              FROM infop_capacitados_por_departamentos_y_municipios;
         `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 // Consulta para infop por modos de formación
 export const getInfop_capacitados_por_modos_de_formacionM = async () => {
@@ -317,7 +308,6 @@ export const getInfop_capacitados_por_modos_de_formacionM = async () => {
   }
 };
 
-
 // Consulta para infop por programas
 export const getInfop_capacitados_por_programasM = async () => {
   try {
@@ -335,7 +325,6 @@ export const getInfop_capacitados_por_programasM = async () => {
     throw error;
   }
 };
-
 
 // Consulta para infop por regional
 export const getInfop_capacitados_por_regionalM = async () => {
@@ -356,7 +345,6 @@ export const getInfop_capacitados_por_regionalM = async () => {
   }
 };
 
-
 // Consulta para infop por sector economico
 export const getInfop_capacitados_por_sector_economicoM = async () => {
   try {
@@ -376,7 +364,6 @@ export const getInfop_capacitados_por_sector_economicoM = async () => {
   }
 };
 
-
 // Consulta para regiones de infop
 export const getInfop_regionesM = async () => {
   try {
@@ -390,8 +377,6 @@ export const getInfop_regionesM = async () => {
     throw error;
   }
 };
-
-
 
 /*_________________________________________________ DES _________________________________________________*/
 // Consulta para DES matrícula por grado académico
@@ -422,7 +407,6 @@ export const getDES_matricula_por_institucionM = async () => {
   }
 };
 
-
 // Consulta para DES matrícula por sexo
 export const getDES_matricula_por_sexoM = async () => {
   try {
@@ -437,12 +421,7 @@ export const getDES_matricula_por_sexoM = async () => {
   }
 };
 
-
-
-
-
 /*_________________________________________________ SIIE _________________________________________________*/
-
 
 // Consulta para SIIE matrícula por departamento
 export const getSIIE_matricula_por_departamentoM = async () => {
@@ -458,7 +437,6 @@ export const getSIIE_matricula_por_departamentoM = async () => {
   }
 };
 
-
 // Consulta para SIIE matrícula por institución
 export const getSIIE_matricula_por_institucionM = async () => {
   try {
@@ -472,7 +450,6 @@ export const getSIIE_matricula_por_institucionM = async () => {
     throw error;
   }
 };
-
 
 // Consulta para SIIE matrícula por sexo
 export const getSIIE_matricula_por_sexoM = async () => {
@@ -491,10 +468,6 @@ export const getSIIE_matricula_por_sexoM = async () => {
     throw error;
   }
 };
-
-
-
-
 
 /*
   ######################################################################
@@ -523,7 +496,6 @@ export const getinfop_tasasmatriculasM = async () => {
   }
 };
 
-
 // Consulta para vista de tasas de matriculas de infop por modos de formación
 export const getinfop_tasasmatriculasmodosformacionM = async () => {
   try {
@@ -544,7 +516,6 @@ export const getinfop_tasasmatriculasmodosformacionM = async () => {
     throw error;
   }
 };
-
 
 // Consulta para vista de tasas de matriculas de infop por programas
 export const getinfop_tasasmatriculasprogramasM = async () => {
@@ -580,7 +551,6 @@ export const getinfop_tasasmatriculasregionalesM = async () => {
   }
 };
 
-
 // Consulta para vista de tasas de matriculas de infop por sector economico
 export const getinfop_tasasmatriculassectoreconomicoM = async () => {
   try {
@@ -598,9 +568,7 @@ export const getinfop_tasasmatriculassectoreconomicoM = async () => {
   }
 };
 
-
 /*_________________________________________________ SEDUC _________________________________________________*/
-
 
 export const getseduc_accesoprimergradoM = async () => {
   try {
@@ -628,7 +596,6 @@ export const getseduc_cancelacionpivotgradoM = async () => {
   }
 };
 
-
 export const getseduc_coberturanetaniveleseducativosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -654,7 +621,6 @@ export const getseduc_coberturabrutaniveleseducativosM = async () => {
   }
 };
 
-
 export const getseduc_cobertura_neta_bruta_niveleseducativosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -677,9 +643,6 @@ export const getseduc_cobertura_neta_bruta_niveleseducativosM = async () => {
   }
 };
 
-
-
-
 export const getseduc_desercionpivotgradoM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -693,7 +656,6 @@ export const getseduc_desercionpivotgradoM = async () => {
   }
 };
 
-
 export const getseduc_escolarizcionporedadesM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -706,8 +668,6 @@ export const getseduc_escolarizcionporedadesM = async () => {
     throw error;
   }
 };
-
-
 
 export const getseduc_matriculanetagradoM = async () => {
   try {
@@ -741,9 +701,6 @@ export const getseduc_matriculabrutagradoM = async () => {
   }
 };
 
-
-
-
 export const getseduc_tasanetaacceso3prebasicaM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -756,7 +713,6 @@ export const getseduc_tasanetaacceso3prebasicaM = async () => {
     throw error;
   }
 };
-
 
 export const getseduc_tasabrutaacceso3prebasicaM = async () => {
   try {
@@ -792,12 +748,6 @@ export const getseduc_tasa_neta_bruta_acceso3prebasicaM = async () => {
   }
 };
 
-
-
-
-
-
-
 export const getseduc_tasanetaaccesoprimergradobasicaM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -824,8 +774,6 @@ export const getseduc_tasabrutaaccesoprimergradobasicaM = async () => {
   }
 };
 
-
-
 export const getseduc_tasa_neta_bruta_accesoprimergradobasicaM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -846,7 +794,6 @@ export const getseduc_tasa_neta_bruta_accesoprimergradobasicaM = async () => {
     throw error;
   }
 };
-
 
 export const getseduc_tasanetaciclosM = async () => {
   try {
@@ -914,7 +861,6 @@ export const getseduc_tasa_neta_bruta_ciclosM = async () => {
   }
 };
 
-
 export const getseduc_tasanetamatriculagradosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -934,7 +880,6 @@ export const getseduc_tasanetamatriculagradosM = async () => {
   }
 };
 
-
 export const getseduc_tasabrutamatriculagradosM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -953,7 +898,6 @@ export const getseduc_tasabrutamatriculagradosM = async () => {
     throw error;
   }
 };
-
 
 export const getseduc_tasa_neta_bruta_matriculagradosM = async () => {
   try {
@@ -1065,25 +1009,21 @@ export const getseduc_tasa_neta_bruta_matriculagradosM = async () => {
   }
 };
 
-
-export const getseduc_variacioninteranualprebasicagradoobligatorioM = async () => {
-  try {
-    const { rows } = await pool.query(`
+export const getseduc_variacioninteranualprebasicagradoobligatorioM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
              SELECT 
               "Año", "MatriculaActual", "MatriCulaAnterior", "VIMAOPB"
              FROM seduc_variacioninteranualprebasicagradoobligatorio;
         `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 /*_________________________________________________ CONEANFO _________________________________________________*/
-
 
 export const getconeanfo_atencionesM = async () => {
   try {
@@ -1101,15 +1041,17 @@ export const getconeanfo_atencionesM = async () => {
 export const getconeanfo_participantesM = async () => {
   try {
     const { rows } = await pool.query(`
-           SELECT 
-              año, departamento, proyecto, identidad, discapacidad_proyecto, etnia, sexo, rangoetario
-           FROM coneanfo_participantes;
+          SELECT 
+            año, departamento, proyecto, discapacidad_proyecto, etnia, rangoetario, 
+            participantes_femeninos, participantes_masculinos, total_participantes, total_por_proyecto
+          FROM public.coneanfo_participantes;
         `);
     return rows;
   } catch (error) {
     throw error;
   }
 };
+
 
 export const getconeanfo_atenciones_prticipantes_proceso_educativoM = async () => {
   try {
@@ -1138,8 +1080,6 @@ export const getconeanfo_atenciones_proyecto_sexoM = async () => {
   }
 };
 
-
-
 export const getconeanfo_atenciones_año_sexoM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -1153,7 +1093,6 @@ export const getconeanfo_atenciones_año_sexoM = async () => {
   }
 };
 
-
 export const getconeanfo_atenciones_discapacidadM = async () => {
   try {
     const { rows } = await pool.query(`
@@ -1166,8 +1105,6 @@ export const getconeanfo_atenciones_discapacidadM = async () => {
     throw error;
   }
 };
-
-
 
 export const getconeanfo_atenciones_etniaM = async () => {
   try {
