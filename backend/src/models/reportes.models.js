@@ -1111,6 +1111,18 @@ export const getconeanfo_participantesM = async () => {
   }
 };
 
+export const getconeanfo_atenciones_prticipantes_proceso_educativoM = async () => {
+  try {
+    const { rows } = await pool.query(`
+          SELECT 
+            año, proyecto, procesoeducativo, total_atenciones, total_participantes
+          FROM coneanfo_atenciones_prticipantes_proceso_educativo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
 export const getconeanfo_atenciones_proyecto_sexoM = async () => {
