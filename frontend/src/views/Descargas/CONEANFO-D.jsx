@@ -160,6 +160,25 @@ const ReporteConeanfo = () => {
                 }
             }
         },
+        {
+            value: "coneanfoprocesoeducativo",
+            label: " CONEANFO Proceso Educativo",
+            endpoint: "/coneanfoprocesoeducativo",
+            config: {
+                titulo: "Reporte de CONEANFO Proceso Educativo ",
+                filtros: ["año", "proyecto", "procesoeducativo"],
+                columnasBase: [
+                    "año", "proyecto", "procesoeducativo", "total_atenciones", "total_participantes"
+                ],
+                encabezados: {
+                    "año": "Año",
+                    "proyecto": "Proyecto",
+                    "procesoeducativo": "Proceso Educativo",
+                    "total_atenciones": "Total Atenciones",
+                    "total_participantes": "Total Participantes"
+                }
+            }
+        },
     ];
 
     // Obtener configuración del reporte actual
