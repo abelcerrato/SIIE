@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import { useTheme, useMediaQuery } from "@mui/material";
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import conedLogo from "../img/logos-CONED.png";
 import siieLogo from "../img/SIIE.png";
 import colaboradoresLogo from "../img/Colaboradores.png";
@@ -39,14 +39,41 @@ import {
     Close
 } from "@mui/icons-material";
 import CloseIcon from '@mui/icons-material/Close';
+
+
+
 export default function AcercaDe() {
-    const [hovered, setHovered] = useState(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-    const instituciones = [
-        { name: "SEDUC", logo: seducLogo },
-        { name: "INFOP", logo: infopLogo },
-        { name: "CONEANFO", logo: coneanfoLogo },
+    const [hovered, setHovered] = useState(null);
+    const [selectedInstitution, setSelectedInstitution] = useState(null);
+    const [open, setOpen] = useState(false);
+
+    const miembros = [
+        { nombre: "Jose Alexis Ordoñes Velasquez ", puesto: " Secretario Ejecutivo" },
+        { nombre: "Beatriz Victoria Galeano Escobar", puesto: "Asistente Ejecutiva" },
+        { nombre: "Zorayda Waleska Zelaya Acosta", puesto: "Coordinadora de Telecomunicaciones" },
+        { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
+        { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
+        { nombre: "Zoila Suyapa Padilla Sabillon", puesto: "Cordinadora de Desarrollo Profesional Docente" },
+        { nombre: "Melany Lizzeth Ordoñez Cruz", puesto: "Asistente Técnico de Desarrollo Profesional Docente" },
+        { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
+        { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
+        { nombre: "Mare Yescenia Figueroa Aguiriano", puesto: "Asistente Técnica de la UTC" },
+        { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de FTP" },
+        { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
+        { nombre: "Conrado Ernesto Fuentes Carranza", puesto: "Cordinador de Gestión de la Información" },
+        { nombre: "Roberto Briceño Jimenez", puesto: "Cordinador del Modelo Ejecutivo" },
+        { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
+        { nombre: "Giuver Andony Padilla Santos", puesto: "Asistente de Administración" },
+        { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
+        { nombre: "Luesbelin Julieth Mejia Garcia", puesto: "Desarrolladora FrontEnd" },
+        { nombre: "Heydy Carolina Elvir Gutierrez", puesto: "Asistente de Servicios Generales" },
+    ];
+
+    const trasporte = [
+        { nombre: "Edwin David Ramos Bustillo" },
+        { nombre: "Jhimy Xavier Valladares" },
     ];
 
     const objetivos = [
@@ -74,35 +101,35 @@ export default function AcercaDe() {
         },
     ];
 
-    const [open, setOpen] = useState(false);
-
-    // Ejemplo de datos para los miembros del consejo
-    const miembros = [
-        { nombre: "Jose Alexis Ordoñes Velasquez ", puesto: " Secretario Ejecutivo" },
-        { nombre: "Beatriz Victoria Galeano Escobar", puesto: "Asistente Ejecutiva" },
-        { nombre: "Zorayda Waleska Zelaya Acosta", puesto: "Coordinadora de Telecomunicaciones" },
-        { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
-        { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
-        { nombre: "Zoila Suyapa Padilla Sabillon", puesto: "Cordinadora de Desarrollo Profesional Docente" },
-        { nombre: "Melany Lizzeth Ordoñez Cruz", puesto: "Asistente Técnico de Desarrollo Profesional Docente" },
-        { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
-        { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
-        { nombre: "Mare Yescenia Figueroa Aguiriano", puesto: "Asistente Técnica de la UTC" },
-        { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de FTP" },
-        { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
-        { nombre: "Conrado Ernesto Fuentes Carranza", puesto: "Cordinador de Gestión de la Información" },
-        { nombre: "Roberto Briceño Jimenez", puesto: "Cordinador del Modelo Ejecutivo" },
-        { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
-        { nombre: "Giuver Andony Padilla Santos", puesto: "Asistente de Administración" },
-        { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
-        { nombre: "Luesbelin Julieth Mejia Garcia", puesto: "Desarrolladora FrontEnd" },
-        { nombre: "Heydy Carolina Elvir Gutierrez", puesto: "Asistente de Servicios Generales" },
+    const instituciones = [
+        {
+            name: "SEDUC", logo: seducLogo,
+            agradecimientos: [
+                { nombre: "Carlos Gómez", puesto: "Facilitador" },
+            ],
+        },
+        {
+            name: "INFOP", logo: infopLogo,
+            agradecimientos: [
+                { nombre: "Calor Alvarado", puesto: "Facilitador" },
+                { nombre: "Kevin Matamoros", puesto: "" },
+                { nombre: "Esli Rivera", puesto: "Coordinadora unidad de Estadística" },
+            ],
+        },
+        {
+            name: "CONEANFO", logo: coneanfoLogo,
+            agradecimientos: [
+                { nombre: "Roberto Bussi", puesto: "Secretario Ejecutivo" },
+                { nombre: "Julio Miralda", puesto: "Coordinador Unidad Técnica" },
+                { nombre: "Lourdes Brid", puesto: "Coordinadora Gestión de Calidad" },
+                { nombre: "Poleth Solórzano", puesto: "Gestor de Sistemas de Información" },
+                { nombre: "Juan Giron", puesto: "Asistente de Sistemas Informáticos" },
+                { nombre: "Onan Martínez ", puesto: "Asistente de Monitoreo y Seguimiento" },
+                { nombre: "Kenia Ramírez", puesto: "Asistente de Certificación" },
+            ],
+        },
     ];
 
-    const trasporte = [
-        { nombre: "Edwin David Ramos Bustillo" },
-        { nombre: "Jhimy Xavier Valladares" },
-    ];
     return (
         <Container maxWidth="lg" sx={{ py: 5 }}>
             {/* Sección principal - ¿Qué es el sitio? */}
@@ -196,117 +223,171 @@ export default function AcercaDe() {
                     </Typography>
                 </Grid>
 
-                {!isMobile ? (
-                    <>
-                        {/* --- ESCRITORIO --- Lista a la izquierda --- */}
-                        <Grid item size={{ xs: 12, md: 3 }}>
-                            <Typography variant="body2" color="text.secondary" marginLeft={5}>
-                                <ul style={{ listStyle: "none", padding: 15 }}>
-                                    {instituciones.map((inst) => (
-                                        <li
-                                            key={inst.name}
-                                            onMouseEnter={() => setHovered(inst.name)}
-                                            onMouseLeave={() => setHovered(null)}
-                                            style={{
-                                                marginBottom: 8,
-                                                cursor: "pointer",
-                                                fontWeight: hovered === inst.name ? "bold" : "normal",
-                                                color: hovered === inst.name ? "#88CFE0" : "inherit",
-                                            }}
-                                        >
-                                            {inst.name}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Typography>
-                        </Grid>
+                <Grid item size={{ xs: 12, md: 12 }}>
+                    {selectedInstitution ? (
+                        // Caso 1: institución seleccionada → logo + agradecimientos
+                        <Grid container spacing={3} mb={4}>
+                            {/* Logo */}
+                            <Grid item size={{ xs: 12, sm: 6, md: 4 }} sx={{ textAlign: "center" }}>
+                                <Grid item size={{ xs: 12 }} sx={{ textAlign: "left", mb: 1 }}>
+                                    <IconButton aria-label="Volver" onClick={() => setSelectedInstitution(null)}>
+                                        <ArrowBackIcon color="error" />
+                                    </IconButton>
+                                </Grid>
+                                {isMobile && (
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ mt: 1, fontWeight: "bold", color: "#88CFE0" }}
+                                    >
+                                        {selectedInstitution.name}
+                                    </Typography>
+                                )}
+                                <CardMedia
+                                    component="img"
+                                    src={selectedInstitution.logo}
+                                    alt={selectedInstitution.name}
+                                    sx={{
+                                        width: "90%",
+                                        height: "90%",
+                                        maxHeight: 250,
+                                        borderRadius: 2,
+                                        objectFit: "contain",
+                                        mx: "auto",
+                                        mb: 3,
+                                    }}
+                                />
+                           
 
-                        {/* Logos a la derecha */}
-                        <Grid container item size={{ xs: 12, md: 9 }} spacing={2}>
+                            </Grid>
+
+                            {/* Agradecimientos */}
+                            <Grid item size={{ xs: 12, sm: 6, md: 8 }} >
+                                <Typography
+                                    variant="h6"
+                                    textAlign="center"
+                                    gutterBottom
+                                    fontWeight="bold"
+                              
+                                >
+                                    Agradecimientos Especiales
+                                </Typography>
+                                <Grid container spacing={2}>
+                                    {selectedInstitution.agradecimientos.map((miembro, i) => (
+                                        <Grid item size={{ xs: 6, sm: 6 }} key={i}>
+                                            <Typography variant="body1" fontWeight="bold">
+                                                {miembro.nombre}
+                                            </Typography>
+                                            <Typography variant="body2" color="#88CFE0">
+                                                {miembro.puesto}
+                                            </Typography>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    ) : isMobile ? (
+                        // Caso 2: móvil → logo + nombre arriba
+                            <Grid container spacing={2} mb={4}>
                             {instituciones.map((inst) => (
                                 <Grid
                                     item
-                                    size={{ xs: 12, sm: 6, md: 4 }}
+                                    size={{ xs: 12 }}
                                     key={inst.name}
-                                    sx={{ textAlign: "center" }}
+                                    sx={{ textAlign: "center", cursor: "pointer" }}
+                                    onClick={() =>
+                                        setSelectedInstitution(
+                                            selectedInstitution?.name === inst.name ? null : inst
+                                        )
+                                    }
                                 >
+                                    <Typography
+                                        variant="body2"
+                                        sx={{ mt: 1, fontWeight: "bold" }}
+                                    >
+                                        {inst.name}
+                                    </Typography>
                                     <CardMedia
                                         component="img"
                                         src={inst.logo}
                                         alt={inst.name}
                                         sx={{
-                                            width: hovered === inst.name ? 240 : 200,
+                                            width: 200,
                                             height: 120,
                                             borderRadius: 2,
                                             objectFit: "contain",
-                                            transition: "all 0.3s ease",
                                             mx: "auto",
+                                            transition: "all 0.3s ease",
+                                            "&:hover": { width: 220 },
                                         }}
                                     />
+
                                 </Grid>
                             ))}
                         </Grid>
-                    </>
-                ) : (
-                    <>
-                        {/* --- MÓVIL --- Nombre y logo juntos --- */}
-                        {instituciones.map((inst) => (
-                            <Grid
-                                item
-                                size={{ xs: 12 }}
-                                key={inst.name}
-                                sx={{ textAlign: "center" }}
-                                onMouseEnter={() => setHovered(inst.name)}
-                                onMouseLeave={() => setHovered(null)}
-                            >
-                                <Typography
-                                    variant="body2"
-                                    sx={{
-                                        mt: 2,
-                                        mb: 1,
-                                        fontWeight: hovered === inst.name ? "bold" : "normal",
-                                        color: hovered === inst.name ? "#88CFE0" : "inherit",
-                                    }}
-                                >
-                                    {inst.name}
-                                </Typography>
-                                <CardMedia
-                                    component="img"
-                                    src={inst.logo}
-                                    alt={inst.name}
-                                    sx={{
-                                        width: hovered === inst.name ? 240 : 200,
-                                        height: 120,
-                                        borderRadius: 2,
-                                        objectFit: "contain",
-                                        transition: "all 0.3s ease",
-                                        mx: "auto",
-                                    }}
-                                />
-                            </Grid>
-                        ))}
-                    </>
-                )}
+                    ) : (
+                        // Caso 3: escritorio sin selección → mostrar todos los logos
+                                <Grid container spacing={2} mb={4}>
+                            {/* --- ESCRITORIO --- Lista a la izquierda --- */}
+                            <Grid item size={{ xs: 12, md: 3 }}>
+                                <Typography variant="body2" color="text.secondary" marginLeft={5}>
+                                    <ul style={{ listStyle: "none", padding: 15 }}>
+                                        {instituciones.map((inst) => (
+                                            <li
+                                                key={inst.name}
+                                                onClick={() =>
+                                                    setSelectedInstitution(
+                                                        selectedInstitution?.name === inst.name ? null : inst
+                                                    )
+                                                }
+                                                onMouseEnter={() => setHovered(inst.name)}
+                                                onMouseLeave={() => setHovered(null)}
+                                                style={{
+                                                    marginBottom: 8,
+                                                    cursor: "pointer",
+                                                    fontWeight: hovered === inst.name ? "bold" : "normal",
+                                                    color: hovered === inst.name ? "#88CFE0" : "inherit",
+                                                }}
+                                            >
+                                                {inst.name}
+                                            </li>
 
-                {/* Texto inferior */}
-                <Grid item size={{ xs: 12 }} mt={2} p={2}>
-                    <Typography variant="body2" gutterBottom align="justify">
-                        El SIIE estará integrado con otros sistemas, con el fin de
-                        consolidar la información relativa a centros educativos, oferta
-                        educativa, participantes, docentes (instructores y facilitadores),
-                        trayectorias educativas, matrícula, financiadores y más.
-                        <br />
-                        <br />
-                        El SIIE se vinculará con los sistemas de información de la
-                        Secretaría de Educación (SEDUCA), la Dirección de Educación Superior
-                        (DES-UNAH), el Instituto Nacional de Formación Profesional (INFOP) y
-                        la Comisión para el Desarrollo de la Educación Alternativa No Formal
-                        (CONEANFO), permitiendo el aprendizaje colaborativo mediante la
-                        constitución de fichas estandarizadas de información que permitirán
-                        generar indicadores e información.
-                    </Typography>
+                                        ))}
+                                    </ul>
+                                </Typography>
+                            </Grid>
+
+                            {/* Logos a la derecha */}
+                            <Grid container item size={{ xs: 12, md: 9 }} spacing={3}>
+                                {instituciones.map((inst) => (
+                                    <Grid
+                                        item
+                                        size={{ xs: 12, sm: 6, md: 4 }}
+                                        key={inst.name}
+
+                                    >
+                                        <CardMedia
+                                            component="img"
+                                            src={inst.logo}
+                                            alt={inst.name}
+                                            sx={{
+                                                width: hovered === inst.name ? 400 : 380,
+                                                height: 120,
+                                                objectFit: "contain",
+                                                transition: "all 0.3s ease",
+                                                mx: "auto",
+                                            }}
+                                        />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </Grid>
+                    )}
                 </Grid>
+
             </Grid>
+
+
+
 
             {/* Institución */}
             <Grid

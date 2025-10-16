@@ -85,8 +85,8 @@ const Navbar = () => {
             src={siieLogo}
             alt="SIIE Logo"
             style={{
-              height: isMobile ? "" : "140px",
-              width: isMobile ? "90%" : "",
+              height: isMobile ? "" : "120px",
+              width: isMobile ? "80%" : "",
             }}
           />
           {/*           <img src={conedLogo} alt="CONED Logo" style={{ height: "180px" }} /> */}
