@@ -11,6 +11,9 @@ const DESUNAH = () => {
                 src="https://app.powerbi.com/view?r=eyJrIjoiY2JhNzU3MDctOGJmMy00NjJjLWI2NDctYmVjNThlZTlmYTg4IiwidCI6IjI5MjY3MDJhLWZhZTctNDY5Yi04OWVmLTQwOGY2ZTJkMzliNiJ9"
                 frameborder="0"
                 allowFullScreen="true">
+
+
+
             </iframe>
         </div>
     );
