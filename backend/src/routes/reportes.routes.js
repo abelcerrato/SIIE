@@ -57,6 +57,7 @@ import {
     getgetconeanfo_atenciones_etniaC,
     getconeanfo_atencionesC,
     getconeanfo_participantesC,
+    getconeanfo_atenciones_prticipantes_proceso_educativosC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -165,11 +166,12 @@ router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_varia
 /* CONEANFO */
 router.get("/coneanfoatenciones", getconeanfo_atencionesC);
 router.get("/coneanfoparticipantes", getconeanfo_participantesC);
-router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); //no estan en uso
-router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) //no esta en uso
-router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no esta en uso
-router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no esta en uso
+router.get("/coneanfoprocesoeducativo", getconeanfo_atenciones_prticipantes_proceso_educativosC);
 
+router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_sexoC); //no se usa
+router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) // no se usa
+router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no se usa
+router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no se usa
 
 
 export default router;
