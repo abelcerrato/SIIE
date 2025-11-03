@@ -8,7 +8,7 @@ const Layout = () => {
     <Box sx={{ display: "flex", height: "100vh", flexDirection: "column" }}>
       <Header />
       <Box sx={{ flex: 1, p: 2, overflow: "auto" }}>
-        <Outlet />  {/* Aquí se van a mostrar las vistas hijas */}
+        <Outlet /> 
       </Box>
     </Box>
   );
