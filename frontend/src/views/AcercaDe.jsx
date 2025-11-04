@@ -523,7 +523,7 @@ export default function AcercaDe() {
                 spacing={4}
                 sx={{ marginTop: 3, backgroundColor: "#f5f5f5", padding: 2, borderRadius: 2 }}
             >
-                <Grid item size={{ xs: 12, md: 3 }}>
+                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Coordinador del Proyecto
                     </Typography>
@@ -541,7 +541,7 @@ export default function AcercaDe() {
                     </Typography>
                 </Grid>
 
-                <Grid item size={{ xs: 12, md: 3.5 }}>
+                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Sub Coordinador del Proyecto
                     </Typography>
