@@ -52,20 +52,21 @@ export default function AcercaDe() {
     const miembros = [
         { nombre: "Jose Alexis Ordoñes Velasquez ", puesto: " Secretario Ejecutivo" },
         { nombre: "Beatriz Victoria Galeano Escobar", puesto: "Asistente Ejecutiva" },
-        { nombre: "Zorayda Waleska Zelaya Acosta", puesto: "Coordinadora de Telecomunicaciones" },
+        { nombre: "Zorayda Waleska Zelaya Acosta", puesto: "Coordinadora de Comunicaciones" },
         { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
         { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
         { nombre: "Zoila Suyapa Padilla Sabillon", puesto: "Cordinadora de Desarrollo Profesional Docente" },
         { nombre: "Melany Lizzeth Ordoñez Cruz", puesto: "Asistente Técnico de Desarrollo Profesional Docente" },
         { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
+        { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de EFTP" },
         { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
         { nombre: "Mare Yescenia Figueroa Aguiriano", puesto: "Asistente Técnica de la UTC" },
-        { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de FTP" },
         { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
         { nombre: "Conrado Ernesto Fuentes Carranza", puesto: "Cordinador de Gestión de la Información" },
         { nombre: "Roberto Briceño Jimenez", puesto: "Cordinador del Modelo Ejecutivo" },
         { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
         { nombre: "Giuver Andony Padilla Santos", puesto: "Asistente de Administración" },
+        { nombre: "David Enrique Fu Flores", puesto: "Asistente de Administración" },
         { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
         { nombre: "Luesbelin Julieth Mejia Garcia", puesto: "Desarrolladora FrontEnd" },
         { nombre: "Heydy Carolina Elvir Gutierrez", puesto: "Asistente de Servicios Generales" },
@@ -105,14 +106,15 @@ export default function AcercaDe() {
         {
             name: "SEDUC", logo: seducLogo,
             agradecimientos: [
-                { nombre: "Carlos Gómez", puesto: "Facilitador" },
+                { nombre: "Jefrty Ismael Damas", puesto: "DBA" },
+                { nombre: "Manuel Eduardo Perdomo Mazier", puesto: "Coordinador General del Sistema Nacional de Información Educativa de Honduras" },
             ],
         },
         {
             name: "INFOP", logo: infopLogo,
             agradecimientos: [
                 { nombre: "Calor Alvarado", puesto: "Facilitador" },
-                { nombre: "Kevin Matamoros", puesto: "" },
+                { nombre: "Kevin Matamoros", puesto: "Programador" },
                 { nombre: "Esli Rivera", puesto: "Coordinadora unidad de Estadística" },
             ],
         },
@@ -521,7 +523,7 @@ export default function AcercaDe() {
                 spacing={4}
                 sx={{ marginTop: 3, backgroundColor: "#f5f5f5", padding: 2, borderRadius: 2 }}
             >
-                <Grid item size={{ xs: 12, md: 3 }}>
+                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Coordinador del Proyecto
                     </Typography>
@@ -539,7 +541,7 @@ export default function AcercaDe() {
                     </Typography>
                 </Grid>
 
-                <Grid item size={{ xs: 12, md: 3.5 }}>
+                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Sub Coordinador del Proyecto
                     </Typography>
