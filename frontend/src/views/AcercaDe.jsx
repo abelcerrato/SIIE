@@ -520,10 +520,10 @@ export default function AcercaDe() {
             {/* Coordinador del Proyecto | Desarrolladores*/}
             <Grid
                 container
-                spacing={4}
+                spacing={2}
                 sx={{ marginTop: 3, backgroundColor: "#f5f5f5", padding: 2, borderRadius: 2 }}
             >
-                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
+                <Grid item size={{ xs: 12, sm: 5, md: 3.2 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Coordinador del Proyecto
                     </Typography>
@@ -541,7 +541,7 @@ export default function AcercaDe() {
                     </Typography>
                 </Grid>
 
-                <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
+                <Grid item size={{ xs: 12, sm: 5, md: 3.5 }}>
                     <Typography variant="h6" gutterBottom fontWeight="bold">
                         Sub Coordinador del Proyecto
                     </Typography>
@@ -559,7 +559,7 @@ export default function AcercaDe() {
                         </Link>
                     </Typography>
                 </Grid>
-                <Grid item size={{ xs: 12, md: 5.5 }}>
+                <Grid item size={{ xs: 12, md: 5, sm: 5 }}>
                     <Typography
                         variant="h6"
                         gutterBottom
@@ -571,7 +571,7 @@ export default function AcercaDe() {
                     <Grid container spacing={2}>
                         <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
                             <Typography variant="body2" color="text.secondary">
-                                Nombre: Seydi Johana Lara Fuentes
+                                 Nombre: Seydi Johana Lara{/* Fuentes */}
                                 <br />
                                 Puesto: Desarrolladora BackEnd
                                 <br />
