@@ -433,7 +433,7 @@ export default function AcercaDe() {
                             Secretario Ejecutivo
                         </Typography>
                         <Typography variant="body2" color="text.primary" marginLeft={1}>
-                            Nombre: Jose Alexis Ordoñes Velasquez <br />
+                            Nombre: Jose Alexis Ordóñez Velasquez <br />
                             Contacto:{" "}
                             <Link
                                 href="mailto:alexis.ordoñez@coned.gob.hn"
