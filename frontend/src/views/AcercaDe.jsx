@@ -106,7 +106,7 @@ export default function AcercaDe() {
         {
             name: "SEDUC", logo: seducLogo,
             agradecimientos: [
-                { nombre: "Jefrty Ismael Damas", puesto: "DBA" },
+                { nombre: "Jefry Ismael Damas", puesto: "DBA" },
                 { nombre: "Manuel Eduardo Perdomo Mazier", puesto: "Coordinador General del Sistema Nacional de Información Educativa de Honduras" },
             ],
         },
