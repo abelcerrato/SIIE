@@ -106,7 +106,7 @@ export default function AcercaDe() {
         {
             name: "SEDUC", logo: seducLogo,
             agradecimientos: [
-                { nombre: "Jefrty Ismael Damas", puesto: "DBA" },
+                { nombre: "Jefry Ismael Damas", puesto: "DBA" },
                 { nombre: "Manuel Eduardo Perdomo Mazier", puesto: "Coordinador General del Sistema Nacional de Información Educativa de Honduras" },
             ],
         },
@@ -433,7 +433,7 @@ export default function AcercaDe() {
                             Secretario Ejecutivo
                         </Typography>
                         <Typography variant="body2" color="text.primary" marginLeft={1}>
-                            Nombre: Jose Alexis Ordoñes Velasquez <br />
+                            Nombre: Jose Alexis Ordóñez Velasquez <br />
                             Contacto:{" "}
                             <Link
                                 href="mailto:alexis.ordoñez@coned.gob.hn"
