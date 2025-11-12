@@ -397,6 +397,21 @@ export const getInfop_capacitados_por_unidades_y_cursosM = async () => {
   }
 };
 
+// Consulta para capacitados por cursos
+export const getInfop_capacitados_por_centroM = async () => {
+  try {
+    const { rows } = await pool.query(`
+          SELECT 
+            año, regional, centro, rango_edad, matriculados_hombre, matriculados_mujer, matriculados_total, 
+            aprobados_hombre, aprobados_mujer, aprobados_total, desertores_hombre, desertores_mujer, 
+            desertores_total, reprobados_hombre, reprobados_mujer, reprobados_total
+          FROM infop_capacitados_por_centro;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 /*_________________________________________________ DES _________________________________________________*/
 // Consulta para DES matrícula por grado académico

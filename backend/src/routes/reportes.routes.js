@@ -60,6 +60,7 @@ import {
     getconeanfo_atenciones_prticipantes_proceso_educativosC,
     getInfop_capacitados_por_unidades_y_cursosInfop_regionesC,
     getDES_matricula_2024C,
+    getInfop_capacitados_por_centroC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -97,6 +98,7 @@ router.get("/infopcapacitadosporegional", getInfop_capacitados_por_regionalC);
 router.get("/infopcapacitadosporsectoreconomico", getInfop_capacitados_por_sector_economicoC);
 router.get("/infopregiones", getInfop_regionesC);
 router.get("/infopunidadesycursos", getInfop_capacitados_por_unidades_y_cursosInfop_regionesC);
+router.get("/infopcentros", getInfop_capacitados_por_centroC);
 
 
 /* DES */
