@@ -56,7 +56,7 @@ const ReporteConeanfo = () => {
 
     // Configuración específica para cada reporte
     const reportes = [
-        {
+   /*      {
             value: "coneanfo",
             label: "CONEANFO",
             endpoint: "/coneanfo",
@@ -112,7 +112,7 @@ const ReporteConeanfo = () => {
                     "trabajaenelareaqueseformo": "Trabaja en el área que se formó"
                 }
             }
-        },
+        }, */
         {
             value: "coneanfoatenciones",
             label: " CONEANFO Atenciones",
