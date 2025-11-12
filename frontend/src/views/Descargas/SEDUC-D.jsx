@@ -60,10 +60,10 @@ const ReportesSeduc = () => {
     const reportes = [
         {
             value: "seduc1425",
-            label: "SEDUC 2014 - 2025",
+            label: "SEDUC",
             endpoint: "/seduc1425",
             config: {
-                titulo: "Reporte SEDUC 2014 - 2025",
+                titulo: "Reporte SEDUC",
                 filtros: ["Año", "Departamento"],
                 columnasBase: ["Año",
                     "Departamento",
