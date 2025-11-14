@@ -378,6 +378,41 @@ export const getInfop_regionesM = async () => {
   }
 };
 
+
+// Consulta para capacitados por unidades y cursos
+export const getInfop_capacitados_por_unidades_y_cursosM = async () => {
+  try {
+    const { rows } = await pool.query(`
+             SELECT 
+                  año, region, actividad, unidad, curso, instructor, horas, 
+                  finalizados, rango_edad, matriculados_hombre, matriculados_mujeres, 
+                  matriculados_total, aprobados_hombre, aprobados_mujer, aprobados_total, 
+                  desertores_hombre, desertores_mujer, desertores_total, reprobados_hombre, 
+                  reprobados_mujer, reprobados_total
+             FROM infop_capacitados_por_unidades_y_cursos;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Consulta para capacitados por cursos
+export const getInfop_capacitados_por_centroM = async () => {
+  try {
+    const { rows } = await pool.query(`
+          SELECT 
+            año, regional, centro, rango_edad, matriculados_hombre, matriculados_mujer, matriculados_total, 
+            aprobados_hombre, aprobados_mujer, aprobados_total, desertores_hombre, desertores_mujer, 
+            desertores_total, reprobados_hombre, reprobados_mujer, reprobados_total
+          FROM infop_capacitados_por_centro;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /*_________________________________________________ DES _________________________________________________*/
 // Consulta para DES matrícula por grado académico
 export const getDES_matricula_por_grado_academicoM = async () => {
@@ -420,6 +455,31 @@ export const getDES_matricula_por_sexoM = async () => {
     throw error;
   }
 };
+
+
+// Consulta para DES matrícula por 2024, la data nueva que dió Rúben
+export const getDES_matricula_2024M = async () => {
+  try {
+    const { rows } = await pool.query(`
+            SELECT 
+                "AÑO", "NOMBRE_INSTITUCION", "SIGLAS", "NOMBRE_SEDE", "DEPARTAMENTO", "MUNICIPIO", 
+                "PERIODO_ACADEMICO", "TIPO_DOCUMENTO_ID", "NO_DOCUMENTO_ID", "DNI_IMPUTADA", "NO_CUENTA", 
+                "GENERO", "GENERO_IMPUTADO", "FECHA_NACIMIENTO", "EDAD", "EDAD_CALCULADA_E_IMPUTADA", 
+                "RANGO_ETARIO", "NACIONALIDAD", "DEPARTAMENTO_NAC", "NOMBRE_PROGRAMA", "GRADO_ACADEMICO", 
+                "CINE", "MODALIDAD", "EXPRESION", "TIPO_INGRESO", "JORNADA1", "JORNADA2", "NO_ASIGNATURAS_MAT", 
+                "NO_ ASIGNATURAS_NSP", "NO_ASIGNATURAS_ABD", "NO_ASIGNATURAS_RPB", "NO_ASIGNATURAS_APR", 
+                "INDICE_ACADEMICO_PERIODO", "INDICE_ACADEMICO_GLOBAL", "ANOS_CARRERA_UNIVERSIDAD", 
+                "TITULO_EDMEDIA", "TIPO_ADM_CENTRO_EDMEDIA", "ETNIA", "POSEE_DISCAPACIDAD", "CAMPOAMPLIO", 
+                "CAMPOESPECIFICO", "CAMPODETALLADO", "TIPO_ADMINISTRACION"
+            FROM des_matricula_2024;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 /*_________________________________________________ SIIE _________________________________________________*/
 
