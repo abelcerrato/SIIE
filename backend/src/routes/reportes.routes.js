@@ -16,9 +16,6 @@ import {
     getInfop_capacitados_por_regionalC,
     getInfop_capacitados_por_sector_economicoC,
     getInfop_regionesC,
-    getDES_matricula_por_grado_academicoC,
-    getDES_matricula_por_institucionC,
-    getDES_matricula_por_sexoC,
     getSIIE_matricula_por_departamentoC,
     getSIIE_matricula_por_institucionC,
     getSIIE_matricula_por_sexoC,
@@ -59,7 +56,6 @@ import {
     getconeanfo_participantesC,
     getconeanfo_atenciones_prticipantes_proceso_educativosC,
     getInfop_capacitados_por_unidades_y_cursosInfop_regionesC,
-    getDES_matriculaC,
     getInfop_capacitados_por_centroC,
 } from "../controllers/reportes.controller.js";
 
@@ -99,13 +95,6 @@ router.get("/infopcapacitadosporsectoreconomico", getInfop_capacitados_por_secto
 router.get("/infopregiones", getInfop_regionesC);
 router.get("/infopunidadesycursos", getInfop_capacitados_por_unidades_y_cursosInfop_regionesC);
 router.get("/infopcentros", getInfop_capacitados_por_centroC);
-
-
-/* DES */
-router.get("/desmatriculaporgradoacademico", getDES_matricula_por_grado_academicoC);
-router.get("/desmatriculaporinstitucion", getDES_matricula_por_institucionC);
-router.get("/desmatriculaporsexo", getDES_matricula_por_sexoC);
-router.get("/desmatricula", getDES_matriculaC); //matricula del año 2024
 
 
 
