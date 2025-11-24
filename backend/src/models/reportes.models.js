@@ -1,4 +1,4 @@
-import { pool } from "../db.js";
+import { pool, poolDB2 } from "../db.js";
 
 /*
   ######################################################################
@@ -456,11 +456,12 @@ export const getDES_matricula_por_sexoM = async () => {
   }
 };
 
+//---------------------------------------------------------------------------------------
 
 // Consulta para DES matrícula por 2024, la data nueva que dió Rúben
-export const getDES_matricula_2024M = async () => {
+export const getDES_matriculaM = async () => {
   try {
-    const { rows } = await pool.query(`
+    const { rows } = await poolDB2.query(`
             SELECT 
                 "AÑO", "NOMBRE_INSTITUCION", "SIGLAS", "NOMBRE_SEDE", "DEPARTAMENTO", "MUNICIPIO", 
                 "PERIODO_ACADEMICO", "TIPO_DOCUMENTO_ID", "NO_DOCUMENTO_ID", "DNI_IMPUTADA", "NO_CUENTA", 
@@ -471,7 +472,8 @@ export const getDES_matricula_2024M = async () => {
                 "INDICE_ACADEMICO_PERIODO", "INDICE_ACADEMICO_GLOBAL", "ANOS_CARRERA_UNIVERSIDAD", 
                 "TITULO_EDMEDIA", "TIPO_ADM_CENTRO_EDMEDIA", "ETNIA", "POSEE_DISCAPACIDAD", "CAMPOAMPLIO", 
                 "CAMPOESPECIFICO", "CAMPODETALLADO", "TIPO_ADMINISTRACION"
-            FROM des_matricula_2024;
+            FROM des_matricula
+            LIMIT 1000;
         `);
     return rows;
   } catch (error) {

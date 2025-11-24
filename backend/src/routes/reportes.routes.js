@@ -59,7 +59,7 @@ import {
     getconeanfo_participantesC,
     getconeanfo_atenciones_prticipantes_proceso_educativosC,
     getInfop_capacitados_por_unidades_y_cursosInfop_regionesC,
-    getDES_matricula_2024C,
+    getDES_matriculaC,
     getInfop_capacitados_por_centroC,
 } from "../controllers/reportes.controller.js";
 
@@ -105,7 +105,7 @@ router.get("/infopcentros", getInfop_capacitados_por_centroC);
 router.get("/desmatriculaporgradoacademico", getDES_matricula_por_grado_academicoC);
 router.get("/desmatriculaporinstitucion", getDES_matricula_por_institucionC);
 router.get("/desmatriculaporsexo", getDES_matricula_por_sexoC);
-router.get("/desmatricula2024", getDES_matricula_2024C); //matricula del año 2024
+router.get("/desmatricula", getDES_matriculaC); //matricula del año 2024
 
 
 

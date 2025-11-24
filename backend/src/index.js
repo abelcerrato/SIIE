@@ -28,8 +28,11 @@ app.use(reportesRoutes)
 
 
 console.log("DB_USER:", process.env.DB_USER); // Prueba si se está cargando correctamente
+console.log("DB_USER2:", process.env.DB2_USER); // Prueba si se está cargando correctamente
 
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en el puerto ${PORT}`);
+  console.log(`Servidor 1 corriendo en el puerto ${PORT}`);
 });
+
+
 
