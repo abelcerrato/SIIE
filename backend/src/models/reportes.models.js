@@ -1113,3 +1113,181 @@ export const getconeanfo_atenciones_etniaM = async () => {
     throw error;
   }
 };
+
+
+/*_________________________________________________ DES-UNAH _________________________________________________*/
+
+export const getdes_4_1_estudiantes_primer_titulo_esM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+           SELECT 
+            "AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", 
+            "MODALIDAD", "RANGO DE EDAD", "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO" 
+          FROM des_4_1_estudiantes_primer_titulo_es;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", 
+            "MODALIDAD", "RANGO DE EDAD", "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO", "POBLACION TOTAL", 
+            indicador_4_2_por_10000_hab
+          FROM des_4_2_estudiantes_primer_titulo_es_10mil_habitantes;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_3_persona_que_ingresan_esM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN", 
+            "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD", 
+            "PERSONAS QUE INGRESAN A LA EDUCACIÓN SUPERIOR"
+          FROM des_4_3_persona_que_ingresan_es;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_4_nuevos_ingresos_iniciar_programaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO", "CINE", "SEXO", "SECTOR DE GESTIÓN", 
+            "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD", "NUEVOS INGRESOS"
+          FROM des_4_4_nuevos_ingresos_iniciar_programa;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_5_graduadosM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO", 
+            "CINE", "SEXO", "SECTOR DE GESTIÓN", 
+            "MODALIDAD", "RANGO DE EDAD", "CANTIDAD DE EGRESADOS"
+          FROM des_4_5_graduados;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_6_tasa_bruta_matriculaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "MATRICULA", "POBLACIÓN EDAD TEÓRICA", "TASA BRUTA DE MATRÍCULA"
+          FROM des_4_6_tasa_bruta_matricula;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_7_tasa_neta_matriculaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "MATRICULA DE 18 A 24", "POBLACIÓN EDAD TEÓRICA", "TASA NETA DE MATRÍCULA"
+          FROM des_4_7_tasa_neta_matricula;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_4_10_estudiantes_internacionales_ciclo_completoM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "NACIONALIDAD", "TITULO_EDMEDIA", "CINE", "SEXO", "SECTOR DE GESTIÓN", 
+            "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD", 
+            "ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO", 
+            "MATRICULA", "PORCENTAJE DE ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO"
+          FROM des_4_10_estudiantes_internacionales_ciclo_completo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_estudiantes_educacion_superiorM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT 
+            "AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", 
+            "MODALIDAD", "RANGO DE EDAD", "ESTUDIANTES EN LA EDUCACIÓN SUPERIOR"
+          FROM des_estudiantes_educacion_superior;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_total_estudiantes_brutaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT "AÑO", "MATRICULA" FROM des_total_estudiantes_bruta;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getdes_total_estudiantes_netaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT "AÑO", "MATRICULA DE 18 A 24" FROM des_total_estudiantes_neta;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getsiiedes_matriculadepartamentossexoM = async () => {
+  try {
+    const { rows } = await poolDB2.query(`
+          SELECT "Sector", "Año", "Departamento", "Femenino", "Masculino", "Total" FROM siiedes_matriculadepartamentossexo;
+        `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
