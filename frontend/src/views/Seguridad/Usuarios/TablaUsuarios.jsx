@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
+import VpnKeyOutlinedIcon from "@mui/icons-material/VpnKeyOutlined";
 import {
   TableContainer,
   Table,
@@ -15,6 +15,7 @@ import {
   Box,
   Button,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 
 import { EditOutlined as EditOutlinedIcon, Add as AddIcon } from "@mui/icons-material";
@@ -24,7 +25,7 @@ import { useUser } from "../../../components/UserContext";
 
 export default function TablaUsuarios() {
   const navigate = useNavigate();
-  const { permissions } = useUser();
+  const { permissions,user } = useUser();
   const [rows, setRows] = useState([]);
 
   const [openModal, setOpenModal] = useState(false);
@@ -74,6 +75,7 @@ export default function TablaUsuarios() {
       renderCell: (row) => (
         <>
           {tienePermiso(6) && (
+            <>
             <IconButton
               sx={{ color: "#88CFE0" }}
               onClick={(e) => {
@@ -84,6 +86,15 @@ export default function TablaUsuarios() {
             >
               <EditOutlinedIcon />
             </IconButton>
+              <Tooltip title="Restablecer Contraseña" arrow>
+                  <IconButton
+                    onClick={() => handleResetearContra(row.usuario)}
+                    sx={{ color: "#88CFE0" }}
+                  >
+                    <VpnKeyOutlinedIcon />
+                  </IconButton>
+                </Tooltip>
+                </>
           )}
         </>
       ),

@@ -57,62 +57,216 @@ const ReportesDesUnah = () => {
     // Configuración específica para cada reporte
     const reportes = [
         {
-            value: "desmatriculaporgradoacademico",
-            label: "Matrícula por Grado Académico",
-            endpoint: "/desmatriculaporgradoacademico",
+            value: "desestudiantesprimertitulo",
+            label: "Estudiantes con Primer Título",
+            endpoint: "/desestudiantesprimertitulo",
             config: {
-                titulo: "Reporte Matrícula por Grado Académico",
-                filtros: ["año", "gradoacademico",],
+                titulo: "Reporte Estudiantes con Primer Título",
+                filtros: ["AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD",],
                 columnasBase: [
-                    "año", "gradoacademico", "publico", "privado", "total"
+                    "AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD", "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO"
                 ],
                 encabezados: {
-                    "año": "Año",
-                    "gradoacademico": "Grado Académico",
-                    "publico": "Público",
-                    "privado": "Privado",
-                    "total": "Total"
+                    "AÑO": "Año",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
                 }
             }
         },
         {
-            value: "desmatriculaporinstitucion",
-            label: "Matrícula por Institución",
-            endpoint: "/desmatriculaporinstitucion",
+            value: "desestudiantesprimertitulox10milhabitantes",
+            label: "Estudiantes con Primer Título por 10 mil Habitantes",
+            endpoint: "/desestudiantesprimertitulox10milhabitantes",
             config: {
-                titulo: "Reporte Matrícula por Institución",
-                filtros: ["año", "administracion", "ies"],
+                titulo: "Reporte Estudiantes con Primer Título por 10 mil Habitantes",
+                filtros: ["AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD",],
                 columnasBase: [
-                    "año", "ies", "administracion", "femenino", "masculino", "total"],
+                    "AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD", "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO", "POBLACION TOTAL",
+                    "indicador_4_2_por_10000_hab"],
                 encabezados: {
-                    "año": "Año",
-                    "ies": "Institución",
-                    "administracion": "Administración",
-                    "femenino": "Femenino",
-                    "masculino": "Masculino",
-                    "total": "Total"
+                    "AÑO": "Año",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO": "Total de Estudiantes de Primer Título",
+                    "POBLACION TOTAL": "Población Total",
+                    "indicador_4_2_por_10000_hab": "Estudiantes con Primer Título por 10 mil Habitantes"
                 },
 
+
+            }
+        },
+
+        {
+            value: "despersonasqueingresan",
+            label: "Personas que Ingresan a la Educación Superior",
+            endpoint: "/despersonasqueingresan",
+            config: {
+                titulo: "Reporte Personas que Ingresan a la Educación Superior",
+                filtros: ["AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD",],
+                columnasBase: ["AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD",
+                    "PERSONAS QUE INGRESAN A LA EDUCACIÓN SUPERIOR"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "NOMBRE PROGRAMA": "Nombre del Programa",
+                    "TIPO_INGRESO": "Tipo de Ingreso",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "PERSONAS QUE INGRESAN A LA EDUCACIÓN SUPERIOR": "Personas que Ingresan a la Educación Superior"
+                },
+            }
+        },
+
+        {
+            value: "desnuevosingresosiniciarprograma",
+            label: "Nuevos Ingresos que Inician Programa",
+            endpoint: "/desnuevosingresosiniciarprograma",
+            config: {
+                titulo: "Reporte Nuevos Ingresos que Inician Programa",
+                filtros: ["AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD"],
+                columnasBase: ["AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD", "NUEVOS INGRESOS"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "NOMBRE PROGRAMA": "Nombre del Programa",
+                    "GRADO_ACADEMICO": "Grado Académico",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "NUEVOS INGRESOS": "Nuevos Ingresos que Inician Programa"
+                },
             }
         },
         {
-            value: "desmatriculaporsexo",
-            label: "Matrícula por Sexo",
-            endpoint: "/desmatriculaporsexo",
+            value: "desgraduados",
+            label: "Graduados de la Educación Superior",
+            endpoint: "/desgraduados",
             config: {
-                titulo: "Reporte Matrícula por Sexo",
-                filtros: ["año", "gradoacademico"],
-                columnasBase: ["año", "gradoacademico", "femenino", "masculino", "total"],
+                titulo: "Reporte Graduados de la Educación Superior",
+                filtros: ["AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "MODALIDAD", "RANGO DE EDAD"],
+                columnasBase: ["AÑO", "NOMBRE PROGRAMA", "GRADO_ACADEMICO",
+                    "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "MODALIDAD", "RANGO DE EDAD", "CANTIDAD DE EGRESADOS"],
                 encabezados: {
-                    "año": "Año",
-                    "gradoacademico": "Grado Académico",
-                    "femenino": "Femenino",
-                    "masculino": "Masculino",
-                    "total": "Total"
+                    "AÑO": "Año",
+                    "NOMBRE PROGRAMA": "Nombre del Programa",
+                    "GRADO_ACADEMICO": "Grado Académico",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "CANTIDAD DE EGRESADOS": "Cantidad de Graduados"
                 },
             }
         },
-
+        {
+            value: "destasabrutamatricula",
+            label: "Tasa Bruta de Matrícula",
+            endpoint: "/destasabrutamatricula",
+            config: {
+                titulo: "Reporte Tasa Bruta de Matrícula",
+                filtros: ["AÑO"],
+                columnasBase: ["AÑO", "MATRICULA", "POBLACIÓN EDAD TEÓRICA", "TASA BRUTA DE MATRÍCULA"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "MATRICULA": "Matrícula",
+                    "POBLACIÓN EDAD TEÓRICA": "Población de Edad Teórica",
+                    "TASA BRUTA DE MATRÍCULA": "Tasa Bruta de Matrícula"
+                },
+            }
+        },
+        {
+            value: "destasanetamatricula",
+            label: "Tasa Neta de Matrícula",
+            endpoint: "/destasanetamatricula",
+            config: {
+                titulo: "Reporte Tasa Neta de Matrícula",
+                filtros: ["AÑO"],
+                columnasBase: ["AÑO", "MATRICULA DE 18 A 24", "POBLACIÓN EDAD TEÓRICA", "TASA NETA DE MATRÍCULA"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "MATRICULA DE 18 A 24": "Matrícula de 18 a 24",
+                    "POBLACIÓN EDAD TEÓRICA": "Población de Edad Teórica",
+                    "TASA NETA DE MATRÍCULA": "Tasa Neta de Matrícula"
+                },
+            }
+        },
+        {
+            value: "desestudiantesinternacionales",
+            label: "Estudiantes Internacionales",
+            endpoint: "/desestudiantesinternacionales",
+            config: {
+                titulo: "Reporte Estudiantes Internacionales",
+                filtros: ["AÑO", "NACIONALIDAD", "TITULO_EDMEDIA", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD"],
+                columnasBase: ["AÑO", "NACIONALIDAD", "TITULO_EDMEDIA", "CINE", "SEXO", "SECTOR DE GESTIÓN",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", "MODALIDAD", "RANGO DE EDAD",
+                    "ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO",
+                    "MATRICULA", "PORCENTAJE DE ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "NACIONALIDAD": "Nacionalidad",
+                    "TITULO_EDMEDIA": "Título de Educación Media",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO": "Estudiantes Internacionales de Ciclo Completo",
+                    "MATRICULA": "Matrícula",
+                    "PORCENTAJE DE ESTUDIANTES INTERNACIONALES DE CICLO COMPLETO": "Porcentaje de Estudiantes Internacionales de Ciclo Completo"
+                },
+            }
+        },
+        {
+            value: "desestudianteseducacionsuperior",
+            label: "Estudiantes de Educación Superior",
+            endpoint: "/desestudianteseducacionsuperior",
+            config: {
+                titulo: "Reporte Estudiantes de Educación Superior",
+                filtros: ["AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD"],
+                columnasBase: ["AÑO", "NOMBRE PROGRAMA", "TIPO_INGRESO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN",
+                    "MODALIDAD", "RANGO DE EDAD", "ESTUDIANTES EN LA EDUCACIÓN SUPERIOR"],
+                encabezados: {
+                    "AÑO": "Año",
+                    "NOMBRE PROGRAMA": "Nombre del Programa",
+                    "TIPO_INGRESO": "Tipo de Ingreso",
+                    "CINE": "CINE",
+                    "SEXO": "Sexo",
+                    "SECTOR DE GESTIÓN": "Sector de Gestión",
+                    "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
+                    "MODALIDAD": "Modalidad",
+                    "RANGO DE EDAD": "Rango de Edad",
+                    "ESTUDIANTES EN LA EDUCACIÓN SUPERIOR": "Estudiantes en la Educación Superior"
+                },
+            }
+        },
     ];
 
     // Obtener configuración del reporte actual
@@ -164,28 +318,47 @@ const ReportesDesUnah = () => {
         }
     }, [reporteSeleccionado]);
 
-    // Obtener valores únicos para los filtros
+
+    // Filtrar datos
+    const getFilteredDataForFiltro = (filtroActual) => {
+        return data.filter(item => {
+            return Object.keys(filters).every(key => {
+                // Ignorar el filtro que estamos calculando
+                if (key === filtroActual || key === "valor") return true;
+
+                if (!filters[key]) return true;
+
+                const valorItem = item[key];
+                if (valorItem == null) return false;
+
+                return (
+                    valorItem.toString().trim().toLowerCase() ===
+                    filters[key].toString().trim().toLowerCase()
+                );
+            });
+        });
+    };
+
     const getValoresUnicos = (campo) => {
-        return [...new Set(data.map(item => item[campo]))]
-            .filter(val => val != null && val !== "") // Filtrar null, undefined y vacíos
+        const datosFiltrados = getFilteredDataForFiltro(campo);
+
+        return [...new Set(datosFiltrados.map(item => item[campo]))]
+            .filter(val => val != null && val !== "")
             .sort();
     };
 
-    // Filtrar datos
+
     const filteredData = data.filter(item => {
         return Object.keys(filters).every(key => {
-            // Si no hay filtro o es 'valor', no aplicar
             if (key === "valor" || !filters[key]) return true;
 
             const valor = item[key];
             if (valor == null || valor === "") return false;
 
-            // Normalizamos ambos valores
-            const valorStr = valor.toString().trim().toLowerCase();
-            const filtroStr = filters[key].toString().trim().toLowerCase();
-
-            // Comparación exacta para todos los casos
-            return valorStr === filtroStr;
+            return (
+                valor.toString().trim().toLowerCase() ===
+                filters[key].toString().trim().toLowerCase()
+            );
         });
     });
 
