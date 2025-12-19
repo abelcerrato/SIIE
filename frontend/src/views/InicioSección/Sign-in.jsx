@@ -15,9 +15,9 @@ import {
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../components/UserContext";
+import { useUser } from "../../components/UserContext";
 import Swal from "sweetalert2";
-import siieLogo from "../img/Logos.png";
+import siieLogo from "../../img/Logos.png";
 
 
 const theme = createTheme();
@@ -74,11 +74,56 @@ export default function SignIn() {
         navigate("/Dashboard");
       }
     } catch (error) {
-      const msg =
-        error.response?.data?.message ||
-        "Hubo un problema con la solicitud. Inténtelo de nuevo.";
-      Swal.fire({ title: "Error", text: msg, icon: "error", timer: 6000 });
+      if (error.response) {
+
+        // Credenciales incorrectas
+        if (error.response.status === 401) {
+          Swal.fire({
+            title: "Error",
+            text: error.response.data.message,
+            icon: "error",
+            timer: 6000,
+            confirmButtonColor: "#88CFE0",
+          });
+        }
+
+        //  Cambio de contraseña obligatorio
+        else if (error.response.status === 403) {
+          const { id, usuario, idrol, estado } = error.response.data.user;
+
+          const userData = {
+            id,
+            usuario,
+            idrol,
+            estado,
+            requiresPasswordChange: true,
+          };
+
+          setUser(userData);
+          localStorage.setItem("user", JSON.stringify(userData));
+
+          navigate("/Dashboard/CambiarContrasena", { replace: true });
+        }
+
+
+        //  Otros errores
+        else {
+          Swal.fire({
+            title: "Error",
+            text: error.response.data.message,
+            icon: "error",
+            timer: 6000,
+            confirmButtonColor: "#88CFE0",
+          });
+        }
+
+      } else if (error.request) {
+        alert("Error en la conexión con el servidor.");
+      } else {
+        alert("Hubo un problema con la solicitud. Inténtelo de nuevo.");
+      }
     }
+
   };
 
   return (

@@ -93,7 +93,6 @@ const RolesTable = () => {
         </span>
       )
     },
-    { field: "creadopor", headerName: "Creado por", width: 150 },
   ];
 
   const CustomRow = ({ row }) => (

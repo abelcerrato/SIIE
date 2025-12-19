@@ -57,6 +57,18 @@ import {
     getconeanfo_atenciones_prticipantes_proceso_educativosC,
     getInfop_capacitados_por_unidades_y_cursosInfop_regionesC,
     getInfop_capacitados_por_centroC,
+    getdes_4_1_estudiantes_primer_titulo_esC,
+    getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesC,
+    getdes_4_3_persona_que_ingresan_esC,
+    getdes_4_4_nuevos_ingresos_iniciar_programaC,
+    getdes_4_5_graduadosC,
+    getdes_4_6_tasa_bruta_matriculaC,
+    getdes_4_7_tasa_neta_matriculaC,
+    getdes_4_10_estudiantes_internacionales_ciclo_completoC,
+    getdes_estudiantes_educacion_superiorC,
+    getdes_total_estudiantes_brutaC,
+    getdes_total_estudiantes_netaC,
+    getsiiedes_matriculadepartamentossexoC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -168,6 +180,30 @@ router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_se
 router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) // no se usa
 router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no se usa
 router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no se usa
+
+
+
+/* DES */
+router.get("/desestudiantesprimertitulo", getdes_4_1_estudiantes_primer_titulo_esC);
+router.get("/desestudiantesprimertitulox10milhabitantes", getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesC);
+router.get("/despersonasqueingresan", getdes_4_3_persona_que_ingresan_esC);
+router.get("/desnuevosingresosiniciarprograma", getdes_4_4_nuevos_ingresos_iniciar_programaC);
+router.get("/desgraduados", getdes_4_5_graduadosC);
+router.get("/destasabrutamatricula", getdes_4_6_tasa_bruta_matriculaC );
+router.get("/destasanetamatricula", getdes_4_7_tasa_neta_matriculaC );
+router.get("/desestudiantesinternacionales", getdes_4_10_estudiantes_internacionales_ciclo_completoC);
+router.get("/desestudianteseducacionsuperior", getdes_estudiantes_educacion_superiorC);
+router.get("/destotalestudiantesbruta", getdes_total_estudiantes_brutaC);
+router.get("/destotalestudiantesneta", getdes_total_estudiantes_netaC);
+router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentossexoC);
+
+
+
+
+
+
+
+
 
 
 export default router;
