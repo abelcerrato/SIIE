@@ -57,8 +57,8 @@ export default function TablaUsuarios() {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/resetearContra/${usuario}`);
       Swal.fire({
-        title: "Contraseña actualizada",
-        text: "Se ha restablecido la contraseña al número de identidad del usuario.",
+        title: "Contraseña Actualizada",
+        text: "La contraseña ha sido restablecida a una temporal, la cual es: 12345678 .",
         icon: "success",
         timer: 4000,
       });

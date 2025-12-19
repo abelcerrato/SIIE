@@ -1,5 +1,5 @@
 
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation,Outlet } from "react-router-dom";
 import { useUser } from "./UserContext";
 import { useEffect, useState } from "react";
 
@@ -8,6 +8,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const [isChecking, setIsChecking] = useState(true);
 
+  
   useEffect(() => {
     // Pequeño delay para asegurar que la verificación sea consistente
     const timer = setTimeout(() => {
@@ -17,6 +18,11 @@ const ProtectedRoute = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
+
+  
+if (user?.requiresPasswordChange) {
+  return <Outlet />; // pero el modal bloquea todo
+}
   // Verificar tanto en el estado como en localStorage
   const storedUser = localStorage.getItem("user");
   const isAuthenticated = user || storedUser;

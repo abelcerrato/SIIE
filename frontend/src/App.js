@@ -12,7 +12,8 @@ import SEDUCTABLERO from "./views/Tableros/SEDUC";
 import CONEANFOTABLERO from "./views/Tableros/CONEANFO";
 import DESUNAHTABLERO from "./views/Tableros/DesUnah";
 
-import Login from "./views/Sign-in";
+import Login from "./views/InicioSección/Sign-in";
+import CambiarContraPage from "./views/InicioSección/CambiarContraPage";
 import Layout from "./components/Layout";
 import TablaSeguridad from "./views/Seguridad/Permisos/TablaPermisos";
 import Usuarios from "./views/Seguridad/Usuarios/TablaUsuarios";
@@ -62,6 +63,8 @@ function App() {
             </ProtectedRoute>
           }
         >
+          <Route path="CambiarContrasena" element={<CambiarContraPage />} />
+
           <Route path="Administracion/Usuarios" element={<Usuarios />} />
           <Route
             path="Administracion/RolesyPermisos"

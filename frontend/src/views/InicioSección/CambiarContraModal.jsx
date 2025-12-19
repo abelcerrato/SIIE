@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Box,
@@ -10,12 +10,12 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { color } from "../Components/color";
+
 import axios from "axios";
-import { useUser } from "./UserContext";
+import { useUser } from "../../components/UserContext";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { VerificationContext } from "../App";
+
 
 const style = {
   position: "absolute",
@@ -36,6 +36,8 @@ const CambiarContraModal = ({
   onSuccess,
 }) => {
   const { user } = useUser();
+
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState({
     new: false,
@@ -51,6 +53,7 @@ const CambiarContraModal = ({
     confirmPassword: "",
   });
   const [loading, setLoading] = useState(false);
+
 
   //const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{5,}$/;
   const passwordRegex = /^.{5,15}$/;
@@ -89,18 +92,7 @@ const CambiarContraModal = ({
     return valid;
   };
 
-  const { pauseVerification, resumeVerification } =
-    useContext(VerificationContext);
 
-  // Efecto para pausar/resumir la verificación
-  React.useEffect(() => {
-    if (open) {
-      pauseVerification(); // Pausamos la verificación al abrir
-      return () => {
-        resumeVerification(); // Resumimos al cerrar
-      };
-    }
-  }, [open]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -110,7 +102,7 @@ const CambiarContraModal = ({
       setLoading(true);
 
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/actualizarContra/${user?.usuario}`,
+        `${process.env.REACT_APP_API_URL}/cambioContra/${user?.usuario}`,
         {
           nuevaContraseña: passwords.newPassword,
         }
@@ -121,12 +113,12 @@ const CambiarContraModal = ({
           text: "Su contraseña ha sido actualizada exitosamente, sera rederigido/a al inicio de sección y podra ingrsar con su contraseña nueva.",
           icon: "success",
           timer: 8000,
-          confirmButtonColor: color.primary.azul,
+          confirmButtonColor: "#88CFE0",
         });
 
         setPasswords({ newPassword: "", confirmPassword: "" });
         setErrors({ newPassword: "", confirmPassword: "" });
-        navigate("/");
+        navigate("/Login");
         if (onSuccess) {
           onSuccess(); // <- Aquí llamás la función del dashboard
         } else {
@@ -134,11 +126,19 @@ const CambiarContraModal = ({
         }
       }
     } catch (error) {
-      alert("No se cambió la contraseña");
+      Swal.fire({
+        title: "Error",
+        text: "Error al actulizar contraseña.",
+        icon: "error",
+        timer: 8000,
+        confirmButtonColor: "#d61717ff",
+      });
     } finally {
       setLoading(false);
     }
   };
+
+
 
   return (
     <Modal
@@ -232,7 +232,7 @@ const CambiarContraModal = ({
               type="submit"
               variant="contained"
               disabled={loading}
-              sx={{ background: color.primary.azul }}
+              sx={{ background: "#88CFE0" }}
             >
               {loading ? (
                 <CircularProgress size={24} color="inherit" />
