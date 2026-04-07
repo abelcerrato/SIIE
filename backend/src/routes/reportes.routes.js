@@ -195,7 +195,7 @@ router.get("/desestudiantesinternacionales", getdes_4_10_estudiantes_internacion
 router.get("/desestudianteseducacionsuperior", getdes_estudiantes_educacion_superiorC);
 router.get("/destotalestudiantesbruta", getdes_total_estudiantes_brutaC);
 router.get("/destotalestudiantesneta", getdes_total_estudiantes_netaC);
-
+router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentossexoC);
 
 
 //codigo
