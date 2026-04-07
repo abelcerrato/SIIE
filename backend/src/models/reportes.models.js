@@ -1123,8 +1123,7 @@ export const getdes_4_1_estudiantes_primer_titulo_esM = async () => {
            SELECT 
             "AÑO", "CINE", "SEXO", "SECTOR DE GESTIÓN", "CAMPO DE EDUCACIÓN Y CAPACITACIÓN", 
             "MODALIDAD", "RANGO DE EDAD", "TOTAL DE ESTUDIANTES DE PRIMER TÍTULO" 
-          FROM des_4_1_estudiantes_primer_titulo_es
-          limit 10;
+          FROM des_4_1_estudiantes_primer_titulo_es;
         `);
     return rows;
   } catch (error) {
