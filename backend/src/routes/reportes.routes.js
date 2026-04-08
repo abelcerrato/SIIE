@@ -69,6 +69,7 @@ import {
     getdes_total_estudiantes_brutaC,
     getdes_total_estudiantes_netaC,
     getsiiedes_matriculadepartamentossexoC,
+    getVistaResumenGeneral,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -201,6 +202,8 @@ router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentosse
 //codigo
 
 
+
+router.get("/vistaresumen", getVistaResumenGeneral)
 
 
 
