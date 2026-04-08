@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenDESM, getVistaResumenM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
+import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOM, getVistaResumenDESM, getVistaResumenINFOPM, getVistaResumenSEDUCM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
 
 /* CONEANFO */
 
@@ -429,7 +429,7 @@ export const getseduc_matriculabrutagradoC = async (req, res) => {
 export const getseduc_matricula_neta_bruta_gradoC = async (req, res) => {
   try {
     const tasa = await getseduc_matriculanetagradoM();
-   
+
     res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de matricula SEDUC:", error);
@@ -462,7 +462,7 @@ export const getseduc_tasabrutaacceso3prebasicaC = async (req, res) => {
 export const getseduc_tasa_neta_bruta_acceso3prebasicaC = async (req, res) => {
   try {
     const tasa = await getseduc_tasa_neta_bruta_acceso3prebasicaM();
-      res.json(tasa);
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -791,34 +791,99 @@ export const getsiiedes_matriculadepartamentossexoC = async (req, res) => {
 
 
 
-
-export const getVistaResumenGeneral = async (req, res) => {
+export const getVistaResumenGeneralC = async (req, res) => {
   try {
     console.log("Entro en controlador");
 
-    const resumen = await getVistaResumenM();
+    const seduc = await getVistaResumenSEDUCM();
+    const infop = await getVistaResumenINFOPM();
+    const coneanfo = await getVistaResumenCONEANFOM();
     const des = await getVistaResumenDESM();
 
-    const desMap = new Map();
+    // =====================
+    // Helper para crear mapas
+    // =====================
+    const crearMapa = (data, campoPeriodo = "periodo") => {
+      const map = new Map();
 
-    // Crear mapa DES
-    des.forEach(d => {
-      const key = `${String(d.anio).trim()}-${d.departamento.trim()}`;
-      desMap.set(key, d);
-    });
+      data.forEach(d => {
+        const key = `${String(d[campoPeriodo]).trim()}-${d.departamento.trim()}`;
+        map.set(key, d);
+      });
 
-    // Unir datos
-    const resultado = resumen.map(r => {
-      const key = `${String(r.periodo).trim()}-${r.departamento.trim()}`;
+      return map;
+    };
 
-      const desData = desMap.get(key);
+    const infopMap = crearMapa(infop);
+    const coneanfoMap = crearMapa(coneanfo);
+    const desMap = crearMapa(des, "anio");
+
+    // =====================
+    // Unión final
+    // =====================
+    const resultado = seduc.map(s => {
+      const key = `${String(s.periodo).trim()}-${s.departamento.trim()}`;
+
+      const infopData = infopMap.get(key) || {};
+      const coneanfoData = coneanfoMap.get(key) || {};
+      const desData = desMap.get(key) || {};
 
       return {
-        ...r,
+        ...s,
+
+        // SEDUC 
+        MatriculaIncialMujeresSEDUC: Number(s.MatriculaIncialMujeresSEDUC) || 0,
+        MatriculaInicialHombresSEDUC: Number(s.MatriculaInicialHombresSEDUC) || 0,
+        MatriculaInicialTotalSEDUC: Number(s.MatriculaInicialTotalSEDUC) || 0,
+
+        DesercionMujeresSEDUC: Number(s.DesercionMujeresSEDUC) || 0,
+        DesercionHombresSEDUC: Number(s.DesercionHombresSEDUC) || 0,
+        DesercionTotalSEDUC: Number(s.DesercionTotalSEDUC) || 0,
+
+        CancelacionMujeresSEDUC: Number(s.CancelacionMujeresSEDUC) || 0,
+        CancelacionHombresSEDUC: Number(s.CancelacionHombresSEDUC) || 0,
+        CancelacionTotalSEDUC: Number(s.CancelacionTotalSEDUC) || 0,
+
+        MatriculaFinalMujeresSEDUC: Number(s.MatriculaFinalMujeresSEDUC) || 0,
+        MatriculaFinalHombresSEDUC: Number(s.MatriculaFinalHombresSEDUC) || 0,
+        MatriculaFinalTotalSEDUC: Number(s.MatriculaFinalTotalSEDUC) || 0,
+
+        RepitenciaMujeresSEDUC: Number(s.RepitenciaMujeresSEDUC) || 0,
+        RepitenciaHombresSEDUC: Number(s.RepitenciaHombresSEDUC) || 0,
+        RepitenciaTotalSEDUC: Number(s.RepitenciaTotalSEDUC) || 0,
+
+        ReprobadasMujeresSEDUC: Number(s.ReprobadasMujeresSEDUC) || 0,
+        ReprobadosHombresSEDUC: Number(s.ReprobadosHombresSEDUC) || 0,
+        ReprobadosTotalSEDUC: Number(s.ReprobadosTotalSEDUC) || 0,
+
+        AprobadosMujerSEDUC: Number(s.AprobadosMujerSEDUC) || 0,
+        AprobadosHombresSEDUC: Number(s.AprobadosHombresSEDUC) || 0,
+        AprobadosTotalSEDUC: Number(s.AprobadosTotalSEDUC) || 0,
+
+        // INFOP
+        MatriculaIncialMujeresINFOP: Number(infopData.MatriculaIncialMujeresINFOP) || 0,
+        MatriculaInicialHombresINFOP: Number(infopData.MatriculaInicialHombresINFOP) || 0,
+        MatriculaInicialTotalINFOP: Number(infopData.MatriculaInicialTotalINFOP) || 0,
+        DesercionMujeresINFOP: Number(infopData.DesercionMujeresINFOP) || 0,
+        DesercionHombresINFOP: Number(infopData.DesercionHombresINFOP) || 0,
+        DesercionTotalINFOP: Number(infopData.DesercionTotalINFOP) || 0,
+        ReprobadasMujeresINFOP: Number(infopData.ReprobadasMujeresINFOP) || 0,
+        ReprobadosHombresINFOP: Number(infopData.ReprobadosHombresINFOP) || 0,
+        ReprobadosTotalINFOP: Number(infopData.ReprobadosTotalINFOP) || 0,
+        AprobadosMujerINFOP: Number(infopData.AprobadosMujerINFOP) || 0,
+        AprobadosHombresINFOP: Number(infopData.AprobadosHombresINFOP) || 0,
+        AprobadosTotalINFOP: Number(infopData.AprobadosTotalINFOP) || 0,
+
+        // CONEANFO
+        AtencionesMujeresCONEANFO: Number(coneanfoData.AtencionesMujeresCONEANFO) || 0,
+        AtencionesInicialHombresCONEANFO: Number(coneanfoData.AtencionesInicialHombresCONEANFO) || 0,
+        AtencionesInicialTotalCONEANFO: Number(coneanfoData.AtencionesInicialTotalCONEANFO) || 0,
+        ParticipantesMujeresCONEANFO: Number(coneanfoData.ParticipantesMujeresCONEANFO) || 0,
+        ParticipantesInicialHombresCONEANFO: Number(coneanfoData.ParticipantesInicialHombresCONEANFO) || 0,
+        ParticipantesInicialTotalCONEANFO: Number(coneanfoData.ParticipantesInicialTotalCONEANFO) || 0,
 
         // DES
-        MatriculaDES: Number(desData?.matriculades) || 0,
-        GraduadosDES: Number(desData?.graduadosdes) || 0
+        MatriculaDES: Number(desData.matriculades) || 0
       };
     });
 

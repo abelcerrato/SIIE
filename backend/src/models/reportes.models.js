@@ -1293,18 +1293,13 @@ export const getsiiedes_matriculadepartamentossexoM = async () => {
 
 
 
-
-
-
-
-
-
+//---------------------------------------------------------------------------------------------------------
 // --- Matricula inicial, Deserción, Cancelación, Matricula Final, Repitencias, Reprobación, Aprobación ---
-
-export const getVistaResumenM = async () => {
+//---------------------------------------------------------------------------------------------------------
+export const getVistaResumenSEDUCM = async () => {
   try {
     const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen
+      SELECT * FROM vista_resumen_seduc
     `);
     return rows;
   } catch (error) {
@@ -1312,9 +1307,35 @@ export const getVistaResumenM = async () => {
   }
 };
 
+
+export const getVistaResumenINFOPM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getVistaResumenCONEANFOM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 export const getVistaResumenDESM = async () => {
   try {
-    const { rows } = await poolDB2.query(`
+    const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des
     `);
     return rows;

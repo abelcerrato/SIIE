@@ -69,7 +69,7 @@ import {
     getdes_total_estudiantes_brutaC,
     getdes_total_estudiantes_netaC,
     getsiiedes_matriculadepartamentossexoC,
-    getVistaResumenGeneral,
+    getVistaResumenGeneralC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -198,15 +198,29 @@ router.get("/destotalestudiantesbruta", getdes_total_estudiantes_brutaC);
 router.get("/destotalestudiantesneta", getdes_total_estudiantes_netaC);
 router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentossexoC);
 
-
-//codigo
-
-
-
-router.get("/vistaresumen", getVistaResumenGeneral)
+//=========================================================
+// VISTA DE RESUMEN PARA EL MENU PRINCIPAL
+//=========================================================
+router.get("/vistaresumen", getVistaResumenGeneralC)
 
 
 
 
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
