@@ -71,6 +71,7 @@ import {
     getsiiedes_matriculadepartamentossexoC,
     getVistaResumenGeneralC,
     getVistaResumenSEDUCC,
+    getVistaResumenSEDUCTODOC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -209,8 +210,8 @@ router.get("/vistaresumen", getVistaResumenGeneralC)
 // =====================
 //         SEDUC
 // =====================
-router.get("/vistaresumenseducgeneral", getVistaResumenSEDUCC)
-
+//router.get("/vistaresumenseducgeneral", getVistaResumenSEDUCC)
+router.get("/vistaresumenseducgeneraltodo", getVistaResumenSEDUCTODOC)
 
 // =====================
 //        INFOP
