@@ -1332,11 +1332,54 @@ export const getVistaResumenCONEANFOM = async () => {
 };
 
 
-
 export const getVistaResumenDESM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+//=====================================================================================
+export const getVistaResumenSEDUCGeneralM = async () => {
+  const { rows } = await pool.query(`
+    SELECT * FROM vista_resumen_seduc_general
+  `);
+  return rows;
+};
+
+
+export const getVistaResumenSeducPuestodeTrabajoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_puestos_de_trabajo
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenSeducCentrosEducativosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_centros_educativos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenSeducNiñosConDiscapacidadM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_niños_con_discapacidad
     `);
     return rows;
   } catch (error) {

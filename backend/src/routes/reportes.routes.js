@@ -70,6 +70,7 @@ import {
     getdes_total_estudiantes_netaC,
     getsiiedes_matriculadepartamentossexoC,
     getVistaResumenGeneralC,
+    getVistaResumenSEDUCC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -204,6 +205,28 @@ router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentosse
 router.get("/vistaresumen", getVistaResumenGeneralC)
 
 
+
+// =====================
+//         SEDUC
+// =====================
+router.get("/vistaresumenseducgeneral", getVistaResumenSEDUCC)
+
+
+// =====================
+//        INFOP
+// =====================
+
+
+
+// =====================
+//       CONEANFO
+// =====================
+
+
+
+// =====================
+//          DES
+// =====================
 
 
 
