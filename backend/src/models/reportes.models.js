@@ -1293,20 +1293,15 @@ export const getsiiedes_matriculadepartamentossexoM = async () => {
 
 
 
-//---------------------------------------------------------------------------------------------------------
-// --- Matricula inicial, Deserción, Cancelación, Matricula Final, Repitencias, Reprobación, Aprobación ---
-//---------------------------------------------------------------------------------------------------------
-export const getVistaResumenSEDUCM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
 
+/* 
+export const getVistaResumenSEDUCGeneralM = async () => {
+  const { rows } = await pool.query(`
+    SELECT * FROM vista_resumen_seduc_general
+  `);
+  return rows;
+};
+ */
 
 export const getVistaResumenINFOPM = async () => {
   try {
@@ -1346,13 +1341,22 @@ export const getVistaResumenDESM = async () => {
 
 
 //=====================================================================================
-export const getVistaResumenSEDUCGeneralM = async () => {
-  const { rows } = await pool.query(`
-    SELECT * FROM vista_resumen_seduc_general
-  `);
-  return rows;
-};
+//========================================SEDUC========================================
+//=====================================================================================
 
+//---------------------------------------------------------------------------------------------------------
+// --- Matricula inicial, Deserción, Cancelación, Matricula Final, Repitencias, Reprobación, Aprobación ---
+//---------------------------------------------------------------------------------------------------------
+export const getVistaResumenSEDUCM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const getVistaResumenSeducPuestodeTrabajoM = async () => {
   try {
@@ -1369,6 +1373,17 @@ export const getVistaResumenSeducCentrosEducativosM = async () => {
   try {
     const { rows } = await pool.query(` 
       SELECT * FROM vista_resumen_seduc_centros_educativos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenSeducServiciosBasicosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_servicios_basicos
     `);
     return rows;
   } catch (error) {

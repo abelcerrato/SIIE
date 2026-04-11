@@ -71,7 +71,10 @@ import {
     getsiiedes_matriculadepartamentossexoC,
     getVistaResumenGeneralC,
     getVistaResumenSEDUCC,
-    getVistaResumenSEDUCTODOC,
+    getVistaResumenSEDUCPuestoDeTrabajoC,
+    getVistaResumenSEDUCCentrosEducativosC,
+    getVistaResumenSEDUCPersonasDiscapacidadC,
+    getVistaResumenSEDUCServiciosBasicosC,
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -210,8 +213,15 @@ router.get("/vistaresumen", getVistaResumenGeneralC)
 // =====================
 //         SEDUC
 // =====================
-//router.get("/vistaresumenseducgeneral", getVistaResumenSEDUCC)
-router.get("/vistaresumenseducgeneraltodo", getVistaResumenSEDUCTODOC)
+router.get("/vistaresumenseduc", getVistaResumenSEDUCC) //SEDUC
+router.get("/vistaresumenseducpuestodetrabajo", getVistaResumenSEDUCPuestoDeTrabajoC) // PUESTOS DE TRABAJO O DOCENTES
+router.get("/vistaresumenseduccentroseducativos", getVistaResumenSEDUCCentrosEducativosC) // CENTROS EDUCATIVOS
+router.get("/vistaresumenseducserviciosbasicos", getVistaResumenSEDUCServiciosBasicosC) // SERVICIOS BASICOS DE CENTROS EDUCATIVOS
+router.get("/vistaresumenseducpersonascondiscapacidad", getVistaResumenSEDUCPersonasDiscapacidadC)// PERSONAS CON DISCAPACIDAD
+
+
+
+//router.get("/vistaresumenseducgeneraltodo", getVistaResumenSEDUCTODOC)
 
 // =====================
 //        INFOP
