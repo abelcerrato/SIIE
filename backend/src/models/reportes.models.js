@@ -1303,16 +1303,7 @@ export const getVistaResumenSEDUCGeneralM = async () => {
 };
  */
 
-export const getVistaResumenINFOPM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_infop
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
+
 
 
 export const getVistaResumenCONEANFOM = async () => {
@@ -1395,6 +1386,81 @@ export const getVistaResumenSeducNiñosConDiscapacidadM = async () => {
   try {
     const { rows } = await pool.query(` 
       SELECT * FROM vista_resumen_seduc_niños_con_discapacidad
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//=====================================================================================
+//======================================= INFOP =======================================
+//=====================================================================================
+export const getVistaResumenINFOPM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenInfopUnidadesCursosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop_capacitados_por_unidades_y_cursos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+//=====================================================================================
+//======================================== DES ========================================
+//=====================================================================================
+export const getVistaResumenDESmatriculaM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_des_matricula_departamento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_des_matricula_modalidad_cine_ingreso
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenDESmatriculaCamposM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_des_matricula_campos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenDESgraduadosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_des_graduados_departamento
     `);
     return rows;
   } catch (error) {

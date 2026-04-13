@@ -75,6 +75,14 @@ import {
     getVistaResumenSEDUCCentrosEducativosC,
     getVistaResumenSEDUCPersonasDiscapacidadC,
     getVistaResumenSEDUCServiciosBasicosC,
+    getVistaResumenINFOPdeptosmunicipiosC,
+    getVistaResumenINFOPUnidadesCursosC,
+    getVistaResumenCONEANFOC,
+    getVistaResumenDESmatriculaC,
+    getVistaResumenDESgraduadosC,
+    getVistaResumenDESmatriculaModCINEIngresoC,
+    getVistaResumenDESmatriculaCamposC,
+    
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -226,18 +234,25 @@ router.get("/vistaresumenseducpersonascondiscapacidad", getVistaResumenSEDUCPers
 // =====================
 //        INFOP
 // =====================
-
+router.get("/vistaresumeninfopdepartamentosmunicipios", getVistaResumenINFOPdeptosmunicipiosC ) //INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
+router.get("/vistaresumeninfopunidadescursos", getVistaResumenINFOPUnidadesCursosC) //INFOP UNIDADES Y CURSOS
 
 
 // =====================
 //       CONEANFO
 // =====================
+router.get("/vistaresumenconeanfo", getVistaResumenCONEANFOC) //INFOP UNIDADES Y CURSOS
 
 
 
 // =====================
 //          DES
 // =====================
+router.get("/vistaresumendesmatriculadepartamento", getVistaResumenDESmatriculaC) //DES MATRICULA POR DEPARTAMENTO
+router.get("/vistaresumendesmatriculaModCineIngreso", getVistaResumenDESmatriculaModCINEIngresoC) //DES MATRICULA POR MODALIDAD, CLASIFICACION CINE Y TIPO INGRESO 
+router.get("/vistaresumendesmatriculaCampos", getVistaResumenDESmatriculaCamposC) //DES MATRICULA POR CAMPO AMPLIO, DETALLADO Y ESPECÍFICO
+
+router.get("/vistaresumendesgraduadosdepartamento", getVistaResumenDESgraduadosC) //GRADUADOS POR DEPARTAMENTO
 
 
 
