@@ -1320,6 +1320,7 @@ export const getVistaResumenCONEANFOM = async () => {
   }
 };
 
+
 export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1330,6 +1331,53 @@ export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
     throw error;
   }
 };
+
+
+export const getVistaResumenCONEANFOCompetenciayEmprendimientoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_competencias_emprendimiento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenCONEANFODesarrolloSostenibleM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_desarrollo_sostenible
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenCONEANFOFormacionEducadoresM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_formacion_educadores
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const getVistaResumenCONEANFOEducacionInfantilM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_educacion_infantil_temprana
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 //=====================================================================================
 //================================================================================

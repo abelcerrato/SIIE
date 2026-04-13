@@ -83,6 +83,10 @@ import {
     getVistaResumenDESmatriculaModCINEIngresoC,
     getVistaResumenDESmatriculaCamposC,
     getVistaResumenCONEANFOatencionesproyectoC,
+    getVistaResumenCONEANFOCompetenciayEmprendimientoC,
+    getVistaResumenCONEANFODesarrolloSostenibleC,
+    getVistaResumenCONEANFOFormacionEducadoresC,
+    getVistaResumenCONEANFOEducacionInfantilC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -242,10 +246,17 @@ router.get("/vistaresumeninfopunidadescursos", getVistaResumenINFOPUnidadesCurso
 // =====================
 //       CONEANFO
 // =====================
+// Atenciones
 router.get("/vistaresumenconeanfo", getVistaResumenCONEANFOC) //CONEANFO RESUMEN ATENCIONES Y PARTICIPACIONES
 router.get("/vistaresumenconeanfoatencionesproyecto", getVistaResumenCONEANFOatencionesproyectoC) //CONEANFO ATENCIONES POR PROYECTO
+router.get("/vistaresumenconeanfocompetenciayemprendimiento", getVistaResumenCONEANFOCompetenciayEmprendimientoC) //CONEANFO ATENCIONES COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+router.get("/vistaresumenconeanfodesarrollosostenible", getVistaResumenCONEANFODesarrolloSostenibleC) //CONEANFO ATENCIONES EN EDUCACION AL DESARROLLO SOSTENIBLE
+router.get("/vistaresumenconeanfoformacioneducadores", getVistaResumenCONEANFOFormacionEducadoresC) //CONEANFO ATENCIONES EN FORMACIÓN DE EDUCADORES
+router.get("/vistaresumenconeanfoeducacioninfantil", getVistaResumenCONEANFOEducacionInfantilC) //CONEANFO ATENCIONES EN EDUCACIÓN INFANTIL TEMPRANA 
 
 
+
+// Participantes
 
 // =====================
 //          DES
