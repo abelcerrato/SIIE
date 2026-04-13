@@ -82,6 +82,7 @@ import {
     getVistaResumenDESgraduadosC,
     getVistaResumenDESmatriculaModCINEIngresoC,
     getVistaResumenDESmatriculaCamposC,
+    getVistaResumenCONEANFOatencionesproyectoC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -241,7 +242,8 @@ router.get("/vistaresumeninfopunidadescursos", getVistaResumenINFOPUnidadesCurso
 // =====================
 //       CONEANFO
 // =====================
-router.get("/vistaresumenconeanfo", getVistaResumenCONEANFOC) //INFOP UNIDADES Y CURSOS
+router.get("/vistaresumenconeanfo", getVistaResumenCONEANFOC) //CONEANFO RESUMEN ATENCIONES Y PARTICIPACIONES
+router.get("/vistaresumenconeanfoatencionesproyecto", getVistaResumenCONEANFOatencionesproyectoC) //CONEANFO ATENCIONES POR PROYECTO
 
 
 

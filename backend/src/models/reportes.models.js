@@ -1304,6 +1304,9 @@ export const getVistaResumenSEDUCGeneralM = async () => {
  */
 
 
+//=====================================================================================
+//========================================CONEANFO========================================
+//=====================================================================================
 
 
 export const getVistaResumenCONEANFOM = async () => {
@@ -1317,6 +1320,20 @@ export const getVistaResumenCONEANFOM = async () => {
   }
 };
 
+export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_atenciones_proyecto
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//=====================================================================================
+//================================================================================
+//=====================================================================================
 
 export const getVistaResumenDESM = async () => {
   try {
