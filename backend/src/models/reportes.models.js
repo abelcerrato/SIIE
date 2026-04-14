@@ -1516,7 +1516,7 @@ export const getVistaResumenInfopUnidadesCursosM = async () => {
 //=====================================================================================
 export const getVistaResumenDESmatriculaM = async () => {
   try {
-    const { rows } = await pool.query(` 
+    const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des_matricula_departamento
     `);
     return rows;
@@ -1527,7 +1527,7 @@ export const getVistaResumenDESmatriculaM = async () => {
 
 export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
   try {
-    const { rows } = await pool.query(` 
+    const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des_matricula_modalidad_cine_ingreso
     `);
     return rows;
@@ -1538,7 +1538,7 @@ export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
 
 export const getVistaResumenDESmatriculaCamposM = async () => {
   try {
-    const { rows } = await pool.query(` 
+    const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des_matricula_campos
     `);
     return rows;
@@ -1549,7 +1549,7 @@ export const getVistaResumenDESmatriculaCamposM = async () => {
 
 export const getVistaResumenDESgraduadosM = async () => {
   try {
-    const { rows } = await pool.query(` 
+    const { rows } = await poolDB2.query(` 
       SELECT * FROM vista_resumen_des_graduados_departamento
     `);
     return rows;
