@@ -91,6 +91,7 @@ import {
     getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC,
     getVistaResumenCONEANFOEParticipantesEducacionInfantilC,
     getVistaResumenCONEANFOParticipantesFormacionEducadoresC,
+    getVistaResumenDESdocentesC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -274,6 +275,8 @@ router.get("/vistaresumendesmatriculaModCineIngreso", getVistaResumenDESmatricul
 router.get("/vistaresumendesmatriculaCampos", getVistaResumenDESmatriculaCamposC) //DES MATRICULA POR CAMPO AMPLIO, DETALLADO Y ESPECÍFICO
 
 router.get("/vistaresumendesgraduadosdepartamento", getVistaResumenDESgraduadosC) //GRADUADOS POR DEPARTAMENTO
+router.get("/vistaresumendesdocentesdepartamento", getVistaResumenDESdocentesC) //DOCENTES POR DEPARTAMENTO
+
 
 
 

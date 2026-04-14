@@ -1598,3 +1598,15 @@ export const getVistaResumenDESgraduadosM = async () => {
     throw error;
   }
 };
+
+
+export const getVistaResumenDESdocentesM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_docentes_departamento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
