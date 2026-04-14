@@ -1337,7 +1337,6 @@ export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
   }
 };
 
-
 export const getVistaResumenCONEANFOCompetenciayEmprendimientoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1401,8 +1400,50 @@ export const getVistaResumenCONEANFOparticipantesproyectoM = async () => {
 };
 
 
+export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_competencias_emprendimiento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 
+export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_desarrollo_sostenible
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenCONEANFOParticipantesFormacionEducadoresM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_formacion_educadores
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getVistaResumenCONEANFOEParticipantesEducacionInfantilM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_infantil_temprana
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
 
 //=====================================================================================
 //================================================================================
