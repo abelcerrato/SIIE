@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenDESM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
+import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
 
 /* CONEANFO */
 
@@ -1188,7 +1188,7 @@ export const getVistaResumenINFOPdeptosmunicipiosC = async (req, res) => {
 
 export const getVistaResumenINFOPUnidadesCursosC = async (req, res) => {
   try {
-    const data = await getVistaResumenInfopUnidadesCursosM;
+    const data = await getVistaResumenInfopUnidadesCursosM();
 
     return res.status(200).json({
       ok: true,
@@ -1208,11 +1208,11 @@ export const getVistaResumenINFOPUnidadesCursosC = async (req, res) => {
 
 
 //====================================================================================================
-//============================================= CONEANFO =============================================
+//======================================== CONEANFO ATENCIONES =======================================
 //====================================================================================================
 export const getVistaResumenCONEANFOC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFOM;
+    const data = await getVistaResumenCONEANFOM();
 
     return res.status(200).json({
       ok: true,
@@ -1229,9 +1229,10 @@ export const getVistaResumenCONEANFOC = async (req, res) => {
   }
 };
 
+
 export const getVistaResumenCONEANFOatencionesproyectoC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFOatencionesproyectoM;
+    const data = await getVistaResumenCONEANFOatencionesproyectoM();
 
     return res.status(200).json({
       ok: true,
@@ -1251,7 +1252,7 @@ export const getVistaResumenCONEANFOatencionesproyectoC = async (req, res) => {
 
 export const getVistaResumenCONEANFOCompetenciayEmprendimientoC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFOCompetenciayEmprendimientoM;
+    const data = await getVistaResumenCONEANFOCompetenciayEmprendimientoM();
 
     return res.status(200).json({
       ok: true,
@@ -1270,7 +1271,7 @@ export const getVistaResumenCONEANFOCompetenciayEmprendimientoC = async (req, re
 
 export const getVistaResumenCONEANFODesarrolloSostenibleC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFODesarrolloSostenibleM;
+    const data = await getVistaResumenCONEANFODesarrolloSostenibleM();
 
     return res.status(200).json({
       ok: true,
@@ -1289,7 +1290,7 @@ export const getVistaResumenCONEANFODesarrolloSostenibleC = async (req, res) => 
 
 export const getVistaResumenCONEANFOFormacionEducadoresC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFOFormacionEducadoresM;
+    const data = await getVistaResumenCONEANFOFormacionEducadoresM();
 
     return res.status(200).json({
       ok: true,
@@ -1308,7 +1309,7 @@ export const getVistaResumenCONEANFOFormacionEducadoresC = async (req, res) => {
 
 export const getVistaResumenCONEANFOEducacionInfantilC = async (req, res) => {
   try {
-    const data = await getVistaResumenCONEANFOEducacionInfantilM;
+    const data = await getVistaResumenCONEANFOEducacionInfantilM();
 
     return res.status(200).json({
       ok: true,
@@ -1326,12 +1327,38 @@ export const getVistaResumenCONEANFOEducacionInfantilC = async (req, res) => {
 };
 
 
+
+
+//====================================================================================================
+//======================================== CONEANFO PARTICIPANTES =======================================
+//====================================================================================================
+export const getVistaResumenCONEANFOparticipantesproyectoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOparticipantesproyectoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+
 //====================================================================================================
 //============================================= DES =============================================
 //====================================================================================================
 export const getVistaResumenDESmatriculaC = async (req, res) => {
   try {
-    const data = await getVistaResumenDESmatriculaM ;
+    const data = await getVistaResumenDESmatriculaM();
 
     return res.status(200).json({
       ok: true,
@@ -1350,7 +1377,7 @@ export const getVistaResumenDESmatriculaC = async (req, res) => {
 
 export const getVistaResumenDESmatriculaModCINEIngresoC = async (req, res) => {
   try {
-    const data = await getVistaResumenDESmatriculaModCINEIngresoM ;
+    const data = await getVistaResumenDESmatriculaModCINEIngresoM();
 
     return res.status(200).json({
       ok: true,
@@ -1369,7 +1396,7 @@ export const getVistaResumenDESmatriculaModCINEIngresoC = async (req, res) => {
 
 export const getVistaResumenDESmatriculaCamposC = async (req, res) => {
   try {
-    const data = await getVistaResumenDESmatriculaCamposM ;
+    const data = await getVistaResumenDESmatriculaCamposM();
 
     return res.status(200).json({
       ok: true,
@@ -1390,7 +1417,7 @@ export const getVistaResumenDESmatriculaCamposC = async (req, res) => {
 
 export const getVistaResumenDESgraduadosC = async (req, res) => {
   try {
-    const data = await getVistaResumenDESgraduadosM ;
+    const data = await getVistaResumenDESgraduadosM();
 
     return res.status(200).json({
       ok: true,

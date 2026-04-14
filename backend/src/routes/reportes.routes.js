@@ -87,6 +87,7 @@ import {
     getVistaResumenCONEANFODesarrolloSostenibleC,
     getVistaResumenCONEANFOFormacionEducadoresC,
     getVistaResumenCONEANFOEducacionInfantilC,
+    getVistaResumenCONEANFOparticipantesproyectoC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -254,9 +255,9 @@ router.get("/vistaresumenconeanfodesarrollosostenible", getVistaResumenCONEANFOD
 router.get("/vistaresumenconeanfoformacioneducadores", getVistaResumenCONEANFOFormacionEducadoresC) //CONEANFO ATENCIONES EN FORMACIÓN DE EDUCADORES
 router.get("/vistaresumenconeanfoeducacioninfantil", getVistaResumenCONEANFOEducacionInfantilC) //CONEANFO ATENCIONES EN EDUCACIÓN INFANTIL TEMPRANA 
 
+//Participaciones
+router.get("/vistaresumenconeanfoparticipantesproyecto", getVistaResumenCONEANFOparticipantesproyectoC) //CONEANFO PARTICIPANTES POR PROYECTO
 
-
-// Participantes
 
 // =====================
 //          DES

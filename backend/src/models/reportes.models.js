@@ -1321,6 +1321,11 @@ export const getVistaResumenCONEANFOM = async () => {
 };
 
 
+
+//=====================================================================================
+//================================ CONEANFO ATENCIONES ================================
+//=====================================================================================
+
 export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1377,6 +1382,26 @@ export const getVistaResumenCONEANFOEducacionInfantilM = async () => {
     throw error;
   }
 };
+
+
+
+//=====================================================================================
+//=============================== CONEANFO PARTICIPANTES ==============================
+//=====================================================================================
+
+export const getVistaResumenCONEANFOparticipantesproyectoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_proyecto
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 
 
 //=====================================================================================
