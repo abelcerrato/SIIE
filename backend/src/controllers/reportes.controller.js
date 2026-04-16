@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEParticipantesEducacionInfantilM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM, getVistaResumenCONEANFOParticipantesFormacionEducadoresM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESdocentesM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
+import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM,  getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEParticipantesEducacionInfantilM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM, getVistaResumenCONEANFOParticipantesFormacionEducadoresM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESdocentesM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getVistaTasasSEDUCM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
 
 /* CONEANFO */
 
@@ -229,44 +229,12 @@ export const getInfop_capacitados_por_centroC = async (req, res) => {
 
 
 /* SIIE */
-// Controlador para mostrar la matricula por departamento de SIIE
-export const getSIIE_matricula_por_departamentoC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_departamentoM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por departamento de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
-
-// Controlador para mostrar la matricula por institucion de SIIE
-export const getSIIE_matricula_por_institucionC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_institucionM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por institución de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
-
-// Controlador para mostrar la matricula por sexo de SIIE
-export const getSIIE_matricula_por_sexoC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_sexoM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por sexo de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
 
 
 
 /*
   ######################################################################
-  ############################### VISTAS ###############################
+  ###################### VISTAS  DE INDICADORES ########################
   ######################################################################
 */
 
@@ -790,126 +758,32 @@ export const getsiiedes_matriculadepartamentossexoC = async (req, res) => {
 };
 
 
-//============================================================================================================
-export const getVistaResumenGeneralC = async (req, res) => {
+
+//============================================================================================================================================================================================
+//                                                                                      VISTAS RESUMEN
+//============================================================================================================================================================================================
+
+// VISTA DE TASAS DE SEDUC
+export const getVistaTasasSEDUCC = async (req, res) => {
   try {
-    //console.log("Entro en controlador");
-
-    const seduc = await getVistaResumenSEDUCM();
-    const infop = await getVistaResumenINFOPM();
-    const coneanfo = await getVistaResumenCONEANFOM();
-    const des = await getVistaResumenDESM();
-
-    // ========================
-    // Helper para crear mapas
-    // ========================
-    const crearMapa = (data, campoPeriodo = "periodo") => {
-      const map = new Map();
-
-      data.forEach(d => {
-        const key = `${String(d[campoPeriodo]).trim()}-${d.departamento.trim()}`;
-        map.set(key, d);
-      });
-
-      return map;
-    };
-
-    const infopMap = crearMapa(infop);
-    const coneanfoMap = crearMapa(coneanfo);
-    const desMap = crearMapa(des, "anio");
-
-    // =====================
-    // Unión final
-    // =====================
-    const resultado = seduc.map(s => {
-      //const key = `${String(s.periodo).trim()}-${s.departamento.trim()}`;
-      const key = `${String(s.periodo).trim()}-${s.departamento.trim()}-${s.municipio.trim()}-${s.administracion.trim()}`;
-    
-
-      const infopData = infopMap.get(key) || {};
-      const coneanfoData = coneanfoMap.get(key) || {};
-      const desData = desMap.get(key) || {};
-
-      return {
-        ...s,
-
-        // SEDUC 
-        MatriculaIncialMujeresSEDUC: Number(s.MatriculaIncialMujeresSEDUC) || 0,
-        MatriculaInicialHombresSEDUC: Number(s.MatriculaInicialHombresSEDUC) || 0,
-        MatriculaInicialTotalSEDUC: Number(s.MatriculaInicialTotalSEDUC) || 0,
-
-        DesercionMujeresSEDUC: Number(s.DesercionMujeresSEDUC) || 0,
-        DesercionHombresSEDUC: Number(s.DesercionHombresSEDUC) || 0,
-        DesercionTotalSEDUC: Number(s.DesercionTotalSEDUC) || 0,
-
-        CancelacionMujeresSEDUC: Number(s.CancelacionMujeresSEDUC) || 0,
-        CancelacionHombresSEDUC: Number(s.CancelacionHombresSEDUC) || 0,
-        CancelacionTotalSEDUC: Number(s.CancelacionTotalSEDUC) || 0,
-
-        MatriculaFinalMujeresSEDUC: Number(s.MatriculaFinalMujeresSEDUC) || 0,
-        MatriculaFinalHombresSEDUC: Number(s.MatriculaFinalHombresSEDUC) || 0,
-        MatriculaFinalTotalSEDUC: Number(s.MatriculaFinalTotalSEDUC) || 0,
-
-        RepitenciaMujeresSEDUC: Number(s.RepitenciaMujeresSEDUC) || 0,
-        RepitenciaHombresSEDUC: Number(s.RepitenciaHombresSEDUC) || 0,
-        RepitenciaTotalSEDUC: Number(s.RepitenciaTotalSEDUC) || 0,
-
-        ReprobadasMujeresSEDUC: Number(s.ReprobadasMujeresSEDUC) || 0,
-        ReprobadosHombresSEDUC: Number(s.ReprobadosHombresSEDUC) || 0,
-        ReprobadosTotalSEDUC: Number(s.ReprobadosTotalSEDUC) || 0,
-
-        AprobadosMujerSEDUC: Number(s.AprobadosMujerSEDUC) || 0,
-        AprobadosHombresSEDUC: Number(s.AprobadosHombresSEDUC) || 0,
-        AprobadosTotalSEDUC: Number(s.AprobadosTotalSEDUC) || 0,
-
-        // INFOP
-        MatriculaIncialMujeresINFOP: Number(infopData.MatriculaIncialMujeresINFOP) || 0,
-        MatriculaInicialHombresINFOP: Number(infopData.MatriculaInicialHombresINFOP) || 0,
-        MatriculaInicialTotalINFOP: Number(infopData.MatriculaInicialTotalINFOP) || 0,
-        DesercionMujeresINFOP: Number(infopData.DesercionMujeresINFOP) || 0,
-        DesercionHombresINFOP: Number(infopData.DesercionHombresINFOP) || 0,
-        DesercionTotalINFOP: Number(infopData.DesercionTotalINFOP) || 0,
-        ReprobadasMujeresINFOP: Number(infopData.ReprobadasMujeresINFOP) || 0,
-        ReprobadosHombresINFOP: Number(infopData.ReprobadosHombresINFOP) || 0,
-        ReprobadosTotalINFOP: Number(infopData.ReprobadosTotalINFOP) || 0,
-        AprobadosMujerINFOP: Number(infopData.AprobadosMujerINFOP) || 0,
-        AprobadosHombresINFOP: Number(infopData.AprobadosHombresINFOP) || 0,
-        AprobadosTotalINFOP: Number(infopData.AprobadosTotalINFOP) || 0,
-
-        // CONEANFO
-        AtencionesMujeresCONEANFO: Number(coneanfoData.AtencionesMujeresCONEANFO) || 0,
-        AtencionesInicialHombresCONEANFO: Number(coneanfoData.AtencionesInicialHombresCONEANFO) || 0,
-        AtencionesInicialTotalCONEANFO: Number(coneanfoData.AtencionesInicialTotalCONEANFO) || 0,
-        ParticipantesMujeresCONEANFO: Number(coneanfoData.ParticipantesMujeresCONEANFO) || 0,
-        ParticipantesInicialHombresCONEANFO: Number(coneanfoData.ParticipantesInicialHombresCONEANFO) || 0,
-        ParticipantesInicialTotalCONEANFO: Number(coneanfoData.ParticipantesInicialTotalCONEANFO) || 0,
-
-        // DES
-        MatriculaDES: Number(desData.matriculades) || 0
-      };
-    });
+    const data = await getVistaTasasSEDUCM();
 
     return res.status(200).json({
       ok: true,
-      data: resultado
+      data
     });
 
   } catch (error) {
-    console.error("Error en getVistaResumenGeneral:", error);
-
+    console.error(error);
     return res.status(500).json({
       ok: false,
-      message: "Error al obtener vista resumen",
+      message: "Error al obtener datos",
       error: error.message
     });
   }
 };
 
-
-//====================================================================================================
-//============================================= SEDUC ================================================
-//====================================================================================================
-
+//============================================= SUDUC ================================================
 // RESUMEN SEDUC
 export const getVistaResumenSEDUCC = async (req, res) => {
   try {
@@ -930,7 +804,7 @@ export const getVistaResumenSEDUCC = async (req, res) => {
   }
 };
 
-// PUESTOS DE TRABAJO O DOCENTES
+//SEDUC PUESTOS DE TRABAJO O DOCENTES
 export const getVistaResumenSEDUCPuestoDeTrabajoC = async (req, res) => {
   try {
     const data = await getVistaResumenSeducPuestodeTrabajoM();
@@ -951,7 +825,7 @@ export const getVistaResumenSEDUCPuestoDeTrabajoC = async (req, res) => {
 };
 
 
-// CENTROS EDUCATIVOS
+//SEDUC CENTROS EDUCATIVOS
 export const getVistaResumenSEDUCCentrosEducativosC = async (req, res) => {
   try {
     const data = await getVistaResumenSeducCentrosEducativosM();
@@ -972,7 +846,7 @@ export const getVistaResumenSEDUCCentrosEducativosC = async (req, res) => {
 };
 
 
-// SERVICIOS BASICOS
+//SEDUC SERVICIOS BASICOS
 export const getVistaResumenSEDUCServiciosBasicosC = async (req, res) => {
   try {
     const data = await getVistaResumenSeducServiciosBasicosM();
@@ -993,7 +867,7 @@ export const getVistaResumenSEDUCServiciosBasicosC = async (req, res) => {
 };
 
 
-// PERSONAS CON DISCAPACIDAD
+//SEDUC PERSONAS CON DISCAPACIDAD
 export const getVistaResumenSEDUCPersonasDiscapacidadC = async (req, res) => {
   try {
     const data = await getVistaResumenSeducNiñosConDiscapacidadM();
@@ -1015,156 +889,8 @@ export const getVistaResumenSEDUCPersonasDiscapacidadC = async (req, res) => {
 
 
 
-/* export const getVistaResumenSEDUCTODOC = async (req, res) => {
-  try {
-    console.log("Entro en controlador");
 
-    const seduc = await getVistaResumenSEDUCM();
-    const puestotrabajo = await getVistaResumenSeducPuestodeTrabajoM();
-    const centros = await getVistaResumenSeducCentrosEducativosM();
-    const discapacidad = await getVistaResumenSeducNiñosConDiscapacidadM();
-
-    // =====================
-    // MAPA PUESTOS (nivel completo)
-    // =====================
-    const puestoMap = new Map();
-
-    puestotrabajo.forEach(p => {
-      const key = `${p.periodo}-${p.departamento}-${p.municipio}-${p.administracion}`;
-      puestoMap.set(key, p);
-    });
-
-    // =====================
-    // MAPA CENTROS (solo periodo + depto)
-    // =====================
-    const centrosMap = new Map();
-
-    centros.forEach(c => {
-      const key = `${c.periodo}-${c.departamento}`;
-      centrosMap.set(key, c);
-    });
-
-    // =====================
-    // MAPA DISCAPACIDAD (AGREGADO)
-    // =====================
-    const discapacidadMap = new Map();
-
-    discapacidad.forEach(d => {
-      const key = `${d.periodo}-${d.departamento}-${d.municipio}-${d.administracion}`;
-
-      if (!discapacidadMap.has(key)) {
-        discapacidadMap.set(key, {
-          Niñas: 0,
-          Niños: 0,
-          Total: 0
-        });
-      }
-
-      const actual = discapacidadMap.get(key);
-
-      actual.Niñas += Number(d.NiñasConDiscapacidad) || 0;
-      actual.Niños += Number(d.NiñosConDiscapacidad) || 0;
-      actual.Total += Number(d.TotalConDiscapacidad) || 0;
-    });
-
-    // =====================
-    // UNIÓN FINAL
-    // =====================
-    const resultado = seduc.map(s => {
-
-      const keyFull = `${s.periodo}-${s.departamento}-${s.municipio}-${s.administracion}`;
-      const keyDepto = `${s.periodo}-${s.departamento}`;
-
-      const puesto = puestoMap.get(keyFull) || {};
-      const centro = centrosMap.get(keyDepto) || {};
-      const disc = discapacidadMap.get(keyFull) || {};
-
-      return {
-        ...s,
-
-        // =====================
-        // SEDUC
-        // =====================
-        MatriculaIncialMujeresSEDUC: Number(s.MatriculaIncialMujeresSEDUC) || 0,
-        MatriculaInicialHombresSEDUC: Number(s.MatriculaInicialHombresSEDUC) || 0,
-        MatriculaInicialTotalSEDUC: Number(s.MatriculaInicialTotalSEDUC) || 0,
-
-        DesercionMujeresSEDUC: Number(s.DesercionMujeresSEDUC) || 0,
-        DesercionHombresSEDUC: Number(s.DesercionHombresSEDUC) || 0,
-        DesercionTotalSEDUC: Number(s.DesercionTotalSEDUC) || 0,
-
-        CancelacionMujeresSEDUC: Number(s.CancelacionMujeresSEDUC) || 0,
-        CancelacionHombresSEDUC: Number(s.CancelacionHombresSEDUC) || 0,
-        CancelacionTotalSEDUC: Number(s.CancelacionTotalSEDUC) || 0,
-
-        MatriculaFinalMujeresSEDUC: Number(s.MatriculaFinalMujeresSEDUC) || 0,
-        MatriculaFinalHombresSEDUC: Number(s.MatriculaFinalHombresSEDUC) || 0,
-        MatriculaFinalTotalSEDUC: Number(s.MatriculaFinalTotalSEDUC) || 0,
-
-        RepitenciaMujeresSEDUC: Number(s.RepitenciaMujeresSEDUC) || 0,
-        RepitenciaHombresSEDUC: Number(s.RepitenciaHombresSEDUC) || 0,
-        RepitenciaTotalSEDUC: Number(s.RepitenciaTotalSEDUC) || 0,
-
-        ReprobadasMujeresSEDUC: Number(s.ReprobadasMujeresSEDUC) || 0,
-        ReprobadosHombresSEDUC: Number(s.ReprobadosHombresSEDUC) || 0,
-        ReprobadosTotalSEDUC: Number(s.ReprobadosTotalSEDUC) || 0,
-
-        AprobadosMujerSEDUC: Number(s.AprobadosMujerSEDUC) || 0,
-        AprobadosHombresSEDUC: Number(s.AprobadosHombresSEDUC) || 0,
-        AprobadosTotalSEDUC: Number(s.AprobadosTotalSEDUC) || 0,
-
-        // =====================
-        // PUESTOS
-        // =====================
-        DocentesMujeres: Number(puesto.DocentesMujer) || 0,
-        DocentesHombres: Number(puesto.DocentesHombre) || 0,
-        TotalDocentes: Number(puesto.TotalDocentes) || 0,
-
-        // =====================
-        // CENTROS
-        // =====================
-        TotalPrebasica: Number(centro.TotalPrebasica) || 0,
-        TotalBasica: Number(centro.totalBasica) || 0,
-        TotalMedia: Number(centro.TotalMedia) || 0,
-
-        TotalZonaUrbana: Number(centro.TotalZonaUrbana) || 0,
-        TotalZonaRural: Number(centro.TotalZonaRural) || 0,
-
-        TotalAdminGubernamental: Number(centro.TotalAdiministracionGubernamental) || 0,
-        TotalAdminNoGubernamental: Number(centro.TotalAdiministracionNoGubernamental) || 0,
-
-        // =====================
-        // DISCAPACIDAD (ya agregada)
-        // =====================
-        NiñasConDiscapacidad: disc.Niñas || 0,
-        NiñosConDiscapacidad: disc.Niños || 0,
-        TotalConDiscapacidad: disc.Total || 0,
-      };
-    });
-
-    return res.status(200).json({
-      ok: true,
-      data: resultado
-    });
-
-  } catch (error) {
-    console.error("Error en getVistaResumenGeneral:", error);
-
-    return res.status(500).json({
-      ok: false,
-      message: "Error al obtener vista resumen",
-      error: error.message
-    });
-  }
-}; */
-
-
-
-
-
-//====================================================================================================
 //============================================= INFOP ================================================
-//====================================================================================================
 //INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
 export const getVistaResumenINFOPdeptosmunicipiosC = async (req, res) => {
   try {
@@ -1185,7 +911,7 @@ export const getVistaResumenINFOPdeptosmunicipiosC = async (req, res) => {
   }
 };
 
-
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS
 export const getVistaResumenINFOPUnidadesCursosC = async (req, res) => {
   try {
     const data = await getVistaResumenInfopUnidadesCursosM();
@@ -1207,9 +933,9 @@ export const getVistaResumenINFOPUnidadesCursosC = async (req, res) => {
 
 
 
-//====================================================================================================
-//======================================== CONEANFO ATENCIONES =======================================
-//====================================================================================================
+//============================================ CONEANFO ===========================================
+
+//CONEANFO ATENCIONES Y PARTICIPANCIONES GENERALES
 export const getVistaResumenCONEANFOC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOM();
@@ -1229,7 +955,8 @@ export const getVistaResumenCONEANFOC = async (req, res) => {
   }
 };
 
-
+//======================================== CONEANFO ATENCIONES =======================================
+//CONEANFO ATENCIONES POR PROYECTO
 export const getVistaResumenCONEANFOatencionesproyectoC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOatencionesproyectoM();
@@ -1249,7 +976,7 @@ export const getVistaResumenCONEANFOatencionesproyectoC = async (req, res) => {
   }
 };
 
-
+//CONEANFO ATENCIONES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
 export const getVistaResumenCONEANFOCompetenciayEmprendimientoC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOCompetenciayEmprendimientoM();
@@ -1269,6 +996,7 @@ export const getVistaResumenCONEANFOCompetenciayEmprendimientoC = async (req, re
   }
 };
 
+//CONEANFO ATENCIONES POR DESARROLLO SOSTENIBLE
 export const getVistaResumenCONEANFODesarrolloSostenibleC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFODesarrolloSostenibleM();
@@ -1288,6 +1016,7 @@ export const getVistaResumenCONEANFODesarrolloSostenibleC = async (req, res) => 
   }
 };
 
+//CONEANFO ATENCIONES POR FORMACIÓN DE EDUCADORES
 export const getVistaResumenCONEANFOFormacionEducadoresC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOFormacionEducadoresM();
@@ -1307,6 +1036,7 @@ export const getVistaResumenCONEANFOFormacionEducadoresC = async (req, res) => {
   }
 };
 
+//CONEANFO ATENCIONES POR EDUCACIÓN INFANTIL TEMPRANA
 export const getVistaResumenCONEANFOEducacionInfantilC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOEducacionInfantilM();
@@ -1326,12 +1056,8 @@ export const getVistaResumenCONEANFOEducacionInfantilC = async (req, res) => {
   }
 };
 
-
-
-
-//====================================================================================================
 //======================================== CONEANFO PARTICIPANTES =======================================
-//====================================================================================================
+//CONEANFO PARTICIPANTES POR PROYECTO
 export const getVistaResumenCONEANFOparticipantesproyectoC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOparticipantesproyectoM();
@@ -1351,7 +1077,7 @@ export const getVistaResumenCONEANFOparticipantesproyectoC = async (req, res) =>
   }
 };
 
-
+//CONEANFO PARTICIPANTES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
 export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOCompetenciayEmprendimientoM();
@@ -1371,7 +1097,7 @@ export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC = a
   }
 };
 
-
+//CONEANFO PARTICIPANTES POR DESARROLLO SOSTENIBLE
 export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM();
@@ -1391,6 +1117,7 @@ export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC = async (
   }
 };
 
+//CONEANFO PARTICIPANTES POR FORMACIÓN DE EDUCADORES
 export const getVistaResumenCONEANFOParticipantesFormacionEducadoresC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOParticipantesFormacionEducadoresM();
@@ -1410,6 +1137,7 @@ export const getVistaResumenCONEANFOParticipantesFormacionEducadoresC = async (r
   }
 };
 
+//CONEANFO PARTICIPANTES POR EDUCACIÓN INFANTIL TEMPRANA
 export const getVistaResumenCONEANFOEParticipantesEducacionInfantilC = async (req, res) => {
   try {
     const data = await getVistaResumenCONEANFOEParticipantesEducacionInfantilM();
@@ -1428,9 +1156,9 @@ export const getVistaResumenCONEANFOEParticipantesEducacionInfantilC = async (re
   }
 };
 
-//====================================================================================================
+
 //============================================= DES =============================================
-//====================================================================================================
+// DES MATRICULAS
 export const getVistaResumenDESmatriculaC = async (req, res) => {
   try {
     const data = await getVistaResumenDESmatriculaM();
@@ -1450,6 +1178,7 @@ export const getVistaResumenDESmatriculaC = async (req, res) => {
   }
 };
 
+// DES MATRICULA POR MODALIDAD, CINE Y TIPO DE INGRESO
 export const getVistaResumenDESmatriculaModCINEIngresoC = async (req, res) => {
   try {
     const data = await getVistaResumenDESmatriculaModCINEIngresoM();
@@ -1469,6 +1198,7 @@ export const getVistaResumenDESmatriculaModCINEIngresoC = async (req, res) => {
   }
 };
 
+// DES MATRICULA POR CAMPO DE ESTUDIO
 export const getVistaResumenDESmatriculaCamposC = async (req, res) => {
   try {
     const data = await getVistaResumenDESmatriculaCamposM();
@@ -1488,8 +1218,7 @@ export const getVistaResumenDESmatriculaCamposC = async (req, res) => {
   }
 };
 
-
-
+// DES GRADUADOS 
 export const getVistaResumenDESgraduadosC = async (req, res) => {
   try {
     const data = await getVistaResumenDESgraduadosM();
@@ -1509,7 +1238,7 @@ export const getVistaResumenDESgraduadosC = async (req, res) => {
   }
 };
 
-
+// DES DOCENTES
 export const getVistaResumenDESdocentesC = async (req, res) => {
   try {
     const data = await getVistaResumenDESdocentesM();

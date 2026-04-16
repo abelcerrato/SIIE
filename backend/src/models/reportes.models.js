@@ -415,55 +415,6 @@ export const getInfop_capacitados_por_centroM = async () => {
 
 
 
-
-/*_________________________________________________ SIIE _________________________________________________*/
-
-// Consulta para SIIE matrícula por departamento
-export const getSIIE_matricula_por_departamentoM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, departamento, matriculaseduc, matriculainfop, matriculaconeanfo, matriculatotal, matriculadesunah
-             FROM siie_matricula_por_departamento;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Consulta para SIIE matrícula por institución
-export const getSIIE_matricula_por_institucionM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, seduc, infop, coneanfo, des, matriculatotal
-             FROM siie_matricula_por_institucion;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Consulta para SIIE matrícula por sexo
-export const getSIIE_matricula_por_sexoM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, 
-              mujerseduc, hombreseduc, 
-              mujerinfop, hombreinfop, 
-              mujerconeanfo, hombreconeanfo, 
-              totalmujeres, totalhombres
-             FROM siie_matricula_por_sexo;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
 /*
   ######################################################################
   ############################### VISTAS ###############################
@@ -1293,22 +1244,115 @@ export const getsiiedes_matriculadepartamentossexoM = async () => {
 
 
 
+//============================================================================================================================================================================================
+//                                                                                      VISTAS RESUMEN
+//============================================================================================================================================================================================
 
-/* 
-export const getVistaResumenSEDUCGeneralM = async () => {
-  const { rows } = await pool.query(`
-    SELECT * FROM vista_resumen_seduc_general
-  `);
-  return rows;
+// VISTA DE TASAS DE SEDUC
+export const getVistaTasasSEDUCM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_tasas_seduc
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
 };
- */
 
 
-//=====================================================================================
+//========================================SEDUC========================================
+
+// RESUMEN SEDUC
+export const getVistaResumenSEDUCM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC PUESTOS DE TRABAJO O DOCENTES
+export const getVistaResumenSeducPuestodeTrabajoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_puestos_de_trabajo
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC CENTROS EDUCATIVOS
+export const getVistaResumenSeducCentrosEducativosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_centros_educativos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC SERVICIOS BASICOS
+export const getVistaResumenSeducServiciosBasicosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_servicios_basicos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC PERSONAS CON DISCAPACIDAD
+export const getVistaResumenSeducNiñosConDiscapacidadM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_niños_con_discapacidad
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//======================================= INFOP =======================================
+//INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
+export const getVistaResumenINFOPM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS
+export const getVistaResumenInfopUnidadesCursosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop_capacitados_por_unidades_y_cursos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 //========================================CONEANFO========================================
-//=====================================================================================
 
-
+//CONEANFO ATENCIONES  Y PARTICIPANCIONES GENERALES
 export const getVistaResumenCONEANFOM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1321,11 +1365,8 @@ export const getVistaResumenCONEANFOM = async () => {
 };
 
 
-
-//=====================================================================================
 //================================ CONEANFO ATENCIONES ================================
-//=====================================================================================
-
+//CONEANFO ATENCIONES POR PROYECTO
 export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1337,6 +1378,7 @@ export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
   }
 };
 
+//CONEANFO ATENCIONES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
 export const getVistaResumenCONEANFOCompetenciayEmprendimientoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1348,6 +1390,7 @@ export const getVistaResumenCONEANFOCompetenciayEmprendimientoM = async () => {
   }
 };
 
+//CONEANFO ATENCIONES POR DESARROLLO SOSTENIBLE
 export const getVistaResumenCONEANFODesarrolloSostenibleM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1359,6 +1402,7 @@ export const getVistaResumenCONEANFODesarrolloSostenibleM = async () => {
   }
 };
 
+//CONEANFO ATENCIONES POR FORMACIÓN DE EDUCADORES
 export const getVistaResumenCONEANFOFormacionEducadoresM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1370,7 +1414,7 @@ export const getVistaResumenCONEANFOFormacionEducadoresM = async () => {
   }
 };
 
-
+//CONEANFO ATENCIONES POR EDUCACIÓN INFANTIL TEMPRANA
 export const getVistaResumenCONEANFOEducacionInfantilM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1383,11 +1427,8 @@ export const getVistaResumenCONEANFOEducacionInfantilM = async () => {
 };
 
 
-
-//=====================================================================================
 //=============================== CONEANFO PARTICIPANTES ==============================
-//=====================================================================================
-
+//CONEANFO PARTICIPANTES POR PROYECTO
 export const getVistaResumenCONEANFOparticipantesproyectoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1399,7 +1440,7 @@ export const getVistaResumenCONEANFOparticipantesproyectoM = async () => {
   }
 };
 
-
+//CONEANFO PARTICIPANTES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
 export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1411,7 +1452,7 @@ export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM = a
   }
 };
 
-
+//CONEANFO PARTICIPANTES POR DESARROLLO SOSTENIBLE
 export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1423,6 +1464,7 @@ export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM = async (
   }
 };
 
+//CONEANFO PARTICIPANTES POR FORMACIÓN DE EDUCADORES
 export const getVistaResumenCONEANFOParticipantesFormacionEducadoresM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1434,6 +1476,7 @@ export const getVistaResumenCONEANFOParticipantesFormacionEducadoresM = async ()
   }
 };
 
+//CONEANFO PARTICIPANTES POR EDUCACIÓN INFANTIL TEMPRANA
 export const getVistaResumenCONEANFOEParticipantesEducacionInfantilM = async () => {
   try {
     const { rows } = await pool.query(` 
@@ -1461,100 +1504,8 @@ export const getVistaResumenDESM = async () => {
 };
 
 
-
-//=====================================================================================
-//========================================SEDUC========================================
-//=====================================================================================
-
-//---------------------------------------------------------------------------------------------------------
-// --- Matricula inicial, Deserción, Cancelación, Matricula Final, Repitencias, Reprobación, Aprobación ---
-//---------------------------------------------------------------------------------------------------------
-export const getVistaResumenSEDUCM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getVistaResumenSeducPuestodeTrabajoM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc_puestos_de_trabajo
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getVistaResumenSeducCentrosEducativosM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc_centros_educativos
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getVistaResumenSeducServiciosBasicosM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc_servicios_basicos
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getVistaResumenSeducNiñosConDiscapacidadM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_seduc_niños_con_discapacidad
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-//=====================================================================================
-//======================================= INFOP =======================================
-//=====================================================================================
-export const getVistaResumenINFOPM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_infop
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-export const getVistaResumenInfopUnidadesCursosM = async () => {
-  try {
-    const { rows } = await pool.query(` 
-      SELECT * FROM vista_resumen_infop_capacitados_por_unidades_y_cursos
-    `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-
-
-//=====================================================================================
 //======================================== DES ========================================
-//=====================================================================================
+// DES MATRICULAS
 export const getVistaResumenDESmatriculaM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
@@ -1566,6 +1517,7 @@ export const getVistaResumenDESmatriculaM = async () => {
   }
 };
 
+// DES MATRICULA POR MODALIDAD, CINE Y TIPO DE INGRESO
 export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
@@ -1577,6 +1529,7 @@ export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
   }
 };
 
+// DES MATRICULA POR CAMPO DE ESTUDIO
 export const getVistaResumenDESmatriculaCamposM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
@@ -1588,6 +1541,7 @@ export const getVistaResumenDESmatriculaCamposM = async () => {
   }
 };
 
+// DES GRADUADOS 
 export const getVistaResumenDESgraduadosM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
@@ -1599,7 +1553,7 @@ export const getVistaResumenDESgraduadosM = async () => {
   }
 };
 
-
+// DES DOCENTES
 export const getVistaResumenDESdocentesM = async () => {
   try {
     const { rows } = await poolDB2.query(` 
