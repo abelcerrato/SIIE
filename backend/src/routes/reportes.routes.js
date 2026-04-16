@@ -210,6 +210,7 @@ router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentosse
 //         SEDUC
 // =====================
 router.get("/vistatasasseduc", getVistaTasasSEDUCC) // VISTA DE TASAS DE SEDUC
+
 router.get("/vistaresumenseduc", getVistaResumenSEDUCC) //SEDUC
 router.get("/vistaresumenseducpuestodetrabajo", getVistaResumenSEDUCPuestoDeTrabajoC) // PUESTOS DE TRABAJO O DOCENTES
 router.get("/vistaresumenseduccentroseducativos", getVistaResumenSEDUCCentrosEducativosC) // CENTROS EDUCATIVOS
