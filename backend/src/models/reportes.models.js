@@ -51,7 +51,7 @@ export const getSeducM = async () => {
 export const getSeduc_2014_2025M = async () => {
   try {
     const { rows } = await pool.query(`
-             SELECT 
+              SELECT 
                 "Año", "Departamento", 
                 "PrebasicaBruta", "PrebasicaNeta", "BasicaBruta", "BasicaNeta", "MediaBruta", "MediaNeta", 
                 "GradoObligatorioPrebasica", "GOP5años", 
@@ -63,9 +63,9 @@ export const getSeduc_2014_2025M = async () => {
                 "EdadPrebasica", "EdadBásica", "EdadMedia", "EdadICiclo", "EdadIICiclo", "EdadIIICiclo",
                 "Edad5años", "Edad6años", "Edad7años", "Edad8años", "Edad9años", "Edad10años", "Edad11años", "Edad12años", "Edad13años", "Edad14años", "Edad15años", "Edad16años", "Edad17años", 
                 "MatriculaBruta", "MatriculaNeta", "EdadMatriculatotal", 
-                "TasadeMatriculaBruta", "TasadeMatriculaNeta", "TasadecoberturaBrutaPrebasica", "TasadecoberturaNetaPrebasica ", "TasaCoberturaBrutaBasica", " TasadecoberturaNetaBasica", "TasadecoberturaBrutaMedia", "TasadecoberturaNetaMedia", 
+                "TasadeMatriculaBruta", "TasadeMatriculaNeta", "TasadecoberturaBrutaPrebasica", "TasadecoberturaNetaPrebasica", "TasaCoberturaBrutaBasica", "TasadecoberturaNetaBasica", "TasadecoberturaBrutaMedia", "TasadecoberturaNetaMedia", 
                 "TBA3PB", "TNA3PB", "TNA1Grado", "TBMICiclo", "TBMIICiclo", "TBMIIICiclo", "TNMICiclo", "TNMIICiclo", "TNMIIICiclo", 
-                "TBM1Grado", "TBM2Grdo ", "TBM3Grado", "TBM4Grado", "TBM5Grado", "TBM6Grado", "TBM7", "TBM8Grado", "TBM9Grado", "TBM10Grado", "TBM11Grado", "TBM12Grado", "TNM1Grado", "TNM2Grado", 
+                "TBM1Grado", "TBM2Grdo", "TBM3Grado", "TBM4Grado", "TBM5Grado", "TBM6Grado", "TBM7", "TBM8Grado", "TBM9Grado", "TBM10Grado", "TBM11Grado", "TBM12Grado", "TNM1Grado", "TNM2Grado", 
                 "TNM3Grado", "TNM4Grado", "TNM5Grado", "TNM6Grado", "TNM7Grado", "TNM8Grado", "TNM9Grado", "TNM10Grado", "TNM11Grado", "TNM12Grado"
              FROM seduc_2014_2025;
         `);
