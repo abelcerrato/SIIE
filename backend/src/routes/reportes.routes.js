@@ -89,6 +89,10 @@ import {
     getVistaResumenCONEANFOParticipantesFormacionEducadoresC,
     getVistaResumenDESdocentesC,
     getVistaTasasSEDUCC,
+    getseduc_tasarepitencianivelC,
+    getseduc_tasadesercionnivelC,
+    getseduc_tasapromovidosnivelC,
+    getseduc_tasaaprobacionnivelC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -176,6 +180,12 @@ router.get("/seductasabrutamatriculagrados",  getseduc_tasabrutamatriculagradosC
 router.get("/seducmatriculanetabrutamatriculagrados", getseduc_tasa_neta_bruta_matriculagradosC); //Matricula neta y bruta por grado
 
 router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_variacioninteranualprebasicagradoobligatorioC);
+
+router.get("/seductasarepitencianivel",  getseduc_tasarepitencianivelC); //seduc_tasarepitencianivel
+router.get("/seductasadesercionnivel",  getseduc_tasadesercionnivelC); //seduc_tasadesercionnivel
+router.get("/seductasapromovidosnivel",  getseduc_tasapromovidosnivelC); //seduc_tasapromovidosnivel
+router.get("/seductasaaprobacionnivel", getseduc_tasaaprobacionnivelC ); //seduc_tasaaprobacionnivel
+
 
 /* CONEANFO */
 router.get("/coneanfoatenciones", getconeanfo_atencionesC);

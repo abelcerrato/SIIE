@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM,  getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEParticipantesEducacionInfantilM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM, getVistaResumenCONEANFOParticipantesFormacionEducadoresM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESdocentesM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getVistaTasasSEDUCM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
+import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM,  getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEParticipantesEducacionInfantilM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM, getVistaResumenCONEANFOParticipantesFormacionEducadoresM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESdocentesM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getVistaTasasSEDUCM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasaaprobacionnivelM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasadesercionnivelM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_tasapromovidosnivelM, getseduc_tasarepitencianivelM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
 
 /* CONEANFO */
 
@@ -538,9 +538,6 @@ export const getseduc_tasa_neta_bruta_matriculagradosC = async (req, res) => {
   }
 };
 
-
-
-
 export const getseduc_variacioninteranualprebasicagradoobligatorioC = async (req, res) => {
   try {
     const seduc = await getseduc_variacioninteranualprebasicagradoobligatorioM();
@@ -551,7 +548,49 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioC = async (req
   }
 };
 
+//seduc_tasarepitencianivel
+export const getseduc_tasarepitencianivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasarepitencianivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de repitencias de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
 
+//seduc_tasadesercionnivel
+export const getseduc_tasadesercionnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasadesercionnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de deserción de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasapromovidosnivel
+export const getseduc_tasapromovidosnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasapromovidosnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de promovidos por nivel de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasaaprobacionnivel
+export const getseduc_tasaaprobacionnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasaaprobacionnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de aprobados por nivel de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
 
 /* CONEANFO */
 

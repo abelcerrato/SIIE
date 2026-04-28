@@ -969,6 +969,79 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM =
     }
   };
 
+//seduc_tasarepitencianivel
+export const getseduc_tasarepitencianivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "RepitenciaBasica", "MatriculaBasica", "TasaRepitenciaBasica", "RepitenciaMedia", "MatriculaMedia", "TasaRepitenciaMedia"
+          FROM seduc_tasarepitencianivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasadesercionnivel
+export const getseduc_tasadesercionnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "NIVEL", "Desercion", "Matricula", "TasaDesercion"
+          FROM seduc_tasadesercionnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasapromovidosnivel
+export const getseduc_tasapromovidosnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "MatriculaPreBasicaProx", "RepitenciaPreBasica", "MatriculaPreBasica", "TasaPromovidosPreBasica", "MatriculaBasicaProx", 
+            "RepitenciaBasica", "MatriculaBasica", "TasaPromovidosBasica", "MatriculaMediaProx", "RepitenciaMedia", "MatriculaMedia", "TasaPromovidosMedia"
+          FROM seduc_tasapromovidosnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasaaprobacionnivel
+export const getseduc_tasaaprobacionnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "AprobacionPreBasica", "MatriculaPreBasica", "TasaAprobacionPreBasica", "AprobacionBasica", "MatriculaBasica", 
+            "TasaAprobacionBasica", "AprobacionMedia", "MatriculaMedia", "TasaAprobacionMedia", "AprobacionTotal", "MatriculaTotal", "TasaAprobacionTotal"
+          FROM seduc_tasaaprobacionnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+
+
+
+
+
+
+
 /*_________________________________________________ CONEANFO _________________________________________________*/
 
 export const getconeanfo_atencionesM = async () => {
