@@ -1008,7 +1008,7 @@ export const getseduc_tasapromovidosnivelM =
       const { rows } = await pool.query(`
           SELECT 
             "Periodo", "MatriculaPreBasicaProx", "RepitenciaPreBasica", "MatriculaPreBasica", "TasaPromovidosPreBasica", "MatriculaBasicaProx", 
-            "RepitenciaBasica", "MatriculaBasica", "TasaPromovidosBasica", "MatriculaMediaProx", "RepitenciaMedia", "MatriculaMedia", "TasaPromovidosMedia"
+            "RepitenciaBasica", "MatriculaBasica", "TasaPromovidosBasica", "MatriculaMediaProx", "RepitenciaMedia", "MatriculaMedia", "TasaPromovidosMedia", "TasaPromovidosTotal"
           FROM seduc_tasapromovidosnivel;
         `);
       return rows;
