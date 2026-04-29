@@ -1034,6 +1034,51 @@ export const getseduc_tasaaprobacionnivelM =
     }
   };
 
+//seduc_tasasupervivencianivel
+export const getseduc_tasasupervivencianivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "NIVEL", "Matricula", "MatriculaProx", "TasaSupervivencia"
+          FROM seduc_tasasupervivencianivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasamatriculaneta
+export const getseduc_tasamatriculanetaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+         SELECT * FROM seduc_tasamatriculaneta mn;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasamatriculabruta
+export const getseduc_tasamatriculabrutaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+         SELECT * FROM seduc_tasamatriculabruta;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+
 
 
 
