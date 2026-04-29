@@ -96,6 +96,7 @@ import {
     getseduc_tasasupervivencianivelC,
     getseduc_tasamatriculanetaC,
     getseduc_tasamatriculabrutaC,
+    getseduc_tasamatriculanetabrutaC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -192,6 +193,7 @@ router.get("/seductasasupervivencianivel", getseduc_tasasupervivencianivelC ); /
 
 router.get("/seductasamatriculaneta", getseduc_tasamatriculanetaC ); //seduc_tasamatriculaneta
 router.get("/seductasamatriculabruta", getseduc_tasamatriculabrutaC ); //seduc_tasamatriculabruta
+router.get("/seductasamatriculanetabruta", getseduc_tasamatriculanetabrutaC ); //seduc_tasamatriculanetabruta (unión de las dos vistas)
 
 /* CONEANFO */
 router.get("/coneanfoatenciones", getconeanfo_atencionesC);

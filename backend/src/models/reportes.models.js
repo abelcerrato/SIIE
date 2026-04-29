@@ -1078,6 +1078,23 @@ export const getseduc_tasamatriculabrutaM =
   };
 
 
+//seduc_tasamatricula_neta_y_bruta
+export const getseduc_tasamatriculanetabrutaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+        SELECT 
+          mn."Periodo", mn."Grado", mn."MatriculaNeta",  mb."Matricula" as "MatriculaBruta", mn."PoblacionEdadOportuna", 
+          mn."TasaMatricula" as "TasaMatriculaNeta",  mb."TasaMatricula" as "TasaMatriculaBruta" 
+        FROM seduc_tasamatriculaneta mn
+        inner join seduc_tasamatriculabruta mb on mn."Periodo" = mb."Periodo"
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
 
 
 
