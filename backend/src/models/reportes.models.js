@@ -1084,10 +1084,17 @@ export const getseduc_tasamatriculanetabrutaM =
     try {
       const { rows } = await pool.query(`
         SELECT 
-          mn."Periodo", mn."Grado", mn."MatriculaNeta",  mb."Matricula" as "MatriculaBruta", mn."PoblacionEdadOportuna", 
-          mn."TasaMatricula" as "TasaMatriculaNeta",  mb."TasaMatricula" as "TasaMatriculaBruta" 
-        FROM seduc_tasamatriculaneta mn
-        inner join seduc_tasamatriculabruta mb on mn."Periodo" = mb."Periodo"
+          mn."Periodo", 
+          mn."Grado", 
+          mn."PoblacionEdadOportuna", 
+          mn."MatriculaNeta",           
+          mn."TasaMatricula" AS "TasaMatriculaNeta",  
+          mb."Matricula" AS "MatriculaBruta", 
+          mb."TasaMatricula" AS "TasaMatriculaBruta" 
+      FROM seduc_tasamatriculaneta mn
+      INNER JOIN seduc_tasamatriculabruta mb 
+        ON mn."Periodo" = mb."Periodo"
+        AND mn."Grado" = mb."Grado";
         `);
       return rows;
     } catch (error) {
