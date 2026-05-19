@@ -97,6 +97,7 @@ import {
     getseduc_tasamatriculanetaC,
     getseduc_tasamatriculabrutaC,
     getseduc_tasamatriculanetabrutaC,
+    getVistaResumenINFOPUCHorasFinalizadosC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -241,6 +242,8 @@ router.get("/vistaresumenseducpersonascondiscapacidad", getVistaResumenSEDUCPers
 // =====================
 router.get("/vistaresumeninfopdepartamentosmunicipios", getVistaResumenINFOPdeptosmunicipiosC ) //INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
 router.get("/vistaresumeninfopunidadescursos", getVistaResumenINFOPUnidadesCursosC) //INFOP UNIDADES Y CURSOS
+router.get("/vistaresumeninfopUChorasfinalizados", getVistaResumenINFOPUCHorasFinalizadosC) //INFOP UNIDADES Y CURSOS FILTRO POR HORAS Y FINALIZADOS
+
 
 // =====================
 //       CONEANFO

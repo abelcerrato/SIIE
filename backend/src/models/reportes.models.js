@@ -1491,6 +1491,19 @@ export const getVistaResumenInfopUnidadesCursosM = async () => {
   }
 };
 
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS, HORAS, FINALIZADOS
+export const getVistaResumenInfopUCHoras_FinalizadosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop_capacitados_u_c_horas_finalizados
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 //========================================CONEANFO========================================
 
