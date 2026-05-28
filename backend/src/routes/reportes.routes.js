@@ -98,6 +98,7 @@ import {
     getseduc_tasamatriculabrutaC,
     getseduc_tasamatriculanetabrutaC,
     getVistaResumenINFOPUCHorasFinalizadosC,
+    getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC,
     
 } from "../controllers/reportes.controller.js";
 
@@ -258,13 +259,13 @@ router.get("/vistaresumenconeanfoeducacioninfantil", getVistaResumenCONEANFOEduc
 
 //Participaciones
 router.get("/vistaresumenconeanfoparticipantesproyecto", getVistaResumenCONEANFOparticipantesproyectoC) //CONEANFO PARTICIPANTES POR PROYECTO
-router.get("/vistaresumenconeanfoparticipantescompetenciasemprendimiento", getVistaResumenCONEANFOCompetenciayEmprendimientoC) //CONEANFO PARTICIPANTES COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+router.get("/vistaresumenconeanfoparticipantescompetenciasemprendimiento", getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC) //CONEANFO PARTICIPANTES COMPETENCIAS LABORALES Y EMPRENDIMIENTO
 router.get("/vistaresumenconeanfoparticipantesdesarrollosostenible", getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC) //CONEANFO PARTICIPANTES EN EDUCACION AL DESARROLLO SOSTENIBLE
 router.get("/vistaresumenconeanfoparticipantesformacioneducadores", getVistaResumenCONEANFOParticipantesFormacionEducadoresC) //CONEANFO PARTICIPANTES EN FORMACIÓN DE EDUCADORES
 router.get("/vistaresumenconeanfoparticipanteseducacioninfantil", getVistaResumenCONEANFOEParticipantesEducacionInfantilC) //CONEANFO PARTICIPANTES EN EDUCACIÓN INFANTIL TEMPRANA 
 
 
-// =====================
+// ===================== 
 //          DES
 // =====================
 router.get("/vistaresumendesmatriculadepartamento", getVistaResumenDESmatriculaC) //DES MATRICULA POR DEPARTAMENTO
