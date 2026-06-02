@@ -30,8 +30,9 @@ import { Download, FilterList, ChevronLeft, ChevronRight, ArrowCircleLeftOutline
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useUser } from "../../components/UserContext";
-import LogoCONED from "../../img/logos-CONED.png";
-import LogoSIIE from "../../img/SIIE.png";
+import LogoCONED from "../../img/nueva-linea-grafica/Logo CONED.png";
+import LogoSIIE from "../../img/nueva-linea-grafica/logos-siie-y-coned.png";
+import color from "../../components/color";
 
 const toBase64 = async (url) => {
     const response = await fetch(url);
@@ -1141,7 +1142,7 @@ const ReportesInfop = () => {
                     component="h1"
                     sx={{
                         fontWeight: "bold",
-                        color: "#88CFE0",
+                        color: color.white,
                         textAlign: "center",
                         wordWrap: "break-word",
                         mb: 2
@@ -1176,7 +1177,7 @@ const ReportesInfop = () => {
                         startIcon={<Download />}
                         onClick={downloadExcel}
                         sx={{
-                            backgroundColor: "#88CFE0",
+                            backgroundColor: color.white,
                             "&:hover": { backgroundColor: "#ff0000ff" },
                         }}
                     >
@@ -1366,7 +1367,7 @@ const ReportesInfop = () => {
                                                 height: 250,
                                                 "&:hover": {
                                                     transform: "translateY(-5px)",
-                                                    backgroundColor: "#88CFE0",
+                                                    backgroundColor: color.white,
                                                     color: "#fff"
                                                 }
                                             }}

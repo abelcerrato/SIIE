@@ -13,6 +13,7 @@ import {
 } from "@mui/icons-material";
 import { useUser } from '../../../components/UserContext';
 import ModalRol from './RolyPermisos'; // <-- Importa tu modal aquí
+import color from "../../../components/color";
 
 const RolesTable = () => {
   const [roles, setRoles] = useState([]);
@@ -58,7 +59,7 @@ const RolesTable = () => {
         <>
           {tienePermiso(5) && (
             <IconButton
-              sx={{ color: "#88CFE0" }}
+              sx={{ color: color.white }}
               onClick={(e) => {
                 e.stopPropagation();
                 setRolId(params.row.idrol); // <-- setear rol a editar
@@ -93,6 +94,7 @@ const RolesTable = () => {
         </span>
       )
     },
+    { field: "creadopor", headerName: "Creado por", width: 150 },
   ];
 
   const CustomRow = ({ row }) => (
@@ -117,7 +119,7 @@ const RolesTable = () => {
               <TableContainer component={Paper}>
                 <Table size="small">
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: "#88CFE0" }}>
+                    <TableRow sx={{ backgroundColor: color.white }}>
                       <TableCell sx={{ color: 'white' }}>Módulo</TableCell>
                       <TableCell sx={{ color: 'white' }} align="center">Consultar</TableCell>
                       <TableCell sx={{ color: 'white' }} align="center">Insertar</TableCell>
@@ -158,14 +160,14 @@ const RolesTable = () => {
   return (
     <Box component={Paper} sx={{ p: 5 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', color: "#88CFE0" }}>
+        <Typography variant="h3" sx={{ fontWeight: 'bold', color: color.white }}>
           Roles y Permisos
         </Typography>
         {tienePermisoIn(5) && (
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            sx={{ backgroundColor: "#88CFE0" }}
+            sx={{ backgroundColor: color.white }}
             onClick={() => { setRolId(null); setOpenModal(true); }} // <-- abrir modal para crear
           >
             Nuevo
