@@ -1,5 +1,5 @@
 
-import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM, getSIIE_matricula_por_departamentoM, getSIIE_matricula_por_institucionM, getSIIE_matricula_por_sexoM, getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
+import { getAllSeducM, getConeanfoM, getInfop_capacitados_por_centroM, getInfop_capacitados_por_departamentos_y_municipiosM, getInfop_capacitados_por_modos_de_formacionM, getInfop_capacitados_por_programasM, getInfop_capacitados_por_regionalM, getInfop_capacitados_por_sector_economicoM, getInfop_capacitados_por_unidades_y_cursosM, getInfop_regionesM,  getSeducM, getSeduc_2014_2025M, getSeduc_centros_educativosM, getSeduc_matriculagradoedadM, getSeduc_nivelesacademicosdepartamentoM, getSeduc_niños_con_discapacidadM, getSeduc_servicios_basicosM, getServicios_docentesM, getSseduc_repitenciagradoedad, getVistaResumenCONEANFOCompetenciayEmprendimientoM, getVistaResumenCONEANFODesarrolloSostenibleM, getVistaResumenCONEANFOEParticipantesEducacionInfantilM, getVistaResumenCONEANFOEducacionInfantilM, getVistaResumenCONEANFOFormacionEducadoresM, getVistaResumenCONEANFOM, getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM, getVistaResumenCONEANFOParticipantesFormacionEducadoresM, getVistaResumenCONEANFOatencionesproyectoM, getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM, getVistaResumenCONEANFOparticipantesproyectoM, getVistaResumenDESM, getVistaResumenDESdocentesM, getVistaResumenDESgraduadosM, getVistaResumenDESmatriculaCamposM, getVistaResumenDESmatriculaM, getVistaResumenDESmatriculaModCINEIngresoM, getVistaResumenINFOPM,  getVistaResumenInfopUCHoras_FinalizadosM,  getVistaResumenInfopUnidadesCursosM,  getVistaResumenSEDUCM, getVistaResumenSeducCentrosEducativosM, getVistaResumenSeducNiñosConDiscapacidadM, getVistaResumenSeducPuestodeTrabajoM, getVistaResumenSeducServiciosBasicosM, getVistaTasasSEDUCM, getconeanfo_atencionesM, getconeanfo_atenciones_año_sexoM, getconeanfo_atenciones_discapacidadM, getconeanfo_atenciones_etniaM, getconeanfo_atenciones_proyecto_sexoM, getconeanfo_atenciones_prticipantes_proceso_educativoM, getconeanfo_participantesM, getdes_4_10_estudiantes_internacionales_ciclo_completoM, getdes_4_1_estudiantes_primer_titulo_esM, getdes_4_2_estudiantes_primer_titulo_es_10mil_habitantesM, getdes_4_3_persona_que_ingresan_esM, getdes_4_4_nuevos_ingresos_iniciar_programaM, getdes_4_5_graduadosM, getdes_4_6_tasa_bruta_matriculaM, getdes_4_7_tasa_neta_matriculaM, getdes_estudiantes_educacion_superiorM, getdes_total_estudiantes_brutaM, getdes_total_estudiantes_netaM, getinfop_tasasmatriculasM, getinfop_tasasmatriculasmodosformacionM, getinfop_tasasmatriculasprogramasM, getinfop_tasasmatriculasregionalesM, getinfop_tasasmatriculassectoreconomicoM, getseduc_accesoprimergradoM, getseduc_cancelacionpivotgradoM, getseduc_cobertura_neta_bruta_niveleseducativosM, getseduc_coberturabrutaniveleseducativosM, getseduc_coberturanetaniveleseducativosM, getseduc_desercionpivotgradoM, getseduc_escolarizcionporedadesM, getseduc_matriculabrutagradoM, getseduc_matriculanetagradoM, getseduc_tasa_neta_bruta_acceso3prebasicaM, getseduc_tasa_neta_bruta_accesoprimergradobasicaM, getseduc_tasa_neta_bruta_ciclosM, getseduc_tasa_neta_bruta_matriculagradosM, getseduc_tasaaprobacionnivelM, getseduc_tasabrutaacceso3prebasicaM, getseduc_tasabrutaaccesoprimergradobasicaM, getseduc_tasabrutaciclosM, getseduc_tasabrutamatriculagradosM, getseduc_tasadesercionnivelM, getseduc_tasamatriculabrutaM, getseduc_tasamatriculanetaM, getseduc_tasamatriculanetabrutaM, getseduc_tasanetaacceso3prebasicaM, getseduc_tasanetaaccesoprimergradobasicaM, getseduc_tasanetaciclosM, getseduc_tasanetamatriculagradosM, getseduc_tasapromovidosnivelM, getseduc_tasarepitencianivelM, getseduc_tasasupervivencianivelM, getseduc_variacioninteranualprebasicagradoobligatorioM, getsiiedes_matriculadepartamentossexoM } from "../models/reportes.models.js";
 
 /* CONEANFO */
 
@@ -229,44 +229,12 @@ export const getInfop_capacitados_por_centroC = async (req, res) => {
 
 
 /* SIIE */
-// Controlador para mostrar la matricula por departamento de SIIE
-export const getSIIE_matricula_por_departamentoC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_departamentoM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por departamento de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
-
-// Controlador para mostrar la matricula por institucion de SIIE
-export const getSIIE_matricula_por_institucionC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_institucionM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por institución de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
-
-// Controlador para mostrar la matricula por sexo de SIIE
-export const getSIIE_matricula_por_sexoC = async (req, res) => {
-  try {
-    const siie = await getSIIE_matricula_por_sexoM();
-    res.json(siie);
-  } catch (error) {
-    console.error("Error al obtener la matricula por sexo de SIIE:", error);
-    res.status(500).json({ error: "Error interno del servidor" });
-  }
-};
 
 
 
 /*
   ######################################################################
-  ############################### VISTAS ###############################
+  ###################### VISTAS  DE INDICADORES ########################
   ######################################################################
 */
 
@@ -429,7 +397,7 @@ export const getseduc_matriculabrutagradoC = async (req, res) => {
 export const getseduc_matricula_neta_bruta_gradoC = async (req, res) => {
   try {
     const tasa = await getseduc_matriculanetagradoM();
-   
+
     res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de matricula SEDUC:", error);
@@ -462,7 +430,7 @@ export const getseduc_tasabrutaacceso3prebasicaC = async (req, res) => {
 export const getseduc_tasa_neta_bruta_acceso3prebasicaC = async (req, res) => {
   try {
     const tasa = await getseduc_tasa_neta_bruta_acceso3prebasicaM();
-      res.json(tasa);
+    res.json(tasa);
   } catch (error) {
     console.error("Error al obtener la tasa de seduc:", error);
     res.status(500).json({ error: "Error interno del servidor" });
@@ -570,9 +538,6 @@ export const getseduc_tasa_neta_bruta_matriculagradosC = async (req, res) => {
   }
 };
 
-
-
-
 export const getseduc_variacioninteranualprebasicagradoobligatorioC = async (req, res) => {
   try {
     const seduc = await getseduc_variacioninteranualprebasicagradoobligatorioM();
@@ -583,6 +548,96 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioC = async (req
   }
 };
 
+//seduc_tasarepitencianivel
+export const getseduc_tasarepitencianivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasarepitencianivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de repitencias de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasadesercionnivel
+export const getseduc_tasadesercionnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasadesercionnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de deserción de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasapromovidosnivel
+export const getseduc_tasapromovidosnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasapromovidosnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de promovidos por nivel de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasaaprobacionnivel
+export const getseduc_tasaaprobacionnivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasaaprobacionnivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de aprobados por nivel de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+//seduc_tasasupervivencianivel
+export const getseduc_tasasupervivencianivelC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasasupervivencianivelM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de supervivencia por nivel de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+//seduc_tasamatriculaneta
+export const getseduc_tasamatriculanetaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasamatriculanetaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de matricula neta por grado de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+//seduc_tasamatriculabruta
+export const getseduc_tasamatriculabrutaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasamatriculabrutaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de matricula bruta por grado de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
+
+
+//seduc_tasamatriculanetabruta
+export const getseduc_tasamatriculanetabrutaC = async (req, res) => {
+  try {
+    const seduc = await getseduc_tasamatriculanetabrutaM();
+    res.json(seduc);
+  } catch (error) {
+    console.error("Error al obtener la tasa de matricula bruta por grado de seduc:", error);
+    res.status(500).json({ error: "Error interno del servidor" });
+  }
+};
 
 
 /* CONEANFO */
@@ -791,3 +846,521 @@ export const getsiiedes_matriculadepartamentossexoC = async (req, res) => {
 
 
 
+//============================================================================================================================================================================================
+//                                                                                      VISTAS RESUMEN
+//============================================================================================================================================================================================
+
+// VISTA DE TASAS DE SEDUC
+export const getVistaTasasSEDUCC = async (req, res) => {
+  try {
+    const data = await getVistaTasasSEDUCM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//============================================= SUDUC ================================================
+// RESUMEN SEDUC
+export const getVistaResumenSEDUCC = async (req, res) => {
+  try {
+    const data = await getVistaResumenSEDUCM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//SEDUC PUESTOS DE TRABAJO O DOCENTES
+export const getVistaResumenSEDUCPuestoDeTrabajoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenSeducPuestodeTrabajoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//SEDUC CENTROS EDUCATIVOS
+export const getVistaResumenSEDUCCentrosEducativosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenSeducCentrosEducativosM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//SEDUC SERVICIOS BASICOS
+export const getVistaResumenSEDUCServiciosBasicosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenSeducServiciosBasicosM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//SEDUC PERSONAS CON DISCAPACIDAD
+export const getVistaResumenSEDUCPersonasDiscapacidadC = async (req, res) => {
+  try {
+    const data = await getVistaResumenSeducNiñosConDiscapacidadM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+
+
+//============================================= INFOP ================================================
+//INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
+export const getVistaResumenINFOPdeptosmunicipiosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenINFOPM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS
+export const getVistaResumenINFOPUnidadesCursosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenInfopUnidadesCursosM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS, HORAS, FINALIZADOS
+export const getVistaResumenINFOPUCHorasFinalizadosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenInfopUCHoras_FinalizadosM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//============================================ CONEANFO ===========================================
+
+//CONEANFO ATENCIONES Y PARTICIPANCIONES GENERALES
+export const getVistaResumenCONEANFOC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//======================================== CONEANFO ATENCIONES =======================================
+//CONEANFO ATENCIONES POR PROYECTO
+export const getVistaResumenCONEANFOatencionesproyectoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOatencionesproyectoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO ATENCIONES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+export const getVistaResumenCONEANFOCompetenciayEmprendimientoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOCompetenciayEmprendimientoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO ATENCIONES POR DESARROLLO SOSTENIBLE
+export const getVistaResumenCONEANFODesarrolloSostenibleC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFODesarrolloSostenibleM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO ATENCIONES POR FORMACIÓN DE EDUCADORES
+export const getVistaResumenCONEANFOFormacionEducadoresC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOFormacionEducadoresM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO ATENCIONES POR EDUCACIÓN INFANTIL TEMPRANA
+export const getVistaResumenCONEANFOEducacionInfantilC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOEducacionInfantilM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//======================================== CONEANFO PARTICIPANTES =======================================
+//CONEANFO PARTICIPANTES POR PROYECTO
+export const getVistaResumenCONEANFOparticipantesproyectoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOparticipantesproyectoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO PARTICIPANTES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO PARTICIPANTES POR DESARROLLO SOSTENIBLE
+export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO PARTICIPANTES POR FORMACIÓN DE EDUCADORES
+export const getVistaResumenCONEANFOParticipantesFormacionEducadoresC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOParticipantesFormacionEducadoresM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+//CONEANFO PARTICIPANTES POR EDUCACIÓN INFANTIL TEMPRANA
+export const getVistaResumenCONEANFOEParticipantesEducacionInfantilC = async (req, res) => {
+  try {
+    const data = await getVistaResumenCONEANFOEParticipantesEducacionInfantilM();
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+
+//============================================= DES =============================================
+// DES MATRICULAS
+export const getVistaResumenDESmatriculaC = async (req, res) => {
+  try {
+    const data = await getVistaResumenDESmatriculaM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+// DES MATRICULA POR MODALIDAD, CINE Y TIPO DE INGRESO
+export const getVistaResumenDESmatriculaModCINEIngresoC = async (req, res) => {
+  try {
+    const data = await getVistaResumenDESmatriculaModCINEIngresoM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+// DES MATRICULA POR CAMPO DE ESTUDIO
+export const getVistaResumenDESmatriculaCamposC = async (req, res) => {
+  try {
+    const data = await getVistaResumenDESmatriculaCamposM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+// DES GRADUADOS 
+export const getVistaResumenDESgraduadosC = async (req, res) => {
+  try {
+    const data = await getVistaResumenDESgraduadosM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};
+
+// DES DOCENTES
+export const getVistaResumenDESdocentesC = async (req, res) => {
+  try {
+    const data = await getVistaResumenDESdocentesM();
+
+    return res.status(200).json({
+      ok: true,
+      data
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      ok: false,
+      message: "Error al obtener datos",
+      error: error.message
+    });
+  }
+};

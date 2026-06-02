@@ -51,7 +51,7 @@ export const getSeducM = async () => {
 export const getSeduc_2014_2025M = async () => {
   try {
     const { rows } = await pool.query(`
-             SELECT 
+              SELECT 
                 "Año", "Departamento", 
                 "PrebasicaBruta", "PrebasicaNeta", "BasicaBruta", "BasicaNeta", "MediaBruta", "MediaNeta", 
                 "GradoObligatorioPrebasica", "GOP5años", 
@@ -63,9 +63,9 @@ export const getSeduc_2014_2025M = async () => {
                 "EdadPrebasica", "EdadBásica", "EdadMedia", "EdadICiclo", "EdadIICiclo", "EdadIIICiclo",
                 "Edad5años", "Edad6años", "Edad7años", "Edad8años", "Edad9años", "Edad10años", "Edad11años", "Edad12años", "Edad13años", "Edad14años", "Edad15años", "Edad16años", "Edad17años", 
                 "MatriculaBruta", "MatriculaNeta", "EdadMatriculatotal", 
-                "TasadeMatriculaBruta", "TasadeMatriculaNeta", "TasadecoberturaBrutaPrebasica", "TasadecoberturaNetaPrebasica ", "TasaCoberturaBrutaBasica", " TasadecoberturaNetaBasica", "TasadecoberturaBrutaMedia", "TasadecoberturaNetaMedia", 
+                "TasadeMatriculaBruta", "TasadeMatriculaNeta", "TasadecoberturaBrutaPrebasica", "TasadecoberturaNetaPrebasica", "TasaCoberturaBrutaBasica", "TasadecoberturaNetaBasica", "TasadecoberturaBrutaMedia", "TasadecoberturaNetaMedia", 
                 "TBA3PB", "TNA3PB", "TNA1Grado", "TBMICiclo", "TBMIICiclo", "TBMIIICiclo", "TNMICiclo", "TNMIICiclo", "TNMIIICiclo", 
-                "TBM1Grado", "TBM2Grdo ", "TBM3Grado", "TBM4Grado", "TBM5Grado", "TBM6Grado", "TBM7", "TBM8Grado", "TBM9Grado", "TBM10Grado", "TBM11Grado", "TBM12Grado", "TNM1Grado", "TNM2Grado", 
+                "TBM1Grado", "TBM2Grdo", "TBM3Grado", "TBM4Grado", "TBM5Grado", "TBM6Grado", "TBM7", "TBM8Grado", "TBM9Grado", "TBM10Grado", "TBM11Grado", "TBM12Grado", "TNM1Grado", "TNM2Grado", 
                 "TNM3Grado", "TNM4Grado", "TNM5Grado", "TNM6Grado", "TNM7Grado", "TNM8Grado", "TNM9Grado", "TNM10Grado", "TNM11Grado", "TNM12Grado"
              FROM seduc_2014_2025;
         `);
@@ -414,55 +414,6 @@ export const getInfop_capacitados_por_centroM = async () => {
 };
 
 
-
-
-/*_________________________________________________ SIIE _________________________________________________*/
-
-// Consulta para SIIE matrícula por departamento
-export const getSIIE_matricula_por_departamentoM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, departamento, matriculaseduc, matriculainfop, matriculaconeanfo, matriculatotal, matriculadesunah
-             FROM siie_matricula_por_departamento;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Consulta para SIIE matrícula por institución
-export const getSIIE_matricula_por_institucionM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, seduc, infop, coneanfo, des, matriculatotal
-             FROM siie_matricula_por_institucion;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
-
-// Consulta para SIIE matrícula por sexo
-export const getSIIE_matricula_por_sexoM = async () => {
-  try {
-    const { rows } = await pool.query(`
-             SELECT 
-              año, 
-              mujerseduc, hombreseduc, 
-              mujerinfop, hombreinfop, 
-              mujerconeanfo, hombreconeanfo, 
-              totalmujeres, totalhombres
-             FROM siie_matricula_por_sexo;
-        `);
-    return rows;
-  } catch (error) {
-    throw error;
-  }
-};
 
 /*
   ######################################################################
@@ -1018,6 +969,148 @@ export const getseduc_variacioninteranualprebasicagradoobligatorioM =
     }
   };
 
+//seduc_tasarepitencianivel
+export const getseduc_tasarepitencianivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "RepitenciaBasica", "MatriculaBasica", "TasaRepitenciaBasica", "RepitenciaMedia", "MatriculaMedia", "TasaRepitenciaMedia"
+          FROM seduc_tasarepitencianivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasadesercionnivel
+export const getseduc_tasadesercionnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "NIVEL", "Desercion", "Matricula", "TasaDesercion"
+          FROM seduc_tasadesercionnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasapromovidosnivel
+export const getseduc_tasapromovidosnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "MatriculaPreBasicaProx", "RepitenciaPreBasica", "MatriculaPreBasica", "TasaPromovidosPreBasica", "MatriculaBasicaProx", 
+            "RepitenciaBasica", "MatriculaBasica", "TasaPromovidosBasica", "MatriculaMediaProx", "RepitenciaMedia", "MatriculaMedia", "TasaPromovidosMedia", "TasaPromovidosTotal"
+          FROM seduc_tasapromovidosnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasaaprobacionnivel
+export const getseduc_tasaaprobacionnivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "AprobacionPreBasica", "MatriculaPreBasica", "TasaAprobacionPreBasica", "AprobacionBasica", "MatriculaBasica", 
+            "TasaAprobacionBasica", "AprobacionMedia", "MatriculaMedia", "TasaAprobacionMedia", "AprobacionTotal", "MatriculaTotal", "TasaAprobacionTotal"
+          FROM seduc_tasaaprobacionnivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+//seduc_tasasupervivencianivel
+export const getseduc_tasasupervivencianivelM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+          SELECT 
+            "Periodo", "NIVEL", "Matricula", "MatriculaProx", "TasaSupervivencia"
+          FROM seduc_tasasupervivencianivel;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasamatriculaneta
+export const getseduc_tasamatriculanetaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+         SELECT * FROM seduc_tasamatriculaneta mn;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasamatriculabruta
+export const getseduc_tasamatriculabrutaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+         SELECT * FROM seduc_tasamatriculabruta;
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+//seduc_tasamatricula_neta_y_bruta
+export const getseduc_tasamatriculanetabrutaM =
+  async () => {
+    try {
+      const { rows } = await pool.query(`
+        SELECT 
+          mn."Periodo", 
+          mn."Grado", 
+          mn."PoblacionEdadOportuna", 
+          mn."MatriculaNeta",           
+          mn."TasaMatricula" AS "TasaMatriculaNeta",  
+          mb."Matricula" AS "MatriculaBruta", 
+          mb."TasaMatricula" AS "TasaMatriculaBruta" 
+      FROM seduc_tasamatriculaneta mn
+      INNER JOIN seduc_tasamatriculabruta mb 
+        ON mn."Periodo" = mb."Periodo"
+        AND mn."Grado" = mb."Grado";
+        `);
+      return rows;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+
+
+
+
+
+
+
+
+
 /*_________________________________________________ CONEANFO _________________________________________________*/
 
 export const getconeanfo_atencionesM = async () => {
@@ -1291,3 +1384,338 @@ export const getsiiedes_matriculadepartamentossexoM = async () => {
 };
 
 
+
+
+//============================================================================================================================================================================================
+//                                                                                      VISTAS RESUMEN
+//============================================================================================================================================================================================
+
+// VISTA DE TASAS DE SEDUC
+export const getVistaTasasSEDUCM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_tasas_seduc
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//========================================SEDUC========================================
+
+// RESUMEN SEDUC
+export const getVistaResumenSEDUCM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC PUESTOS DE TRABAJO O DOCENTES
+export const getVistaResumenSeducPuestodeTrabajoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_puestos_de_trabajo
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC CENTROS EDUCATIVOS
+export const getVistaResumenSeducCentrosEducativosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_centros_educativos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC SERVICIOS BASICOS
+export const getVistaResumenSeducServiciosBasicosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_servicios_basicos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//SEDUC PERSONAS CON DISCAPACIDAD
+export const getVistaResumenSeducNiñosConDiscapacidadM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_seduc_niños_con_discapacidad
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//======================================= INFOP =======================================
+//INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
+export const getVistaResumenINFOPM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS
+export const getVistaResumenInfopUnidadesCursosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop_capacitados_por_unidades_y_cursos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//INFOP CAPACITADOS POR UNIDADES Y CURSOS, HORAS, FINALIZADOS
+export const getVistaResumenInfopUCHoras_FinalizadosM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_infop_capacitados_u_c_horas_finalizados
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
+//========================================CONEANFO========================================
+
+//CONEANFO ATENCIONES  Y PARTICIPANCIONES GENERALES
+export const getVistaResumenCONEANFOM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//================================ CONEANFO ATENCIONES ================================
+//CONEANFO ATENCIONES POR PROYECTO
+export const getVistaResumenCONEANFOatencionesproyectoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_atenciones_proyecto
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO ATENCIONES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+export const getVistaResumenCONEANFOCompetenciayEmprendimientoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_competencias_emprendimiento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO ATENCIONES POR DESARROLLO SOSTENIBLE
+export const getVistaResumenCONEANFODesarrolloSostenibleM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_desarrollo_sostenible
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO ATENCIONES POR FORMACIÓN DE EDUCADORES
+export const getVistaResumenCONEANFOFormacionEducadoresM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_formacion_educadores
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO ATENCIONES POR EDUCACIÓN INFANTIL TEMPRANA
+export const getVistaResumenCONEANFOEducacionInfantilM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_educacion_infantil_temprana
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//=============================== CONEANFO PARTICIPANTES ==============================
+//CONEANFO PARTICIPANTES POR PROYECTO
+export const getVistaResumenCONEANFOparticipantesproyectoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_proyecto
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO PARTICIPANTES POR COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+export const getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_competencias_emprendimiento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO PARTICIPANTES POR DESARROLLO SOSTENIBLE
+export const getVistaResumenCONEANFOParticipantesDesarrolloSostenibleM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_desarrollo_sostenible
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO PARTICIPANTES POR FORMACIÓN DE EDUCADORES
+export const getVistaResumenCONEANFOParticipantesFormacionEducadoresM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_formacion_educadores
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//CONEANFO PARTICIPANTES POR EDUCACIÓN INFANTIL TEMPRANA
+export const getVistaResumenCONEANFOEParticipantesEducacionInfantilM = async () => {
+  try {
+    const { rows } = await pool.query(` 
+      SELECT * FROM vista_resumen_coneanfo_participantes_infantil_temprana
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+//=====================================================================================
+//================================================================================
+//=====================================================================================
+
+export const getVistaResumenDESM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+//======================================== DES ========================================
+// DES MATRICULAS
+export const getVistaResumenDESmatriculaM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_matricula_departamento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DES MATRICULA POR MODALIDAD, CINE Y TIPO DE INGRESO
+export const getVistaResumenDESmatriculaModCINEIngresoM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_matricula_modalidad_cine_ingreso
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DES MATRICULA POR CAMPO DE ESTUDIO
+export const getVistaResumenDESmatriculaCamposM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_matricula_campos
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DES GRADUADOS 
+export const getVistaResumenDESgraduadosM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_graduados_departamento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// DES DOCENTES
+export const getVistaResumenDESdocentesM = async () => {
+  try {
+    const { rows } = await poolDB2.query(` 
+      SELECT * FROM vista_resumen_des_docentes_departamento
+    `);
+    return rows;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -16,9 +16,6 @@ import {
     getInfop_capacitados_por_regionalC,
     getInfop_capacitados_por_sector_economicoC,
     getInfop_regionesC,
-    getSIIE_matricula_por_departamentoC,
-    getSIIE_matricula_por_institucionC,
-    getSIIE_matricula_por_sexoC,
     getinfop_tasasmatriculasC,
     getinfop_tasasmatriculasmodosformacionC,
     getinfop_tasasmatriculasprogramasC,
@@ -69,6 +66,40 @@ import {
     getdes_total_estudiantes_brutaC,
     getdes_total_estudiantes_netaC,
     getsiiedes_matriculadepartamentossexoC,
+    getVistaResumenSEDUCC,
+    getVistaResumenSEDUCPuestoDeTrabajoC,
+    getVistaResumenSEDUCCentrosEducativosC,
+    getVistaResumenSEDUCPersonasDiscapacidadC,
+    getVistaResumenSEDUCServiciosBasicosC,
+    getVistaResumenINFOPdeptosmunicipiosC,
+    getVistaResumenINFOPUnidadesCursosC,
+    getVistaResumenCONEANFOC,
+    getVistaResumenDESmatriculaC,
+    getVistaResumenDESgraduadosC,
+    getVistaResumenDESmatriculaModCINEIngresoC,
+    getVistaResumenDESmatriculaCamposC,
+    getVistaResumenCONEANFOatencionesproyectoC,
+    getVistaResumenCONEANFOCompetenciayEmprendimientoC,
+    getVistaResumenCONEANFODesarrolloSostenibleC,
+    getVistaResumenCONEANFOFormacionEducadoresC,
+    getVistaResumenCONEANFOEducacionInfantilC,
+    getVistaResumenCONEANFOparticipantesproyectoC,
+    getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC,
+    getVistaResumenCONEANFOEParticipantesEducacionInfantilC,
+    getVistaResumenCONEANFOParticipantesFormacionEducadoresC,
+    getVistaResumenDESdocentesC,
+    getVistaTasasSEDUCC,
+    getseduc_tasarepitencianivelC,
+    getseduc_tasadesercionnivelC,
+    getseduc_tasapromovidosnivelC,
+    getseduc_tasaaprobacionnivelC,
+    getseduc_tasasupervivencianivelC,
+    getseduc_tasamatriculanetaC,
+    getseduc_tasamatriculabrutaC,
+    getseduc_tasamatriculanetabrutaC,
+    getVistaResumenINFOPUCHorasFinalizadosC,
+    getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC,
+    
 } from "../controllers/reportes.controller.js";
 
 const router = Router();
@@ -110,13 +141,6 @@ router.get("/infopcentros", getInfop_capacitados_por_centroC);
 
 
 
-/* SIIE */
-router.get("/siiematriculapordepartamento", getSIIE_matricula_por_departamentoC);
-router.get("/siiematriculaporinstitucion", getSIIE_matricula_por_institucionC);
-router.get("/siiematriculaporsexo", getSIIE_matricula_por_sexoC);
-
-
-
 /*
   ######################################################################
   ############################### TASAS ###############################
@@ -153,23 +177,25 @@ router.get("/seductasanetaaccesoprimergradobasica",  getseduc_tasanetaaccesoprim
 router.get("/seductasabrutaaccesoprimergradobasica", getseduc_tasabrutaaccesoprimergradobasicaC );
 router.get("/seductasanetabrutaaccesoprimergradobasica",  getseduc_tasa_neta_bruta_accesoprimergradobasicaC); //Tasa neta y bruta acceso primer grado basica
 
-
 router.get("/seductasanetaciclos", getseduc_tasanetaciclosC );
 router.get("/seductasabrutaciclos",  getseduc_tasabrutaciclosC);
 router.get("/seductasanetabrutaciclos",  getseduc_tasa_neta_bruta_ciclosC); //Tasa neta y bruta ciclos
-
 
 router.get("/seductasanetamatriculagrados",  getseduc_tasanetamatriculagradosC);
 router.get("/seductasabrutamatriculagrados",  getseduc_tasabrutamatriculagradosC);
 router.get("/seducmatriculanetabrutamatriculagrados", getseduc_tasa_neta_bruta_matriculagradosC); //Matricula neta y bruta por grado
 
-
-
 router.get("/seducvariacioninteranualprebasicagradoobligatorio",  getseduc_variacioninteranualprebasicagradoobligatorioC);
 
+router.get("/seductasarepitencianivel",  getseduc_tasarepitencianivelC); //seduc_tasarepitencianivel
+router.get("/seductasadesercionnivel",  getseduc_tasadesercionnivelC); //seduc_tasadesercionnivel
+router.get("/seductasapromovidosnivel",  getseduc_tasapromovidosnivelC); //seduc_tasapromovidosnivel
+router.get("/seductasaaprobacionnivel", getseduc_tasaaprobacionnivelC ); //seduc_tasaaprobacionnivel
+router.get("/seductasasupervivencianivel", getseduc_tasasupervivencianivelC ); //seduc_tasasupervivencianivel
 
-
-
+router.get("/seductasamatriculaneta", getseduc_tasamatriculanetaC ); //seduc_tasamatriculaneta
+router.get("/seductasamatriculabruta", getseduc_tasamatriculabrutaC ); //seduc_tasamatriculabruta
+router.get("/seductasamatriculanetabruta", getseduc_tasamatriculanetabrutaC ); //seduc_tasamatriculanetabruta (unión de las dos vistas)
 
 /* CONEANFO */
 router.get("/coneanfoatenciones", getconeanfo_atencionesC);
@@ -180,8 +206,6 @@ router.get("/coneanfoatencionesproyectosexo", getconeanfo_atenciones_proyecto_se
 router.get("/coneanfoatencionesaniosexo", getconeanfo_atenciones_año_sexoC) // no se usa
 router.get("/coneanfoatencionesdiscapacidad", getgetconeanfo_atenciones_discapacidadC); //no se usa
 router.get("/coneanfoatencionesetnia", getgetconeanfo_atenciones_etniaC); //no se usa
-
-
 
 /* DES */
 router.get("/desestudiantesprimertitulo", getdes_4_1_estudiantes_primer_titulo_esC);
@@ -198,12 +222,76 @@ router.get("/destotalestudiantesneta", getdes_total_estudiantes_netaC);
 router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentossexoC);
 
 
-//codigo
+//============================================================================================================================================================================================
+//                                                                      VISTA DE RESUMEN PARA EL MENU PRINCIPAL
+//============================================================================================================================================================================================
+
+// =====================
+//         SEDUC
+// =====================
+router.get("/vistatasasseduc", getVistaTasasSEDUCC) // VISTA DE TASAS DE SEDUC
+router.get("/vistaresumenseduc", getVistaResumenSEDUCC) //SEDUC
+router.get("/vistaresumenseducpuestodetrabajo", getVistaResumenSEDUCPuestoDeTrabajoC) // PUESTOS DE TRABAJO O DOCENTES
+router.get("/vistaresumenseduccentroseducativos", getVistaResumenSEDUCCentrosEducativosC) // CENTROS EDUCATIVOS
+router.get("/vistaresumenseducserviciosbasicos", getVistaResumenSEDUCServiciosBasicosC) // SERVICIOS BASICOS DE CENTROS EDUCATIVOS
+router.get("/vistaresumenseducpersonascondiscapacidad", getVistaResumenSEDUCPersonasDiscapacidadC)// PERSONAS CON DISCAPACIDAD
+
+//router.get("/vistaresumenseducgeneraltodo", getVistaResumenSEDUCTODOC)
+
+// =====================
+//        INFOP
+// =====================
+router.get("/vistaresumeninfopdepartamentosmunicipios", getVistaResumenINFOPdeptosmunicipiosC ) //INFOP CAPACITADOS POR DEPARTAMENTOS Y MUNICIPIOS
+router.get("/vistaresumeninfopunidadescursos", getVistaResumenINFOPUnidadesCursosC) //INFOP UNIDADES Y CURSOS
+router.get("/vistaresumeninfopUChorasfinalizados", getVistaResumenINFOPUCHorasFinalizadosC) //INFOP UNIDADES Y CURSOS FILTRO POR HORAS Y FINALIZADOS
 
 
+// =====================
+//       CONEANFO
+// =====================
+// Atenciones
+router.get("/vistaresumenconeanfo", getVistaResumenCONEANFOC) //CONEANFO RESUMEN ATENCIONES Y PARTICIPACIONES
+router.get("/vistaresumenconeanfoatencionesproyecto", getVistaResumenCONEANFOatencionesproyectoC) //CONEANFO ATENCIONES POR PROYECTO
+router.get("/vistaresumenconeanfocompetenciayemprendimiento", getVistaResumenCONEANFOCompetenciayEmprendimientoC) //CONEANFO ATENCIONES COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+router.get("/vistaresumenconeanfodesarrollosostenible", getVistaResumenCONEANFODesarrolloSostenibleC) //CONEANFO ATENCIONES EN EDUCACION AL DESARROLLO SOSTENIBLE
+router.get("/vistaresumenconeanfoformacioneducadores", getVistaResumenCONEANFOFormacionEducadoresC) //CONEANFO ATENCIONES EN FORMACIÓN DE EDUCADORES
+router.get("/vistaresumenconeanfoeducacioninfantil", getVistaResumenCONEANFOEducacionInfantilC) //CONEANFO ATENCIONES EN EDUCACIÓN INFANTIL TEMPRANA 
 
+//Participaciones
+router.get("/vistaresumenconeanfoparticipantesproyecto", getVistaResumenCONEANFOparticipantesproyectoC) //CONEANFO PARTICIPANTES POR PROYECTO
+router.get("/vistaresumenconeanfoparticipantescompetenciasemprendimiento", getVistaResumenCONEANFOparticipantesCompetenciasEmprendimientoC) //CONEANFO PARTICIPANTES COMPETENCIAS LABORALES Y EMPRENDIMIENTO
+router.get("/vistaresumenconeanfoparticipantesdesarrollosostenible", getVistaResumenCONEANFOParticipantesDesarrolloSostenibleC) //CONEANFO PARTICIPANTES EN EDUCACION AL DESARROLLO SOSTENIBLE
+router.get("/vistaresumenconeanfoparticipantesformacioneducadores", getVistaResumenCONEANFOParticipantesFormacionEducadoresC) //CONEANFO PARTICIPANTES EN FORMACIÓN DE EDUCADORES
+router.get("/vistaresumenconeanfoparticipanteseducacioninfantil", getVistaResumenCONEANFOEParticipantesEducacionInfantilC) //CONEANFO PARTICIPANTES EN EDUCACIÓN INFANTIL TEMPRANA 
+
+
+// ===================== 
+//          DES
+// =====================
+router.get("/vistaresumendesmatriculadepartamento", getVistaResumenDESmatriculaC) //DES MATRICULA POR DEPARTAMENTO
+router.get("/vistaresumendesmatriculaModCineIngreso", getVistaResumenDESmatriculaModCINEIngresoC) //DES MATRICULA POR MODALIDAD, CLASIFICACION CINE Y TIPO INGRESO 
+router.get("/vistaresumendesmatriculaCampos", getVistaResumenDESmatriculaCamposC) //DES MATRICULA POR CAMPO AMPLIO, DETALLADO Y ESPECÍFICO
+
+router.get("/vistaresumendesgraduadosdepartamento", getVistaResumenDESgraduadosC) //GRADUADOS POR DEPARTAMENTO
+router.get("/vistaresumendesdocentesdepartamento", getVistaResumenDESdocentesC) //DOCENTES POR DEPARTAMENTO
 
 
 
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

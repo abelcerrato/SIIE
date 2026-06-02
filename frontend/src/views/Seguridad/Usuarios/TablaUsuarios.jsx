@@ -23,9 +23,12 @@ import { EditOutlined as EditOutlinedIcon, Add as AddIcon } from "@mui/icons-mat
 import ModalUsuario from "./Usuarios"; // Modal unificado
 import { useUser } from "../../../components/UserContext";
 
+
+import color from "../../../components/color";
+
 export default function TablaUsuarios() {
-  const navigate = useNavigate();
-  const { permissions,user } = useUser();
+
+  const { permissions } = useUser();
   const [rows, setRows] = useState([]);
 
   const [openModal, setOpenModal] = useState(false);
@@ -57,8 +60,8 @@ export default function TablaUsuarios() {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/resetearContra/${usuario}`);
       Swal.fire({
-        title: "Contraseña Actualizada",
-        text: "La contraseña ha sido restablecida a una temporal, la cual es: 12345678 .",
+        title: "Contraseña actualizada",
+        text: "Se ha restablecido la contraseña al número de identidad del usuario.",
         icon: "success",
         timer: 4000,
       });
@@ -75,9 +78,8 @@ export default function TablaUsuarios() {
       renderCell: (row) => (
         <>
           {tienePermiso(6) && (
-            <>
             <IconButton
-              sx={{ color: "#88CFE0" }}
+              sx={{ color: color.white }}
               onClick={(e) => {
                 e.stopPropagation();
                 setUsuarioSeleccionado(row.id);
@@ -86,15 +88,6 @@ export default function TablaUsuarios() {
             >
               <EditOutlinedIcon />
             </IconButton>
-              <Tooltip title="Restablecer Contraseña" arrow>
-                  <IconButton
-                    onClick={() => handleResetearContra(row.usuario)}
-                    sx={{ color: "#88CFE0" }}
-                  >
-                    <VpnKeyOutlinedIcon />
-                  </IconButton>
-                </Tooltip>
-                </>
           )}
         </>
       ),
@@ -123,7 +116,7 @@ export default function TablaUsuarios() {
 
   return (
     <Paper sx={{ padding: 3, marginBottom: 3 }}>
-      <Typography variant="h3" sx={{ fontWeight: "bold", color: "#88CFE0", mb: 2 }}>
+      <Typography variant="h3" sx={{ fontWeight: "bold", color: color.white, mb: 2 }}>
         Usuarios
       </Typography>
 
@@ -131,7 +124,7 @@ export default function TablaUsuarios() {
         {tienePermisoIn(6) && (
           <Button
             variant="contained"
-            sx={{ backgroundColor: "#88CFE0" }}
+            sx={{ backgroundColor: color.white }}
             startIcon={<AddIcon />}
             onClick={() => {
               setUsuarioSeleccionado(null); // null = crear

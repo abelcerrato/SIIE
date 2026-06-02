@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { flushSync } from "react-dom";
-
+import color from "../components/color";
 import {
   AppBar,
   Toolbar,
@@ -15,8 +15,8 @@ import {
   Typography
 } from "@mui/material";
 import { useUser } from "./UserContext";
-import siieLogo from "../img/SIIE.png";
-import conedLogo from "../img/LOGOCONED_Blanco.png";
+import siieLogo from "../img/nueva-linea-grafica/logos-siie-y-coned.png";
+import conedLogo from "../img/nueva-linea-grafica/logos-siie-y-coned.png";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
@@ -86,7 +86,7 @@ const Header = () => {
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
           justifyContent: "space-between",
-          backgroundColor: "#88CFE0",
+          backgroundColor: color.white,
         }}
       >
         {/* Izquierda */}
@@ -131,7 +131,7 @@ const Header = () => {
                       sx={{
                         color:
                           location.pathname === "/Dashboard/Administracion/Usuarios"
-                            ? "#88CFE0"
+                            ? color.white
                             : "inherit",
                       }}
                     >
@@ -148,7 +148,7 @@ const Header = () => {
                         color:
                           location.pathname ===
                             "/Dashboard/Administracion/RolesyPermisos"
-                            ? "#88CFE0"
+                            ? color.white
                             : "inherit",
                       }}
                     >
@@ -305,7 +305,7 @@ const Header = () => {
                               sx={{
                                 color:
                                   location.pathname === "/Dashboard/Administracion/Usuarios"
-                                    ? "#88CFE0"
+                                    ? color.white
                                     : "inherit",
                               }}
                             >
@@ -322,7 +322,7 @@ const Header = () => {
                                 color:
                                   location.pathname ===
                                     "/Dashboard/Administracion/RolesyPermisos"
-                                    ? "#88CFE0"
+                                    ? color.white
                                     : "inherit",
                               }}
                             >
@@ -360,11 +360,11 @@ const Header = () => {
                   CONEANFO
                 </NavButton>
               )}
-             {tienePermiso(4) && (
+             {/*  {tienePermiso(4) && (
                 <NavButton component={NavLink} to="/Dashboard/Descargas/DES-UNAH">
                   DES-UNAH
                 </NavButton>
-              )} 
+              )} */}
             </Box>
           </Box>
         </Box>
