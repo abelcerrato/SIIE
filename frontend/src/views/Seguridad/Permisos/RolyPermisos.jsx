@@ -29,6 +29,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useUser } from "../../../components/UserContext";
+import color from "../../../components/color";
 
 export default function ModalRol({ open, onClose, rolId, onSaved }) {
   const { user } = useUser();
@@ -279,11 +280,11 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
             <Box sx={{ mb: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
 
 
-              <Button variant="text" onClick={handleToggleAllPermissions} startIcon={allPermissionsActive() ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsActive() ? "red" : "#88CFE0" }}>
+              <Button variant="text" onClick={handleToggleAllPermissions} startIcon={allPermissionsActive() ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsActive() ? "red" : color.white }}>
                 {allPermissionsActive() ? "Desactivar Todos" : "Activar Todos"}
               </Button>
               {["consultar", "insertar", "actualizar"].map(tipo => (
-                <Button key={tipo} variant="text" onClick={() => handleTogglePermissionType(tipo)} startIcon={allPermissionsOfTypeActive(tipo) ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsOfTypeActive(tipo) ? "red" : "#88CFE0" }}>
+                <Button key={tipo} variant="text" onClick={() => handleTogglePermissionType(tipo)} startIcon={allPermissionsOfTypeActive(tipo) ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsOfTypeActive(tipo) ? "red" : color.white }}>
                   {allPermissionsOfTypeActive(tipo) ? `Desactivar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}` : `Activar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`}
                 </Button>
               ))}
@@ -306,10 +307,10 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
                     return (
                       <TableRow key={permiso.idmodulo}>
                         <TableCell>{permiso.modulo}</TableCell>
-                        <TableCell align="center"><Checkbox checked={allModuleActive} onChange={() => handleToggleModule(permiso.idmodulo)} sx={{ "&.Mui-checked": { color: "#88CFE0" } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.consultar} onChange={() => handlePermissionChange(permiso.idmodulo, "consultar")} disabled={permiso.insertar || permiso.actualizar} sx={{ "&.Mui-checked": { color: "#88CFE0" } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.insertar} onChange={() => handlePermissionChange(permiso.idmodulo, "insertar")} sx={{ "&.Mui-checked": { color: "#88CFE0" } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.actualizar} onChange={() => handlePermissionChange(permiso.idmodulo, "actualizar")} sx={{ "&.Mui-checked": { color: "#88CFE0" } }} /></TableCell>
+                        <TableCell align="center"><Checkbox checked={allModuleActive} onChange={() => handleToggleModule(permiso.idmodulo)} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
+                        <TableCell align="center"><Checkbox checked={permiso.consultar} onChange={() => handlePermissionChange(permiso.idmodulo, "consultar")} disabled={permiso.insertar || permiso.actualizar} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
+                        <TableCell align="center"><Checkbox checked={permiso.insertar} onChange={() => handlePermissionChange(permiso.idmodulo, "insertar")} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
+                        <TableCell align="center"><Checkbox checked={permiso.actualizar} onChange={() => handlePermissionChange(permiso.idmodulo, "actualizar")} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
                       </TableRow>
                     )
                   })}
@@ -323,7 +324,7 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
       </DialogContent>
 
       <DialogActions>
-        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: "#88CFE0" }}>
+        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: color.white }}>
           Guardar
         </Button>
 

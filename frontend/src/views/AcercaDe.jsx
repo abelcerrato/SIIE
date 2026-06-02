@@ -1,611 +1,1363 @@
-import React, { useState } from "react";
+import React from "react";
+import { useEffect, useRef, useState } from "react";
 import {
-    Container,
-    Typography,
-    Grid,
-    Card,
-    CardContent,
-    CardMedia,
-    Divider,
-    Box,
-    Paper,
-    Link,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogActions,
-    Button,
-    List,
-    ListItem,
-    ListItemText,
-    IconButton
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  Box,
+  Paper,
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
 } from "@mui/material";
-import { motion } from "framer-motion";
+import { motion, useInView, useAnimation } from "framer-motion";
 import { useTheme, useMediaQuery } from "@mui/material";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import conedLogo from "../img/logos-CONED.png";
-import siieLogo from "../img/SIIE.png";
-import colaboradoresLogo from "../img/Colaboradores.png";
-import seducLogo from "../img/SEDUC.png";
-import coneanfoLogo from "../img/CONEANFO.png";
-import infopLogo from "../img/INFOP.png";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import conedLogo from "../img/nueva-linea-grafica/coned-logo-con-fondo.png";
+import Instituciones from "../img/nueva-linea-grafica/Instituciones.png";
+
+import iconoDorado from "../img/nueva-linea-grafica/lofosiieconfondo.png";
+import seducLogo from "../img/nueva-linea-grafica/logoSEDUC.jpg";
+import coneanfoLogo from "../img/nueva-linea-grafica/logoCONEANFO.jpg";
+import infopLogo from "../img/nueva-linea-grafica/logoINFOP.jpg";
+import fondo from "../img/nueva-linea-grafica/fondo.png";
 import {
-    ListAlt,
-    Info,
-    PieChart,
-    Computer,
-    Search,
-    Storage,
-    Close
+  ListAlt,
+  Info,
+  PieChart,
+  Computer,
+  Search,
+  Storage,
+  Close,
 } from "@mui/icons-material";
-import CloseIcon from '@mui/icons-material/Close';
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import CloseIcon from "@mui/icons-material/Close";
+import color from "../components/color";
+import logosiie from "../img/nueva-linea-grafica/lofosiieconfondo.png";
+import hero from "../img/nueva-linea-grafica/Hero.png";
+import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
+import HubRoundedIcon from "@mui/icons-material/HubRounded";
+import ThumbsUpDownRoundedIcon from "@mui/icons-material/ThumbsUpDownRounded";
 
 
+// Componente para animaciones al hacer scroll
+const ScrollReveal = ({
+  children,
+  delay = 0,
+  direction = "up",
+  duration = 0.6,
+  once = false, // Cambiado a false por defecto
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, {
+    once: once, // Usar el prop once
+    margin: "-100px 0px -100px 0px",
+  });
+  const controls = useAnimation();
+
+  const directions = {
+    up: { y: 50, x: 0 },
+    down: { y: -50, x: 0 },
+    left: { y: 0, x: 50 },
+    right: { y: 0, x: -50 },
+    none: { y: 0, x: 0 },
+  };
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible");
+    } else {
+      // Reiniciar la animación cuando salga de vista
+      controls.start("hidden");
+    }
+  }, [isInView, controls]);
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: { opacity: 0, ...directions[direction] },
+        visible: {
+          opacity: 1,
+          y: 0,
+          x: 0,
+          transition: { duration, delay, ease: "easeOut" },
+        },
+      }}
+    >
+      {children}
+    </motion.div>
+  );
+};
 
 export default function AcercaDe() {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-    const [hovered, setHovered] = useState(null);
-    const [selectedInstitution, setSelectedInstitution] = useState(null);
-    const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-    const miembros = [
-        { nombre: "Jose Alexis Ordoñes Velasquez ", puesto: " Secretario Ejecutivo" },
-        { nombre: "Beatriz Victoria Galeano Escobar", puesto: "Asistente Ejecutiva" },
-        { nombre: "Zorayda Waleska Zelaya Acosta", puesto: "Coordinadora de Comunicaciones" },
-        { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
-        { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
-        { nombre: "Zoila Suyapa Padilla Sabillon", puesto: "Cordinadora de Desarrollo Profesional Docente" },
-        { nombre: "Melany Lizzeth Ordoñez Cruz", puesto: "Asistente Técnico de Desarrollo Profesional Docente" },
-        { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
-        { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de EFTP" },
-        { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
-        { nombre: "Mare Yescenia Figueroa Aguiriano", puesto: "Asistente Técnica de la UTC" },
-        { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
-        { nombre: "Conrado Ernesto Fuentes Carranza", puesto: "Cordinador de Gestión de la Información" },
-        { nombre: "Roberto Briceño Jimenez", puesto: "Cordinador del Modelo Ejecutivo" },
-        { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
-        { nombre: "Giuver Andony Padilla Santos", puesto: "Asistente de Administración" },
-        { nombre: "David Enrique Fu Flores", puesto: "Asistente de Administración" },
-        { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
-        { nombre: "Luesbelin Julieth Mejia Garcia", puesto: "Desarrolladora FrontEnd" },
-        { nombre: "Heydy Carolina Elvir Gutierrez", puesto: "Asistente de Servicios Generales" },
-    ];
+  const [selectedInstitution, setSelectedInstitution] = useState(null);
+  const [open, setOpen] = useState(false);
 
-    const trasporte = [
-        { nombre: "Edwin David Ramos Bustillo" },
-        { nombre: "Jhimy Xavier Valladares" },
-    ];
+  const miembros = [
+    {
+      nombre: "Jose Alexis Ordoñes Velasquez ",
+      puesto: " Secretario Ejecutivo",
+    },
+    {
+      nombre: "Beatriz Victoria Galeano Escobar",
+      puesto: "Asistente Ejecutiva",
+    },
+    {
+      nombre: "Zorayda Waleska Zelaya Acosta",
+      puesto: "Coordinadora de Comunicaciones",
+    },
+    { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
+    { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
+    {
+      nombre: "Zoila Suyapa Padilla Sabillon",
+      puesto: "Cordinadora de Desarrollo Profesional Docente",
+    },
+    {
+      nombre: "Melany Lizzeth Ordoñez Cruz",
+      puesto: "Asistente Técnico de Desarrollo Profesional Docente",
+    },
+    { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
+    { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de EFTP" },
+    { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
+    {
+      nombre: "Mare Yescenia Figueroa Aguiriano",
+      puesto: "Asistente Técnica de la UTC",
+    },
+    { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
+    {
+      nombre: "Conrado Ernesto Fuentes Carranza",
+      puesto: "Cordinador de Gestión de la Información",
+    },
+    {
+      nombre: "Roberto Briceño Jimenez",
+      puesto: "Cordinador del Modelo Ejecutivo",
+    },
+    { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
+    {
+      nombre: "Giuver Andony Padilla Santos",
+      puesto: "Asistente de Administración",
+    },
+    {
+      nombre: "David Enrique Fu Flores",
+      puesto: "Asistente de Administración",
+    },
+    { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
+    {
+      nombre: "Luesbelin Julieth Mejia Garcia",
+      puesto: "Desarrolladora FrontEnd",
+    },
+    {
+      nombre: "Heydy Carolina Elvir Gutierrez",
+      puesto: "Asistente de Servicios Generales",
+    },
+  ];
 
-    const objetivos = [
+  const trasporte = [
+    { nombre: "Edwin David Ramos Bustillo" },
+    { nombre: "Jhimy Xavier Valladares" },
+  ];
+
+  const objetivos = [
+    {
+      icon: <HubRoundedIcon sx={{ fontSize: "4rem" }} />,
+      title: "Centralizar la información educativa del país",
+      text: "Integrar en una sola plataforma digital la información generada por distintas instituciones del sistema educativo hondureño, como el Instituto INFOP, CONEANFO, SEDUC y UNAH. Esto permite consolidar los datos educativos en un único punto de acceso, facilitando su consulta, organización y análisis por parte de usuarios e instituciones.",
+    },
+
+    {
+      icon: <SchoolRoundedIcon sx={{ fontSize: "4rem" }} />,
+      title:
+        "Proporcionar información confiable para el análisis del sistema educativo",
+      text: "Almacenar y gestionar datos relevantes que permitan calcular indicadores educativos nacionales e internacionales, asegurando que la información presentada sea confiable, actualizada y útil para evaluar el estado del sistema educativo del país, identificar avances, detectar desafíos y dar seguimiento a los objetivos educativos establecidos.",
+    },
+
+    {
+      icon: <ThumbsUpDownRoundedIcon sx={{ fontSize: "4rem" }} />,
+      title: "Apoyar la toma de decisiones estratégicas en el ámbito educativo",
+      text: "Generar información clara y oportuna que sirva como base para la formulación de políticas públicas, programas educativos y estrategias de mejora del sistema educativo. A través del análisis de los datos disponibles, las autoridades y organizaciones pueden tomar decisiones fundamentadas que contribuyan al fortalecimiento de una educación inclusiva, equitativa y de calidad.",
+    },
+    {
+      icon: <AutoGraphRoundedIcon sx={{ fontSize: "4rem" }} />,
+      title: "Facilitar el acceso y la comprensión de la información educativa",
+      text: "Presentar los datos mediante representaciones visuales, estadísticas interactivas y herramientas de filtrado que permitan a los usuarios explorar la información de manera sencilla. De esta forma, el sistema busca que investigadores, estudiantes, autoridades y ciudadanos puedan comprender fácilmente los datos educativos y utilizarlos para análisis, investigación o consulta general.",
+    },
+  ];
+
+  const instituciones = [
+    {
+      name: "SEDUC",
+      logo: seducLogo,
+      agradecimientos: [
+        { nombre: "Jefry Ismael Damas", puesto: "DBA" },
         {
-            icon: <ListAlt sx={{ fontSize: "4rem" }} />,
-            title: "Registrar las trayectorias educativas",
-            text: "El SIIE tiene como objetivo registrar las trayectorias educativas de los ciudadanos a lo largo de la vida, crear la base de centros educativos, asociaciones de padres de familia, centros de formación técnica y benefactores, así como de los docentes e instructores certificados.",
+          nombre: "Manuel Eduardo Perdomo Mazier",
+          puesto:
+            "Coordinador General del Sistema Nacional de Información Educativa de Honduras",
         },
-
+      ],
+    },
+    {
+      name: "CONEANFO",
+      logo: coneanfoLogo,
+      agradecimientos: [
+        { nombre: "Roberto Bussi", puesto: "Secretario Ejecutivo" },
+        { nombre: "Julio Miralda", puesto: "Coordinador Unidad Técnica" },
+        { nombre: "Lourdes Brid", puesto: "Coordinadora Gestión de Calidad" },
         {
-            icon: <PieChart sx={{ fontSize: "4rem" }} />,
-            title: "Generar información estratégica",
-            text: "El SIIE busca generar información confiable y oportuna que permita una toma de decisiones informada para formular nuevas políticas educativas y diseñar estrategias orientadas a una educación inclusiva y de calidad basada en evidencias.",
+          nombre: "Poleth Solórzano",
+          puesto: "Gestor de Sistemas de Información",
         },
-
+        { nombre: "Juan Giron", puesto: "Asistente de Sistemas Informáticos" },
         {
-            icon: <Search sx={{ fontSize: "4rem" }} />,
-            title: "Brindar mayor transparencia",
-            text: "A través de la implementación de un portal de datos abiertos para Educación, que responda a criterios de confianza requeridos por el Open Data Institute.",
+          nombre: "Onan Martínez ",
+          puesto: "Asistente de Monitoreo y Seguimiento",
         },
-        {
-            icon: <Storage sx={{ fontSize: "4rem" }} />,
-            title: "Almacenar información para indicadores",
-            text: "Incluye información pertinente y necesaria para el cálculo de indicadores nacionales e internacionales de Educación a los cuales Honduras responde.",
-        },
-    ];
+        { nombre: "Kenia Ramírez", puesto: "Asistente de Certificación" },
+      ],
+    },
+    {
+      name: "INFOP",
+      logo: infopLogo,
+      agradecimientos: [
+        { nombre: "Carlos Alvarado", puesto: "Facilitador" },
+        { nombre: "Kevin Matamoros", puesto: "Programador" },
+        { nombre: "Esli Rivera", puesto: "Coordinadora unidad de Estadística" },
+      ],
+    },
+  ];
 
-    const instituciones = [
-        {
-            name: "SEDUC", logo: seducLogo,
-            agradecimientos: [
-                { nombre: "Jefry Ismael Damas", puesto: "DBA" },
-                { nombre: "Manuel Eduardo Perdomo Mazier", puesto: "Coordinador General del Sistema Nacional de Información Educativa de Honduras" },
-            ],
-        },
-        {
-            name: "INFOP", logo: infopLogo,
-            agradecimientos: [
-                { nombre: "Calor Alvarado", puesto: "Facilitador" },
-                { nombre: "Kevin Matamoros", puesto: "Programador" },
-                { nombre: "Esli Rivera", puesto: "Coordinadora unidad de Estadística" },
-            ],
-        },
-        {
-            name: "CONEANFO", logo: coneanfoLogo,
-            agradecimientos: [
-                { nombre: "Roberto Bussi", puesto: "Secretario Ejecutivo" },
-                { nombre: "Julio Miralda", puesto: "Coordinador Unidad Técnica" },
-                { nombre: "Lourdes Brid", puesto: "Coordinadora Gestión de Calidad" },
-                { nombre: "Poleth Solórzano", puesto: "Gestor de Sistemas de Información" },
-                { nombre: "Juan Giron", puesto: "Asistente de Sistemas Informáticos" },
-                { nombre: "Onan Martínez ", puesto: "Asistente de Monitoreo y Seguimiento" },
-                { nombre: "Kenia Ramírez", puesto: "Asistente de Certificación" },
-            ],
-        },
-    ];
+  return (
+    <Container maxWidth="lg" sx={{ py: 5 }}>
+      {/* Encabezado con logos - Hero */}
+      <ScrollReveal delay={0.2}>
+        <Box
+          sx={{
+            position: "relative",
+            height: { xs: "auto", md: 220 },
+            display: "flex",
+            alignItems: "center",
+            pl: { xs: 2, md: 20 },
+            py: { xs: 6, md: 0 },
+            backgroundImage: `url(${fondo})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center 20%",
+            borderRadius: 5,
+            overflow: "hidden",
+            mb: 6,
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              inset: 0,
+              backgroundColor: "rgba(59, 105, 190, 0.56)",
+              borderRadius: "inherit",
+              zIndex: 1,
+            }}
+          />
 
-    return (
-        <Container maxWidth="lg" sx={{ py: 5 }}>
-            {/* Sección principal - ¿Qué es el sitio? */}
+          <Box
+            component="img"
+            src={iconoDorado}
+            alt="Icono"
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: { xs: 120, md: 255 },
+              zIndex: 2,
+            }}
+          />
 
-            <Grid container spacing={2} alignItems="center">
-                <Grid item size={{ xs: 12, md: 7 }}>
-                    <Typography variant="h5" gutterBottom fontWeight="bold">
-                        ¿Qué es el SIIE?
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" align="justify">
-                        <b>SIIE – Sistema Integrado de Información Educativa</b>
-                        <br />
-                        El SIIE es una plataforma que centraliza y organiza la información
-                        proveniente de tres instituciones: INFOP, CONEANFO y SEDUC. Su
-                        objetivo es presentar datos confiables del sector educativo del país
-                        de manera clara y accesible, a través de representaciones
-                        estadísticas interactivas.
-                        <br /> <br />
-                        El sistema permite aplicar diversos filtros para que los usuarios
-                        puedan explorar la información de acuerdo con sus necesidades
-                        específicas, garantizando así una experiencia más dinámica y
-                        personalizada en el análisis de los datos educativos.
-                        <br />
-                    </Typography>
-                </Grid>
-                <Grid item size={{ xs: 12, md: 5 }}>
-                    <CardMedia
-                        sx={{
-                            borderRadius: 2,
-                            maxWidth: 300,
-                            margin: "auto",
-                            transition: "transform 0.3s ease",
-                            "&:hover": {
-                                transform: "scale(1.4)",
-                            },
-                        }}
-                        component="img"
-                        image={siieLogo}
-                        alt="Logo SIIE"
-                    />
-                </Grid>
-            </Grid>
-            <Grid container spacing={2} mt={4}>
-                <Typography variant="h5" gutterBottom fontWeight="bold">
-                    Objetivos y Funciones Principales
-                </Typography>
-
-                <Grid container spacing={2}>
-                    {objetivos.map((obj, index) => (
-                        <Grid item size={{ xs: 12 }} key={index}>
-                            <Paper
-                                elevation={3}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    p: 2,
-                                    bgcolor: "#88CFE0",
-                                    color: "white",
-                                    width: "97%",
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        borderRadius: 1,
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        minWidth: 80,
-                                    }}
-                                >
-                                    {" "}
-                                    {obj.icon}
-                                </Box>
-                                <Box sx={{ ml: 3 }}>
-                                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                                        {obj.title}
-                                    </Typography>
-                                    <Typography>{obj.text}</Typography>
-                                </Box>
-                            </Paper>
-                        </Grid>
-                    ))}
-                </Grid>
-            </Grid>
-            {/* Colaboradores */}
-            <Grid container spacing={2} mt={4}>
-                {/* Título */}
-                <Grid item size={{ xs: 12 }}>
-                    <Typography variant="h5" gutterBottom fontWeight="bold">
-                        Colaboradores
-                    </Typography>
-                </Grid>
-
-                <Grid item size={{ xs: 12, md: 12 }}>
-                    {selectedInstitution ? (
-                        // Caso 1: institución seleccionada → logo + agradecimientos
-                        <Grid container spacing={3} mb={4}>
-                            {/* Logo */}
-                            <Grid item size={{ xs: 12, sm: 6, md: 4 }} sx={{ textAlign: "center" }}>
-                                <Grid item size={{ xs: 12 }} sx={{ textAlign: "left", mb: 1 }}>
-                                    <IconButton aria-label="Volver" onClick={() => setSelectedInstitution(null)}>
-                                        <ArrowBackIcon color="error" />
-                                    </IconButton>
-                                </Grid>
-                                {isMobile && (
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ mt: 1, fontWeight: "bold", color: "#88CFE0" }}
-                                    >
-                                        {selectedInstitution.name}
-                                    </Typography>
-                                )}
-                                <CardMedia
-                                    component="img"
-                                    src={selectedInstitution.logo}
-                                    alt={selectedInstitution.name}
-                                    sx={{
-                                        width: "90%",
-                                        height: "90%",
-                                        maxHeight: 250,
-                                        borderRadius: 2,
-                                        objectFit: "contain",
-                                        mx: "auto",
-                                        mb: 3,
-                                    }}
-                                />
-                           
-
-                            </Grid>
-
-                            {/* Agradecimientos */}
-                            <Grid item size={{ xs: 12, sm: 6, md: 8 }} >
-                                <Typography
-                                    variant="h6"
-                                    textAlign="center"
-                                    gutterBottom
-                                    fontWeight="bold"
-                              
-                                >
-                                    Agradecimientos Especiales
-                                </Typography>
-                                <Grid container spacing={2}>
-                                    {selectedInstitution.agradecimientos.map((miembro, i) => (
-                                        <Grid item size={{ xs: 6, sm: 6 }} key={i}>
-                                            <Typography variant="body1" fontWeight="bold">
-                                                {miembro.nombre}
-                                            </Typography>
-                                            <Typography variant="body2" color="#88CFE0">
-                                                {miembro.puesto}
-                                            </Typography>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    ) : isMobile ? (
-                        // Caso 2: móvil → logo + nombre arriba
-                            <Grid container spacing={2} mb={4}>
-                            {instituciones.map((inst) => (
-                                <Grid
-                                    item
-                                    size={{ xs: 12 }}
-                                    key={inst.name}
-                                    sx={{ textAlign: "center", cursor: "pointer" }}
-                                    onClick={() =>
-                                        setSelectedInstitution(
-                                            selectedInstitution?.name === inst.name ? null : inst
-                                        )
-                                    }
-                                >
-                                    <Typography
-                                        variant="body2"
-                                        sx={{ mt: 1, fontWeight: "bold" }}
-                                    >
-                                        {inst.name}
-                                    </Typography>
-                                    <CardMedia
-                                        component="img"
-                                        src={inst.logo}
-                                        alt={inst.name}
-                                        sx={{
-                                            width: 200,
-                                            height: 120,
-                                            borderRadius: 2,
-                                            objectFit: "contain",
-                                            mx: "auto",
-                                            transition: "all 0.3s ease",
-                                            "&:hover": { width: 220 },
-                                        }}
-                                    />
-
-                                </Grid>
-                            ))}
-                        </Grid>
-                    ) : (
-                        // Caso 3: escritorio sin selección → mostrar todos los logos
-                                <Grid container spacing={2} mb={4}>
-                            {/* --- ESCRITORIO --- Lista a la izquierda --- */}
-                            <Grid item size={{ xs: 12, md: 3 }}>
-                                <Typography variant="body2" color="text.secondary" marginLeft={5}>
-                                    <ul style={{ listStyle: "none", padding: 15 }}>
-                                        {instituciones.map((inst) => (
-                                            <li
-                                                key={inst.name}
-                                                onClick={() =>
-                                                    setSelectedInstitution(
-                                                        selectedInstitution?.name === inst.name ? null : inst
-                                                    )
-                                                }
-                                                onMouseEnter={() => setHovered(inst.name)}
-                                                onMouseLeave={() => setHovered(null)}
-                                                style={{
-                                                    marginBottom: 8,
-                                                    cursor: "pointer",
-                                                    fontWeight: hovered === inst.name ? "bold" : "normal",
-                                                    color: hovered === inst.name ? "#88CFE0" : "inherit",
-                                                }}
-                                            >
-                                                {inst.name}
-                                            </li>
-
-                                        ))}
-                                    </ul>
-                                </Typography>
-                            </Grid>
-
-                            {/* Logos a la derecha */}
-                            <Grid container item size={{ xs: 12, md: 9 }} spacing={3}>
-                                {instituciones.map((inst) => (
-                                    <Grid
-                                        item
-                                        size={{ xs: 12, sm: 6, md: 4 }}
-                                        key={inst.name}
-
-                                    >
-                                        <CardMedia
-                                            component="img"
-                                            src={inst.logo}
-                                            alt={inst.name}
-                                            sx={{
-                                                width: hovered === inst.name ? 400 : 380,
-                                                height: 120,
-                                                objectFit: "contain",
-                                                transition: "all 0.3s ease",
-                                                mx: "auto",
-                                            }}
-                                        />
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </Grid>
-                    )}
-                </Grid>
-
-            </Grid>
-
-
-
-
-            {/* Institución */}
-            <Grid
-                container
-                spacing={2}
-                alignItems="center"
-                sx={{ backgroundColor: "#f5f5f5", borderRadius: 2 }}
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 2,
+              width: { xs: "100%", md: "70%", lg: "80%" },
+              textAlign: { xs: "center", md: "right" },
+              top: { xs: 20, md: 0 },
+              color: "#fff",
+              px: { xs: 2, md: 5 },
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "clamp(1.3rem, 4vw, 3.5rem)",
+                fontWeight: "bold",
+              }}
             >
-                <Grid item size={{ xs: 12, md: 6 }}>
-                    <CardMedia
-                        component="img"
-                        image={conedLogo}
-                        alt="Logo institución"
-                        sx={{
-                            maxWidth: 530,
-                            margin: "auto",
-                            transition: "transform 0.3s ease",
-                            "&:hover": {
-                                transform: "scale(1.2)",
-                            },
-                        }}
-                    />
-                </Grid>
-                <Grid item size={{ xs: 12, md: 6 }} marginTop={2}>
-                    <CardContent>
-                        <Typography variant="h6" gutterBottom fontWeight="bold">
-                            Institución
-                        </Typography>
-                        <Typography variant="body2" color="text.primary" marginLeft={1}>
-                            Secretaría Técnica del Consejo Nacional de Educación en Honduras
-                        </Typography>
-                        <br />
-                        <Typography variant="h6" gutterBottom fontWeight="bold">
-                            Unidad
-                        </Typography>
-                        <Typography variant="body2" color="text.primary" marginLeft={1}>
-                            Infotecnología
-                        </Typography>
-                        <br />
-                        <Typography variant="h6" gutterBottom fontWeight="bold">
-                            Secretario Ejecutivo
-                        </Typography>
-                        <Typography variant="body2" color="text.primary" marginLeft={1}>
-                            Nombre: Jose Alexis Ordóñez Velasquez <br />
-                            Contacto:{" "}
-                            <Link
-                                href="mailto:alexis.ordoñez@coned.gob.hn"
-                                underline="none"
-                                sx={{ color: "#88CFE0", fontWeight: "bold" }}
-                            >
-                                alexis.ordoñez@coned.gob.hn
-                            </Link>
-                        </Typography>
-                        <br />
-                        <Typography variant="h6" gutterBottom fontWeight="bold">
-                            Miembros del Consejo
-                            <Typography
-                                variant="body2"
-                                gutterBottom
-                                fontWeight="bold"
-                                sx={{ cursor: "pointer", color: "#88CFE0", marginLeft: 1 }}
-                                onClick={() => setOpen(true)}
-                            >
-                                Ver listado completo
-                            </Typography>
-                        </Typography>
+              Sistema Integrado de Información Educativa
+            </Typography>
+          </Box>
+        </Box>
+      </ScrollReveal>
 
-
-                        {/* Modal con listado */}
-                        <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="sm">
-                            <DialogTitle>
-                                <Grid container spacing={2} >
-                                    <Grid item variant="h3" container fontWeight="bold" alignItems="center" size={{ xs: 11, md: 11 }} >
-                                        Miembros del Consejo Nacional de Educación
-                                    </Grid>
-                                    <Grid item size={{ xs: 1, md: 1 }} container justifyContent="flex-end">
-
-                                        <IconButton onClick={() => setOpen(false)} aria-label="Cerrar" size="large" color="error">
-                                            <Close />
-                                        </IconButton>
-                                    </Grid>
-
-                                </Grid>
-                            </DialogTitle>
-                            <DialogContent dividers>
-                                <Grid container spacing={2}>
-                                    {miembros.map((miembro, index) => (
-                                        <React.Fragment key={index}>
-                                            <Grid item size={{ xs: 12, md: 6 }}>
-                                                <Typography variant="body1" >
-                                                    {miembro.nombre}{/*•  DB473C*/}
-                                                </Typography>
-
-                                                <Typography variant="body2" color="#88CFE0">
-                                                    {miembro.puesto}
-                                                </Typography>
-                                            </Grid>
-                                        </React.Fragment>
-                                    ))}
-                                </Grid>
-                                <Divider sx={{ my: 2 }} />
-                                <Typography variant="h6" gutterBottom fontWeight="bold" align="center" sx={{ mt: 2 }}>
-                                    Transporte
-                                </Typography>
-                                <Grid container spacing={2}>
-                                    {trasporte.map((miembro, index) => (
-                                        <React.Fragment key={index}>
-                                            <Grid item size={{ xs: 12, md: 6 }}>
-                                                <Typography variant="body1" >
-                                                    {miembro.nombre}{/*•  DB473C*/}
-                                                </Typography>
-
-                                                <Typography variant="body2" color="#88CFE0">
-                                                    {miembro.puesto}
-                                                </Typography>
-                                            </Grid>
-                                        </React.Fragment>
-                                    ))}
-                                </Grid>
-                            </DialogContent>
-
-                        </Dialog>
-
-                    </CardContent>
-                </Grid>
-            </Grid>
-
-            {/* Coordinador del Proyecto | Desarrolladores*/}
-            <Grid
-                container
-                spacing={2}
-                sx={{ marginTop: 3, backgroundColor: "#f5f5f5", padding: 2, borderRadius: 2 }}
+      {/* ¿Qué es el SIIE? */}
+      <Grid container spacing={2} alignItems="center">
+        <Grid item size={{ xs: 12, md: 7 }} mb={5}>
+          <ScrollReveal delay={0.3} direction="right">
+            <Box
+              sx={{
+                position: "relative",
+                animation: "slideUp 0.6s ease-out",
+                "@keyframes slideUp": {
+                  "0%": {
+                    opacity: 0,
+                    transform: "translateY(30px)",
+                  },
+                  "100%": {
+                    opacity: 1,
+                    transform: "translateY(0)",
+                  },
+                },
+              }}
             >
-                <Grid item size={{ xs: 12, sm: 5, md: 3.2 }}>
-                    <Typography variant="h6" gutterBottom fontWeight="bold">
-                        Coordinador del Proyecto
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Nombre: Rubén Isaac Fú Flores <br />
-                        Contacto: {" "}
-                        <Link
-                            href="mailto:ruben.fu@coned.gob.hn"
-                            underline="none"
-                            sx={{ color: "#88CFE0", fontWeight: "bold" }}
-                        >
-                            ruben.fu@coned.gob.hn
-                        </Link>
+              <Typography
+                variant="h3"
+                gutterBottom
+                fontWeight="bold"
+                sx={{
+                  color: color.secondary,
+                  position: "relative",
+                  display: "inline-block",
+                  "&:after": {
+                    content: '""',
+                    position: "absolute",
+                    bottom: -10,
+                    left: 0,
+                    width: "60px",
+                    height: "4px",
+                    background: color.secondary,
+                    borderRadius: "2px",
+                    animation: "expandWidth 0.8s ease-out 0.3s both",
+                  },
+                  "@keyframes expandWidth": {
+                    "0%": { width: 0 },
+                    "100%": { width: "60px" },
+                  },
+                }}
+              >
+                ¿Qué es el SIIE?
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: color.contrastText, marginBottom: 2, mt: 3 }}
+              >
+                SIIE – Sistema Integrado de Información Educativa
+              </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: color.third,
+                  textAlign: "justify",
+                  lineHeight: 1.8,
+                }}
+              >
+                El SIIE es una plataforma web que centraliza, organiza y pone a
+                disposición la información proveniente de cuatro instituciones
+                clave del sector educativo: INFOP, CONEANFO, SEDUC y UNAH. Su
+                principal objetivo es presentar datos confiables y actualizados
+                de manera clara, accesible e intuitiva mediante representaciones
+                estadísticas interactivas.
+                <br /> <br />
+                La plataforma integra tableros dinámicos que permiten visualizar
+                indicadores educativos relevantes, facilitando la comprensión de
+                la información y apoyando la toma de decisiones basada en datos.
+                Asimismo, el sistema incorpora múltiples filtros y opciones de
+                exploración que permiten a los usuarios personalizar la
+                visualización según sus necesidades, haciendo posible analizar
+                la información desde distintas perspectivas y niveles de
+                detalle.
+                <br /> <br />
+                De esta manera, el SIIE contribuye a mejorar la transparencia,
+                el acceso a la información y el análisis del sector educativo a
+                través de una experiencia de navegación ágil, interactiva y
+                centrada en el usuario.
+              </Typography>
+            </Box>
+          </ScrollReveal>
+        </Grid>
+        <Grid item size={{ xs: 12, md: 5 }}>
+          <ScrollReveal delay={0.5} direction="left">
+            <Box
+              sx={{
+                position: "relative",
+                "&:before": {
+                  content: '""',
+                  position: "absolute",
+                  top: -10,
+                  left: -10,
+                  right: -10,
+                  bottom: -10,
+                  background: `linear-gradient(45deg, ${color.secondary}, transparent, ${color.secondary})`,
+                  borderRadius: 3,
+                  opacity: 0,
+                  transition: "opacity 0.5s ease",
+                  zIndex: 0,
+                },
+              }}
+            >
+              <CardMedia
+                sx={{
+                  borderRadius: 2,
+                  maxWidth: 400,
+                  margin: "auto",
+                  position: "relative",
+                  zIndex: 1,
+                  transition: "all 0.4s ease",
+                  filter: "drop-shadow(0 10px 8px rgba(0,0,0,0.2))",
+                  "&:hover": {
+                    transform: "scale(1.08)",
+                    filter: "drop-shadow(0 20px 15px rgba(0,0,0,0.3))",
+                  },
+                }}
+                component="img"
+                image={Instituciones}
+                alt="Logo SIIE"
+              />
+            </Box>
+          </ScrollReveal>
+        </Grid>
+      </Grid>
 
-                    </Typography>
-                </Grid>
+      {/* Objetivos y Funciones Principales */}
+      <Grid container spacing={2} mt={4}>
+        <Typography
+          variant="h3"
+          gutterBottom
+          fontWeight="bold"
+          width="100%"
+          sx={{
+            color: color.secondary,
+            textAlign: "center",
+            mb: 4,
+            position: "relative",
+            "&:after": {
+              content: '""',
+              display: "block",
+              width: "80px",
+              height: "4px",
+              background: color.secondary,
+              margin: "20px auto 0",
+              borderRadius: "2px",
+            },
+          }}
+        >
+          Objetivos y Funciones Principales
+        </Typography>
 
-                <Grid item size={{ xs: 12, sm: 5, md: 3.5 }}>
-                    <Typography variant="h6" gutterBottom fontWeight="bold">
-                        Sub Coordinador del Proyecto
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        Nombre: Abel Mauricio Cerrato Anchecta
-                        <br />
-                        Contacto:{" "}
-
-                        <Link
-                            href="mailto:abel.cerrato@coned.gob.hn"
-                            underline="none"
-                            sx={{ color: "#88CFE0", fontWeight: "bold" }}
-                        >
-                            abel.cerrato@coned.gob.hn
-                        </Link>
-                    </Typography>
-                </Grid>
-                <Grid item size={{ xs: 12, md: 5, sm: 5 }}>
-                    <Typography
-                        variant="h6"
-                        gutterBottom
-                        fontWeight="bold"
-                        align="center"
+        <Grid container spacing={8}>
+          {objetivos.map((obj, index) => (
+            <Grid
+              item
+              size={{ xs: 12, sm: 6, md: 3 }}
+              key={index}
+              sx={{ display: "flex" }}
+            >
+              <ScrollReveal
+                delay={index * 0.15}
+                direction="up"
+                style={{ width: "100%", height: "100%" }}
+              >
+                <Box
+                  sx={{
+                    perspective: "1000px",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      flexDirection:
+                        index % 2 === 0 ? "column" : "column-reverse",
+                      alignItems: "center",
+                      transition: "transform 0.5s ease",
+                      transformStyle: "preserve-3d",
+                      "&:hover": {
+                        transform: "rotateY(10deg) rotateX(5deg)",
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "100%",
+                        flex: 1,
+                        p: 2,
+                        bgcolor: color.primary,
+                        color: color.white,
+                        borderTopLeftRadius: index % 2 === 0 ? 20 : 0,
+                        borderTopRightRadius: index % 2 === 0 ? 20 : 0,
+                        borderBottomLeftRadius: index % 2 !== 0 ? 20 : 0,
+                        borderBottomRightRadius: index % 2 !== 0 ? 20 : 0,
+                        transition: "all 0.3s ease",
+                      }}
                     >
-                        Desarrolladores
-                    </Typography>
-                    <Grid container spacing={2}>
-                        <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
-                            <Typography variant="body2" color="text.secondary">
-                                 Nombre: Seydi Johana Lara{/* Fuentes */}
-                                <br />
-                                Puesto: Desarrolladora BackEnd
-                                <br />
-                                Contacto:{" "}
+                      <Typography variant="h6" fontWeight="bold" mb={2}>
+                        {obj.title}
+                      </Typography>
+                      <Typography textAlign="justify" variant="body2">
+                        {obj.text}
+                      </Typography>
+                    </Box>
 
-                                <Link
-                                    href="https://www.linkedin.com/in/seydi-johana-lara-fuentes-35b08a2a4"
-                                    //underline="none"
-                                    sx={{ color: "#88CFE0", fontWeight: "bold" }}
-                                >
-                                    LinkedIn
-                                </Link>
-                            </Typography>
-                        </Grid>
-                        <Grid item size={{ xs: 12, sm: 6, md: 6 }}>
-                            <Typography variant="body2" color="text.secondary">
-                                Nombre: Luesbelin Julieth Mejia
-                                <br />
-                                Puesto: Desarrolladora FrontEnd
-                                <br />
-                                Contacto:{" "}
-                                <Link
-                                    href="https://www.linkedin.com/in/luesbelin-mejia-154546279"
-                                    //underline="none"
-                                    sx={{ color: "#88CFE0", fontWeight: "bold" }}
-                                >
-                                    LinkedIn
-                                </Link>
-
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: 80,
+                        p: 2,
+                        bgcolor: color.secondary,
+                        borderBottomLeftRadius: index % 2 === 0 ? 20 : 0,
+                        borderBottomRightRadius: index % 2 === 0 ? 20 : 0,
+                        borderTopLeftRadius: index % 2 !== 0 ? 20 : 0,
+                        borderTopRightRadius: index % 2 !== 0 ? 20 : 0,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        color: color.white,
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {obj.icon}
+                    </Box>
+                  </Box>
+                </Box>
+              </ScrollReveal>
             </Grid>
-        </Container>
-    );
+          ))}
+        </Grid>
+      </Grid>
+
+      {/* Colaboradores */}
+      <Grid container spacing={2} mt={8}>
+        <Grid item size={{ xs: 12 }}>
+          <ScrollReveal delay={0.2}>
+            <Typography
+              variant="h3"
+              gutterBottom
+              fontWeight="bold"
+              width="100%"
+              sx={{
+                color: color.secondary,
+                textAlign: "center",
+                mb: 4,
+                position: "relative",
+                "&:after": {
+                  content: '""',
+                  display: "block",
+                  width: "80px",
+                  height: "4px",
+                  background: color.secondary,
+                  margin: "20px auto 0",
+                  borderRadius: "2px",
+                },
+              }}
+            >
+              Colaboradores
+            </Typography>
+          </ScrollReveal>
+        </Grid>
+
+        <Grid item size={{ xs: 12, md: 12 }}>
+          {selectedInstitution ? (
+            <ScrollReveal delay={0.2} direction="none">
+              <Grid container spacing={4} mb={4}>
+                <Grid
+                  item
+                  size={{ xs: 12, sm: 6, md: 5 }}
+                  sx={{ textAlign: "center" }}
+                >
+                  <Grid
+                    item
+                    size={{ xs: 12 }}
+                    sx={{ textAlign: "left", mb: 2 }}
+                  >
+                    <IconButton
+                      aria-label="Volver"
+                      onClick={() => setSelectedInstitution(null)}
+                      sx={{
+                        backgroundColor: "rgba(255,255,255,0.1)",
+                        "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" },
+                      }}
+                    >
+                      <ArrowBackIcon sx={{ color: color.secondary }} />
+                    </IconButton>
+                  </Grid>
+
+                  <Box
+                    sx={{
+                      p: 3,
+                      borderRadius: 3,
+                      background:
+                        "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255,255,255,0.1)",
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      src={selectedInstitution.logo}
+                      alt={selectedInstitution.name}
+                      sx={{
+                        width: "80%",
+                        height: "auto",
+                        maxHeight: 250,
+                        borderRadius: 2,
+                        objectFit: "contain",
+                        mx: "auto",
+                        transition: "transform 0.3s ease",
+                        "&:hover": { transform: "scale(1.05)" },
+                      }}
+                    />
+                  </Box>
+                  {isMobile && (
+                    <Typography
+                      variant="h5"
+                      sx={{ mt: 2, fontWeight: "bold", color: color.white }}
+                    >
+                      {selectedInstitution.name}
+                    </Typography>
+                  )}
+                </Grid>
+
+                <Grid item size={{ xs: 12, sm: 6, md: 7 }}>
+                  <Typography
+                    variant="h4"
+                    textAlign="center"
+                    gutterBottom
+                    fontWeight="bold"
+                    sx={{ color: color.secondary, mb: 3 }}
+                  >
+                    Agradecimientos Especiales
+                  </Typography>
+                  <Grid container spacing={3}>
+                    {selectedInstitution.agradecimientos.map((miembro, i) => (
+                      <Grid item size={{ xs: 12, sm: 6 }} key={i}>
+                        <Box
+                          sx={{
+                            p: 2,
+                            borderRadius: 2,
+                            backgroundColor: "rgba(255,255,255,0.05)",
+                            borderLeft: `3px solid ${color.secondary}`,
+                            transition: "all 0.3s ease",
+                            "&:hover": {
+                              backgroundColor: "rgba(255,255,255,0.1)",
+                              transform: "translateX(5px)",
+                            },
+                          }}
+                        >
+                          <Typography
+                            variant="body1"
+                            fontWeight="bold"
+                            sx={{ color: color.secondary }}
+                          >
+                            {miembro.nombre}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: color.third, opacity: 0.8 }}
+                          >
+                            {miembro.puesto}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </ScrollReveal>
+          ) : (
+            <Grid container spacing={4} justifyContent="center">
+              {instituciones.map((inst, index) => (
+                <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={inst.name}>
+                  <ScrollReveal delay={index * 0.15} direction="up">
+                    <Box
+                      sx={{
+                        position: "relative",
+                        cursor: "pointer",
+                        borderRadius: 3,
+                        overflow: "hidden",
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-10px)",
+                          boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+                        },
+                      }}
+                      onClick={() => setSelectedInstitution(inst)}
+                    >
+                      <Box
+                        sx={{
+                          position: "relative",
+                          width: "100%",
+                          aspectRatio: "4/3",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CardMedia
+                          component="img"
+                          src={inst.logo}
+                          alt={inst.name}
+                          sx={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "contain",
+                            transition: "transform 0.5s ease",
+                          }}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          p: 2,
+                          backgroundColor: "rgba(255, 255, 255, 0.7)",
+                          backdropFilter: "blur(10px)",
+                          borderTop: `1px solid ${color.secondary}`,
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          textAlign="center"
+                          sx={{ color: color.secondary }}
+                        >
+                          {inst.name}
+                        </Typography>
+                      </Box>
+
+                      <Box
+                        className="overlay"
+                        sx={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: `linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 100%)`,
+                          backdropFilter: "blur(20px)",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          opacity: 0,
+                          transition: "opacity 0.3s ease",
+                          p: 2,
+                          textAlign: "center",
+                          "&:hover": {
+                            opacity: 1,
+                          },
+                          "@media (hover: none)": {
+                            "&:active": {
+                              opacity: 1,
+                            },
+                          },
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{
+                            color: color.secondary,
+                            mb: 2,
+                            borderBottom: `2px solid ${color.secondary}`,
+                            pb: 1,
+                          }}
+                        >
+                          {inst.name}
+                        </Typography>
+
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: color.white,
+                            mb: 1.5,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Agradecimientos
+                        </Typography>
+
+                        <Box
+                          sx={{
+                            maxHeight: "70%",
+                            overflow: "auto",
+                            width: "100%",
+                          }}
+                        >
+                          {inst.agradecimientos &&
+                          inst.agradecimientos.length > 0 ? (
+                            inst.agradecimientos.map((miembro, idx) => (
+                              <Box key={idx} sx={{ mb: 1.5 }}>
+                                <Typography
+                                  variant="body2"
+                                  fontWeight="bold"
+                                  sx={{ color: color.white }}
+                                >
+                                  {miembro.nombre}
+                                </Typography>
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: "#aaa", fontSize: "0.7rem" }}
+                                >
+                                  {miembro.puesto}
+                                </Typography>
+                              </Box>
+                            ))
+                          ) : (
+                            <Typography
+                              variant="body2"
+                              sx={{ color: color.white }}
+                            >
+                              Sin agradecimientos registrados
+                            </Typography>
+                          )}
+                        </Box>
+
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            color: color.secondary,
+                            mt: 2,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Ver más
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </ScrollReveal>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Grid>
+      </Grid>
+
+      {/* Institución */}
+      <ScrollReveal delay={0.2} direction="up">
+        <Grid
+          container
+          spacing={4}
+          alignItems="center"
+          mt={8}
+          sx={{
+            backgroundColor: "#ffffff",
+            borderRadius: 4,
+            overflow: "hidden",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+            border: "1px solid #e0e0e0",
+          }}
+        >
+          <Grid item size={{ xs: 12, md: 6 }}>
+            <Box
+              sx={{
+                p: 4,
+                backgroundColor: "#9a7d36",
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CardMedia
+                component="img"
+                image={conedLogo}
+                alt="Logo institución"
+                sx={{
+                  maxWidth: 350,
+                  margin: "auto",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                  },
+                }}
+              />
+            </Box>
+          </Grid>
+
+          <Grid item size={{ xs: 12, md: 6 }}>
+            <CardContent sx={{ p: 4 }}>
+              <Box sx={{ mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  fontWeight="bold"
+                  sx={{
+                    color: color.secondary,
+                  }}
+                >
+                  Institución
+                </Typography>
+                <Typography variant="body1" sx={{ color: "#333", ml: 1 }}>
+                  Secretaría Técnica del Consejo Nacional de Educación en
+                  Honduras
+                </Typography>
+              </Box>
+
+              <Box sx={{ mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  fontWeight="bold"
+                  sx={{
+                    color: color.secondary,
+                  }}
+                >
+                  Unidad
+                </Typography>
+                <Typography variant="body1" sx={{ color: "#333", ml: 1 }}>
+                  Infotecnología
+                </Typography>
+              </Box>
+
+              <Box sx={{ mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  fontWeight="bold"
+                  sx={{
+                    color: color.secondary,
+                  }}
+                >
+                  Secretario Ejecutivo
+                </Typography>
+                <Box sx={{ ml: 1 }}>
+                  <Typography variant="body1" sx={{ color: "#333" }}>
+                    <strong>Nombre:</strong> 
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: "#333", mt: 1 }}>
+                    <strong>Contacto:</strong>{" "}
+                    <Link
+                      href="mailto:"
+                      underline="hover"
+                      sx={{
+                        color: color.secondary,
+                        fontWeight: "bold",
+                        "&:hover": { color: color.primary },
+                      }}
+                    >
+                      
+                    </Link>
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  fontWeight="bold"
+                  sx={{
+                    color: color.secondary,
+                    mb: 2,
+                  }}
+                >
+                  Miembros del Consejo
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    cursor: "pointer",
+                    color: color.primary,
+                    ml: 1,
+                    display: "inline-block",
+                    fontWeight: "bold",
+                    "&:hover": {
+                      textDecoration: "underline",
+                      color: color.secondary,
+                    },
+                  }}
+                  onClick={() => setOpen(true)}
+                >
+                  Ver listado completo →
+                </Typography>
+              </Box>
+            </CardContent>
+          </Grid>
+        </Grid>
+      </ScrollReveal>
+
+      {/* Coordinador del Proyecto | Desarrolladores */}
+<Grid container spacing={3} sx={{ mt: 8 }}>
+  {/* Columna izquierda - Coordinadores */}
+  <Grid item size={{ xs: 12, md: 5 }}>
+    <Grid container spacing={3}>
+      <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
+        <ScrollReveal delay={0.1} direction="right">
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: "#ffffff",
+              border: "1px solid #e0e0e0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                transform: "translateY(-2px)",
+              },
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Box
+                sx={{
+                  width: 4,
+                  height: 30,
+                  backgroundColor: color.secondary,
+                  borderRadius: 2,
+                  mr: 2,
+                }}
+              />
+              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+                Coordinador del Proyecto
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
+              <strong>Nombre:</strong> Rubén Isaac Fú Flores
+            </Typography>
+            <Typography variant="body1" sx={{ color: color.contrastText }}>
+              <strong>Contacto:</strong>{" "}
+              <Link
+                href="mailto:ruben.fu@coned.gob.hn"
+                underline="hover"
+                sx={{ color: color.secondary, fontWeight: "bold" }}
+              >
+                ruben.fu@coned.gob.hn
+              </Link>
+            </Typography>
+          </Box>
+        </ScrollReveal>
+      </Grid>
+
+      <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
+        <ScrollReveal delay={0.2} direction="right">
+          <Box
+            sx={{
+              p: 3,
+              borderRadius: 3,
+              backgroundColor: "#ffffff",
+              border: "1px solid #e0e0e0",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                transform: "translateY(-2px)",
+              },
+            }}
+          >
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Box
+                sx={{
+                  width: 4,
+                  height: 30,
+                  backgroundColor: color.secondary,
+                  borderRadius: 2,
+                  mr: 2,
+                }}
+              />
+              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+                Sub Coordinador del Proyecto
+              </Typography>
+            </Box>
+            <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
+              <strong>Nombre:</strong> Abel Mauricio Cerrato Anchecta
+            </Typography>
+            <Typography variant="body1" sx={{ color: color.contrastText }}>
+              <strong>Contacto:</strong>{" "}
+              <Link
+                href="mailto:abel.cerrato@coned.gob.hn"
+                underline="hover"
+                sx={{ color: color.secondary, fontWeight: "bold" }}
+              >
+                abel.cerrato@coned.gob.hn
+              </Link>
+            </Typography>
+          </Box>
+        </ScrollReveal>
+      </Grid>
+    </Grid>
+  </Grid>
+
+  {/* Columna derecha - Desarrolladores */}
+  <Grid item size={{ xs: 12, md: 7 }}>
+    <ScrollReveal delay={0.3} direction="left">
+      <Box
+        sx={{
+          p: 3,
+          borderRadius: 3,
+          backgroundColor: "#ffffff",
+          border: "1px solid #e0e0e0",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+          },
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+          <Box
+            sx={{
+              width: 4,
+              height: 30,
+              backgroundColor: color.secondary,
+              borderRadius: 2,
+              mr: 2,
+            }}
+          />
+          <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+            Equipo de Desarrollo
+          </Typography>
+        </Box>
+
+        <Grid container spacing={3}>
+          <Grid item size={{ xs: 12, sm: 6 }}>
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 2,
+                backgroundColor: "#f8f9fa",
+                border: "1px solid #e9ecef",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#ffffff",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                  transform: "translateY(-3px)",
+                },
+              }}
+            >
+              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
+                Seydi Johana Lara Fuentes
+              </Typography>
+              <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
+                Desarrolladora BackEnd
+              </Typography>
+              <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
+                <strong>Contacto:</strong>
+                <br />
+                <Link
+                  href="mailto:seydi.lara@coned.gob.hn"
+                  underline="hover"
+                  sx={{ color: color.secondary, fontWeight: "bold" }}
+                >
+                  seydi.lara@coned.gob.hn
+                </Link>
+              </Typography>
+              <Link
+                href="https://www.linkedin.com/in/seydi-johana-lara-fuentes-35b08a2a4"
+                target="_blank"
+                underline="hover"
+                sx={{
+                  color: color.primary,
+                  fontSize: "0.875rem",
+                  fontWeight: "bold",
+                  "&:hover": { color: color.secondary },
+                }}
+              >
+                LinkedIn →
+              </Link>
+            </Box>
+          </Grid>
+
+          <Grid item size={{ xs: 12, sm: 6 }}>
+            <Box
+              sx={{
+                p: 2.5,
+                borderRadius: 2,
+                backgroundColor: "#f8f9fa",
+                border: "1px solid #e9ecef",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: "#ffffff",
+                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                  transform: "translateY(-3px)",
+                },
+              }}
+            >
+              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
+                Luesbelin Julieth Mejia Garcia
+              </Typography>
+              <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
+                Desarrolladora FrontEnd
+              </Typography>
+              <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
+                <strong>Contacto:</strong>
+                <br />
+                <Link
+                  href="mailto:luesbelin.mejia@coned.gob.hn"
+                  underline="hover"
+                  sx={{ color: color.secondary, fontWeight: "bold" }}
+                >
+                  luesbelin.mejia@coned.gob.hn
+                </Link>
+              </Typography>
+              <Link
+                href="https://www.linkedin.com/in/luesbelin-mejia-154546279"
+                target="_blank"
+                underline="hover"
+                sx={{
+                  color: color.primary,
+                  fontSize: "0.875rem",
+                  fontWeight: "bold",
+                  "&:hover": { color: color.secondary },
+                }}
+              >
+                LinkedIn →
+              </Link>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </ScrollReveal>
+  </Grid>
+</Grid>
+
+      {/* Modal */}
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        fullWidth
+        maxWidth="md"
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            backgroundColor: "#ffffff",
+          },
+        }}
+      >
+        <DialogTitle>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Grid item size={{ xs: 11 }}>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                sx={{ color: color.third }}
+              >
+                Miembros del Consejo Nacional de Educación
+              </Typography>
+            </Grid>
+            <Grid item size={{ xs: 1 }}>
+              <IconButton
+                onClick={() => setOpen(false)}
+                aria-label="Cerrar"
+                size="large"
+                sx={{
+                  color: "#666",
+                  "&:hover": {
+                    backgroundColor: "#f5f5f5",
+                    transform: "rotate(90deg)",
+                  },
+                  transition: "all 0.3s ease",
+                }}
+              >
+                <Close />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </DialogTitle>
+
+        <DialogContent dividers sx={{ borderColor: "#e0e0e0" }}>
+          <Grid container spacing={2}>
+            {miembros.map((miembro, index) => (
+              <Grid item size={{ xs: 12, md: 6 }} key={index}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: "#f8f9fa",
+                    borderLeft: `3px solid ${color.secondary}`,
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      backgroundColor: "#e9ecef",
+                      transform: "translateX(3px)",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    sx={{ color: color.primary }}
+                  >
+                    {miembro.nombre}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#666" }}>
+                    {miembro.puesto}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography
+            variant="h6"
+            gutterBottom
+            fontWeight="bold"
+            align="center"
+            sx={{ color: color.primary, mb: 3 }}
+          >
+            Transporte
+          </Typography>
+
+          <Grid container spacing={2}>
+            {trasporte.map((miembro, index) => (
+              <Grid item size={{ xs: 12, md: 6 }} key={index}>
+                <Box
+                  sx={{
+                    p: 2,
+                    borderRadius: 2,
+                    backgroundColor: "#f8f9fa",
+                    borderLeft: `3px solid ${color.secondary}`,
+                    transition: "all 0.2s ease",
+                    "&:hover": {
+                      backgroundColor: "#e9ecef",
+                      transform: "translateX(3px)",
+                    },
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    fontWeight="bold"
+                    sx={{ color: color.primary }}
+                  >
+                    {miembro.nombre}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#666" }}>
+                    {miembro.puesto}
+                  </Typography>
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
+        </DialogContent>
+      </Dialog>
+    </Container>
+  );
 }

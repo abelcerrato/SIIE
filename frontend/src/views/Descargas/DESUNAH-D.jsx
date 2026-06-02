@@ -30,8 +30,8 @@ import { Download, FilterList, ChevronLeft, ChevronRight, ArrowCircleLeftOutline
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
 import { useUser } from "../../components/UserContext";
-import LogoCONED from "../../img/logos-CONED.png";
-import LogoSIIE from "../../img/SIIE.png";
+import LogoCONED from "../../img/nueva-linea-grafica/Logo CONED.png";
+import LogoSIIE from "../../img/nueva-linea-grafica/logos-siie-y-coned.png";
 
 const toBase64 = async (url) => {
     const response = await fetch(url);

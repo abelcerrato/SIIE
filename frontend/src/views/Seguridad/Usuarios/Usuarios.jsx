@@ -11,19 +11,18 @@ import {
   InputLabel,
   Select,
   MenuItem,
-  FormHelperText,
-  IconButton,
+  Box
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useUser } from "../../../components/UserContext";
+import color from "../../../components/color";
 
 export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
   const { user } = useUser();
   const [roles, setRoles] = useState([]);
-  const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
     nombre: "",
     usuario: "",
@@ -78,57 +77,7 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
-  const handleResetearContra = async (usuario) => {
-    try {
-      const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/resetearContra/${usuario}`
-      );
-
-      Swal.fire({
-        title: "Contraseña Actualizada",
-        text: "La contraseña ha sido actualizada exitosamente al número de identidad del usuario.",
-        icon: "success",
-        timer: 6000,
-      });
-    } catch (error) {
-      console.error("Error al restablecer la contraseña:", error);
-    }
-  };
-
-  
-  const validateForm = () => {
-    const newErrors = {};
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!formData.nombre?.trim()) newErrors.nombre = "El nombre es obligatorio";
-    if (!formData.usuario?.trim()) newErrors.usuario = "El usuario es obligatorio";
-
-    if (!formData.correo?.trim()) {
-      newErrors.correo = "El correo electrónico es obligatorio";
-    } else if (!emailRegex.test(formData.correo)) {
-      newErrors.correo = "Ingrese un correo electrónico válido";
-    }
-
-    if (!formData.contraseña?.trim() && !usuarioId)
-      newErrors.contraseña = "La contraseña es obligatoria";
-
-    if (!formData.idrol) newErrors.idrol = "El rol es obligatorio";
-    if (!formData.estado) newErrors.estado = "El estado es obligatorio";
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-
-
   const handleSave = async () => {
-    // Validar antes de enviar
-    if (!validateForm()) {
-      return;
-    }
-
     try {
       if (usuarioId) {
         // Editar
@@ -150,17 +99,13 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>
         <Grid container justifyContent="space-between">
-          <Grid size={{ sx: 12, md: 6 }}>
-            {usuarioId ? "Editar Usuario" : "Nuevo Usuario"}
-          </Grid>
-          <Grid
-            size={{ sx: 12, md: 6 }}
-            sx={{ display: 'flex', justifyContent: 'flex-end' }}
+          {usuarioId ? "Editar Usuario" : "Nuevo Usuario"}
+          <Button
+            onClick={onClose}
+            sx={{ color: "red", minWidth: "auto" }}
+            startIcon={<CloseIcon />}
           >
-            <IconButton aria-label="delete" onClick={onClose} color="error">
-              <CloseIcon />
-            </IconButton>
-          </Grid>
+          </Button>
         </Grid>
       </DialogTitle>
       <DialogContent>
@@ -171,22 +116,16 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
               name="nombre"
               value={formData.nombre || ""}
               onChange={handleChange}
-              error={!!errors.nombre}
-              helperText={errors.nombre}
-              required
               fullWidth
             />
           </Grid>
 
           <Grid size={{ sx: 12, md: 6 }}>
             <TextField
-              label="Correo Electrónico"
+              label="Correo"
               name="correo"
               value={formData.correo || ""}
               onChange={handleChange}
-              error={!!errors.correo}
-              helperText={errors.correo}
-              required
               fullWidth
             />
           </Grid>
@@ -196,9 +135,6 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
               name="usuario"
               value={formData.usuario || ""}
               onChange={handleChange}
-              error={!!errors.usuario}
-              helperText={errors.usuario}
-              required
               fullWidth
             />
           </Grid>
@@ -209,51 +145,44 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
               type="password"
               value={formData.contraseña || ""}
               onChange={handleChange}
-              error={!!errors.contraseña}
-              helperText={errors.contraseña}
-              required
               fullWidth
             />
           </Grid>
           <Grid size={{ sx: 12, md: 6 }}>
 
-            <FormControl fullWidth error={!!errors.idrol}>
+            <FormControl fullWidth>
               <InputLabel>Rol</InputLabel>
               <Select
                 label="Rol"
                 name="idrol"
                 value={formData.idrol || ""}
-                onChange={handleChange}
-                required
-              >
+                onChange={handleChange}>
                 <MenuItem value="">Seleccionar rol</MenuItem>
                 {roles.map((r) => (
                   <MenuItem key={r.id} value={r.id}>{r.rol}</MenuItem>
                 ))}
               </Select>
-              {errors.idrol && <FormHelperText>{errors.idrol}</FormHelperText>}
             </FormControl>
           </Grid>
           <Grid size={{ sx: 12, md: 6 }}>
-            <FormControl fullWidth error={!!errors.estado}>
+            <FormControl fullWidth>
               <InputLabel>Estado</InputLabel>
               <Select
                 label="Estado"
                 name="estado"
-                value={formData.estado || ""}
+                value={formData.estado || "Nuevo"}
                 onChange={handleChange}>
                 <MenuItem value="">Seleccionar estado</MenuItem>
                 <MenuItem value="Activo">Activo</MenuItem>
                 <MenuItem value="Inactivo">Inactivo</MenuItem>
               </Select>
-              {errors.estado && <FormHelperText>{errors.estado}</FormHelperText>}
             </FormControl>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
 
-        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: "#88CFE0" }}>
+        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: color.white }}>
           Guardar
         </Button>
       </DialogActions>
