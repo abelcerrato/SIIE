@@ -138,7 +138,7 @@ export default function AcercaDe() {
     },
     {
       nombre: "Luis Daniel Euraque Morales",
-      puesto: "Asistente de Administración",
+      puesto: "Coordinador de Infotecnología",
     },
     { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
     {
@@ -936,7 +936,7 @@ export default function AcercaDe() {
                   <Typography variant="body1" sx={{ color: "#333", mt: 1 }}>
                     <strong>Contacto:</strong> {" "}
                     <Link
-                      href="mailto:rafale.nunez@coned.gob.hn"
+                      href="mailto:rafael.nunez@coned.gob.hn"
                       underline="hover"
                       sx={{
                         color: color.secondary,
@@ -944,7 +944,7 @@ export default function AcercaDe() {
                         "&:hover": { color: color.primary },
                       }}
                     >
-rafale.nunez@coned.gob.hn
+rafael.nunez@coned.gob.hn
                     </Link>
                   </Typography>
                 </Box>
