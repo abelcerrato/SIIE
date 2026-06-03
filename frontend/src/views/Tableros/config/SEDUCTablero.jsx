@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import {
   Box,
   Typography,
@@ -46,7 +52,9 @@ import BlindRoundedIcon from "@mui/icons-material/BlindRounded";
 import MapaDinamico from "./MapaDinamico.jsx";
 import color from "../../../components/color.js";
 import MapIcon from "@mui/icons-material/Map";
-import GraficoTasasCobertura, { TIPO_GRAFICO } from "./GraficoTasasCobertura.jsx";
+import GraficoTasasCobertura, {
+  TIPO_GRAFICO,
+} from "./GraficoTasasCobertura.jsx";
 
 import {
   StyledCard,
@@ -361,14 +369,10 @@ const procesarDatosGenerales = (data) => {
           campo = `MatriculaInicial${prefijo}SEDUC`;
         else if (metrica === "matriculaFinal")
           campo = `MatriculaFinal${prefijo}SEDUC`;
-        else if (metrica === "repitencia")
-          campo = `Repitencia${prefijo}SEDUC`;
-        else if (metrica === "reprobados")
-          campo = `Reprobados${prefijo}SEDUC`;
-        else if (metrica === "aprobados")
-          campo = `Aprobados${prefijo}SEDUC`;
-        else if (metrica === "desercion")
-          campo = `Desercion${prefijo}SEDUC`;
+        else if (metrica === "repitencia") campo = `Repitencia${prefijo}SEDUC`;
+        else if (metrica === "reprobados") campo = `Reprobados${prefijo}SEDUC`;
+        else if (metrica === "aprobados") campo = `Aprobados${prefijo}SEDUC`;
+        else if (metrica === "desercion") campo = `Desercion${prefijo}SEDUC`;
         else if (metrica === "cancelacion")
           campo = `Cancelacion${prefijo}SEDUC`;
 
@@ -425,7 +429,7 @@ const procesarDatosNiveles = (data) => {
     "reprobados",
     "aprobados",
     "desercion",
-    "cancelacion"
+    "cancelacion",
   ];
 
   data.forEach((item) => {
@@ -452,7 +456,12 @@ const procesarDatosNiveles = (data) => {
         ["Femenino", "Masculino"].forEach((genero) => {
           let valor = 0;
           const prefijo = genero === "Femenino" ? "Mujer" : "Hombre";
-          const nivelCapitalizado = nivel === "prebasica" ? "Prebasica" : (nivel === "basica" ? "Basica" : "Media");
+          const nivelCapitalizado =
+            nivel === "prebasica"
+              ? "Prebasica"
+              : nivel === "basica"
+                ? "Basica"
+                : "Media";
 
           let metricaNombre = "";
           if (metrica === "matriculaInicial") {
@@ -514,7 +523,9 @@ const fetchGenericData = async (
   const endpointUrl = API_CONFIG[institucion]?.endpoints[endpointKey];
 
   if (!endpointUrl) {
-    console.error(`No se encontró el endpoint ${endpointKey} para ${institucion}`);
+    console.error(
+      `No se encontró el endpoint ${endpointKey} para ${institucion}`,
+    );
     return [];
   }
 
@@ -598,8 +609,12 @@ const fetchGenericData = async (
         Rural: parseInt(item.TotalZonaRural) || 0,
         Urbana: parseInt(item.TotalZonaUrbana) || 0,
         Gubernamental: parseInt(item.TotalAdiministracionGubernamental) || 0,
-        NoGubernamental: parseInt(item.TotalAdiministracionNoGubernamental) || 0,
-        totalCentros: (parseInt(item.TotalPrebasica) || 0) + (parseInt(item.TotalBasica) || 0) + (parseInt(item.TotalMedia) || 0),
+        NoGubernamental:
+          parseInt(item.TotalAdiministracionNoGubernamental) || 0,
+        totalCentros:
+          (parseInt(item.TotalPrebasica) || 0) +
+          (parseInt(item.TotalBasica) || 0) +
+          (parseInt(item.TotalMedia) || 0),
       }));
     }
 
@@ -676,7 +691,10 @@ const fetchGenericData = async (
     // Para endpoints de indicadores, devolver los datos directamente
     return result;
   } catch (error) {
-    console.error(`Error fetching data for ${institucion}/${endpointKey}:`, error);
+    console.error(
+      `Error fetching data for ${institucion}/${endpointKey}:`,
+      error,
+    );
     return [];
   }
 };
@@ -693,7 +711,8 @@ const GraficoMetricasNiveles = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const tieneFiltroMunicipio = filtros?.municipio && filtros.municipio !== "Todos";
+  const tieneFiltroMunicipio =
+    filtros?.municipio && filtros.municipio !== "Todos";
 
   const nivelesConfig = {
     prebasica: { label: "Prebásica", color: color.primary },
@@ -723,7 +742,8 @@ const GraficoMetricasNiveles = ({
 
     if (filtros?.departamento && filtros.departamento !== "Todos") {
       datosFiltrados = datosFiltrados.filter(
-        (item) => normalizar(item.departamento) === normalizar(filtros.departamento),
+        (item) =>
+          normalizar(item.departamento) === normalizar(filtros.departamento),
       );
     }
 
@@ -756,30 +776,87 @@ const GraficoMetricasNiveles = ({
     return totales;
   }, [datosProcesados, tieneFiltroMunicipio]);
 
-  if (loading) return <StyledCard><StyledCardContent><ChartSkeleton height={300} /></StyledCardContent></StyledCard>;
-  if (tieneFiltroMunicipio) return <StyledCard><StyledCardContent><EmptyState message="Los datos por nivel educativo no están disponibles a nivel municipal" /></StyledCardContent></StyledCard>;
-  if (!datosProcesados.length) return <StyledCard><StyledCardContent><EmptyState message={`No hay datos de ${metricaLabel?.toLowerCase()} por nivel educativo`} /></StyledCardContent></StyledCard>;
+  if (loading)
+    return (
+      <StyledCard>
+        <StyledCardContent>
+          <ChartSkeleton height={300} />
+        </StyledCardContent>
+      </StyledCard>
+    );
+  if (tieneFiltroMunicipio)
+    return (
+      <StyledCard>
+        <StyledCardContent>
+          <EmptyState message="Los datos por nivel educativo no están disponibles a nivel municipal" />
+        </StyledCardContent>
+      </StyledCard>
+    );
+  if (!datosProcesados.length)
+    return (
+      <StyledCard>
+        <StyledCardContent>
+          <EmptyState
+            message={`No hay datos de ${metricaLabel?.toLowerCase()} por nivel educativo`}
+          />
+        </StyledCardContent>
+      </StyledCard>
+    );
 
   return (
     <StyledCard>
       <StyledCardContent>
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <School sx={{ color: color.primary }} />
-          <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Nivel Educativo</Typography>
+          <Typography
+            variant="h6"
+            sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}
+          >
+            Por Nivel Educativo
+          </Typography>
         </Stack>
-        <Stack direction="row" spacing={2} sx={{ mb: 3, justifyContent: "center", flexWrap: "wrap", gap: 1 }}>
-          {Object.entries(totalesPorNivel).map(([nivel, total]) => total > 0 && (
-            <Chip key={nivel} label={`${nivelLabels[nivel]}: ${total.toLocaleString()}`} sx={{ bgcolor: alpha(nivelesConfig[nivel].color, 0.1), color: nivelesConfig[nivel].color, fontWeight: "bold" }} />
-          ))}
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{ mb: 3, justifyContent: "center", flexWrap: "wrap", gap: 1 }}
+        >
+          {Object.entries(totalesPorNivel).map(
+            ([nivel, total]) =>
+              total > 0 && (
+                <Chip
+                  key={nivel}
+                  label={`${nivelLabels[nivel]}: ${total.toLocaleString()}`}
+                  sx={{
+                    bgcolor: alpha(nivelesConfig[nivel].color, 0.1),
+                    color: nivelesConfig[nivel].color,
+                    fontWeight: "bold",
+                  }}
+                />
+              ),
+          )}
         </Stack>
         <ResponsiveContainer width="100%" height={347}>
-          <BarChart data={datosProcesados} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-            <XAxis dataKey="anio" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} tickLine={false} />
+          <BarChart
+            data={datosProcesados}
+            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+          >
+            <XAxis
+              dataKey="anio"
+              tick={{ fill: color.contrastText, fontSize: 12 }}
+              axisLine={{ stroke: color.primary }}
+              tickLine={false}
+            />
             <YAxis hide />
-            <RechartsTooltip formatter={(value, name) => [value.toLocaleString(), nivelLabels[name] || name]} />
+            <RechartsTooltip
+              formatter={(value, name) => [
+                value.toLocaleString(),
+                nivelLabels[name] || name,
+              ]}
+              labelFormatter={(label) => `Año: ${label}`}
+            />
             <Legend formatter={(value) => nivelLabels[value] || value} />
             {Object.entries(nivelesConfig).map(([nivel, config]) => {
-              if (!datosProcesados.some(item => item[nivel] > 0)) return null;
+              if (!datosProcesados.some((item) => item[nivel] > 0)) return null;
               return (
                 <Bar
                   key={nivel}
@@ -803,8 +880,6 @@ const GraficoMetricasNiveles = ({
                   }
                 />
               );
-
-
             })}
           </BarChart>
         </ResponsiveContainer>
@@ -814,8 +889,16 @@ const GraficoMetricasNiveles = ({
 };
 
 const GraficoDocentesNiveles = ({ data, metricaLabel, loading = false }) => {
-  const nombreANivel = { Prebásica: "prebasica", Básica: "basica", Media: "media" };
-  const colores = { prebasica: color.primary, basica: color.secondary, media: color.contrastText };
+  const nombreANivel = {
+    Prebásica: "prebasica",
+    Básica: "basica",
+    Media: "media",
+  };
+  const colores = {
+    prebasica: color.primary,
+    basica: color.secondary,
+    media: color.contrastText,
+  };
   const nombres = { prebasica: "Prebásica", basica: "Básica", media: "Media" };
 
   return (
@@ -823,16 +906,49 @@ const GraficoDocentesNiveles = ({ data, metricaLabel, loading = false }) => {
       <StyledCardContent>
         <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <School sx={{ color: color.primary }} />
-          <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Nivel Educativo</Typography>
+          <Typography
+            variant="h6"
+            sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}
+          >
+            Por Nivel Educativo
+          </Typography>
         </Stack>
-        {loading ? <ChartSkeleton height={400} /> : !data.length ? <EmptyState message={`No hay datos de ${metricaLabel?.toLowerCase()} por nivel educativo`} /> : (
+        {loading ? (
+          <ChartSkeleton height={400} />
+        ) : !data.length ? (
+          <EmptyState
+            message={`No hay datos de ${metricaLabel?.toLowerCase()} por nivel educativo`}
+          />
+        ) : (
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={data} margin={{ top: 20, right: 30, left: 60, bottom: 10 }}>
-              <XAxis dataKey="nivel" tick={{ fill: color.contrastText, fontSize: 12 }} tickLine={false} />
+            <BarChart
+              data={data}
+              margin={{ top: 20, right: 30, left: 60, bottom: 10 }}
+            >
+              <XAxis
+                dataKey="nivel"
+                tick={{ fill: color.contrastText, fontSize: 12 }}
+                tickLine={false}
+              />
               <YAxis hide />
-              <RechartsTooltip formatter={(value) => [value.toLocaleString(), "Puestos de Trabajo"]} />
-              <Bar dataKey="valor" radius={[8, 8, 0, 0]} label={{ position: "top", formatter: (v) => v.toLocaleString(), fontSize: 12 }}>
-                {data.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
+              <RechartsTooltip
+                formatter={(value) => [
+                  value.toLocaleString(),
+                  "Puestos de Trabajo",
+                ]}
+              />
+              <Bar
+                dataKey="valor"
+                radius={[8, 8, 0, 0]}
+                label={{
+                  position: "top",
+                  formatter: (v) => v.toLocaleString(),
+                  fontSize: 12,
+                }}
+              >
+                {data.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -842,20 +958,68 @@ const GraficoDocentesNiveles = ({ data, metricaLabel, loading = false }) => {
   );
 };
 
-const GraficoServiciosBasicos = ({ data, loading = false, totalPlanteles = 0, onClearFilters }) => {
+const GraficoServiciosBasicos = ({
+  data,
+  loading = false,
+  totalPlanteles = 0,
+  onClearFilters,
+}) => {
   const serviciosConSI_NO = useMemo(() => {
     if (!data.length) return [];
     const servicios = [
-      { key: "Electricidad", label: "Electricidad", icon: <ElectricalServicesIcon />, color: "#ffc107", si: 0, no: 0 },
-      { key: "AbastecimientoAgua", label: "Abastecimiento de Agua", icon: <WaterDropIcon />, color: "#2196f3", si: 0, no: 0 },
-      { key: "EvacuacionAguas", label: "Evacuación de Agua", icon: <PlumbingIcon />, color: "#4caf50", si: 0, no: 0 },
+      {
+        key: "Electricidad",
+        label: "Electricidad",
+        icon: <ElectricalServicesIcon />,
+        color: "#ffc107",
+        si: 0,
+        no: 0,
+      },
+      {
+        key: "AbastecimientoAgua",
+        label: "Abastecimiento de Agua",
+        icon: <WaterDropIcon />,
+        color: "#2196f3",
+        si: 0,
+        no: 0,
+      },
+      {
+        key: "EvacuacionAguas",
+        label: "Evacuación de Agua",
+        icon: <PlumbingIcon />,
+        color: "#4caf50",
+        si: 0,
+        no: 0,
+      },
     ];
-    data.forEach(item => { servicios.forEach(servicio => { servicio.si += item[servicio.key] || 0; servicio.no += item[`${servicio.key}NO`] || 0; }); });
+    data.forEach((item) => {
+      servicios.forEach((servicio) => {
+        servicio.si += item[servicio.key] || 0;
+        servicio.no += item[`${servicio.key}NO`] || 0;
+      });
+    });
     return servicios;
   }, [data]);
 
-  if (loading) return <StyledCard><StyledCardContent><ChartSkeleton height={600} /></StyledCardContent></StyledCard>;
-  if (!serviciosConSI_NO.length || totalPlanteles === 0) return <StyledCard><StyledCardContent><EmptyState message="No hay datos de servicios básicos" onClearFilters={onClearFilters} /></StyledCardContent></StyledCard>;
+  if (loading)
+    return (
+      <StyledCard>
+        <StyledCardContent>
+          <ChartSkeleton height={600} />
+        </StyledCardContent>
+      </StyledCard>
+    );
+  if (!serviciosConSI_NO.length || totalPlanteles === 0)
+    return (
+      <StyledCard>
+        <StyledCardContent>
+          <EmptyState
+            message="No hay datos de servicios básicos"
+            onClearFilters={onClearFilters}
+          />
+        </StyledCardContent>
+      </StyledCard>
+    );
 
   return (
     <Grid container spacing={3}>
@@ -863,28 +1027,80 @@ const GraficoServiciosBasicos = ({ data, loading = false, totalPlanteles = 0, on
         const total = servicio.si + servicio.no;
         const pctSI = total > 0 ? ((servicio.si / total) * 100).toFixed(1) : 0;
         const datosGrafica = [
-          { name: "Sí", value: servicio.si, porcentaje: pctSI, color: color.primary },
-          { name: "No", value: servicio.no, porcentaje: (100 - pctSI).toFixed(1), color: color.secondary },
+          {
+            name: "Sí",
+            value: servicio.si,
+            porcentaje: pctSI,
+            color: color.primary,
+          },
+          {
+            name: "No",
+            value: servicio.no,
+            porcentaje: (100 - pctSI).toFixed(1),
+            color: color.secondary,
+          },
         ];
         return (
           <Grid item size={{ xs: 12, md: 12 }} key={servicio.key}>
-            <StyledCard><StyledCardContent>
-              <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 2 }}>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  {React.cloneElement(servicio.icon, { sx: { color: servicio.color, fontSize: 32 } })}
-                  <Typography variant="h6" sx={{ fontWeight: "bold", color: color.primary }}>{servicio.label}</Typography>
+            <StyledCard>
+              <StyledCardContent>
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ mb: 2 }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    {React.cloneElement(servicio.icon, {
+                      sx: { color: servicio.color, fontSize: 32 },
+                    })}
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", color: color.primary }}
+                    >
+                      {servicio.label}
+                    </Typography>
+                  </Stack>
                 </Stack>
-              </Stack>
-              <ResponsiveContainer width="100%" height={183}>
-                <BarChart data={datosGrafica} layout="vertical" margin={{ top: 10, right: 30, left: 60, bottom: 20 }}>
-                  <XAxis type="number" hide /><YAxis type="category" dataKey="name" tick={{ fontSize: 14, fontWeight: "bold" }} width={50} />
-                  <RechartsTooltip formatter={(value) => [value.toLocaleString(), "Total"]} />
-                  <Bar dataKey="value" radius={[0, 8, 8, 0]} barSize={40} label={{ position: "right", formatter: (v, entry) => `${v.toLocaleString()} (${entry.payload.porcentaje}%)`, fontSize: 12 }}>
-                    {datosGrafica.map((entry, idx) => <Cell key={`cell-${idx}`} fill={entry.color} />)}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            </StyledCardContent></StyledCard>
+                <ResponsiveContainer width="100%" height={183}>
+                  <BarChart
+                    data={datosGrafica}
+                    layout="vertical"
+                    margin={{ top: 10, right: 30, left: 60, bottom: 20 }}
+                  >
+                    <XAxis type="number" hide />
+                    <YAxis
+                      type="category"
+                      dataKey="name"
+                      tick={{ fontSize: 14, fontWeight: "bold" }}
+                      width={50}
+                    />
+                    <RechartsTooltip
+                      formatter={(value) => [value.toLocaleString(), "Total"]}
+                    />
+                    <Bar
+                      dataKey="value"
+                      radius={[0, 8, 8, 0]}
+                      barSize={40}
+                      label={{
+                        position: "right",
+                        formatter: (v, entry) => {
+                          // Solución: verificar si entry y entry.payload existen
+                          if (!entry || !entry.payload)
+                            return v.toLocaleString();
+                          return `${v.toLocaleString()} (${entry.payload.porcentaje}%)`;
+                        },
+                        fontSize: 12,
+                      }}
+                    >
+                      {datosGrafica.map((entry, idx) => (
+                        <Cell key={`cell-${idx}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </StyledCardContent>
+            </StyledCard>
           </Grid>
         );
       })}
@@ -892,41 +1108,95 @@ const GraficoServiciosBasicos = ({ data, loading = false, totalPlanteles = 0, on
   );
 };
 
-const GraficoDiscapacidadPorTipo = ({ data, loading = false, onClearFilters }) => {
+const GraficoDiscapacidadPorTipo = ({
+  data,
+  loading = false,
+  onClearFilters,
+}) => {
   const datosPorTipo = useMemo(() => {
     if (!data.length) return [];
     const tiposMap = new Map();
-    data.forEach(item => { const tipo = item.tipodiscapacidad; if (!tiposMap.has(tipo)) tiposMap.set(tipo, { tipo, Total: 0 }); tiposMap.get(tipo).Total += item.TotalConDiscapacidad || 0; });
+    data.forEach((item) => {
+      const tipo = item.tipodiscapacidad;
+      if (!tiposMap.has(tipo)) tiposMap.set(tipo, { tipo, Total: 0 });
+      tiposMap.get(tipo).Total += item.TotalConDiscapacidad || 0;
+    });
     return Array.from(tiposMap.values()).sort((a, b) => b.Total - a.Total);
   }, [data]);
 
   return (
-    <StyledCard><StyledCardContent>
-      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><BlindRoundedIcon sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Tipo de Discapacidad</Typography></Stack>
-      {loading ? <ChartSkeleton height={400} /> : !datosPorTipo.length ? <EmptyState message="No hay datos de discapacidad" onClearFilters={onClearFilters} /> : (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={datosPorTipo} layout="vertical" margin={{ top: 20, right: 30, left: 10, bottom: 20 }}>
-            <XAxis type="number" hide /><YAxis type="category" dataKey="tipo" tick={{ fontSize: 12 }} width={120} />
-            <RechartsTooltip formatter={(value) => value.toLocaleString()} />
-            <Bar dataKey="Total" fill={color.primary} radius={[0, 8, 8, 0]} barSize={30} label={{ position: "right", formatter: (v) => v.toLocaleString(), fontSize: 12 }} />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </StyledCardContent></StyledCard>
+    <StyledCard>
+      <StyledCardContent>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <BlindRoundedIcon sx={{ color: color.primary }} />
+          <Typography
+            variant="h6"
+            sx={{ color: color.primary, fontWeight: "bold" }}
+          >
+            Por Tipo de Discapacidad
+          </Typography>
+        </Stack>
+        {loading ? (
+          <ChartSkeleton height={400} />
+        ) : !datosPorTipo.length ? (
+          <EmptyState
+            message="No hay datos de discapacidad"
+            onClearFilters={onClearFilters}
+          />
+        ) : (
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart
+              data={datosPorTipo}
+              layout="vertical"
+              margin={{ top: 20, right: 30, left: 10, bottom: 20 }}
+            >
+              <XAxis type="number" hide />
+              <YAxis
+                type="category"
+                dataKey="tipo"
+                tick={{ fontSize: 12 }}
+                width={120}
+              />
+              <RechartsTooltip formatter={(value) => value.toLocaleString()} />
+              <Bar
+                dataKey="Total"
+                fill={color.primary}
+                radius={[0, 8, 8, 0]}
+                barSize={30}
+                label={{
+                  position: "right",
+                  formatter: (v) => v.toLocaleString(),
+                  fontSize: 12,
+                }}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </StyledCardContent>
+    </StyledCard>
   );
 };
 
-const GraficoDiscapacidadPorNivel = ({ data, loading = false, onClearFilters }) => {
+const GraficoDiscapacidadPorNivel = ({
+  data,
+  loading = false,
+  onClearFilters,
+}) => {
   const datosPorNivel = useMemo(() => {
     if (!data.length) return [];
     const nivelMap = new Map();
-    data.forEach(item => {
+    data.forEach((item) => {
       const nivelOriginal = item.niveleducativo?.toUpperCase() || "";
       let nivel = "Otros";
       if (nivelOriginal.includes("PREBASICA")) nivel = "Prebásica";
-      else if (nivelOriginal.includes("BÁSICA") || nivelOriginal.includes("BASICA")) nivel = "Básica";
+      else if (
+        nivelOriginal.includes("BÁSICA") ||
+        nivelOriginal.includes("BASICA")
+      )
+        nivel = "Básica";
       else if (nivelOriginal.includes("MEDIA")) nivel = "Media";
-      if (!nivelMap.has(nivel)) nivelMap.set(nivel, { nivel, Mujeres: 0, Hombres: 0 });
+      if (!nivelMap.has(nivel))
+        nivelMap.set(nivel, { nivel, Mujeres: 0, Hombres: 0 });
       const entry = nivelMap.get(nivel);
       entry.Mujeres += item.NiñasConDiscapacidad || 0;
       entry.Hombres += item.NiñosConDiscapacidad || 0;
@@ -935,19 +1205,61 @@ const GraficoDiscapacidadPorNivel = ({ data, loading = false, onClearFilters }) 
   }, [data]);
 
   return (
-    <StyledCard><StyledCardContent>
-      <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><School sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Nivel Educativo</Typography></Stack>
-      {loading ? <ChartSkeleton height={300} /> : !datosPorNivel.length ? <EmptyState message="No hay datos por nivel educativo" onClearFilters={onClearFilters} /> : (
-        <ResponsiveContainer width="100%" height={350}>
-          <BarChart data={datosPorNivel} margin={{ top: 30, right: 30, left: 20, bottom: 10 }}>
-            <XAxis dataKey="nivel" tick={{ fontSize: 12 }} /><YAxis hide />
-            <RechartsTooltip formatter={(value, name) => [value.toLocaleString(), name]} />
-            <Legend /><Bar dataKey="Mujeres" fill={color.primary} name="Mujeres" radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v.toLocaleString() }} />
-            <Bar dataKey="Hombres" fill={color.secondary} name="Hombres" radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v.toLocaleString() }} />
-          </BarChart>
-        </ResponsiveContainer>
-      )}
-    </StyledCardContent></StyledCard>
+    <StyledCard>
+      <StyledCardContent>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+          <School sx={{ color: color.primary }} />
+          <Typography
+            variant="h6"
+            sx={{ color: color.primary, fontWeight: "bold" }}
+          >
+            Por Nivel Educativo
+          </Typography>
+        </Stack>
+        {loading ? (
+          <ChartSkeleton height={300} />
+        ) : !datosPorNivel.length ? (
+          <EmptyState
+            message="No hay datos por nivel educativo"
+            onClearFilters={onClearFilters}
+          />
+        ) : (
+          <ResponsiveContainer width="100%" height={350}>
+            <BarChart
+              data={datosPorNivel}
+              margin={{ top: 30, right: 30, left: 20, bottom: 10 }}
+            >
+              <XAxis dataKey="nivel" tick={{ fontSize: 12 }} />
+              <YAxis hide />
+              <RechartsTooltip
+                formatter={(value, name) => [value.toLocaleString(), name]}
+              />
+              <Legend />
+              <Bar
+                dataKey="Mujeres"
+                fill={color.primary}
+                name="Mujeres"
+                radius={[4, 4, 0, 0]}
+                label={{
+                  position: "top",
+                  formatter: (v) => v.toLocaleString(),
+                }}
+              />
+              <Bar
+                dataKey="Hombres"
+                fill={color.secondary}
+                name="Hombres"
+                radius={[4, 4, 0, 0]}
+                label={{
+                  position: "top",
+                  formatter: (v) => v.toLocaleString(),
+                }}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
+      </StyledCardContent>
+    </StyledCard>
   );
 };
 
@@ -969,7 +1281,10 @@ const BaseTablero = ({ titulo }) => {
   const [tasasCiclosData, setTasasCiclosData] = useState([]);
   const [variacionInteranualData, setVariacionInteranualData] = useState([]);
   const [tasaSupervivenciaData, setTasaSupervivenciaData] = useState([]);
-  const [acessoPrimerGradoEdadesSimplesData, setAcessoPrimerGradoEdadesSimplesData] = useState([]);
+  const [
+    acessoPrimerGradoEdadesSimplesData,
+    setAcessoPrimerGradoEdadesSimplesData,
+  ] = useState([]);
   const [tasasPorGrado, setTasasPorGrado] = useState([]);
 
   const [data, setData] = useState([]);
@@ -980,59 +1295,172 @@ const BaseTablero = ({ titulo }) => {
   const [datosDepto, setDatosDepto] = useState({});
   const [dimensions, setDimensions] = useState({ width: 1000, height: 500 });
 
-  const [selectedMetric, setSelectedMetric] = useState(() => Object.keys(METRICAS_SEDUC)[0] || "");
+  const [selectedMetric, setSelectedMetric] = useState(
+    () => Object.keys(METRICAS_SEDUC)[0] || "",
+  );
 
   const [filtros, setFiltros] = useState({
-    anio: "Todos", genero: "Todos", departamento: "Todos", municipio: "Todos",
-    zona: "Todos", administracion: "Todos", nivel: "Todos",
+    anio: "Todos",
+    genero: "Todos",
+    departamento: "Todos",
+    municipio: "Todos",
+    zona: "Todos",
+    administracion: "Todos",
+    nivel: "Todos",
   });
 
-  const METRICAS_LIST = useMemo(() => Object.entries(METRICAS_SEDUC).map(([id, label]) => ({ id, label })), []);
+  const METRICAS_LIST = useMemo(
+    () => Object.entries(METRICAS_SEDUC).map(([id, label]) => ({ id, label })),
+    [],
+  );
 
   const añosDisponibles = useMemo(() => {
     const añosSet = new Set();
-    data.forEach(item => { if (item.anio) añosSet.add(String(item.anio)); });
-    dataServiciosBasicos.forEach(item => { if (item.periodo) añosSet.add(String(item.periodo)); });
+    data.forEach((item) => {
+      if (item.anio) añosSet.add(String(item.anio));
+    });
+    dataServiciosBasicos.forEach((item) => {
+      if (item.periodo) añosSet.add(String(item.periodo));
+    });
     return ["Todos", ...Array.from(añosSet).sort((a, b) => b - a)];
   }, [data, dataServiciosBasicos]);
 
-  const deptosDisponibles = useMemo(() => ["Todos", ...Array.from(new Set(data.map(item => item.departamento).filter(Boolean))).sort()], [data]);
+  const deptosDisponibles = useMemo(
+    () => [
+      "Todos",
+      ...Array.from(
+        new Set(data.map((item) => item.departamento).filter(Boolean)),
+      ).sort(),
+    ],
+    [data],
+  );
 
   const municipiosDisponibles = useMemo(() => {
     if (filtros.departamento === "Todos") return ["Todos"];
-    return ["Todos", ...Array.from(new Set(data.filter(item => normalizar(item.departamento) === normalizar(filtros.departamento)).map(item => item.municipio).filter(Boolean))).sort()];
+    return [
+      "Todos",
+      ...Array.from(
+        new Set(
+          data
+            .filter(
+              (item) =>
+                normalizar(item.departamento) ===
+                normalizar(filtros.departamento),
+            )
+            .map((item) => item.municipio)
+            .filter(Boolean),
+        ),
+      ).sort(),
+    ];
   }, [data, filtros.departamento]);
 
-  const administracionesDisponibles = useMemo(() => ["Todos", ...Array.from(new Set(data.map(item => item.administracion).filter(Boolean))).sort()], [data]);
+  const administracionesDisponibles = useMemo(
+    () => [
+      "Todos",
+      ...Array.from(
+        new Set(data.map((item) => item.administracion).filter(Boolean)),
+      ).sort(),
+    ],
+    [data],
+  );
 
-  const configGraficos = useMemo(() => CONFIG_GRAFICOS_POR_METRICA[selectedMetric] || CONFIG_GRAFICOS_POR_METRICA.matriculaInicial, [selectedMetric]);
+  const configGraficos = useMemo(
+    () =>
+      CONFIG_GRAFICOS_POR_METRICA[selectedMetric] ||
+      CONFIG_GRAFICOS_POR_METRICA.matriculaInicial,
+    [selectedMetric],
+  );
 
   const filtersConfig = useMemo(() => {
-    const cfg = CONFIG_FILTROS_POR_METRICA[selectedMetric] || CONFIG_FILTROS_POR_METRICA.matriculaInicial;
-    const base = [{ key: "anio", label: "Año", options: añosDisponibles }, { key: "departamento", label: "Departamento", options: deptosDisponibles }];
-    if (filtros.departamento !== "Todos" && cfg.mostrarMunicipio) base.push({ key: "municipio", label: "Municipio", options: municipiosDisponibles });
-    if (cfg.mostrarGenero) base.push({ key: "genero", label: "Género", options: ["Todos", "Femenino", "Masculino"] });
-    if (cfg.mostrarAdministracion) base.push({ key: "administracion", label: "Administración", options: administracionesDisponibles });
-    if (cfg.mostrarZona) base.push({ key: "zona", label: "Zona", options: ["Todos", "URBANA", "RURAL"] });
-    if (cfg.mostrarNivel) base.push({ key: "nivel", label: "Nivel Educativo", options: ["Todos", "Prebásica", "Básica", "Media"] });
+    const cfg =
+      CONFIG_FILTROS_POR_METRICA[selectedMetric] ||
+      CONFIG_FILTROS_POR_METRICA.matriculaInicial;
+    const base = [
+      { key: "anio", label: "Año", options: añosDisponibles },
+      {
+        key: "departamento",
+        label: "Departamento",
+        options: deptosDisponibles,
+      },
+    ];
+    if (filtros.departamento !== "Todos" && cfg.mostrarMunicipio)
+      base.push({
+        key: "municipio",
+        label: "Municipio",
+        options: municipiosDisponibles,
+      });
+    if (cfg.mostrarGenero)
+      base.push({
+        key: "genero",
+        label: "Género",
+        options: ["Todos", "Femenino", "Masculino"],
+      });
+    if (cfg.mostrarAdministracion)
+      base.push({
+        key: "administracion",
+        label: "Administración",
+        options: administracionesDisponibles,
+      });
+    if (cfg.mostrarZona)
+      base.push({
+        key: "zona",
+        label: "Zona",
+        options: ["Todos", "URBANA", "RURAL"],
+      });
+    if (cfg.mostrarNivel)
+      base.push({
+        key: "nivel",
+        label: "Nivel Educativo",
+        options: ["Todos", "Prebásica", "Básica", "Media"],
+      });
     return base;
-  }, [selectedMetric, filtros.departamento, añosDisponibles, deptosDisponibles, municipiosDisponibles, administracionesDisponibles]);
+  }, [
+    selectedMetric,
+    filtros.departamento,
+    añosDisponibles,
+    deptosDisponibles,
+    municipiosDisponibles,
+    administracionesDisponibles,
+  ]);
 
-  const getEndpointForMetric = (metric) => METRICAS_CON_ENDPOINT_ESPECIAL.includes(metric) ? metric : "principal";
+  const getEndpointForMetric = (metric) =>
+    METRICAS_CON_ENDPOINT_ESPECIAL.includes(metric) ? metric : "principal";
 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
       try {
         const endpoint = getEndpointForMetric(selectedMetric);
-        const dataFetched = await fetchGenericData("SEDUC", endpoint, null, false);
+        const dataFetched = await fetchGenericData(
+          "SEDUC",
+          endpoint,
+          null,
+          false,
+        );
         setData(dataFetched);
-        if (selectedMetric === "serviciosbasicos") setDataServiciosBasicos(await fetchGenericData("SEDUC", "serviciosbasicos", null, false));
-        if (!["docentes", "centroeducativo", "serviciosbasicos", "discapacidad", "indicadores"].includes(selectedMetric)) {
-          setDataNiveles(await fetchGenericData("SEDUC", "niveles", selectedMetric, false));
+        if (selectedMetric === "serviciosbasicos")
+          setDataServiciosBasicos(
+            await fetchGenericData("SEDUC", "serviciosbasicos", null, false),
+          );
+        if (
+          ![
+            "docentes",
+            "centroeducativo",
+            "serviciosbasicos",
+            "discapacidad",
+            "indicadores",
+          ].includes(selectedMetric)
+        ) {
+          setDataNiveles(
+            await fetchGenericData("SEDUC", "niveles", selectedMetric, false),
+          );
         }
-      } catch (error) { console.error("Error loading data:", error); setData([]); }
-      finally { setLoading(false); }
+      } catch (error) {
+        console.error("Error loading data:", error);
+        setData([]);
+      } finally {
+        setLoading(false);
+      }
     };
     loadData();
   }, [selectedMetric]);
@@ -1042,7 +1470,10 @@ const BaseTablero = ({ titulo }) => {
       const container = document.getElementById("map-container");
       if (container) {
         const w = container.clientWidth;
-        setDimensions({ width: w, height: isMobile ? w * 0.5 : (isTablet ? 500 : 600) });
+        setDimensions({
+          width: w,
+          height: isMobile ? w * 0.5 : isTablet ? 500 : 600,
+        });
       }
     };
     updateDimensions();
@@ -1051,36 +1482,77 @@ const BaseTablero = ({ titulo }) => {
   }, [isMobile, isTablet]);
 
   useEffect(() => {
-    if (!data.length) { setFilteredData([]); setDatosDepto({}); return; }
-    let filtrado = data.filter(d => {
-      const cumpleAnio = filtros.anio === "Todos" || d.anio === filtros.anio || d.periodo === filtros.anio;
-      const cumpleDepto = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-      const cumpleMunicipio = filtros.municipio === "Todos" || normalizar(d.municipio) === normalizar(filtros.municipio);
-      const cumpleGenero = filtros.genero === "Todos" || d.genero === filtros.genero;
+    if (!data.length) {
+      setFilteredData([]);
+      setDatosDepto({});
+      return;
+    }
+    let filtrado = data.filter((d) => {
+      const cumpleAnio =
+        filtros.anio === "Todos" ||
+        d.anio === filtros.anio ||
+        d.periodo === filtros.anio;
+      const cumpleDepto =
+        filtros.departamento === "Todos" ||
+        normalizar(d.departamento) === normalizar(filtros.departamento);
+      const cumpleMunicipio =
+        filtros.municipio === "Todos" ||
+        normalizar(d.municipio) === normalizar(filtros.municipio);
+      const cumpleGenero =
+        filtros.genero === "Todos" || d.genero === filtros.genero;
       const cumpleZona = filtros.zona === "Todos" || d.zona === filtros.zona;
-      const cumpleAdmin = filtros.administracion === "Todos" || d.administracion === filtros.administracion;
+      const cumpleAdmin =
+        filtros.administracion === "Todos" ||
+        d.administracion === filtros.administracion;
       let nivelData = "";
       const nivelOriginal = d.niveleducativo?.toUpperCase() || "";
       if (nivelOriginal.includes("PREBASICA")) nivelData = "Prebásica";
-      else if (nivelOriginal.includes("BÁSICA") || nivelOriginal.includes("BASICA")) nivelData = "Básica";
+      else if (
+        nivelOriginal.includes("BÁSICA") ||
+        nivelOriginal.includes("BASICA")
+      )
+        nivelData = "Básica";
       else if (nivelOriginal.includes("MEDIA")) nivelData = "Media";
-      const cumpleNivel = filtros.nivel === "Todos" || nivelData === filtros.nivel;
-      return cumpleAnio && cumpleGenero && cumpleDepto && cumpleMunicipio && cumpleZona && cumpleAdmin && cumpleNivel;
+      const cumpleNivel =
+        filtros.nivel === "Todos" || nivelData === filtros.nivel;
+      return (
+        cumpleAnio &&
+        cumpleGenero &&
+        cumpleDepto &&
+        cumpleMunicipio &&
+        cumpleZona &&
+        cumpleAdmin &&
+        cumpleNivel
+      );
     });
     setFilteredData(filtrado);
-    let datosMapa = selectedMetric === "serviciosbasicos" ? dataServiciosBasicos : (selectedMetric === "docentes" ? filtrado.filter(d => d.genero === "Femenino") : filtrado);
+    let datosMapa =
+      selectedMetric === "serviciosbasicos"
+        ? dataServiciosBasicos
+        : selectedMetric === "docentes"
+          ? filtrado.filter((d) => d.genero === "Femenino")
+          : filtrado;
     const mapa = {};
-    datosMapa.forEach(row => {
-      let clave = (filtros.municipio !== "Todos" || filtros.departamento !== "Todos") ? row.municipio : row.departamento;
+    datosMapa.forEach((row) => {
+      let clave =
+        filtros.municipio !== "Todos" || filtros.departamento !== "Todos"
+          ? row.municipio
+          : row.departamento;
       if (clave && clave !== "Todos") {
         let valor = 0;
         if (selectedMetric === "docentes") valor = row.TotalDocentes || 0;
-        else if (selectedMetric === "centroeducativo") valor = (row.Rural || 0) + (row.Urbana || 0);
-        else if (selectedMetric === "serviciosbasicos") valor = parseInt(row.Plantel) || 0;
-        else if (selectedMetric === "discapacidad") valor = row.TotalConDiscapacidad || 0;
+        else if (selectedMetric === "centroeducativo")
+          valor = (row.Rural || 0) + (row.Urbana || 0);
+        else if (selectedMetric === "serviciosbasicos")
+          valor = parseInt(row.Plantel) || 0;
+        else if (selectedMetric === "discapacidad")
+          valor = row.TotalConDiscapacidad || 0;
         else valor = row[selectedMetric] || 0;
         const norm = normalizar(clave);
-        mapa[norm] = { valor: (mapa[norm]?.valor || 0) + valor, nivel: "departamento" };
+        mapa[norm] = {
+          valor: (mapa[norm]?.valor || 0) + valor,
+          nivel: "departamento",
+        };
       }
     });
     setDatosDepto(mapa);
@@ -1088,30 +1560,80 @@ const BaseTablero = ({ titulo }) => {
 
   const totalGeneral = useMemo(() => {
     if (!filteredData.length) return 0;
-    if (selectedMetric === "centroeducativo") return filteredData.reduce((s, r) => s + ((r.Rural || 0) + (r.Urbana || 0)), 0);
-    if (selectedMetric === "discapacidad") return filteredData.reduce((s, r) => s + (r.TotalConDiscapacidad || 0), 0);
-    return filteredData.filter(r => r.genero === "Femenino" || r.genero === "Masculino").reduce((s, r) => s + (r[selectedMetric] || 0), 0);
+    if (selectedMetric === "centroeducativo")
+      return filteredData.reduce(
+        (s, r) => s + ((r.Rural || 0) + (r.Urbana || 0)),
+        0,
+      );
+    if (selectedMetric === "discapacidad")
+      return filteredData.reduce(
+        (s, r) => s + (r.TotalConDiscapacidad || 0),
+        0,
+      );
+    return filteredData
+      .filter((r) => r.genero === "Femenino" || r.genero === "Masculino")
+      .reduce((s, r) => s + (r[selectedMetric] || 0), 0);
   }, [filteredData, selectedMetric]);
 
   useEffect(() => {
     const loadIndicadores = async () => {
       if (selectedMetric === "indicadores") {
         try {
-          setCoberturaData(await fetchGenericData("SEDUC", "coberturaBrutayNetaNiveles") || []);
-          setAccesoPrimerGradoBasica(await fetchGenericData("SEDUC", "tasaBrutayNetaaccesoprimergradoBasica") || []);
-          setAccesoPrebasica3(await fetchGenericData("SEDUC", "acceso3prebasica") || []);
-          setEscolarizacionData(await fetchGenericData("SEDUC", "tasaescolarizacion") || []);
-          setTasasDepartamentoData(await fetchGenericData("SEDUC", "tasaBrutayNetaporDepartamento") || []);
-          setTasaRepitenciaData(await fetchGenericData("SEDUC", "tasarepitencias") || []);
-          setTasaDesercionData(await fetchGenericData("SEDUC", "tasadesercion") || []);
-          setTasaAprobacionData(await fetchGenericData("SEDUC", "tasaaprobacion") || []);
-          setTasaPromovidosData(await fetchGenericData("SEDUC", "tasapromovidos") || []);
-          setVariacionInteranualData(await fetchGenericData("SEDUC", "tasaesvariacion") || []);
-          setTasasPorGrado(await fetchGenericData("SEDUC", "tasaBrutayNetaporGrado") || []);
-          setAcessoPrimerGradoEdadesSimplesData(await fetchGenericData("SEDUC", "tasaprimergradobasicaporedadessimples") || []);
-          setTasasCiclosData(await fetchGenericData("SEDUC", "tasasciclosporperiodo") || []);
-          setTasaSupervivenciaData(await fetchGenericData("SEDUC", "tasaSupervivencia") || []);
-        } catch (error) { console.error("Error loading indicadores:", error); }
+          setCoberturaData(
+            (await fetchGenericData("SEDUC", "coberturaBrutayNetaNiveles")) ||
+            [],
+          );
+          setAccesoPrimerGradoBasica(
+            (await fetchGenericData(
+              "SEDUC",
+              "tasaBrutayNetaaccesoprimergradoBasica",
+            )) || [],
+          );
+          setAccesoPrebasica3(
+            (await fetchGenericData("SEDUC", "acceso3prebasica")) || [],
+          );
+          setEscolarizacionData(
+            (await fetchGenericData("SEDUC", "tasaescolarizacion")) || [],
+          );
+          setTasasDepartamentoData(
+            (await fetchGenericData(
+              "SEDUC",
+              "tasaBrutayNetaporDepartamento",
+            )) || [],
+          );
+          setTasaRepitenciaData(
+            (await fetchGenericData("SEDUC", "tasarepitencias")) || [],
+          );
+          setTasaDesercionData(
+            (await fetchGenericData("SEDUC", "tasadesercion")) || [],
+          );
+          setTasaAprobacionData(
+            (await fetchGenericData("SEDUC", "tasaaprobacion")) || [],
+          );
+          setTasaPromovidosData(
+            (await fetchGenericData("SEDUC", "tasapromovidos")) || [],
+          );
+          setVariacionInteranualData(
+            (await fetchGenericData("SEDUC", "tasaesvariacion")) || [],
+          );
+          setTasasPorGrado(
+            (await fetchGenericData("SEDUC", "tasaBrutayNetaporGrado")) || [],
+          );
+          setAcessoPrimerGradoEdadesSimplesData(
+            (await fetchGenericData(
+              "SEDUC",
+              "tasaprimergradobasicaporedadessimples",
+            )) || [],
+          );
+          setTasasCiclosData(
+            (await fetchGenericData("SEDUC", "tasasciclosporperiodo")) || [],
+          );
+          setTasaSupervivenciaData(
+            (await fetchGenericData("SEDUC", "tasaSupervivencia")) || [],
+          );
+        } catch (error) {
+          console.error("Error loading indicadores:", error);
+        }
       }
     };
     loadIndicadores();
@@ -1119,67 +1641,165 @@ const BaseTablero = ({ titulo }) => {
 
   const datosGenero = useMemo(() => {
     const agrupado = { Femenino: 0, Masculino: 0 };
-    filteredData.forEach(item => {
-      if (selectedMetric === "discapacidad") { agrupado.Femenino += item.NiñasConDiscapacidad || 0; agrupado.Masculino += item.NiñosConDiscapacidad || 0; }
-      else if (selectedMetric === "docentes") { if (item.genero === "Femenino") agrupado.Femenino += item.docentes || 0; else if (item.genero === "Masculino") agrupado.Masculino += item.docentes || 0; }
-      else if (item.genero === "Femenino" || item.genero === "Masculino") agrupado[item.genero] += item[selectedMetric] || 0;
+    filteredData.forEach((item) => {
+      if (selectedMetric === "discapacidad") {
+        agrupado.Femenino += item.NiñasConDiscapacidad || 0;
+        agrupado.Masculino += item.NiñosConDiscapacidad || 0;
+      } else if (selectedMetric === "docentes") {
+        if (item.genero === "Femenino") agrupado.Femenino += item.docentes || 0;
+        else if (item.genero === "Masculino")
+          agrupado.Masculino += item.docentes || 0;
+      } else if (item.genero === "Femenino" || item.genero === "Masculino")
+        agrupado[item.genero] += item[selectedMetric] || 0;
     });
-    return [{ name: "Femenino", value: agrupado.Femenino }, { name: "Masculino", value: agrupado.Masculino }];
+    return [
+      { name: "Femenino", value: agrupado.Femenino },
+      { name: "Masculino", value: agrupado.Masculino },
+    ];
   }, [filteredData, selectedMetric]);
 
   const datosAdministracion = useMemo(() => {
     const agrupado = {};
-    filteredData.forEach(item => {
+    filteredData.forEach((item) => {
       const admin = item.administracion;
       if (admin && admin !== "Todos") {
-        let valor = selectedMetric === "docentes" ? (item.genero === "Femenino" ? item.TotalDocentes || 0 : 0) : (item[selectedMetric] || 0);
+        let valor =
+          selectedMetric === "docentes"
+            ? item.genero === "Femenino"
+              ? item.TotalDocentes || 0
+              : 0
+            : item[selectedMetric] || 0;
         if (valor) agrupado[admin] = (agrupado[admin] || 0) + valor;
       }
     });
-    return Object.entries(agrupado).map(([name, value]) => ({ name: name.length > 20 ? name.substring(0, 17) + "..." : name, value }));
+    return Object.entries(agrupado).map(([name, value]) => ({
+      name: name.length > 20 ? name.substring(0, 17) + "..." : name,
+      value,
+    }));
   }, [filteredData, selectedMetric]);
 
   const datosLineaPeriodo = useMemo(() => {
     const mapa = new Map();
-    const datos = selectedMetric === "docentes" ? filteredData.filter(i => i.genero === "Femenino") : filteredData;
-    datos.forEach(item => {
-      const periodo = item.anio;
-      let valor = selectedMetric === "docentes" ? (item.TotalDocentes || 0) : (selectedMetric === "discapacidad" ? (item.TotalConDiscapacidad || 0) : (item[selectedMetric] || 0));
-      if (!mapa.has(periodo)) mapa.set(periodo, { periodo, total: 0 });
+
+    let datos = [];
+    if (selectedMetric === "docentes") {
+      datos = filteredData.filter((i) => i.genero === "Femenino");
+    } else if (selectedMetric === "discapacidad") {
+      // Para discapacidad, usar todos los datos filtrados
+      datos = filteredData;
+    } else {
+      datos = filteredData;
+    }
+
+    datos.forEach((item) => {
+      const periodo = item.anio || item.periodo;
+      if (!periodo) return;
+
+      let valor = 0;
+      if (selectedMetric === "docentes") {
+        valor = item.TotalDocentes || 0;
+      } else if (selectedMetric === "discapacidad") {
+        valor = item.TotalConDiscapacidad || 0;
+      } else {
+        valor = item[selectedMetric] || 0;
+      }
+
+      if (!mapa.has(periodo)) {
+        mapa.set(periodo, { periodo, total: 0 });
+      }
       mapa.get(periodo).total += valor;
     });
+
     return Array.from(mapa.values()).sort((a, b) => a.periodo - b.periodo);
   }, [filteredData, selectedMetric]);
 
   const datosZonaPorPeriodo = useMemo(() => {
     const mapa = new Map();
-    const datos = selectedMetric === "docentes" ? filteredData.filter(i => i.genero === "Femenino") : filteredData;
-    datos.forEach(item => {
-      const periodo = item.anio;
+
+    let datos = [];
+    if (selectedMetric === "docentes") {
+      datos = filteredData.filter((i) => i.genero === "Femenino");
+    } else if (selectedMetric === "discapacidad") {
+      // Para discapacidad, usar todos los datos filtrados
+      datos = filteredData;
+    } else {
+      datos = filteredData;
+    }
+
+    datos.forEach((item) => {
+      const periodo = item.anio || item.periodo;
       if (!periodo) return;
-      if (!mapa.has(periodo)) mapa.set(periodo, { periodo, rural: 0, urbana: 0, total: 0 });
-      const entry = mapa.get(periodo);
-      if (selectedMetric === "centroeducativo") { entry.rural += item.Rural || 0; entry.urbana += item.Urbana || 0; }
-      else {
-        const zona = item.zona;
-        const valor = selectedMetric === "docentes" ? (item.TotalDocentes || 0) : (item[selectedMetric] || 0);
-        if (zona === "RURAL") entry.rural += valor;
-        else if (zona === "URBANA") entry.urbana += valor;
+
+      if (!mapa.has(periodo)) {
+        mapa.set(periodo, { periodo, rural: 0, urbana: 0, total: 0 });
       }
+
+      const entry = mapa.get(periodo);
+
+      if (selectedMetric === "centroeducativo") {
+        entry.rural += item.Rural || 0;
+        entry.urbana += item.Urbana || 0;
+      } else if (selectedMetric === "discapacidad") {
+        const zona = (item.zona || "").toUpperCase();
+        const valor = item.TotalConDiscapacidad || 0;
+        if (zona === "RURAL") {
+          entry.rural += valor;
+        } else if (zona === "URBANA") {
+          entry.urbana += valor;
+        } else {
+          // Si no tiene zona definida, sumar al total pero no a rural/urbana
+          entry.rural += valor; // o asignar a ambos
+          entry.urbana += valor;
+        }
+      } else {
+        const zona = item.zona;
+        const valor = selectedMetric === "docentes"
+          ? item.TotalDocentes || 0
+          : item[selectedMetric] || 0;
+
+        if (zona === "RURAL") {
+          entry.rural += valor;
+        } else if (zona === "URBANA") {
+          entry.urbana += valor;
+        }
+      }
+
       entry.total = entry.rural + entry.urbana;
     });
+
     return Array.from(mapa.values()).sort((a, b) => a.periodo - b.periodo);
   }, [filteredData, selectedMetric]);
 
   const datosServiciosGrafico = useMemo(() => {
     if (selectedMetric !== "serviciosbasicos") return {};
-    const totales = { ElectricidadSI: 0, ElectricidadNO: 0, AbastecimientoAguaSI: 0, AbastecimientoAguaNO: 0, EvacuacionAguasSI: 0, EvacuacionAguasNO: 0, Plantel: 0, CodigoSACE: 0 };
+    const totales = {
+      ElectricidadSI: 0,
+      ElectricidadNO: 0,
+      AbastecimientoAguaSI: 0,
+      AbastecimientoAguaNO: 0,
+      EvacuacionAguasSI: 0,
+      EvacuacionAguasNO: 0,
+      Plantel: 0,
+      CodigoSACE: 0,
+    };
     let filtrados = [...dataServiciosBasicos];
-    if (filtros.anio && filtros.anio !== "Todos") filtrados = filtrados.filter(i => String(i.periodo) === String(filtros.anio));
-    if (filtros.departamento && filtros.departamento !== "Todos") filtrados = filtrados.filter(i => normalizar(i.departamento) === normalizar(filtros.departamento));
-    if (filtros.municipio && filtros.municipio !== "Todos") filtrados = filtrados.filter(i => normalizar(i.municipio) === normalizar(filtros.municipio));
-    if (filtros.zona && filtros.zona !== "Todos") filtrados = filtrados.filter(i => i.zona?.toUpperCase() === filtros.zona?.toUpperCase());
-    filtrados.forEach(i => {
+    if (filtros.anio && filtros.anio !== "Todos")
+      filtrados = filtrados.filter(
+        (i) => String(i.periodo) === String(filtros.anio),
+      );
+    if (filtros.departamento && filtros.departamento !== "Todos")
+      filtrados = filtrados.filter(
+        (i) => normalizar(i.departamento) === normalizar(filtros.departamento),
+      );
+    if (filtros.municipio && filtros.municipio !== "Todos")
+      filtrados = filtrados.filter(
+        (i) => normalizar(i.municipio) === normalizar(filtros.municipio),
+      );
+    if (filtros.zona && filtros.zona !== "Todos")
+      filtrados = filtrados.filter(
+        (i) => i.zona?.toUpperCase() === filtros.zona?.toUpperCase(),
+      );
+    filtrados.forEach((i) => {
       totales.ElectricidadSI += parseInt(i.Electricidad) || 0;
       totales.ElectricidadNO += parseInt(i.ElectricidadNO) || 0;
       totales.AbastecimientoAguaSI += parseInt(i.AbastecimientoAgua) || 0;
@@ -1189,26 +1809,70 @@ const BaseTablero = ({ titulo }) => {
       totales.Plantel += parseInt(i.Plantel) || 0;
       totales.CodigoSACE += parseInt(i.CodigoSACE) || 0;
     });
-    return { totales, totalPlanteles: totales.Plantel, totalCodigoSACE: totales.CodigoSACE };
-  }, [selectedMetric, dataServiciosBasicos, filtros.anio, filtros.departamento, filtros.municipio, filtros.zona]);
+    return {
+      totales,
+      totalPlanteles: totales.Plantel,
+      totalCodigoSACE: totales.CodigoSACE,
+    };
+  }, [
+    selectedMetric,
+    dataServiciosBasicos,
+    filtros.anio,
+    filtros.departamento,
+    filtros.municipio,
+    filtros.zona,
+  ]);
 
   const datosDocentesPorNivel = useMemo(() => {
     if (selectedMetric !== "docentes") return [];
-    const nivelMap = { "EDUCACION PREBASICA": "prebasica", "EDUCACION BASICA": "basica", "EDUCACION MEDIA": "media", PREBASICA: "prebasica", BASICA: "basica", MEDIA: "media" };
+    const nivelMap = {
+      "EDUCACION PREBASICA": "prebasica",
+      "EDUCACION BASICA": "basica",
+      "EDUCACION MEDIA": "media",
+      PREBASICA: "prebasica",
+      BASICA: "basica",
+      MEDIA: "media",
+    };
     const acum = { prebasica: 0, basica: 0, media: 0 };
-    filteredData.filter(i => i.genero === "Femenino").forEach(i => { const key = nivelMap[i.niveleducativo?.toUpperCase() || ""]; if (key) acum[key] += i.TotalDocentes || 0; });
-    const colores = { prebasica: color.primary, basica: color.secondary, media: color.contrastText };
-    const nombres = { prebasica: "Prebásica", basica: "Básica", media: "Media" };
-    return Object.entries(acum).filter(([_, v]) => v > 0).map(([k, v]) => ({ nivel: nombres[k], valor: v, color: colores[k] }));
+    filteredData
+      .filter((i) => i.genero === "Femenino")
+      .forEach((i) => {
+        const key = nivelMap[i.niveleducativo?.toUpperCase() || ""];
+        if (key) acum[key] += i.TotalDocentes || 0;
+      });
+    const colores = {
+      prebasica: color.primary,
+      basica: color.secondary,
+      media: color.contrastText,
+    };
+    const nombres = {
+      prebasica: "Prebásica",
+      basica: "Básica",
+      media: "Media",
+    };
+    return Object.entries(acum)
+      .filter(([_, v]) => v > 0)
+      .map(([k, v]) => ({ nivel: nombres[k], valor: v, color: colores[k] }));
   }, [filteredData, selectedMetric]);
 
   const datosCentroEducativo = useMemo(() => {
     if (selectedMetric !== "centroeducativo") return [];
     const agrupado = new Map();
-    filteredData.forEach(item => {
+    filteredData.forEach((item) => {
       const periodo = item.anio;
       if (!periodo) return;
-      if (!agrupado.has(periodo)) agrupado.set(periodo, { periodo, Prebasica: 0, Basica: 0, Media: 0, Rural: 0, Urbana: 0, Gubernamental: 0, NoGubernamental: 0, total: 0 });
+      if (!agrupado.has(periodo))
+        agrupado.set(periodo, {
+          periodo,
+          Prebasica: 0,
+          Basica: 0,
+          Media: 0,
+          Rural: 0,
+          Urbana: 0,
+          Gubernamental: 0,
+          NoGubernamental: 0,
+          total: 0,
+        });
       const e = agrupado.get(periodo);
       e.Prebasica += item.Prebasica || 0;
       e.Basica += item.Basica || 0;
@@ -1222,70 +1886,309 @@ const BaseTablero = ({ titulo }) => {
     return Array.from(agrupado.values()).sort((a, b) => a.periodo - b.periodo);
   }, [filteredData, selectedMetric]);
 
-  const handleFilterChange = useCallback((key, value) => setFiltros(prev => ({ ...prev, [key]: value })), []);
-  const handleRemoveFilter = useCallback((key) => setFiltros(prev => ({ ...prev, [key]: "Todos" })), []);
-  const handleClearAllFilters = useCallback(() => setFiltros({ anio: "Todos", genero: "Todos", departamento: "Todos", municipio: "Todos", zona: "Todos", administracion: "Todos", nivel: "Todos" }), []);
-  useEffect(() => { if (filtros.municipio !== "Todos") setFiltros(prev => ({ ...prev, municipio: "Todos" })); }, [filtros.departamento]);
+  const handleFilterChange = useCallback(
+    (key, value) => setFiltros((prev) => ({ ...prev, [key]: value })),
+    [],
+  );
+  const handleRemoveFilter = useCallback(
+    (key) => setFiltros((prev) => ({ ...prev, [key]: "Todos" })),
+    [],
+  );
+  const handleClearAllFilters = useCallback(
+    () =>
+      setFiltros({
+        anio: "Todos",
+        genero: "Todos",
+        departamento: "Todos",
+        municipio: "Todos",
+        zona: "Todos",
+        administracion: "Todos",
+        nivel: "Todos",
+      }),
+    [],
+  );
+  useEffect(() => {
+    if (filtros.municipio !== "Todos")
+      setFiltros((prev) => ({ ...prev, municipio: "Todos" }));
+  }, [filtros.departamento]);
 
   const hasData = loading ? true : filteredData.length > 0;
-  const hasGenderData = datosGenero.some(i => i.value > 0);
+  const hasGenderData = datosGenero.some((i) => i.value > 0);
 
   return (
     <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
       <ScrollReveal direction="right" duration={0.8}>
-        <Typography sx={{ textAlign: "center", color: color.secondary, fontWeight: "bold", fontSize: "clamp(1.2rem, 4vw, 2.5rem)", position: "relative", display: "inline-block", width: "100%", mb: 4, "&::after": { content: '""', position: "absolute", left: "50%", bottom: -8, transform: "translateX(-50%)", width: "60px", height: "4px", background: color.secondary, borderRadius: 2, transition: "0.3s" }, "&:hover::after": { width: "120px" } }}>{titulo}</Typography>
+        <Typography
+          sx={{
+            textAlign: "center",
+            color: color.secondary,
+            fontWeight: "bold",
+            fontSize: "clamp(1.2rem, 4vw, 2.5rem)",
+            position: "relative",
+            display: "inline-block",
+            width: "100%",
+            mb: 4,
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              left: "50%",
+              bottom: -8,
+              transform: "translateX(-50%)",
+              width: "60px",
+              height: "4px",
+              background: color.secondary,
+              borderRadius: 2,
+              transition: "0.3s",
+            },
+            "&:hover::after": { width: "120px" },
+          }}
+        >
+          {titulo}
+        </Typography>
       </ScrollReveal>
 
       <ScrollReveal direction="left" delay={0.1}>
-        <Stack direction="row" sx={{ flexWrap: "wrap", justifyContent: "center", gap: 1, mb: 3, px: { xs: 1, sm: 2 } }}>
-          {METRICAS_LIST.map(metric => (
+        <Stack
+          direction="row"
+          sx={{
+            flexWrap: "wrap",
+            justifyContent: "center",
+            gap: 1,
+            mb: 3,
+            px: { xs: 1, sm: 2 },
+          }}
+        >
+          {METRICAS_LIST.map((metric) => (
             <Tooltip key={metric.id} title={`Ver datos por ${metric.label}`}>
-              <Chip label={metric.label} onClick={() => setSelectedMetric(metric.id)} variant={selectedMetric === metric.id ? "filled" : "outlined"} sx={{ transition: "all 0.2s ease", backgroundColor: selectedMetric === metric.id ? color.primary : "transparent", color: selectedMetric === metric.id ? color.white : color.primary, borderColor: color.primary, "&:hover": { transform: "translateY(-2px)", boxShadow: 1, backgroundColor: selectedMetric === metric.id ? color.primary : `${color.primary}15` } }} />
+              <Chip
+                label={metric.label}
+                onClick={() => setSelectedMetric(metric.id)}
+                variant={selectedMetric === metric.id ? "filled" : "outlined"}
+                sx={{
+                  transition: "all 0.2s ease",
+                  backgroundColor:
+                    selectedMetric === metric.id
+                      ? color.primary
+                      : "transparent",
+                  color:
+                    selectedMetric === metric.id ? color.white : color.primary,
+                  borderColor: color.primary,
+                  "&:hover": {
+                    transform: "translateY(-2px)",
+                    boxShadow: 1,
+                    backgroundColor:
+                      selectedMetric === metric.id
+                        ? color.primary
+                        : `${color.primary}15`,
+                  },
+                }}
+              />
             </Tooltip>
           ))}
         </Stack>
       </ScrollReveal>
 
-      <FiltrosActivos filtros={filtros} onRemoveFilter={handleRemoveFilter} onClearAll={handleClearAllFilters} />
+      <FiltrosActivos
+        filtros={filtros}
+        onRemoveFilter={handleRemoveFilter}
+        onClearAll={handleClearAllFilters}
+      />
 
       {selectedMetric !== "indicadores" && (
         <ScrollReveal direction="up" delay={0.2}>
           <Grid container spacing={3} justifyContent="center" sx={{ mb: 3 }}>
-            {filtersConfig.map(filter => (<Grid key={filter.key} size="auto"><FiltroSelect label={filter.label} value={filtros[filter.key]} options={filter.options} onChange={(e) => handleFilterChange(filter.key, e.target.value)} /></Grid>))}
+            {filtersConfig.map((filter) => (
+              <Grid key={filter.key} size="auto">
+                <FiltroSelect
+                  label={filter.label}
+                  value={filtros[filter.key]}
+                  options={filter.options}
+                  onChange={(e) =>
+                    handleFilterChange(filter.key, e.target.value)
+                  }
+                />
+              </Grid>
+            ))}
           </Grid>
         </ScrollReveal>
       )}
 
       <Grid container spacing={{ xs: 2, sm: 3 }}>
         {configGraficos.mostrarMapaPorDepartamento && (
-          <Grid item size={{ xs: 12, md: selectedMetric === "centroeducativo" ? 12 : 7 }} sx={{ order: { xs: 1, md: 2 } }}>
+          <Grid
+            item
+            size={{ xs: 12, md: selectedMetric === "centroeducativo" ? 12 : 7 }}
+            sx={{ order: { xs: 1, md: 2 } }}
+          >
             <ScrollReveal direction="up" delay={0.3}>
-              <StyledCard sx={{ position: "relative", overflow: "visible", height: "885px" }}>
+              <StyledCard
+                sx={{
+                  position: "relative",
+                  overflow: "visible",
+                  height: "885px",
+                }}
+              >
                 <StyledCardContent sx={{ position: "relative" }}>
-                  <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 2 }}>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="center"
+                    spacing={1}
+                    sx={{ mb: 2 }}
+                  >
                     <MapIcon sx={{ color: color.primary }} />
-                    <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>{selectedMetric === "centroeducativo" || selectedMetric === "serviciosbasicos" ? "Por Departamento" : (filtros.departamento !== "Todos" || filtros.municipio !== "Todos") ? "Por Municipio" : "Por Departamento"}</Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{ color: color.primary, fontWeight: "bold" }}
+                    >
+                      {selectedMetric === "centroeducativo" ||
+                        selectedMetric === "serviciosbasicos"
+                        ? "Por Departamento"
+                        : filtros.departamento !== "Todos" ||
+                          filtros.municipio !== "Todos"
+                          ? "Por Municipio"
+                          : "Por Departamento"}
+                    </Typography>
                   </Stack>
                   <Box id="map-container" sx={{ width: "100%" }}>
-                    {loading ? <Skeleton variant="rectangular" width="100%" height={dimensions.height || 700} sx={{ borderRadius: 2 }} animation="wave" /> : !hasData ? <EmptyState onClearFilters={handleClearAllFilters} /> : <MapaDinamico datosDepto={datosDepto} dimensions={dimensions} isMobile={isMobile} filtroDepartamento={filtros.departamento} filtroMunicipio={filtros.municipio} esCentroEducativo={selectedMetric === "centroeducativo"} esMetricaDocente={selectedMetric === "docentes"} modoSimple={false} esServiciosBasicos={selectedMetric === "serviciosbasicos"} />}
+                    {loading ? (
+                      <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={dimensions.height || 700}
+                        sx={{ borderRadius: 2 }}
+                        animation="wave"
+                      />
+                    ) : !hasData ? (
+                      <EmptyState onClearFilters={handleClearAllFilters} />
+                    ) : (
+                      <MapaDinamico
+                        datosDepto={datosDepto}
+                        dimensions={dimensions}
+                        isMobile={isMobile}
+                        filtroDepartamento={filtros.departamento}
+                        filtroMunicipio={filtros.municipio}
+                        esCentroEducativo={selectedMetric === "centroeducativo"}
+                        esMetricaDocente={selectedMetric === "docentes"}
+                        modoSimple={false}
+                        esServiciosBasicos={
+                          selectedMetric === "serviciosbasicos"
+                        }
+                      />
+                    )}
                   </Box>
                 </StyledCardContent>
-                <Box sx={{ position: "absolute", top: { xs: 50, sm: 50, md: 60, lg: 20 }, left: 20, zIndex: 1300, width: { xs: "calc(100% - 40px)", sm: "100px", md: "250px" } }}>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: { xs: 50, sm: 50, md: 60, lg: 20 },
+                    left: 20,
+                    zIndex: 1300,
+                    width: {
+                      xs: "calc(100% - 40px)",
+                      sm: "100px",
+                      md: "250px",
+                    },
+                  }}
+                >
                   {selectedMetric !== "serviciosbasicos" && (
                     <ScrollReveal direction="left" delay={0.4}>
-                      <StyledCard sx={{ background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`, width: "220px" }}>
+                      <StyledCard
+                        sx={{
+                          background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`,
+                          width: "220px",
+                        }}
+                      >
                         <StyledCardContent>
-                          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}><DataExplorationRoundedIcon sx={{ color: color.primary, fontSize: 32 }} /><Typography variant="subtitle2" sx={{ color: color.primary, fontWeight: "bold" }}>Total {METRICAS_LIST.find(m => m.id === selectedMetric)?.label || selectedMetric}</Typography></Stack>
-                          <Typography variant="h3" sx={{ color: color.secondary, fontWeight: "bold", fontSize: "clamp(2rem, 6vw, 2rem)", mb: 1 }}>{loading ? <Skeleton width="80%" /> : <AnimatedCounter value={totalGeneral} />}</Typography>
-                          {(filtros.municipio !== "Todos" || filtros.departamento !== "Todos") && <Chip label={filtros.municipio !== "Todos" ? filtros.municipio : filtros.departamento} size="small" sx={{ mt: 1, bgcolor: color.secondary, color: "white" }} />}
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            spacing={1}
+                            sx={{ mb: 1 }}
+                          >
+                            <DataExplorationRoundedIcon
+                              sx={{ color: color.primary, fontSize: 32 }}
+                            />
+                            <Typography
+                              variant="subtitle2"
+                              sx={{ color: color.primary, fontWeight: "bold" }}
+                            >
+                              Total{" "}
+                              {METRICAS_LIST.find(
+                                (m) => m.id === selectedMetric,
+                              )?.label || selectedMetric}
+                            </Typography>
+                          </Stack>
+                          <Typography
+                            variant="h3"
+                            sx={{
+                              color: color.secondary,
+                              fontWeight: "bold",
+                              fontSize: "clamp(2rem, 6vw, 2rem)",
+                              mb: 1,
+                            }}
+                          >
+                            {loading ? (
+                              <Skeleton width="80%" />
+                            ) : (
+                              <AnimatedCounter value={totalGeneral} />
+                            )}
+                          </Typography>
+                          {(filtros.municipio !== "Todos" ||
+                            filtros.departamento !== "Todos") && (
+                              <Chip
+                                label={
+                                  filtros.municipio !== "Todos"
+                                    ? filtros.municipio
+                                    : filtros.departamento
+                                }
+                                size="small"
+                                sx={{
+                                  mt: 1,
+                                  bgcolor: color.secondary,
+                                  color: "white",
+                                }}
+                              />
+                            )}
                         </StyledCardContent>
                       </StyledCard>
                     </ScrollReveal>
                   )}
                   {selectedMetric === "serviciosbasicos" && (
                     <>
-                      <ScrollReveal direction="left" delay={0.4}><Chip icon={<School sx={{ color: color.primary, fontSize: 18 }} />} label={`Centros Educativos: ${loading ? "..." : (datosServiciosGrafico.totalCodigoSACE || 0).toLocaleString()}`} sx={{ bgcolor: alpha(color.primary, 0.1), color: color.primary, fontWeight: "bold", py: 2, mb: 2 }} /></ScrollReveal>
-                      <ScrollReveal direction="left" delay={0.5}><Chip icon={<ElectricalServicesIcon sx={{ color: color.primary, fontSize: 18 }} />} label={`Planteles con Servicios: ${loading ? "..." : (datosServiciosGrafico.totalPlanteles || 0).toLocaleString()}`} sx={{ bgcolor: alpha(color.primary, 0.1), color: color.primary, fontWeight: "bold", py: 2 }} /></ScrollReveal>
+                      <ScrollReveal direction="left" delay={0.4}>
+                        <Chip
+                          icon={
+                            <School
+                              sx={{ color: color.primary, fontSize: 18 }}
+                            />
+                          }
+                          label={`Centros Educativos: ${loading ? "..." : (datosServiciosGrafico.totalCodigoSACE || 0).toLocaleString()}`}
+                          sx={{
+                            bgcolor: alpha(color.primary, 0.1),
+                            color: color.primary,
+                            fontWeight: "bold",
+                            py: 2,
+                            mb: 2,
+                          }}
+                        />
+                      </ScrollReveal>
+                      <ScrollReveal direction="left" delay={0.5}>
+                        <Chip
+                          icon={
+                            <ElectricalServicesIcon
+                              sx={{ color: color.primary, fontSize: 18 }}
+                            />
+                          }
+                          label={`Planteles con Servicios: ${loading ? "..." : (datosServiciosGrafico.totalPlanteles || 0).toLocaleString()}`}
+                          sx={{
+                            bgcolor: alpha(color.primary, 0.1),
+                            color: color.primary,
+                            fontWeight: "bold",
+                            py: 2,
+                          }}
+                        />
+                      </ScrollReveal>
                     </>
                   )}
                 </Box>
@@ -1296,55 +2199,131 @@ const BaseTablero = ({ titulo }) => {
 
         {configGraficos.mostrarServiciosBasicos && (
           <Grid item size={{ xs: 12, md: 5 }} sx={{ order: { xs: 3, md: 3 } }}>
-            <ScrollReveal direction="up" delay={0.3}><GraficoServiciosBasicos data={dataServiciosBasicos} loading={loading} totalPlanteles={datosServiciosGrafico.totalPlanteles || 0} onClearFilters={handleClearAllFilters} /></ScrollReveal>
+            <ScrollReveal direction="up" delay={0.3}>
+              <GraficoServiciosBasicos
+                data={dataServiciosBasicos}
+                loading={loading}
+                totalPlanteles={datosServiciosGrafico.totalPlanteles || 0}
+                onClearFilters={handleClearAllFilters}
+              />
+            </ScrollReveal>
           </Grid>
         )}
 
-        <Grid item size={{ xs: 12, md: selectedMetric === "centroeducativo" ? 4 : 5 }} sx={{ order: { xs: 2, md: 3 } }}>
+        <Grid
+          item
+          size={{ xs: 12, md: selectedMetric === "centroeducativo" ? 4 : 5 }}
+          sx={{ order: { xs: 2, md: 3 } }}
+        >
           <Grid container spacing={2}>
             {configGraficos.mostrarGenero && (
               <Grid item size={{ xs: 12, md: 12 }}>
                 <ScrollReveal direction="left" delay={0.3}>
-                  <StyledCard><StyledCardContent>
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><WcRoundedIcon sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Género</Typography></Stack>
-                    {loading ? <ChartSkeleton height={280} /> : !hasGenderData ? <EmptyState onClearFilters={handleClearAllFilters} /> : (
-                      <ResponsiveContainer width="100%" height={280}>
-                        <PieChart>
-                          <Pie
-                            data={datosGenero}
-                            dataKey="value"
-                            cx="50%"
-                            cy="50%"
-                            innerRadius="60%"
-                            outerRadius="90%"
-                            paddingAngle={5}
-                            labelLine={false}
-                            label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
-                              const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-                              const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
-                              const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                              return (
-                                <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">
-                                  {`${(percent * 100).toFixed(2)}%`}
-                                </text>
-                              );
-                            }}
-                          >
-                            {datosGenero.map((entry, idx) => (
-                              <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
-                            ))}
-                          </Pie>
-                          <RechartsTooltip formatter={(value, name) => {
-                            const total = datosGenero.reduce((sum, d) => sum + d.value, 0);
-                            const percent = total > 0 ? ((value / total) * 100).toFixed(2) : 0;
-                            return [`${value?.toLocaleString()} (${percent}%)`, name];
-                          }} />
-                          <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
-                        </PieChart>
-                      </ResponsiveContainer>
-                    )}
-                  </StyledCardContent></StyledCard>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        sx={{ mb: 2 }}
+                      >
+                        <WcRoundedIcon sx={{ color: color.primary }} />
+                        <Typography
+                          variant="h6"
+                          sx={{ color: color.primary, fontWeight: "bold" }}
+                        >
+                          Por Género
+                        </Typography>
+                      </Stack>
+                      {loading ? (
+                        <ChartSkeleton height={280} />
+                      ) : !hasGenderData ? (
+                        <EmptyState onClearFilters={handleClearAllFilters} />
+                      ) : (
+                        <ResponsiveContainer width="100%" height={280}>
+                          <PieChart>
+                            <Pie
+                              data={datosGenero}
+                              dataKey="value"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius="60%"
+                              outerRadius="90%"
+                              paddingAngle={5}
+                              labelLine={false}
+                              label={({
+                                name,
+                                percent,
+                                cx,
+                                cy,
+                                midAngle,
+                                innerRadius,
+                                outerRadius,
+                              }) => {
+                                const radius =
+                                  innerRadius +
+                                  (outerRadius - innerRadius) * 0.5;
+                                const x =
+                                  cx +
+                                  radius *
+                                  Math.cos((-midAngle * Math.PI) / 180);
+                                const y =
+                                  cy +
+                                  radius *
+                                  Math.sin((-midAngle * Math.PI) / 180);
+                                return (
+                                  <text
+                                    x={x}
+                                    y={y}
+                                    fill="white"
+                                    textAnchor="middle"
+                                    dominantBaseline="middle"
+                                    fontSize={12}
+                                    fontWeight="bold"
+                                  >
+                                    {`${(percent * 100).toFixed(2)}%`}
+                                  </text>
+                                );
+                              }}
+                            >
+                              {datosGenero.map((entry, idx) => (
+                                <Cell
+                                  key={idx}
+                                  fill={
+                                    entry.name === "Femenino"
+                                      ? color.primary
+                                      : color.secondary
+                                  }
+                                />
+                              ))}
+                            </Pie>
+                            <RechartsTooltip
+                              formatter={(value, name) => {
+                                const total = datosGenero.reduce(
+                                  (sum, d) => sum + d.value,
+                                  0,
+                                );
+                                const percent =
+                                  total > 0
+                                    ? ((value / total) * 100).toFixed(2)
+                                    : 0;
+                                return [
+                                  `${value?.toLocaleString()} (${percent}%)`,
+                                  name,
+                                ];
+                              }}
+                            />
+                            <Legend
+                              iconType="circle"
+                              verticalAlign="bottom"
+                              height={36}
+                              wrapperStyle={{ paddingTop: 10 }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      )}
+                    </StyledCardContent>
+                  </StyledCard>
                 </ScrollReveal>
               </Grid>
             )}
@@ -1352,97 +2331,574 @@ const BaseTablero = ({ titulo }) => {
             {configGraficos.mostrarZona && hasData && (
               <Grid item size={{ xs: 12, md: 12 }}>
                 <ScrollReveal direction="up" delay={0.3}>
-                  <StyledCard><StyledCardContent>
-                    <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><AreaChartRoundedIcon sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Zona</Typography></Stack>
-                    {loading ? <ChartSkeleton height={300} /> : !hasData ? <EmptyState onClearFilters={handleClearAllFilters} /> : (
-                      <TableContainer component={Paper} sx={{ maxHeight: 400 }}><Table stickyHeader size="small"><TableHead><TableRow><StyledTableCell>Periodo</StyledTableCell><StyledTableCell align="right">Rural</StyledTableCell><StyledTableCell align="right">Urbana</StyledTableCell><StyledTableCell align="right">Total</StyledTableCell></TableRow></TableHead><TableBody>{datosZonaPorPeriodo.map(row => (<StyledTableRow key={row.periodo} hover><TableCell>{row.periodo}</TableCell><TableCell align="right">{row.rural.toLocaleString()}</TableCell><TableCell align="right">{row.urbana.toLocaleString()}</TableCell><TableCell align="right" sx={{ fontWeight: "bold" }}>{row.total.toLocaleString()}</TableCell></StyledTableRow>))}</TableBody></Table></TableContainer>
-                    )}
-                  </StyledCardContent></StyledCard>
+                  <StyledCard>
+                    <StyledCardContent>
+                      <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        sx={{ mb: 2 }}
+                      >
+                        <AreaChartRoundedIcon sx={{ color: color.primary }} />
+                        <Typography
+                          variant="h6"
+                          sx={{ color: color.primary, fontWeight: "bold" }}
+                        >
+                          Por Zona
+                        </Typography>
+                      </Stack>
+                      {loading ? (
+                        <ChartSkeleton height={300} />
+                      ) : !hasData ? (
+                        <EmptyState onClearFilters={handleClearAllFilters} />
+                      ) : (
+                        <TableContainer
+                          component={Paper}
+                          sx={{ maxHeight: 400 }}
+                        >
+                          <Table stickyHeader size="small">
+                            <TableHead>
+                              <TableRow>
+                                <StyledTableCell>Periodo</StyledTableCell>
+                                <StyledTableCell align="right">
+                                  Rural
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  Urbana
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  Total
+                                </StyledTableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {datosZonaPorPeriodo.map((row) => (
+                                <StyledTableRow key={row.periodo} hover>
+                                  <TableCell>{row.periodo}</TableCell>
+                                  <TableCell align="right">
+                                    {row.rural.toLocaleString()}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    {row.urbana.toLocaleString()}
+                                  </TableCell>
+                                  <TableCell
+                                    align="right"
+                                    sx={{ fontWeight: "bold" }}
+                                  >
+                                    {row.total.toLocaleString()}
+                                  </TableCell>
+                                </StyledTableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      )}
+                    </StyledCardContent>
+                  </StyledCard>
                 </ScrollReveal>
               </Grid>
             )}
 
             {configGraficos.mostrarDocentesNiveles && (
-              <Grid item size={{ xs: 12, md: 12 }} sx={{ order: { xs: 5, md: 4 } }}>
-                <ScrollReveal direction="left" delay={0.5}><GraficoDocentesNiveles data={datosDocentesPorNivel} metricaLabel="Docentes" loading={loading} /></ScrollReveal>
+              <Grid
+                item
+                size={{ xs: 12, md: 12 }}
+                sx={{ order: { xs: 5, md: 4 } }}
+              >
+                <ScrollReveal direction="left" delay={0.5}>
+                  <GraficoDocentesNiveles
+                    data={datosDocentesPorNivel}
+                    metricaLabel="Docentes"
+                    loading={loading}
+                  />
+                </ScrollReveal>
               </Grid>
             )}
           </Grid>
         </Grid>
 
         {configGraficos.mostrarPeriodo && hasGenderData && (
-          <Grid item size={{ xs: 12, md: selectedMetric === "discapacidad" ? 12 : 7 }} sx={{ order: { xs: 3, md: 3 } }}>
+          <Grid
+            item
+            size={{ xs: 12, md: selectedMetric === "discapacidad" ? 12 : 7 }}
+            sx={{ order: { xs: 3, md: 3 } }}
+          >
             <ScrollReveal direction="up" delay={0.6}>
-              <StyledCard sx={{ mt: 3 }}><StyledCardContent>
-                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><Timeline sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Periodo</Typography></Stack>
-                {loading ? <ChartSkeleton height={375} /> : !hasData ? <EmptyState onClearFilters={handleClearAllFilters} /> : (
-                  <ResponsiveContainer width="100%" height={375}><LineChart data={datosLineaPeriodo} margin={{ top: 30, right: 40, left: 40, bottom: 20 }}><XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} tickLine={false} /><YAxis hide /><RechartsTooltip formatter={(value) => value.toLocaleString()} /><Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3} dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }} label={!isMobile ? { position: "top", fill: color.third, fontSize: 11, formatter: (v) => v.toLocaleString() } : undefined} /></LineChart></ResponsiveContainer>
-                )}
-              </StyledCardContent></StyledCard>
+              <StyledCard sx={{ mt: 3 }}>
+                <StyledCardContent>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    spacing={1}
+                    sx={{ mb: 2 }}
+                  >
+                    <Timeline sx={{ color: color.primary }} />
+                    <Typography
+                      variant="h6"
+                      sx={{ color: color.primary, fontWeight: "bold" }}
+                    >
+                      Por Periodo
+                    </Typography>
+                  </Stack>
+                  {loading ? (
+                    <ChartSkeleton height={375} />
+                  ) : !hasData ? (
+                    <EmptyState onClearFilters={handleClearAllFilters} />
+                  ) : (
+                    <ResponsiveContainer width="100%" height={375}>
+                      <LineChart
+                        data={datosLineaPeriodo}
+                        margin={{ top: 30, right: 40, left: 40, bottom: 20 }}
+                      >
+                        <XAxis
+                          dataKey="periodo"
+                          tick={{ fill: color.contrastText, fontSize: 12 }}
+                          axisLine={{ stroke: color.primary }}
+                          tickLine={false}
+                        />
+                        <YAxis hide />
+                        <RechartsTooltip
+                          formatter={(value) => [
+                            value.toLocaleString(),
+                            "Matrícula Inicial",
+                          ]}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="total"
+                          stroke={color.primary}
+                          strokeWidth={3}
+                          dot={{
+                            fill: color.primary,
+                            r: 5,
+                            strokeWidth: 2,
+                            stroke: color.white,
+                          }}
+                          activeDot={{ r: 7 }}
+                          label={
+                            !isMobile
+                              ? {
+                                position: "top",
+                                fill: color.third,
+                                fontSize: 11,
+                                formatter: (v) => v.toLocaleString(),
+                              }
+                              : undefined
+                          }
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  )}
+                </StyledCardContent>
+              </StyledCard>
             </ScrollReveal>
           </Grid>
         )}
 
-        {configGraficos.mostrarAdministracion && datosAdministracion.length > 0 && (
-          <Grid item size={{ xs: 12, md: 5 }} sx={{ order: { xs: 4, md: 3 } }}>
-            <ScrollReveal direction="up" delay={0.7}>
-              <StyledCard sx={{ mt: 3 }}><StyledCardContent>
-                <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><AccountBalanceRoundedIcon sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Administración</Typography></Stack>
-                {loading ? <ChartSkeleton height={300} /> : !hasData ? <EmptyState onClearFilters={handleClearAllFilters} /> : (
-                  <ResponsiveContainer width="100%" height={375}><BarChart data={datosAdministracion} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}><XAxis dataKey="name" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} tickLine={false} /><YAxis hide /><RechartsTooltip formatter={(value) => value.toLocaleString()} /><Bar dataKey="value" fill={color.primary} radius={[8, 8, 0, 0]} label={{ position: "top", formatter: (v) => v.toLocaleString() }} /></BarChart></ResponsiveContainer>
-                )}
-              </StyledCardContent></StyledCard>
-            </ScrollReveal>
-          </Grid>
-        )}
+        {configGraficos.mostrarAdministracion &&
+          datosAdministracion.length > 0 && (
+            <Grid
+              item
+              size={{ xs: 12, md: 5 }}
+              sx={{ order: { xs: 4, md: 3 } }}
+            >
+              <ScrollReveal direction="up" delay={0.7}>
+                <StyledCard sx={{ mt: 3 }}>
+                  <StyledCardContent>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ mb: 2 }}
+                    >
+                      <AccountBalanceRoundedIcon
+                        sx={{ color: color.primary }}
+                      />
+                      <Typography
+                        variant="h6"
+                        sx={{ color: color.primary, fontWeight: "bold" }}
+                      >
+                        Por Administración
+                      </Typography>
+                    </Stack>
+                    {loading ? (
+                      <ChartSkeleton height={300} />
+                    ) : !hasData ? (
+                      <EmptyState onClearFilters={handleClearAllFilters} />
+                    ) : (
+                      <ResponsiveContainer width="100%" height={375}>
+                        <BarChart
+                          data={datosAdministracion}
+                          margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                        >
+                          <XAxis
+                            dataKey="name"
+                            tick={{ fill: color.contrastText, fontSize: 12 }}
+                            axisLine={{ stroke: color.primary }}
+                            tickLine={false}
+                          />
+                          <YAxis hide />
+                          <RechartsTooltip
+                            formatter={(value) => [
+                              value.toLocaleString(),
+                              "Matrícula Inicial",
+                            ]}
+                          />
+                          <Bar
+                            dataKey="value"
+                            fill={color.primary}
+                            radius={[8, 8, 0, 0]}
+                            label={{
+                              position: "top",
+                              formatter: (v) => v.toLocaleString(),
+                            }}
+                          />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    )}
+                  </StyledCardContent>
+                </StyledCard>
+              </ScrollReveal>
+            </Grid>
+          )}
 
         {configGraficos.mostrarDiscapacidadTipo && hasData && (
           <>
-            <Grid item size={{ xs: 12, md: 6 }} sx={{ order: { xs: 7, md: 4 } }}><GraficoDiscapacidadPorTipo data={filteredData} loading={loading} onClearFilters={handleClearAllFilters} /></Grid>
-            <Grid item size={{ xs: 12, md: 6 }} sx={{ order: { xs: 4, md: 5 } }}><GraficoDiscapacidadPorNivel data={filteredData} loading={loading} onClearFilters={handleClearAllFilters} /></Grid>
+            <Grid
+              item
+              size={{ xs: 12, md: 6 }}
+              sx={{ order: { xs: 7, md: 4 } }}
+            >
+              <GraficoDiscapacidadPorTipo
+                data={filteredData}
+                loading={loading}
+                onClearFilters={handleClearAllFilters}
+              />
+            </Grid>
+            <Grid
+              item
+              size={{ xs: 12, md: 6 }}
+              sx={{ order: { xs: 4, md: 5 } }}
+            >
+              <GraficoDiscapacidadPorNivel
+                data={filteredData}
+                loading={loading}
+                onClearFilters={handleClearAllFilters}
+              />
+            </Grid>
           </>
         )}
 
         {configGraficos.mostrarTablaNiveles && (
           <>
-            <Grid item size={{ xs: 12, md: 4 }} sx={{ order: { xs: 7, md: 7 } }}>
-              <ScrollReveal direction="up" delay={0.3}><StyledCard><StyledCardContent><Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><School sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Nivel Educativo</Typography></Stack>
-                <TableContainer component={Paper} sx={{ maxHeight: 400 }}><Table stickyHeader size="small"><TableHead><TableRow><StyledTableCell>Periodo</StyledTableCell><StyledTableCell align="right">Prebásica</StyledTableCell><StyledTableCell align="right">Básica</StyledTableCell><StyledTableCell align="right">Media</StyledTableCell><StyledTableCell align="right">Total</StyledTableCell></TableRow></TableHead><TableBody>{datosCentroEducativo.map(row => (<StyledTableRow key={row.periodo} hover><TableCell>{row.periodo}</TableCell><TableCell align="right">{row.Prebasica?.toLocaleString() || 0}</TableCell><TableCell align="right">{row.Basica?.toLocaleString() || 0}</TableCell><TableCell align="right">{row.Media?.toLocaleString() || 0}</TableCell><TableCell align="right" sx={{ fontWeight: "bold" }}>{row.total?.toLocaleString() || 0}</TableCell></StyledTableRow>))}</TableBody></Table></TableContainer>
-              </StyledCardContent></StyledCard></ScrollReveal>
+            <Grid
+              item
+              size={{ xs: 12, md: 4 }}
+              sx={{ order: { xs: 7, md: 7 } }}
+            >
+              <ScrollReveal direction="up" delay={0.3}>
+                <StyledCard>
+                  <StyledCardContent>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ mb: 2 }}
+                    >
+                      <School sx={{ color: color.primary }} />
+                      <Typography
+                        variant="h6"
+                        sx={{ color: color.primary, fontWeight: "bold" }}
+                      >
+                        Por Nivel Educativo
+                      </Typography>
+                    </Stack>
+                    <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                      <Table stickyHeader size="small">
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell>Periodo</StyledTableCell>
+                            <StyledTableCell align="right">
+                              Prebásica
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              Básica
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              Media
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              Total
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {datosCentroEducativo.map((row) => (
+                            <StyledTableRow key={row.periodo} hover>
+                              <TableCell>{row.periodo}</TableCell>
+                              <TableCell align="right">
+                                {row.Prebasica?.toLocaleString() || 0}
+                              </TableCell>
+                              <TableCell align="right">
+                                {row.Basica?.toLocaleString() || 0}
+                              </TableCell>
+                              <TableCell align="right">
+                                {row.Media?.toLocaleString() || 0}
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {row.total?.toLocaleString() || 0}
+                              </TableCell>
+                            </StyledTableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </StyledCardContent>
+                </StyledCard>
+              </ScrollReveal>
             </Grid>
-            <Grid item size={{ xs: 12, md: 4 }} sx={{ order: { xs: 8, md: 8 } }}>
-              <ScrollReveal direction="up" delay={0.3}><StyledCard><StyledCardContent><Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}><AccountBalanceRoundedIcon sx={{ color: color.primary }} /><Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Administración</Typography></Stack>
-                <TableContainer component={Paper} sx={{ maxHeight: 400 }}><Table stickyHeader size="small"><TableHead><TableRow><StyledTableCell>Periodo</StyledTableCell><StyledTableCell align="right">Gubernamental</StyledTableCell><StyledTableCell align="right">No Gubernamental</StyledTableCell><StyledTableCell align="right">Total</StyledTableCell></TableRow></TableHead><TableBody>{datosCentroEducativo.map(row => (<StyledTableRow key={row.periodo} hover><TableCell>{row.periodo}</TableCell><TableCell align="right">{row.Gubernamental?.toLocaleString() || 0}</TableCell><TableCell align="right">{row.NoGubernamental?.toLocaleString() || 0}</TableCell><TableCell align="right" sx={{ fontWeight: "bold" }}>{row.total?.toLocaleString() || 0}</TableCell></StyledTableRow>))}</TableBody></Table></TableContainer>
-              </StyledCardContent></StyledCard></ScrollReveal>
+            <Grid
+              item
+              size={{ xs: 12, md: 4 }}
+              sx={{ order: { xs: 8, md: 8 } }}
+            >
+              <ScrollReveal direction="up" delay={0.3}>
+                <StyledCard>
+                  <StyledCardContent>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      spacing={1}
+                      sx={{ mb: 2 }}
+                    >
+                      <AccountBalanceRoundedIcon
+                        sx={{ color: color.primary }}
+                      />
+                      <Typography
+                        variant="h6"
+                        sx={{ color: color.primary, fontWeight: "bold" }}
+                      >
+                        Por Administración
+                      </Typography>
+                    </Stack>
+                    <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+                      <Table stickyHeader size="small">
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell>Periodo</StyledTableCell>
+                            <StyledTableCell align="right">
+                              Gubernamental
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              No Gubernamental
+                            </StyledTableCell>
+                            <StyledTableCell align="right">
+                              Total
+                            </StyledTableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {datosCentroEducativo.map((row) => (
+                            <StyledTableRow key={row.periodo} hover>
+                              <TableCell>{row.periodo}</TableCell>
+                              <TableCell align="right">
+                                {row.Gubernamental?.toLocaleString() || 0}
+                              </TableCell>
+                              <TableCell align="right">
+                                {row.NoGubernamental?.toLocaleString() || 0}
+                              </TableCell>
+                              <TableCell
+                                align="right"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                {row.total?.toLocaleString() || 0}
+                              </TableCell>
+                            </StyledTableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </StyledCardContent>
+                </StyledCard>
+              </ScrollReveal>
             </Grid>
           </>
         )}
 
         {configGraficos.mostrarNiveles && (
           <Grid item size={{ xs: 12, md: 12 }} sx={{ order: { xs: 5, md: 4 } }}>
-            <ScrollReveal direction="right" delay={0.8}><GraficoMetricasNiveles data={dataNiveles} metricaActual={selectedMetric} metricaLabel={METRICAS_LIST.find(m => m.id === selectedMetric)?.label} filtros={filtros} loading={loading} /></ScrollReveal>
+            <ScrollReveal direction="right" delay={0.8}>
+              <GraficoMetricasNiveles
+                data={dataNiveles}
+                metricaActual={selectedMetric}
+                metricaLabel={
+                  METRICAS_LIST.find((m) => m.id === selectedMetric)?.label
+                }
+                filtros={filtros}
+                loading={loading}
+              />
+            </ScrollReveal>
           </Grid>
         )}
 
         {configGraficos.mostrarIndicadores && (
           <Grid item size={{ xs: 12, md: 12 }}>
-            <Typography variant="h5" sx={{ color: color.primary, fontWeight: "bold", textAlign: "center", mt: 2, mb: 1 }}>Indicadores Educativos</Typography>
+            <Typography
+              variant="h5"
+              sx={{
+                color: color.primary,
+                fontWeight: "bold",
+                textAlign: "center",
+                mt: 2,
+                mb: 1,
+              }}
+            >
+              Indicadores Educativos
+            </Typography>
             <Grid container spacing={2}>
-              {tasasDepartamentoData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasasDepartamentoData} tipo={TIPO_GRAFICO.TASAS_DEPARTAMENTO} loading={loading} /></Grid>}
-              {accesoPrebasica3.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={accesoPrebasica3} tipo={TIPO_GRAFICO.ACCESO_PREBASICA_3} loading={loading} /></Grid>}
-              {acessoPrimerGradoEdadesSimplesData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={acessoPrimerGradoEdadesSimplesData} tipo={TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA_EDADES_SIMPLES} loading={loading} /></Grid>}
-              {variacionInteranualData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={variacionInteranualData} tipo={TIPO_GRAFICO.VARIACION_INTERANUAL} loading={loading} /></Grid>}
-              {accesoPrimerGradoBasica.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={accesoPrimerGradoBasica} tipo={TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA} loading={loading} /></Grid>}
-              {coberturaData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={coberturaData} tipo={TIPO_GRAFICO.COBERTURA_NIVELES} loading={loading} /></Grid>}
-              {tasasCiclosData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasasCiclosData} tipo={TIPO_GRAFICO.TASAS_CICLOS} loading={loading} /></Grid>}
-              {escolarizacionData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={escolarizacionData} tipo={TIPO_GRAFICO.ESCOLARIZACION_EDADES} loading={loading} /></Grid>}
-              {tasasPorGrado.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasasPorGrado} tipo={TIPO_GRAFICO.TASAS_POR_GRADO} loading={loading} /></Grid>}
-              {tasaRepitenciaData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasaRepitenciaData} tipo={TIPO_GRAFICO.TASA_REPITENCIA} loading={loading} /></Grid>}
-              {tasaDesercionData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasaDesercionData} tipo={TIPO_GRAFICO.TASA_DESERCION} loading={loading} /></Grid>}
-              {tasaAprobacionData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasaAprobacionData} tipo={TIPO_GRAFICO.TASA_APROBACION} loading={loading} /></Grid>}
-              {tasaPromovidosData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasaPromovidosData} tipo={TIPO_GRAFICO.TASA_PROMOVIDOS} loading={loading} /></Grid>}
-              {tasaSupervivenciaData.length > 0 && <Grid item size={{ xs: 12, md: 6 }}><GraficoTasasCobertura data={tasaSupervivenciaData} tipo={TIPO_GRAFICO.TASA_SUPERVIVENCIA} loading={loading} /></Grid>}
-              {!coberturaData.length && !accesoPrimerGradoBasica.length && !accesoPrebasica3.length && !escolarizacionData.length && !tasasDepartamentoData.length && !loading && (<Box sx={{ textAlign: "center", py: 4 }}><Typography color="text.secondary">No hay datos de indicadores disponibles</Typography></Box>)}
+              {tasasDepartamentoData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasasDepartamentoData}
+                    tipo={TIPO_GRAFICO.TASAS_DEPARTAMENTO}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {accesoPrebasica3.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={accesoPrebasica3}
+                    tipo={TIPO_GRAFICO.ACCESO_PREBASICA_3}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {acessoPrimerGradoEdadesSimplesData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={acessoPrimerGradoEdadesSimplesData}
+                    tipo={
+                      TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA_EDADES_SIMPLES
+                    }
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {variacionInteranualData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={variacionInteranualData}
+                    tipo={TIPO_GRAFICO.VARIACION_INTERANUAL}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {accesoPrimerGradoBasica.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={accesoPrimerGradoBasica}
+                    tipo={TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {coberturaData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={coberturaData}
+                    tipo={TIPO_GRAFICO.COBERTURA_NIVELES}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasasCiclosData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasasCiclosData}
+                    tipo={TIPO_GRAFICO.TASAS_CICLOS}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {escolarizacionData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={escolarizacionData}
+                    tipo={TIPO_GRAFICO.ESCOLARIZACION_EDADES}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasasPorGrado.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasasPorGrado}
+                    tipo={TIPO_GRAFICO.TASAS_POR_GRADO}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasaRepitenciaData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasaRepitenciaData}
+                    tipo={TIPO_GRAFICO.TASA_REPITENCIA}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasaDesercionData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasaDesercionData}
+                    tipo={TIPO_GRAFICO.TASA_DESERCION}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasaAprobacionData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasaAprobacionData}
+                    tipo={TIPO_GRAFICO.TASA_APROBACION}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasaPromovidosData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasaPromovidosData}
+                    tipo={TIPO_GRAFICO.TASA_PROMOVIDOS}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {tasaSupervivenciaData.length > 0 && (
+                <Grid item size={{ xs: 12, md: 6 }}>
+                  <GraficoTasasCobertura
+                    data={tasaSupervivenciaData}
+                    tipo={TIPO_GRAFICO.TASA_SUPERVIVENCIA}
+                    loading={loading}
+                  />
+                </Grid>
+              )}
+              {!coberturaData.length &&
+                !accesoPrimerGradoBasica.length &&
+                !accesoPrebasica3.length &&
+                !escolarizacionData.length &&
+                !tasasDepartamentoData.length &&
+                !loading && (
+                  <Box sx={{ textAlign: "center", py: 4 }}>
+                    <Typography color="text.secondary">
+                      No hay datos de indicadores disponibles
+                    </Typography>
+                  </Box>
+                )}
             </Grid>
           </Grid>
         )}

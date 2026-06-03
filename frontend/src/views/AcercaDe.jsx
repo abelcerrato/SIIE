@@ -112,50 +112,32 @@ export default function AcercaDe() {
 
   const miembros = [
     {
-      nombre: "Jose Alexis Ordoñes Velasquez ",
+      nombre: "Rafael Nuñez Lagos ",
       puesto: " Secretario Ejecutivo",
     },
     {
-      nombre: "Beatriz Victoria Galeano Escobar",
+      nombre: "Martha Yanina Isaula Hernandez",
       puesto: "Asistente Ejecutiva",
     },
-    {
-      nombre: "Zorayda Waleska Zelaya Acosta",
-      puesto: "Coordinadora de Comunicaciones",
-    },
-    { nombre: "Tomas Santiago Cayetano Arzu", puesto: "Diseñador Gráfico" },
     { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
-    {
-      nombre: "Zoila Suyapa Padilla Sabillon",
-      puesto: "Cordinadora de Desarrollo Profesional Docente",
-    },
     {
       nombre: "Melany Lizzeth Ordoñez Cruz",
       puesto: "Asistente Técnico de Desarrollo Profesional Docente",
     },
-    { nombre: "Abel Mauricio Cerrato Anchecta", puesto: "Asistente del SIIE" },
-    { nombre: "José Donaldo Ochoa Herrera", puesto: "Coordinador de EFTP" },
-    { nombre: "Karla Paola Cartagena Lagos", puesto: "Asistente de EFTP" },
-    {
-      nombre: "Mare Yescenia Figueroa Aguiriano",
-      puesto: "Asistente Técnica de la UTC",
-    },
-    { nombre: "Luis Armando Ortiz Laines", puesto: "Asesor Legal" },
-    {
-      nombre: "Conrado Ernesto Fuentes Carranza",
-      puesto: "Cordinador de Gestión de la Información",
-    },
-    {
-      nombre: "Roberto Briceño Jimenez",
-      puesto: "Cordinador del Modelo Ejecutivo",
-    },
+
+    { nombre: "Emma Guadalupe Oyuela Rivera", puesto: "Coordinadora de EFTP" },
+ 
+    { nombre: "Martha Alicia García Casco", puesto: "Asesora Legal" },
+
+
     { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
+
     {
-      nombre: "Giuver Andony Padilla Santos",
+      nombre: "David Enrique Fu Flores",
       puesto: "Asistente de Administración",
     },
     {
-      nombre: "David Enrique Fu Flores",
+      nombre: "Luis Daniel Euraque Morales",
       puesto: "Asistente de Administración",
     },
     { nombre: "Seydi Johana Lara Fuentes", puesto: "Desarrolladora BackEnd" },
@@ -167,10 +149,14 @@ export default function AcercaDe() {
       nombre: "Heydy Carolina Elvir Gutierrez",
       puesto: "Asistente de Servicios Generales",
     },
+    {
+      nombre: "Jose Adolfo Nuñez Varga",
+      puesto: "Asistente de Servicios Generales",
+    },
   ];
 
   const trasporte = [
-    { nombre: "Edwin David Ramos Bustillo" },
+    
     { nombre: "Jhimy Xavier Valladares" },
   ];
 
@@ -290,11 +276,11 @@ export default function AcercaDe() {
             sx={{
               position: "relative",
               zIndex: 2,
-              width: { xs: "100%", md: "70%", lg: "80%" },
+              width: { xs: "100%", md: "60%", lg: "80%" },
               textAlign: { xs: "center", md: "right" },
               top: { xs: 20, md: 0 },
               color: "#fff",
-              px: { xs: 2, md: 5 },
+              px: { xs: 2, md: 12},
             }}
           >
             <Typography
@@ -807,7 +793,7 @@ export default function AcercaDe() {
                           }}
                         >
                           {inst.agradecimientos &&
-                          inst.agradecimientos.length > 0 ? (
+                            inst.agradecimientos.length > 0 ? (
                             inst.agradecimientos.map((miembro, idx) => (
                               <Box key={idx} sx={{ mb: 1.5 }}>
                                 <Typography
@@ -945,12 +931,12 @@ export default function AcercaDe() {
                 </Typography>
                 <Box sx={{ ml: 1 }}>
                   <Typography variant="body1" sx={{ color: "#333" }}>
-                    <strong>Nombre:</strong> 
+                    <strong>Nombre:</strong> Rafael Nuñez Lagos
                   </Typography>
                   <Typography variant="body1" sx={{ color: "#333", mt: 1 }}>
-                    <strong>Contacto:</strong>{" "}
+                    <strong>Contacto:</strong> {" "}
                     <Link
-                      href="mailto:"
+                      href="mailto:rafale.nunez@coned.gob.hn"
                       underline="hover"
                       sx={{
                         color: color.secondary,
@@ -958,7 +944,7 @@ export default function AcercaDe() {
                         "&:hover": { color: color.primary },
                       }}
                     >
-                      
+rafale.nunez@coned.gob.hn
                     </Link>
                   </Typography>
                 </Box>
@@ -1000,238 +986,238 @@ export default function AcercaDe() {
       </ScrollReveal>
 
       {/* Coordinador del Proyecto | Desarrolladores */}
-<Grid container spacing={3} sx={{ mt: 8 }}>
-  {/* Columna izquierda - Coordinadores */}
-  <Grid item size={{ xs: 12, md: 5 }}>
-    <Grid container spacing={3}>
-      <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
-        <ScrollReveal delay={0.1} direction="right">
-          <Box
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              backgroundColor: "#ffffff",
-              border: "1px solid #e0e0e0",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-                transform: "translateY(-2px)",
-              },
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Box
-                sx={{
-                  width: 4,
-                  height: 30,
-                  backgroundColor: color.secondary,
-                  borderRadius: 2,
-                  mr: 2,
-                }}
-              />
-              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
-                Coordinador del Proyecto
-              </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
-              <strong>Nombre:</strong> Rubén Isaac Fú Flores
-            </Typography>
-            <Typography variant="body1" sx={{ color: color.contrastText }}>
-              <strong>Contacto:</strong>{" "}
-              <Link
-                href="mailto:ruben.fu@coned.gob.hn"
-                underline="hover"
-                sx={{ color: color.secondary, fontWeight: "bold" }}
-              >
-                ruben.fu@coned.gob.hn
-              </Link>
-            </Typography>
-          </Box>
-        </ScrollReveal>
-      </Grid>
-
-      <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
-        <ScrollReveal delay={0.2} direction="right">
-          <Box
-            sx={{
-              p: 3,
-              borderRadius: 3,
-              backgroundColor: "#ffffff",
-              border: "1px solid #e0e0e0",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-              transition: "all 0.3s ease",
-              "&:hover": {
-                boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-                transform: "translateY(-2px)",
-              },
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Box
-                sx={{
-                  width: 4,
-                  height: 30,
-                  backgroundColor: color.secondary,
-                  borderRadius: 2,
-                  mr: 2,
-                }}
-              />
-              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
-                Sub Coordinador del Proyecto
-              </Typography>
-            </Box>
-            <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
-              <strong>Nombre:</strong> Abel Mauricio Cerrato Anchecta
-            </Typography>
-            <Typography variant="body1" sx={{ color: color.contrastText }}>
-              <strong>Contacto:</strong>{" "}
-              <Link
-                href="mailto:abel.cerrato@coned.gob.hn"
-                underline="hover"
-                sx={{ color: color.secondary, fontWeight: "bold" }}
-              >
-                abel.cerrato@coned.gob.hn
-              </Link>
-            </Typography>
-          </Box>
-        </ScrollReveal>
-      </Grid>
-    </Grid>
-  </Grid>
-
-  {/* Columna derecha - Desarrolladores */}
-  <Grid item size={{ xs: 12, md: 7 }}>
-    <ScrollReveal delay={0.3} direction="left">
-      <Box
-        sx={{
-          p: 3,
-          borderRadius: 3,
-          backgroundColor: "#ffffff",
-          border: "1px solid #e0e0e0",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
-          transition: "all 0.3s ease",
-          "&:hover": {
-            boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
-          },
-        }}
-      >
-        <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
-          <Box
-            sx={{
-              width: 4,
-              height: 30,
-              backgroundColor: color.secondary,
-              borderRadius: 2,
-              mr: 2,
-            }}
-          />
-          <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
-            Equipo de Desarrollo
-          </Typography>
-        </Box>
-
-        <Grid container spacing={3}>
-          <Grid item size={{ xs: 12, sm: 6 }}>
-            <Box
-              sx={{
-                p: 2.5,
-                borderRadius: 2,
-                backgroundColor: "#f8f9fa",
-                border: "1px solid #e9ecef",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "#ffffff",
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-                  transform: "translateY(-3px)",
-                },
-              }}
-            >
-              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
-                Seydi Johana Lara Fuentes
-              </Typography>
-              <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
-                Desarrolladora BackEnd
-              </Typography>
-              <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
-                <strong>Contacto:</strong>
-                <br />
-                <Link
-                  href="mailto:seydi.lara@coned.gob.hn"
-                  underline="hover"
-                  sx={{ color: color.secondary, fontWeight: "bold" }}
+      <Grid container spacing={3} sx={{ mt: 8 }}>
+        {/* Columna izquierda - Coordinadores */}
+        <Grid item size={{ xs: 12, md: 5 }}>
+          <Grid container spacing={3}>
+            <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
+              <ScrollReveal delay={0.1} direction="right">
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e0e0e0",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
                 >
-                  seydi.lara@coned.gob.hn
-                </Link>
-              </Typography>
-              <Link
-                href="https://www.linkedin.com/in/seydi-johana-lara-fuentes-35b08a2a4"
-                target="_blank"
-                underline="hover"
-                sx={{
-                  color: color.primary,
-                  fontSize: "0.875rem",
-                  fontWeight: "bold",
-                  "&:hover": { color: color.secondary },
-                }}
-              >
-                LinkedIn →
-              </Link>
-            </Box>
-          </Grid>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Box
+                      sx={{
+                        width: 4,
+                        height: 30,
+                        backgroundColor: color.secondary,
+                        borderRadius: 2,
+                        mr: 2,
+                      }}
+                    />
+                    <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+                      Coordinador del Proyecto
+                    </Typography>
+                  </Box>
+                  <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
+                    <strong>Nombre:</strong> Rubén Isaac Fú Flores
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: color.contrastText }}>
+                    <strong>Contacto:</strong>{" "}
+                    <Link
+                      href="mailto:ruben.fu@coned.gob.hn"
+                      underline="hover"
+                      sx={{ color: color.secondary, fontWeight: "bold" }}
+                    >
+                      ruben.fu@coned.gob.hn
+                    </Link>
+                  </Typography>
+                </Box>
+              </ScrollReveal>
+            </Grid>
 
-          <Grid item size={{ xs: 12, sm: 6 }}>
-            <Box
-              sx={{
-                p: 2.5,
-                borderRadius: 2,
-                backgroundColor: "#f8f9fa",
-                border: "1px solid #e9ecef",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  backgroundColor: "#ffffff",
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-                  transform: "translateY(-3px)",
-                },
-              }}
-            >
-              <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
-                Luesbelin Julieth Mejia Garcia
-              </Typography>
-              <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
-                Desarrolladora FrontEnd
-              </Typography>
-              <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
-                <strong>Contacto:</strong>
-                <br />
-                <Link
-                  href="mailto:luesbelin.mejia@coned.gob.hn"
-                  underline="hover"
-                  sx={{ color: color.secondary, fontWeight: "bold" }}
+            <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
+              <ScrollReveal delay={0.2} direction="right">
+                <Box
+                  sx={{
+                    p: 3,
+                    borderRadius: 3,
+                    backgroundColor: "#ffffff",
+                    border: "1px solid #e0e0e0",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
                 >
-                  luesbelin.mejia@coned.gob.hn
-                </Link>
-              </Typography>
-              <Link
-                href="https://www.linkedin.com/in/luesbelin-mejia-154546279"
-                target="_blank"
-                underline="hover"
-                sx={{
-                  color: color.primary,
-                  fontSize: "0.875rem",
-                  fontWeight: "bold",
-                  "&:hover": { color: color.secondary },
-                }}
-              >
-                LinkedIn →
-              </Link>
-            </Box>
+                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                    <Box
+                      sx={{
+                        width: 4,
+                        height: 30,
+                        backgroundColor: color.secondary,
+                        borderRadius: 2,
+                        mr: 2,
+                      }}
+                    />
+                    <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+                      Sub Coordinador del Proyecto
+                    </Typography>
+                  </Box>
+                  <Typography variant="body1" sx={{ color: color.contrastText, mb: 1 }}>
+                    <strong>Nombre:</strong> Abel Mauricio Cerrato Anchecta
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: color.contrastText }}>
+                    <strong>Contacto:</strong>{" "}
+                    <Link
+                      href="mailto:abel.cerrato@coned.gob.hn"
+                      underline="hover"
+                      sx={{ color: color.secondary, fontWeight: "bold" }}
+                    >
+                      abel.cerrato@coned.gob.hn
+                    </Link>
+                  </Typography>
+                </Box>
+              </ScrollReveal>
+            </Grid>
           </Grid>
         </Grid>
-      </Box>
-    </ScrollReveal>
-  </Grid>
-</Grid>
+
+        {/* Columna derecha - Desarrolladores */}
+        <Grid item size={{ xs: 12, md: 7 }}>
+          <ScrollReveal delay={0.3} direction="left">
+            <Box
+              sx={{
+                p: 3,
+                borderRadius: 3,
+                backgroundColor: "#ffffff",
+                border: "1px solid #e0e0e0",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.04)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+                },
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
+                <Box
+                  sx={{
+                    width: 4,
+                    height: 30,
+                    backgroundColor: color.secondary,
+                    borderRadius: 2,
+                    mr: 2,
+                  }}
+                />
+                <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary }}>
+                  Equipo de Desarrollo
+                </Typography>
+              </Box>
+
+              <Grid container spacing={3}>
+                <Grid item size={{ xs: 12, sm: 6 }}>
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2,
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #e9ecef",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#ffffff",
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                        transform: "translateY(-3px)",
+                      },
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
+                      Seydi Johana Lara Fuentes
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
+                      Desarrolladora BackEnd
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
+                      <strong>Contacto:</strong>
+                      <br />
+                      <Link
+                        href="mailto:seydi.lara@coned.gob.hn"
+                        underline="hover"
+                        sx={{ color: color.secondary, fontWeight: "bold" }}
+                      >
+                        seydi.lara@coned.gob.hn
+                      </Link>
+                    </Typography>
+                    <Link
+                      href="https://www.linkedin.com/in/seydi-johana-lara-fuentes-35b08a2a4"
+                      target="_blank"
+                      underline="hover"
+                      sx={{
+                        color: color.primary,
+                        fontSize: "0.875rem",
+                        fontWeight: "bold",
+                        "&:hover": { color: color.secondary },
+                      }}
+                    >
+                      LinkedIn →
+                    </Link>
+                  </Box>
+                </Grid>
+
+                <Grid item size={{ xs: 12, sm: 6 }}>
+                  <Box
+                    sx={{
+                      p: 2.5,
+                      borderRadius: 2,
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #e9ecef",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#ffffff",
+                        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+                        transform: "translateY(-3px)",
+                      },
+                    }}
+                  >
+                    <Typography variant="h6" fontWeight="bold" sx={{ color: color.primary, mb: 1 }}>
+                      Luesbelin Julieth Mejia Garcia
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: color.secondary, fontWeight: "bold", mb: 1 }}>
+                      Desarrolladora FrontEnd
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: color.contrastText, mb: 1 }}>
+                      <strong>Contacto:</strong>
+                      <br />
+                      <Link
+                        href="mailto:luesbelin.mejia@coned.gob.hn"
+                        underline="hover"
+                        sx={{ color: color.secondary, fontWeight: "bold" }}
+                      >
+                        luesbelin.mejia@coned.gob.hn
+                      </Link>
+                    </Typography>
+                    <Link
+                      href="https://www.linkedin.com/in/luesbelin-mejia-154546279"
+                      target="_blank"
+                      underline="hover"
+                      sx={{
+                        color: color.primary,
+                        fontSize: "0.875rem",
+                        fontWeight: "bold",
+                        "&:hover": { color: color.secondary },
+                      }}
+                    >
+                      LinkedIn →
+                    </Link>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
+          </ScrollReveal>
+        </Grid>
+      </Grid>
 
       {/* Modal */}
       <Dialog

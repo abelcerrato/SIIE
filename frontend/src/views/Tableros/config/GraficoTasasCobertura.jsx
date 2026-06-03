@@ -42,7 +42,7 @@ const TIPO_GRAFICO = {
   TASA_PROMOVIDOS: "tasa_promovidos",
   TASAS_POR_GRADO: "tasas_por_grado",
   TASAS_CICLOS: "tasas_ciclos",
-    TASA_SUPERVIVENCIA: "tasa_supervivencia",
+  TASA_SUPERVIVENCIA: "tasa_supervivencia",
 };
 
 // ==================== CONFIGURACIÓN DE MÉTRICAS POR TIPO ====================
@@ -88,6 +88,7 @@ const CONFIGURACION_GRAFICOS = {
       },
     },
   },
+
 [TIPO_GRAFICO.COBERTURA_NIVELES]: {
   titulo: "Cobertura Bruta y Neta por Nivel Educativo",
   esNacional: true,
@@ -101,8 +102,8 @@ const CONFIGURACION_GRAFICOS = {
         añoMap.set(año, { año });
       }
       const entry = añoMap.get(año);
-      entry[`tasa_neta_${nivel}`] = item.tasa_cobertura_neta;
-      entry[`tasa_bruta_${nivel}`] = item.tasa_cobertura_bruta;
+      entry[`tasa_neta_${nivel}`] = item.tasa_cobertura_neta * 100;
+      entry[`tasa_bruta_${nivel}`] = item.tasa_cobertura_bruta * 100;
     });
     return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
   },
@@ -132,6 +133,7 @@ const CONFIGURACION_GRAFICOS = {
     }));
   },
 },
+
   [TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA]: {
     titulo: "Tasa de Acceso al Primer Grado de Educación Básica",
     esNacional: true,
@@ -139,18 +141,19 @@ const CONFIGURACION_GRAFICOS = {
       return data
         .map((item) => ({
           año: item.Año,
-          tasa_acceso_neta: item.tasa_acceso_neta,
-          tasa_acceso_bruta: item.tasa_acceso_bruta,
+          tasa_acceso_neta: parseFloat(item.tasa_acceso_primer_grado_neta) * 100,
+          tasa_acceso_bruta: parseFloat(item.tasa_acceso_primer_grado_bruta) * 100,
           matricula_neta: item.Matricula_Neta,
           matricula_bruta: item.Matricula_Bruta,
         }))
-        .sort((a, b) => a.año - b.año);
-    },
+            .sort((a, b) => a.año - b.año);
+        },
     metricas: [
       { key: "tasa_acceso_neta", label: "Tasa Neta", color: "#2E86AB" },
       { key: "tasa_acceso_bruta", label: "Tasa Bruta", color: "#A23B72" },
     ],
   },
+
   [TIPO_GRAFICO.ACCESO_PREBASICA_3]: {
     titulo: "Tasa de Acceso al Grado Obligatorio (3ro) de Educación Pre Básica",
     esNacional: true,
@@ -158,8 +161,8 @@ const CONFIGURACION_GRAFICOS = {
       return data
         .map((item) => ({
           año: item.Año,
-          tasa_acceso_neta: item.tasa_acceso_neta,
-          tasa_acceso_bruta: item.tasa_acceso_bruta,
+          tasa_acceso_neta: parseFloat(item.tasa_acceso_3_prebasica_neta) * 100, 
+          tasa_acceso_bruta: parseFloat(item.tasa_acceso_3_prebasica_bruta) * 100, 
           matricula_neta: item.Matricula_Neta,
           matricula_bruta: item.Matricula_Bruta,
         }))
@@ -170,6 +173,7 @@ const CONFIGURACION_GRAFICOS = {
       { key: "tasa_acceso_bruta", label: "Tasa Bruta", color: "#BC4A6C" },
     ],
   },
+
   [TIPO_GRAFICO.VARIACION_INTERANUAL]: {
     titulo: "Variación Interanual - Prebásica/Grado Obligatorio",
     esNacional: true,
@@ -177,7 +181,7 @@ const CONFIGURACION_GRAFICOS = {
       return data
         .map((item) => ({
           año: item.Año,
-          variacion: item.variacion,
+          variacion: parseFloat(item.VIMAOPB) * 100,
           matricula_actual: item.matricula_actual,
           matricula_anterior: item.matricula_anterior,
         }))
@@ -185,6 +189,7 @@ const CONFIGURACION_GRAFICOS = {
     },
     metricas: [{ key: "variacion", label: "Variación (%)", color: "#F18F01" }],
   },
+
   [TIPO_GRAFICO.ESCOLARIZACION_EDADES]: {
     titulo: "Tasa Específica de Escolarización por Edad",
     esNacional: true,
@@ -206,7 +211,7 @@ const CONFIGURACION_GRAFICOS = {
         }
 
         const entry = añoMap.get(año);
-        entry[`edad_${edad}`] = tee;
+        entry[`edad_${edad}`] = parseFloat(tee) * 100;
       });
 
       // Convertir a array y ordenar por año
@@ -246,53 +251,55 @@ const CONFIGURACION_GRAFICOS = {
       }));
     },
   },
+
   [TIPO_GRAFICO.ACCESO_PRIMER_GRADO_BASICA_EDADES_SIMPLES]: {
-  titulo: "Tasa de Acceso al Primer Grado de Educación Básica por Edad Simple",
-  esNacional: true,
-  procesarDatos: (data) => {
-    if (!data || data.length === 0) return [];
+    titulo: "Tasa de Acceso al Primer Grado de Educación Básica por Edad Simple",
+    esNacional: true,
+    procesarDatos: (data) => {
+      if (!data || data.length === 0) return [];
 
-    // Agrupar datos por año
-    const añoMap = new Map();
+      const añoMap = new Map();
 
-    data.forEach((item) => {
-      const año = item.Periodo;
-      const edad = String(item.Edad);
-      const tasa = item.tasa_a1b; 
+      data.forEach((item) => {
+        const año = item.Periodo;
+        // Extraer solo el número de la edad (ej: "7 Años" -> "7")
+        const edadMatch = item.Edad?.match(/(\d+)/);
+        const edad = edadMatch ? edadMatch[1] : null;
+        const tasa = item.tasa_a1b;
 
-      if (!año || !edad || tasa === undefined || tasa === null) return;
+        if (!año || !edad || tasa === undefined || tasa === null) return;
 
-      if (!añoMap.has(año)) {
-        añoMap.set(año, { año });
-      }
+        if (!añoMap.has(año)) {
+          añoMap.set(año, { año });
+        }
 
-      const entry = añoMap.get(año);
-      entry[`edad_${edad}`] = tasa;
-    });
+        const entry = añoMap.get(año);
+        entry[`edad_${edad}`] = parseFloat(tasa) * 100; // ← MULTIPLICAR POR 100
+      });
 
-    return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
+      return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
+    },
+    obtenerMetricas: (data) => {
+      if (!data || data.length === 0) return [];
+
+      const edades = [...new Set(data.map((item) => {
+        const edadMatch = item.Edad?.match(/(\d+)/);
+        return edadMatch ? edadMatch[1] : null;
+      }).filter(Boolean))].sort((a, b) => parseInt(a) - parseInt(b));
+
+      const coloresEdades = [
+        "#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#6A994E",
+        "#BC4A6C", "#F4A261", "#2A9D8F", "#E76F51", "#8338EC"
+      ];
+
+      return edades.map((edad, idx) => ({
+        key: `edad_${edad}`,
+        label: `${edad} años`,
+        color: coloresEdades[idx % coloresEdades.length],
+      }));
+    },
   },
-  obtenerMetricas: (data) => {
-    if (!data || data.length === 0) return [];
 
-    // Obtener todas las edades disponibles
-    const edades = [...new Set(data.map((item) => String(item.Edad)))].sort(
-      (a, b) => parseInt(a) - parseInt(b),
-    );
-
-    const coloresEdades = [
-      "#2E86AB",
-      "#A23B72",
-      "#F18F01",
-    ];
-
-    return edades.map((edad, idx) => ({
-      key: `edad_${edad}`,
-      label: `${edad} años`,
-      color: coloresEdades[idx % coloresEdades.length],
-    }));
-  },
-},
   [TIPO_GRAFICO.TASA_REPITENCIA]: {
     titulo: "Tasa de Repitencia por Nivel",
     esNacional: true,
@@ -305,10 +312,10 @@ const CONFIGURACION_GRAFICOS = {
         }
         const entry = añoMap.get(año);
         if (item.TasaRepitenciaBasica !== undefined) {
-          entry.repitencia_basica = item.TasaRepitenciaBasica;
+          entry.repitencia_basica = parseFloat(item.TasaRepitenciaBasica) * 100; 
         }
         if (item.TasaRepitenciaMedia !== undefined) {
-          entry.repitencia_media = item.TasaRepitenciaMedia;
+          entry.repitencia_media = parseFloat(item.TasaRepitenciaMedia) * 100; 
         }
       });
       return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
@@ -335,11 +342,11 @@ const CONFIGURACION_GRAFICOS = {
         }
         const entry = añoMap.get(año);
         if (nivel === "1.PRE-BÁSICA") {
-          entry.desercion_prebasica = item.TasaDesercion;
+          entry.desercion_prebasica = parseFloat(item.TasaDesercion) * 100; 
         } else if (nivel === "2.BÁSICA") {
-          entry.desercion_basica = item.TasaDesercion;
+          entry.desercion_basica = parseFloat(item.TasaDesercion) * 100; 
         } else if (nivel === "3.MEDIA") {
-          entry.desercion_media = item.TasaDesercion;
+          entry.desercion_media = parseFloat(item.TasaDesercion) * 100; 
         }
       });
       return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
@@ -354,6 +361,7 @@ const CONFIGURACION_GRAFICOS = {
       { key: "desercion_media", label: "Deserción Media", color: "#F4A261" },
     ],
   },
+
   [TIPO_GRAFICO.TASA_APROBACION]: {
     titulo: "Tasa de Educando Aprobados por Nivel",
     esNacional: true,
@@ -365,10 +373,10 @@ const CONFIGURACION_GRAFICOS = {
           añoMap.set(año, { año });
         }
         const entry = añoMap.get(año);
-        entry.aprobacion_prebasica = item.TasaAprobacionPreBasica;
-        entry.aprobacion_basica = item.TasaAprobacionBasica;
-        entry.aprobacion_media = item.TasaAprobacionMedia;
-        entry.aprobacion_total = item.TasaAprobacionTotal;
+        entry.aprobacion_prebasica = parseFloat(item.TasaAprobacionPreBasica) * 100;
+        entry.aprobacion_basica = parseFloat(item.TasaAprobacionBasica) * 100;
+        entry.aprobacion_media = parseFloat(item.TasaAprobacionMedia) * 100;
+        entry.aprobacion_total = parseFloat(item.TasaAprobacionTotal) * 100;
       });
       return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
     },
@@ -387,6 +395,7 @@ const CONFIGURACION_GRAFICOS = {
       { key: "aprobacion_total", label: "Aprobación Total", color: "#6A994E" },
     ],
   },
+
   [TIPO_GRAFICO.TASA_PROMOVIDOS]: {
     titulo: "Tasa de Educandos Promovidos por Nivel",
     esNacional: true,
@@ -398,10 +407,10 @@ const CONFIGURACION_GRAFICOS = {
           añoMap.set(año, { año });
         }
         const entry = añoMap.get(año);
-        entry.promovidos_prebasica = item.TasaPromovidosPreBasica;
-        entry.promovidos_basica = item.TasaPromovidosBasica;
-        entry.promovidos_media = item.TasaPromovidosMedia;
-        entry.promovidos_total = item.TasaPromovidosTotal;
+        entry.promovidos_prebasica = parseFloat(item.TasaPromovidosPreBasica) * 100;
+        entry.promovidos_basica = parseFloat(item.TasaPromovidosBasica) * 100;
+        entry.promovidos_media = parseFloat(item.TasaPromovidosMedia) * 100;
+        entry.promovidos_total = parseFloat(item.TasaPromovidosTotal) * 100;
       });
       return Array.from(añoMap.values()).sort((a, b) => a.año - b.año);
     },
@@ -420,49 +429,110 @@ const CONFIGURACION_GRAFICOS = {
       { key: "promovidos_total", label: "Promovidos Total", color: "#6A994E" },
     ],
   },
-[TIPO_GRAFICO.TASAS_POR_GRADO]: {
-  titulo: "Tasas Brutas y Netas por Grado",
-  esNacional: true,
-  // NO usar procesarDatos porque los datos ya vienen procesados de dataFetcher.js
-  obtenerMetricas: (data, tabValue) => {
-    if (!data || data.length === 0) return [];
 
-    // Determinar si mostrar tasas netas (tabValue=1) o brutas (tabValue=0)
-    const tipoTasa = tabValue === 0 ? "bruta" : "neta";
+  [TIPO_GRAFICO.TASAS_POR_GRADO]: {
+    titulo: "Tasas Brutas y Netas por Grado",
+    esNacional: true,
+    procesarDatos: (data) => {
+      if (!data || data.length === 0) return [];
 
-    // Definir los grados a mostrar
-    const grados = [
-      { key: "prebasica1", label: "Primer Grado - Pre Básica" },
-      { key: "prebasica2", label: "Segundo Grado - Pre Básica" },
-      { key: "prebasica3", label: "Tercer Grado - Pre Básica" },
-      { key: "grado1", label: "Grado 1" },
-      { key: "grado2", label: "Grado 2" },
-      { key: "grado3", label: "Grado 3" },
-      { key: "grado4", label: "Grado 4" },
-      { key: "grado5", label: "Grado 5" },
-      { key: "grado6", label: "Grado 6" },
-      { key: "grado7", label: "Grado 7" },
-      { key: "grado8", label: "Grado 8" },
-      { key: "grado9", label: "Grado 9" },
-      { key: "grado10", label: "Grado 10" },
-      { key: "grado11", label: "Grado 11" },
-      { key: "grado12", label: "Grado 12" },
-    ];
+      const añoMap = new Map();
 
-    // Colores para diferentes grados
-    const coloresGrados = [
-      "#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#6A994E",
-      "#BC4A6C", "#F4A261", "#2A9D8F", "#E76F51", "#8338EC",
-      "#3A86FF", "#FB5607", "#9C89B8", "#70D6FF", "#FF70A6"
-    ];
+      data.forEach((item) => {
+        const año = item.Periodo;
+        const grado = item.Grado;
 
-    return grados.map((grado, idx) => ({
-      key: `tasa_${tipoTasa}_${grado.key}`,
-      label: grado.label,
-      color: coloresGrados[idx % coloresGrados.length],
-    }));
+        if (!año) return;
+
+        if (!añoMap.has(año)) {
+          añoMap.set(año, { año });
+        }
+
+        const entry = añoMap.get(año);
+
+        // Mapear grados según el código exacto
+        let gradoKey = "";
+        if (grado === "A1-PRIMER GRADO - PREBÁSICA") {
+          gradoKey = "prebasica1";
+        } else if (grado === "A2-SEGUNDO GRADO - PREBÁSICA") {
+          gradoKey = "prebasica2";
+        } else if (grado === "A3-TERCER GRADO - PREBÁSICA") {
+          gradoKey = "prebasica3";
+        } else if (grado === "G1-PRIMER GRADO") {
+          gradoKey = "grado1";
+        } else if (grado === "G2-SEGUNDO GRADO") {
+          gradoKey = "grado2";
+        } else if (grado === "G3-TERCER GRADO") {
+          gradoKey = "grado3";
+        } else if (grado === "G4-CUARTO GRADO") {
+          gradoKey = "grado4";
+        } else if (grado === "G5-QUINTO GRADO") {
+          gradoKey = "grado5";
+        } else if (grado === "G6-SEXTO GRADO") {
+          gradoKey = "grado6";
+        } else if (grado === "G7-SÉPTIMO GRADO") {
+          gradoKey = "grado7";
+        } else if (grado === "G8-OCTAVO GRADO") {
+          gradoKey = "grado8";
+        } else if (grado === "G9-NOVENO GRADO") {
+          gradoKey = "grado9";
+        } else if (grado === "M10-DÉCIMO GRADO") {
+          gradoKey = "grado10";
+        } else if (grado === "M11-UNDÉCIMO GRADO") {
+          gradoKey = "grado11";
+        } else if (grado === "M12-DUODÉCIMO GRADO") {
+          gradoKey = "grado12";
+        } else if (grado === "M13-DECIMOTERCER GRADO") {
+          gradoKey = "grado13";
+        }
+
+        if (gradoKey && item.TasaMatriculaBruta && item.TasaMatriculaNeta) {
+          // Multiplicar por 100 para convertir a porcentaje
+          entry[`tasa_bruta_${gradoKey}`] = parseFloat(item.TasaMatriculaBruta) * 100;
+          entry[`tasa_neta_${gradoKey}`] = parseFloat(item.TasaMatriculaNeta) * 100;
+        }
+      });
+
+      return Array.from(añoMap.values()).sort((a, b) => parseInt(a.año) - parseInt(b.año));
+    },
+    obtenerMetricas: (data, tabValue) => {
+      if (!data || data.length === 0) return [];
+
+      const tipoTasa = tabValue === 0 ? "bruta" : "neta";
+
+      // Definir los grados a mostrar (excluyendo grado13 que tiene valores muy bajos)
+      const grados = [
+        { key: "prebasica1", label: "Primer Grado - Pre Básica" },
+        { key: "prebasica2", label: "Segundo Grado - Pre Básica" },
+        { key: "prebasica3", label: "Tercer Grado - Pre Básica" },
+        { key: "grado1", label: "Primer Grado" },
+        { key: "grado2", label: "Segundo Grado" },
+        { key: "grado3", label: "Tercer Grado" },
+        { key: "grado4", label: "Cuarto Grado" },
+        { key: "grado5", label: "Quinto Grado" },
+        { key: "grado6", label: "Sexto Grado" },
+        { key: "grado7", label: "Séptimo Grado" },
+        { key: "grado8", label: "Octavo Grado" },
+        { key: "grado9", label: "Noveno Grado" },
+        { key: "grado10", label: "Décimo Grado" },
+        { key: "grado11", label: "Undécimo Grado" },
+        { key: "grado12", label: "Duodécimo Grado" },
+      ];
+
+      // Colores para diferentes grados
+      const coloresGrados = [
+        "#2E86AB", "#A23B72", "#F18F01", "#C73E1D", "#6A994E",
+        "#BC4A6C", "#F4A261", "#2A9D8F", "#E76F51", "#8338EC",
+        "#3A86FF", "#FB5607", "#9C89B8", "#70D6FF", "#FF70A6"
+      ];
+
+      return grados.map((grado, idx) => ({
+        key: `tasa_${tipoTasa}_${grado.key}`,
+        label: grado.label,
+        color: coloresGrados[idx % coloresGrados.length],
+      }));
+    },
   },
-},
   [TIPO_GRAFICO.TASAS_CICLOS]: {
   titulo: "Tasas Brutas y Netas por Ciclo",
   esNacional: true,
@@ -513,6 +583,7 @@ const CONFIGURACION_GRAFICOS = {
     }));
   },
 },
+
 [TIPO_GRAFICO.TASA_SUPERVIVENCIA]: {
   titulo: "Tasa de Supervivencia por Nivel Educativo",
   esNacional: true,
@@ -545,9 +616,8 @@ const CONFIGURACION_GRAFICOS = {
       }
       
       if (nivelKey) {
-        // Usar el valor directamente (ya viene multiplicado por 100 del backend)
         const tasa = parseFloat(item.TasaSupervivencia);
-        entry[`tasa_supervivencia_${nivelKey}`] = isNaN(tasa) ? 0 : tasa;
+        entry[`tasa_supervivencia_${nivelKey}`] = isNaN(tasa) ? 0 : tasa * 100;
       }
     });
 
@@ -948,7 +1018,12 @@ const metricasAMostrar = useMemo(() => {
               tick={{ fill: color.contrastText, fontSize: 12 }}
               axisLine={{ stroke: color.primary }}
               domain={[0, 100]}
-              tickFormatter={(value) => `${value.toFixed(2)}%`}
+              tickFormatter={(value) => {
+                // Convertir a número de forma segura
+                const numValue = typeof value === 'number' ? value : parseFloat(value);
+                if (isNaN(numValue)) return '0%';
+                return `${numValue.toFixed(2)}%`;
+              }}
               label={{
                 value: "Porcentaje (%)",
                 angle: -90,
@@ -956,7 +1031,13 @@ const metricasAMostrar = useMemo(() => {
               }}
             />
             <RechartsTooltip
-              formatter={(value) => `${value.toFixed(2)}%`}
+              formatter={(value) => {
+                // Convertir a número de forma segura
+                const numValue = typeof value === 'number' ? value : parseFloat(value);
+                // Verificar si es un número válido
+                if (isNaN(numValue)) return '0%';
+                return `${numValue.toFixed(2)}%`;
+              }}
               labelFormatter={(label) => `Año: ${label}`}
             />
             {metricasAMostrar.map((metrica, idx) => {
@@ -976,7 +1057,11 @@ const metricasAMostrar = useMemo(() => {
                     dot={{ r: 5 }}
                     label={{
                       position: "top",
-                      formatter: (value) => `${value.toFixed(2)}%`,
+                      formatter: (value) => {
+                        const numValue = typeof value === 'number' ? value : parseFloat(value);
+                        if (isNaN(numValue)) return '0%';
+                        return `${numValue.toFixed(2)}%`;
+                      },
                       fontSize: 11,
                       fill: metrica.color || colores[idx % colores.length],
                     }}
