@@ -386,7 +386,7 @@ const BaseTableroInicio = () => {
   const hasData = Object.keys(datosDepto).length > 0;
 
   return (
-    <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+    <Box sx={{ p: { xs: 1, sm: 2, md: 4 } }}>
       {/* Título */}
       <ScrollReveal direction="right" duration={0.8}>
         <Typography sx={{ textAlign: "center", color: color.secondary, fontWeight: "bold", fontSize: "clamp(1.2rem, 4vw, 2.5rem)", mb: 4, position: "relative", display: "inline-block", width: "100%", "&::after": { content: '""', position: "absolute", left: "50%", bottom: -8, transform: "translateX(-50%)", width: "60px", height: "4px", background: color.secondary, borderRadius: 2 } }}>
