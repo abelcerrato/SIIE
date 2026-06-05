@@ -253,3 +253,6 @@ router.get("/destotalestudiantesneta", getdes_total_estudiantes_netaC);
 router.get("/desmatriculadepartamentossexo", getsiiedes_matriculadepartamentossexoC);
 router.get("/vistaresumendesgraduadosdepartamento", getVistaResumenDESgraduadosC) //GRADUADOS POR DEPARTAMENTO
 router.get("/vistaresumendesdocentesdepartamento", getVistaResumenDESdocentesC) //DOCENTES POR DEPARTAMENTO
+
+
+export default router;
