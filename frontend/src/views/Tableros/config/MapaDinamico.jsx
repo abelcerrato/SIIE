@@ -117,40 +117,51 @@ const MapaDinamico = ({
       // Verificar si hay un filtro de región seleccionado
       const hayFiltroRegion = filtroDepartamento && filtroDepartamento !== "Todos" && esModoRegion;
 
-      // Función para obtener el color original (sin hover)
-      const obtenerColorOriginal = (nombreRegion) => {
-        if (esModoRegion) {
-          const region = obtenerRegionPorDepartamento(nombreRegion);
-          const colorRegion = obtenerColorRegion(region);
-          
-          // Si hay un filtro de región seleccionado
-          if (hayFiltroRegion) {
-            const esRegionSeleccionada = region === filtroDepartamento;
-            if (esRegionSeleccionada) {
-              // Región seleccionada: mostrar su color
-              return colorRegion;
-            } else {
-              // Otras regiones: gris
-              return "#e0e0e0";
-            }
-          }
-          
-          // Sin filtro: mostrar color de región
-          return colorRegion;
-        }
-        
-        // Modo departamento normal
-        const tieneDatos = obtenerValor(nombreRegion) > 0;
-        if (filtroDepartamento && filtroDepartamento !== "Todos") {
-          const esDepartamentoSeleccionado = normalizar(nombreRegion) === normalizar(filtroDepartamento);
-          if (esDepartamentoSeleccionado) {
-            return tieneDatos ? color.primary : "#e0e0e0";
-          }
-          return "#e0e0e0";
-        }
-        
-        return tieneDatos ? color.primary : "#e0e0e0";
-      };
+// Función para obtener el color original (sin hover)
+const obtenerColorOriginal = (nombreRegion) => {
+  if (esModoRegion) {
+    const region = obtenerRegionPorDepartamento(nombreRegion);
+    const colorRegion = obtenerColorRegion(region);
+    
+    // Si hay un filtro de región seleccionado
+    if (hayFiltroRegion) {
+      const esRegionSeleccionada = region === filtroDepartamento;
+      if (esRegionSeleccionada) {
+        // Región seleccionada: mostrar su color
+        return colorRegion;
+      } else {
+        // Otras regiones: gris
+        return "#e0e0e0";
+      }
+    }
+    
+    // Sin filtro: mostrar color de región
+    return colorRegion;
+  }
+  
+  // Modo departamento normal
+  const tieneDatos = obtenerValor(nombreRegion) > 0;
+  
+  // Si estamos en mapa de municipios (hay filtro de municipio o departamento con municipios)
+  if (filtroMunicipio && filtroMunicipio !== "Todos") {
+    // Mapa de municipios: solo colorear el municipio seleccionado si tiene datos
+    const esMunicipioSeleccionado = normalizar(nombreRegion) === normalizar(filtroMunicipio);
+    if (esMunicipioSeleccionado) {
+      return tieneDatos ? color.primary : "#e0e0e0";
+    }
+    return "#e0e0e0";
+  }
+  
+  // Si hay departamento seleccionado pero NO municipio (vista de municipios del departamento)
+  if (filtroDepartamento && filtroDepartamento !== "Todos") {
+    // Es mapa de municipios (mostrando todos los municipios del departamento)
+    // Colorear TODOS los municipios que tengan datos
+    return tieneDatos ? color.primary : "#e0e0e0";
+  }
+  
+  // Mapa de departamentos (sin filtro o "Todos"): mostrar todos los departamentos con datos
+  return tieneDatos ? color.primary : "#e0e0e0";
+};
 
       // Dibujar el mapa
       svg
@@ -315,7 +326,7 @@ const MapaDinamico = ({
   const tooltipWidth = 200;
   const tooltipHeight = 80;
   let left = tooltip.x + 10;
-  let top = tooltip.y - 40;
+  let top = tooltip.y - 30;
 
   if (left + tooltipWidth > window.innerWidth) {
     left = tooltip.x - tooltipWidth - 10;

@@ -32,6 +32,7 @@ import { saveAs } from "file-saver";
 import { useUser } from "../../components/UserContext";
 import LogoCONED from "../../img/nueva-linea-grafica/Logo CONED.png";
 import LogoSIIE from "../../img/nueva-linea-grafica/logos-siie-y-coned.png";
+import color from "../../components/color";
 
 const toBase64 = async (url) => {
     const response = await fetch(url);
@@ -103,11 +104,8 @@ const ReportesDesUnah = () => {
                     "POBLACION TOTAL": "Población Total",
                     "indicador_4_2_por_10000_hab": "Estudiantes con Primer Título por 10 mil Habitantes"
                 },
-
-
             }
         },
-
         {
             value: "despersonasqueingresan",
             label: "Personas que Ingresan a la Educación Superior",
@@ -133,7 +131,6 @@ const ReportesDesUnah = () => {
                 },
             }
         },
-
         {
             value: "desnuevosingresosiniciarprograma",
             label: "Nuevos Ingresos que Inician Programa",
@@ -151,7 +148,6 @@ const ReportesDesUnah = () => {
                     "CINE": "CINE",
                     "SEXO": "Sexo",
                     "SECTOR DE GESTIÓN": "Sector de Gestión",
-
                     "CAMPO DE EDUCACIÓN Y CAPACITACIÓN": "Campo de Educación y Capacitación",
                     "MODALIDAD": "Modalidad",
                     "RANGO DE EDAD": "Rango de Edad",
@@ -269,18 +265,15 @@ const ReportesDesUnah = () => {
         },
     ];
 
-    // Obtener configuración del reporte actual
     const getConfigReporte = () => {
         return reportes.find(r => r.value === reporteSeleccionado)?.config || {};
     };
 
-    // Función para obtener el encabezado formateado
     const getEncabezado = (columna) => {
         const config = getConfigReporte();
         return config.encabezados?.[columna] || columna;
     };
 
-    // Inicializar filtros cuando se selecciona un reporte
     useEffect(() => {
         if (reporteSeleccionado) {
             const config = getConfigReporte();
@@ -295,7 +288,6 @@ const ReportesDesUnah = () => {
         }
     }, [reporteSeleccionado]);
 
-    // Obtener datos de la API
     useEffect(() => {
         if (reporteSeleccionado) {
             const fetchData = async () => {
@@ -318,19 +310,13 @@ const ReportesDesUnah = () => {
         }
     }, [reporteSeleccionado]);
 
-
-    // Filtrar datos
     const getFilteredDataForFiltro = (filtroActual) => {
         return data.filter(item => {
             return Object.keys(filters).every(key => {
-                // Ignorar el filtro que estamos calculando
                 if (key === filtroActual || key === "valor") return true;
-
                 if (!filters[key]) return true;
-
                 const valorItem = item[key];
                 if (valorItem == null) return false;
-
                 return (
                     valorItem.toString().trim().toLowerCase() ===
                     filters[key].toString().trim().toLowerCase()
@@ -341,20 +327,16 @@ const ReportesDesUnah = () => {
 
     const getValoresUnicos = (campo) => {
         const datosFiltrados = getFilteredDataForFiltro(campo);
-
         return [...new Set(datosFiltrados.map(item => item[campo]))]
             .filter(val => val != null && val !== "")
             .sort();
     };
 
-
     const filteredData = data.filter(item => {
         return Object.keys(filters).every(key => {
             if (key === "valor" || !filters[key]) return true;
-
             const valor = item[key];
             if (valor == null || valor === "") return false;
-
             return (
                 valor.toString().trim().toLowerCase() ===
                 filters[key].toString().trim().toLowerCase()
@@ -383,7 +365,6 @@ const ReportesDesUnah = () => {
         setPage(1);
     };
 
-    // Paginación
     const getPaginatedData = () => {
         const startIndex = (page - 1) * rowsPerPage;
         const endIndex = startIndex + rowsPerPage;
@@ -409,7 +390,6 @@ const ReportesDesUnah = () => {
             timeStyle: "short",
         });
 
-        // 🔹 Reporte general
         const reporte = reportes.find((r) => r.value === reporteSeleccionado);
         const configReporte = getConfigReporte();
         const columnasAMostrar = configReporte.columnasBase;
@@ -427,14 +407,12 @@ const ReportesDesUnah = () => {
         nombreHoja = reporte.label;
         tituloReporte = reporte.label;
 
-        // 🧾 Crear workbook y hoja
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(nombreHoja);
 
         const image1Base64 = await toBase64(LogoCONED);
         const image2Base64 = await toBase64(LogoSIIE);
 
-        // Agregar imágenes
         const image1 = workbook.addImage({
             base64: image1Base64,
             extension: "png",
@@ -444,14 +422,13 @@ const ReportesDesUnah = () => {
             extension: "png",
         });
 
-        // Insertar las imágenes en el archivo Excel
         worksheet.addImage(image1, "A1:B9");
         worksheet.addImage(image2, "F2:H8");
 
         worksheet.mergeCells("C5", "E5");
         const titleCell = worksheet.getCell("C5");
         titleCell.value = tituloReporte;
-        titleCell.font = { size: 16, bold: true, color: { argb: "88CFE0" } };
+        titleCell.font = { size: 16, bold: true, color: { argb: color.primary.replace("#", "") } };
         titleCell.alignment = { horizontal: "center", vertical: "middle" };
 
         worksheet.mergeCells("C6", "E6");
@@ -462,7 +439,6 @@ const ReportesDesUnah = () => {
         worksheet.addRow([]);
         worksheet.addRow([]);
 
-        // 🧱 Agregar encabezados de tabla
         if (datosParaExcel.length > 0) {
             const headers = Object.keys(datosParaExcel[0]);
             const headerRow = worksheet.addRow(headers);
@@ -472,7 +448,7 @@ const ReportesDesUnah = () => {
                 cell.fill = {
                     type: "pattern",
                     pattern: "solid",
-                    fgColor: { argb: "88CFE0" },
+                    fgColor: { argb: color.primary.replace("#", "") },
                 };
                 cell.alignment = { horizontal: "center", vertical: "middle" };
                 cell.border = {
@@ -483,7 +459,6 @@ const ReportesDesUnah = () => {
                 };
             });
 
-            // 📊 Agregar datos
             datosParaExcel.forEach((fila) => {
                 const filaData = worksheet.addRow(Object.values(fila));
                 filaData.eachCell((cell) => {
@@ -497,7 +472,6 @@ const ReportesDesUnah = () => {
                 });
             });
 
-            // Ajuste de ancho de columnas automático
             worksheet.columns.forEach((column) => {
                 let maxLength = 0;
                 column.eachCell({ includeEmpty: true }, (cell) => {
@@ -507,36 +481,38 @@ const ReportesDesUnah = () => {
                 column.width = maxLength < 12 ? 12 : maxLength + 2;
             });
 
-            // Asegurar ancho fijo del bloque del título
-            worksheet.getColumn(3).width = 25; // C
-            worksheet.getColumn(4).width = 25; // D
-            worksheet.getColumn(5).width = 25; // E
+            worksheet.getColumn(3).width = 25;
+            worksheet.getColumn(4).width = 25;
+            worksheet.getColumn(5).width = 25;
         }
 
-        // 💾 Generar archivo
         const buffer = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buffer]), "DES-UNAH_" + nombreArchivo);
     };
 
     const activeFiltersCount = Object.values(filters).filter(val => val !== "").length;
 
-    // Renderizar filtros dinámicamente para reportes
     const renderFiltros = () => {
         const config = getConfigReporte();
 
         return config.filtros?.map(filtro => {
-            // Verificar si hay opciones predefinidas para este filtro
             const opcionesPredefinidas = config.opcionesFiltros?.[filtro];
 
             if (opcionesPredefinidas) {
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                         <FormControl fullWidth size="small">
-                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                             <Select
                                 value={filters[filtro] || ""}
                                 onChange={(e) => handleFilterChange(filtro, e.target.value)}
                                 label={getEncabezado(filtro)}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 {opcionesPredefinidas.map(opcion => (
                                     <MenuItem key={opcion.value} value={opcion.value}>
@@ -549,7 +525,6 @@ const ReportesDesUnah = () => {
                 );
             }
 
-            // Para filtros de texto
             if (config.filtrosTexto?.includes(filtro)) {
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
@@ -560,22 +535,33 @@ const ReportesDesUnah = () => {
                             value={filters[filtro] || ""}
                             onChange={(e) => handleFilterChange(filtro, e.target.value)}
                             placeholder={`Buscar ${getEncabezado(filtro).toLowerCase()}...`}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    "&:hover fieldset": { borderColor: color.primary },
+                                    "&.Mui-focused fieldset": { borderColor: color.primary }
+                                }
+                            }}
                         />
                     </Grid>
                 );
             }
 
-            // Filtro dinámico basado en datos
             const valoresUnicos = getValoresUnicos(filtro);
 
             return (
                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                     <FormControl fullWidth size="small">
-                        <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                        <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                         <Select
                             value={filters[filtro] || ""}
                             onChange={(e) => handleFilterChange(filtro, e.target.value)}
                             label={getEncabezado(filtro)}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    "&:hover fieldset": { borderColor: color.primary },
+                                    "&.Mui-focused fieldset": { borderColor: color.primary }
+                                }
+                            }}
                         >
                             <MenuItem value="">Todos</MenuItem>
                             {valoresUnicos.map(valor => (
@@ -588,7 +574,6 @@ const ReportesDesUnah = () => {
         });
     };
 
-    // Renderizar vista para reportes
     const renderReporte = () => {
         const config = getConfigReporte();
         const columnasAMostrar = config.columnasBase;
@@ -596,7 +581,7 @@ const ReportesDesUnah = () => {
         if (loading) {
             return (
                 <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: color.primary }} />
                 </Box>
             );
         }
@@ -611,7 +596,6 @@ const ReportesDesUnah = () => {
 
         return (
             <>
-                {/* 🔹 Encabezado con botón volver y título */}
                 <Tooltip title="Volver">
                     <IconButton
                         aria-label="Volver"
@@ -620,8 +604,9 @@ const ReportesDesUnah = () => {
                             setData([]);
                             setFilters({});
                         }}
+                        sx={{ color: color.secondary }}
                     >
-                        <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
+                        <ArrowCircleLeftOutlined sx={{ fontSize: 40 }} />
                     </IconButton>
                 </Tooltip>
 
@@ -630,7 +615,7 @@ const ReportesDesUnah = () => {
                     component="h1"
                     sx={{
                         fontWeight: "bold",
-                        color: "#88CFE0",
+                        color: color.primary,
                         textAlign: "center",
                         wordWrap: "break-word",
                         mb: 2
@@ -639,17 +624,16 @@ const ReportesDesUnah = () => {
                     {config.titulo}
                 </Typography>
 
-                {/* 🔹 Filtros */}
-                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f1f1f1ff" }}>
+                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                        <FilterList sx={{ mr: 1 }} />
-                        <Typography variant="h6">Filtros</Typography>
+                        <FilterList sx={{ mr: 1, color: color.primary }} />
+                        <Typography variant="h6" sx={{ color: color.primary }}>Filtros</Typography>
 
                         {activeFiltersCount > 0 && (
                             <Chip
                                 label={`${activeFiltersCount} activos`}
                                 size="small"
-                                sx={{ ml: 1 }}
+                                sx={{ ml: 1, backgroundColor: color.secondary, color: color.white }}
                                 onDelete={clearFilters}
                             />
                         )}
@@ -658,24 +642,18 @@ const ReportesDesUnah = () => {
                     <Grid container spacing={2}>{renderFiltros()}</Grid>
                 </Paper>
 
-                {/* 🔹 Contenedor del botón de descarga */}
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
                     <Button
                         variant="contained"
                         startIcon={<Download />}
                         onClick={downloadExcel}
-                        sx={{
-                            backgroundColor: "#88CFE0",
-                            "&:hover": { backgroundColor: "#ff0000ff" },
-                        }}
+                        sx={{ backgroundColor: color.secondary, "&:hover": { backgroundColor: color.primary } }}
                     >
                         Descargar Excel
                     </Button>
                 </Box>
 
-                {/* 🔹 Tabla con controles */}
-                <Paper sx={{ p: 3 }}>
-                    {/* Controles superiores */}
+                <Paper sx={{ p: 3, borderRadius: 2, backgroundColor: color.white }}>
                     <Box
                         sx={{
                             display: "flex",
@@ -686,12 +664,12 @@ const ReportesDesUnah = () => {
                             mb: 2,
                         }}
                     >
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                        <Typography variant="body2" sx={{ color: color.contrastText }}>
                             Mostrando {filteredData.length} registros • Página {page} de {totalPages}
                         </Typography>
 
                         <FormControl variant="standard" size="small" sx={{ minWidth: 120 }}>
-                            <InputLabel>Filas por página</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>Filas por página</InputLabel>
                             <Select
                                 value={rowsPerPage}
                                 onChange={(e) => {
@@ -699,6 +677,12 @@ const ReportesDesUnah = () => {
                                     setPage(1);
                                 }}
                                 label="Filas por página"
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 {[10, 25, 50, 100, 200].map((num) => (
                                     <MenuItem key={num} value={num}>
@@ -709,7 +693,6 @@ const ReportesDesUnah = () => {
                         </FormControl>
                     </Box>
 
-                    {/* Paginación superior */}
                     {totalPages > 1 && (
                         <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                             <Pagination
@@ -719,11 +702,18 @@ const ReportesDesUnah = () => {
                                 color="primary"
                                 showFirstButton
                                 showLastButton
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        "&.Mui-selected": {
+                                            backgroundColor: color.primary,
+                                            color: color.white
+                                        }
+                                    }
+                                }}
                             />
                         </Box>
                     )}
 
-                    {/* Tabla */}
                     <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                         <Table stickyHeader size="small">
                             <TableHead>
@@ -731,7 +721,7 @@ const ReportesDesUnah = () => {
                                     {columnasAMostrar.map((columna) => (
                                         <TableCell
                                             key={columna}
-                                            sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                                            sx={{ fontWeight: "bold", backgroundColor: color.primary, color: color.white }}
                                         >
                                             {getEncabezado(columna)}
                                         </TableCell>
@@ -755,13 +745,12 @@ const ReportesDesUnah = () => {
 
                     {filteredData.length === 0 && (
                         <Box textAlign="center" py={4}>
-                            <Typography variant="h6" color="text.secondary">
+                            <Typography variant="h6" sx={{ color: color.contrastText }}>
                                 No se encontraron resultados con los filtros aplicados
                             </Typography>
                         </Box>
                     )}
 
-                    {/* Paginación inferior */}
                     {filteredData.length > 0 && totalPages > 1 && (
                         <Box
                             sx={{
@@ -773,7 +762,7 @@ const ReportesDesUnah = () => {
                                 gap: 2,
                             }}
                         >
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" sx={{ color: color.contrastText }}>
                                 Mostrando {((page - 1) * rowsPerPage) + 1}-
                                 {Math.min(page * rowsPerPage, filteredData.length)} de{" "}
                                 {filteredData.length} registros
@@ -786,6 +775,14 @@ const ReportesDesUnah = () => {
                                 color="primary"
                                 showFirstButton
                                 showLastButton
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        "&.Mui-selected": {
+                                            backgroundColor: color.primary,
+                                            color: color.white
+                                        }
+                                    }
+                                }}
                             />
 
                             <Box sx={{ display: "flex", gap: 1 }}>
@@ -794,6 +791,7 @@ const ReportesDesUnah = () => {
                                     disabled={page === 1}
                                     onClick={() => setPage(page - 1)}
                                     startIcon={<ChevronLeft />}
+                                    sx={{ color: color.primary }}
                                 >
                                     Anterior
                                 </Button>
@@ -802,6 +800,7 @@ const ReportesDesUnah = () => {
                                     disabled={page === totalPages}
                                     onClick={() => setPage(page + 1)}
                                     endIcon={<ChevronRight />}
+                                    sx={{ color: color.primary }}
                                 >
                                     Siguiente
                                 </Button>
@@ -813,22 +812,20 @@ const ReportesDesUnah = () => {
         );
     };
 
-
     const tienePermiso = (idmodulo) => permissions?.find(p => p.idmodulo === idmodulo)?.consultar;
 
     return (
         <>
             {tienePermiso(4) && (
-                <Paper sx={{ p: 3, background: "#f5f7fa", boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
-                    {/* Selección de Reporte */}
+                <Paper sx={{ p: 3, backgroundColor: "#f5f7fa", borderRadius: 2, boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
                     {!reporteSeleccionado && (
                         <Box
                             sx={{
                                 p: 3,
                                 display: "flex",
-                                justifyContent: "center",   // centra horizontalmente
-                                alignItems: "center",       // centra verticalmente
-                                minHeight: "70vh",          // altura mínima para centrar verticalmente
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: "70vh",
                             }}
                         >
                             <Grid container spacing={3} justifyContent="center">
@@ -839,13 +836,15 @@ const ReportesDesUnah = () => {
                                                 cursor: "pointer",
                                                 borderRadius: 2,
                                                 transition: "all 0.3s",
-                                                backgroundColor: "#fff",
+                                                backgroundColor: color.white,
                                                 width: 250,
                                                 height: 250,
+                                                border: `1px solid ${color.primary}20`,
                                                 "&:hover": {
                                                     transform: "translateY(-5px)",
-                                                    backgroundColor: "#88CFE0",
-                                                    color: "#fff"
+                                                    backgroundColor: color.primary,
+                                                    color: color.white,
+                                                    boxShadow: "0px 8px 25px rgba(0,0,0,0.15)"
                                                 }
                                             }}
                                             onClick={() => setReporteSeleccionado(reporte.value)}
@@ -860,10 +859,10 @@ const ReportesDesUnah = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-                                                <Typography variant="h6" component="div" gutterBottom >
+                                                <Typography variant="h6" component="div" gutterBottom sx={{ fontWeight: "bold" }}>
                                                     {reporte.label}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
+                                                <Typography variant="body2" sx={{ color: "inherit" }}>
                                                     Generar reporte
                                                 </Typography>
                                             </CardContent>
@@ -874,7 +873,6 @@ const ReportesDesUnah = () => {
                         </Box>
                     )}
 
-                    {/* Vista para reportes */}
                     {reporteSeleccionado && renderReporte()}
                 </Paper>
             )}

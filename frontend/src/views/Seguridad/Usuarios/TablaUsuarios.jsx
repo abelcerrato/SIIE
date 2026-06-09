@@ -20,10 +20,8 @@ import {
 
 import { EditOutlined as EditOutlinedIcon, Add as AddIcon } from "@mui/icons-material";
 
-import ModalUsuario from "./Usuarios"; // Modal unificado
+import ModalUsuario from "./Usuarios";
 import { useUser } from "../../../components/UserContext";
-
-
 import color from "../../../components/color";
 
 export default function TablaUsuarios() {
@@ -34,9 +32,8 @@ export default function TablaUsuarios() {
   const [openModal, setOpenModal] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
 
-  const [isSaved, setIsSaved] = useState(false); // Para refrescar tabla al guardar
+  const [isSaved, setIsSaved] = useState(false);
 
-  // Obtener usuarios
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API_URL}/usuarios`)
@@ -44,7 +41,6 @@ export default function TablaUsuarios() {
       .catch((err) => console.error("Error al obtener usuarios:", err));
   }, [isSaved]);
 
-  // Permisos
   const tienePermiso = (idmodulo) => {
     const permiso = permissions?.find((p) => p.idmodulo === idmodulo);
     return permiso?.actualizar === true;
@@ -55,7 +51,6 @@ export default function TablaUsuarios() {
     return permiso?.insertar === true;
   };
 
-  // Resetear contraseña
   const handleResetearContra = async (usuario) => {
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/resetearContra/${usuario}`);
@@ -78,17 +73,36 @@ export default function TablaUsuarios() {
       renderCell: (row) => (
         <>
           {tienePermiso(6) && (
+            <Tooltip title="Editar Usuario">
+              <IconButton
+                sx={{ 
+                  color: color.primary,
+                  "&:hover": { backgroundColor: `${color.primary}15` }
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setUsuarioSeleccionado(row.id);
+                  setOpenModal(true);
+                }}
+              >
+                <EditOutlinedIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {/* <Tooltip title="Restablecer Contraseña">
             <IconButton
-              sx={{ color: color.white }}
+              sx={{ 
+                color: color.secondary,
+                "&:hover": { backgroundColor: `${color.secondary}15` }
+              }}
               onClick={(e) => {
                 e.stopPropagation();
-                setUsuarioSeleccionado(row.id);
-                setOpenModal(true);
+                handleResetearContra(row.usuario);
               }}
             >
-              <EditOutlinedIcon />
+              <VpnKeyOutlinedIcon />
             </IconButton>
-          )}
+          </Tooltip> */}
         </>
       ),
     },
@@ -107,7 +121,7 @@ export default function TablaUsuarios() {
       headerName: "Estado",
       width: 100,
       renderCell: (row) => (
-        <span style={{ color: row.estado === "Activo" ? "green" : "red" }}>
+        <span style={{ color: row.estado === "Activo" ? "#4caf50" : "#f44336", fontWeight: "bold" }}>
           {row.estado}
         </span>
       ),
@@ -115,8 +129,13 @@ export default function TablaUsuarios() {
   ];
 
   return (
-    <Paper sx={{ padding: 3, marginBottom: 3 }}>
-      <Typography variant="h3" sx={{ fontWeight: "bold", color: color.white, mb: 2 }}>
+    <Paper sx={{ 
+      p: 3, 
+      backgroundColor: "#f5f7fa", 
+      borderRadius: 2, 
+      boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" 
+    }}>
+      <Typography variant="h4" sx={{ fontWeight: "bold", color: color.primary, mb: 2 }}>
         Usuarios
       </Typography>
 
@@ -124,24 +143,28 @@ export default function TablaUsuarios() {
         {tienePermisoIn(6) && (
           <Button
             variant="contained"
-            sx={{ backgroundColor: color.white }}
             startIcon={<AddIcon />}
+            sx={{ 
+              backgroundColor: color.primary,
+              color: color.white,
+              "&:hover": { backgroundColor: color.primary + "CC" }
+            }}
             onClick={() => {
-              setUsuarioSeleccionado(null); // null = crear
+              setUsuarioSeleccionado(null);
               setOpenModal(true);
             }}
           >
-            Nuevo
+            Nuevo Usuario
           </Button>
         )}
       </Box>
 
-      <TableContainer>
+      <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: "hidden" }}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ backgroundColor: color.primary }}>
               {columns.map((col) => (
-                <TableCell key={col.field} sx={{ fontWeight: "bold", width: col.width }}>
+                <TableCell key={col.field} sx={{ fontWeight: "bold", color: color.white, width: col.width }}>
                   {col.headerName}
                 </TableCell>
               ))}
@@ -151,7 +174,7 @@ export default function TablaUsuarios() {
           <TableBody>
             {rows.length > 0 ? (
               rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} hover>
                   {columns.map((col) => (
                     <TableCell key={col.field}>
                       {col.renderCell ? col.renderCell(row) : row[col.field] ?? ""}
@@ -170,13 +193,12 @@ export default function TablaUsuarios() {
         </Table>
       </TableContainer>
 
-      {/* Modal Crear / Editar */}
       <ModalUsuario
         open={openModal}
         onClose={() => setOpenModal(false)}
-        usuarioId={usuarioSeleccionado} // null = crear
+        usuarioId={usuarioSeleccionado}
         onSaved={() => {
-          setIsSaved(!isSaved); // refresca tabla
+          setIsSaved(!isSaved);
           setOpenModal(false);
         }}
       />
