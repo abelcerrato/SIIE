@@ -766,7 +766,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                             }}
                                         >
                                             {datosGenero.map((entry, idx) => (
-                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
+                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.secondary : color.primary} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip formatter={(value, name) => {
@@ -1402,7 +1402,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                                 return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
                                             }}>
                                             {datosGenero.map((entry, idx) => (
-                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
+                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.secondary : color.primary} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip formatter={(value, name) => {
@@ -2001,7 +2001,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                                                 return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
                                             }}>
                                             {datosGenero.map((entry, idx) => (
-                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
+                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.secondary : color.primary} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip formatter={(value, name) => {
@@ -2529,7 +2529,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                                 return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
                                             }}>
                                             {datosGenero.map((entry, idx) => (
-                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
+                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.secondary : color.primary} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip formatter={(value, name) => {
@@ -3122,7 +3122,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                                 return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
                                             }}>
                                             {datosGenero.map((entry, idx) => (
-                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
+                                                <Cell key={idx} fill={entry.name === "Femenino" ? color.secondary : color.primary} />
                                             ))}
                                         </Pie>
                                         <RechartsTooltip formatter={(value, name) => {

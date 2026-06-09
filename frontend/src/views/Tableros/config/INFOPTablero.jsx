@@ -1412,7 +1412,11 @@ const handleFilterChange = useCallback((key, value) => {
                     return (
                       <Cell
                         key={idx}
-                        fill={entry.name === "Femenino" ? (isSelected ? color.primary : "#e0e0e0") : (isSelected ? color.secondary : "#e0e0e0")}
+                       fill={
+                                    entry.name === "Femenino"
+                                      ? isSelected ? color.secondary : "#e0e0e0"
+                                      : isSelected ? color.primary : "#e0e0e0"
+                                  }
                         opacity={isSelected ? 1 : 0.5}
                       />
                     );
