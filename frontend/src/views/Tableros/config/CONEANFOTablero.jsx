@@ -1203,7 +1203,7 @@ const handleFilterChange = useCallback((key, value) => {
                                                 }}
                                             >
                                                 {datosGenero.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={entry.name === "Femenino" ? color.primary : color.secondary} stroke={color.white} strokeWidth={2} />
+                                                    <Cell key={`cell-${index}`} fill={entry.name === "Femenino" ? color.secondary : color.primary} stroke={color.white} strokeWidth={2} />
                                                 ))}
                                             </Pie>
                                             <RechartsTooltip formatter={(value, name) => {
