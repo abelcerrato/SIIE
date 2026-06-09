@@ -216,7 +216,6 @@ const cargarDatosGenerales = async (apiUrl) => {
 
 
 // ==================== COMPONENTE DE TABLA SIMPLE ====================
-// Modificar SimpleTable para permitir ancho personalizado
 const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, loading, nameWidth = "auto" }) => {
     const [localOrder, setLocalOrder] = useState("desc");
 
@@ -321,28 +320,111 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
     const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-
-    // Estados para datos procesados
     const [filteredData, setFilteredData] = useState([]);
     const [datosMapa, setDatosMapa] = useState({});
 
+    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
+    const filtrarExcluyendo = useCallback((excluirKey) => {
+        if (!data.length) return [];
+        
+        return data.filter(item => {
+            return Object.entries(filtros).every(([key, value]) => {
+                if (key === excluirKey || value === "Todos") return true;
+                
+                const fieldMap = {
+                    anio: "anio",
+                    departamento: "departamento",
+                    institucion: "institucion",
+                    administracion: "administracion",
+                    gradoacademico: "gradoacademico",
+                    sede: "sede"
+                };
+                
+                const campo = fieldMap[key];
+                if (!campo) return true;
+                
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null") return true;
+                
+                return normalizar(itemValue) === normalizar(value);
+            });
+        });
+    }, [data, filtros]);
 
-    // Verificar si hay filtros activos
-    const hasActiveFilters = useMemo(() => {
-        return Object.values(filtros).some(value => value !== "Todos");
-    }, [filtros]);
+    // ==================== OPCIONES DE FILTROS CONEXADAS ====================
+    const aniosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("anio");
+        const aniosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.anio) aniosSet.add(String(item.anio));
+        });
+        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
+    }, [filtrarExcluyendo]);
 
-    // Eliminar un filtro específico
-    const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
-    };
+    const departamentosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("departamento");
+        const deptosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
+        });
+        return ["Todos", ...Array.from(deptosSet).sort()];
+    }, [filtrarExcluyendo]);
 
-    // Limpiar todos los filtros
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
+    const institucionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("institucion");
+        const instSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
+        });
+        return ["Todos", ...Array.from(instSet).sort()];
+    }, [filtrarExcluyendo]);
 
-    // Filtrar datos
+    const sedesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("sede");
+        const sedeSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
+        });
+        return ["Todos", ...Array.from(sedeSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const administracionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("administracion");
+        const admSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.administracion && item.administracion !== "null") admSet.add(item.administracion);
+        });
+        return ["Todos", ...Array.from(admSet).sort()];
+    }, [filtrarExcluyendo]);
+
+   const gradosDisponibles = useMemo(() => {
+    // Usa filtrarExcluyendo con "gradoacademico" - esto EXCLUYE el filtro de grado
+    // por lo tanto, el grado seleccionado NO afecta a los grados disponibles
+    const datosFiltrados = filtrarExcluyendo("gradoacademico");
+    const gradoSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.gradoacademico && item.gradoacademico !== "null") gradoSet.add(item.gradoacademico);
+    });
+    return ["Todos", ...Array.from(gradoSet).sort()];
+}, [filtrarExcluyendo]);
+
+    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
+    const handleFilterChangeWithReset = useCallback((key, value) => {
+        // Actualizar el filtro
+        onFilterChange(key, value);
+        
+        // Resetear filtros dependientes cuando cambia un filtro padre
+        if (key === "departamento") {
+            onFilterChange("sede", "Todos");
+            onFilterChange("institucion", "Todos");
+        }
+        if (key === "institucion") {
+            onFilterChange("sede", "Todos");
+        }
+        // Nota: No se resetean otros filtros para mantener la independencia de cada uno
+    }, [onFilterChange]);
+
+    // ==================== FILTRAR DATOS PRINCIPALES ====================
     useEffect(() => {
         if (!data.length) {
             setFilteredData([]);
@@ -377,57 +459,20 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         setDatosMapa(datosMapaTemp);
     }, [data, filtros]);
 
-    // Opciones para filtros
-    const aniosDisponibles = useMemo(() => {
-        const aniosSet = new Set();
-        data.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [data]);
+    // ==================== VERIFICAR FILTROS ACTIVOS ====================
+    const hasActiveFilters = useMemo(() => {
+        return Object.values(filtros).some(value => value !== "Todos");
+    }, [filtros]);
 
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
+    const handleRemoveFilter = (key) => {
+        onFilterChange(key, "Todos");
+    };
 
-    const institucionesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
+    const handleClearAllFilters = () => {
+        onClearFilters();
+    };
 
-    const sedesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.sede && item.sede !== "null") instSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-
-    const administracionesDisponibles = useMemo(() => {
-        const admSet = new Set();
-        data.forEach((item) => {
-            if (item.administracion && item.administracion !== "null") admSet.add(item.administracion);
-        });
-        return ["Todos", ...Array.from(admSet).sort()];
-    }, [data]);
-
-    const gradosDisponibles = useMemo(() => {
-        const gradoSet = new Set();
-        data.forEach((item) => {
-            if (item.gradoacademico && item.gradoacademico !== "null") gradoSet.add(item.gradoacademico);
-        });
-        return ["Todos", ...Array.from(gradoSet).sort()];
-    }, [data]);
-
-
+    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -467,37 +512,19 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
 
-
     const datosEtnia = useMemo(() => {
         const mapa = new Map();
-
         const excluir = new Set([
-            "NO SABE",
-            "NO",
-            "NADA",
-            "NULL",
-            "",
-            "SIN DISPONIBILIDAD",
-            "NO APLICA",
-            "NO DISPONIBLE",
-            "NINGUNA",
-            "184",
-            "ADVENTISTA DEL SÉPTIMO DÍA",
-            "NICARAGUENSE",
-            "225",
-            "HIJO DE EMPLEADO",
-            "LATINO",
+            "NO SABE", "NO", "NADA", "NULL", "", "SIN DISPONIBILIDAD",
+            "NO APLICA", "NO DISPONIBLE", "NINGUNA", "184", "ADVENTISTA DEL SÉPTIMO DÍA",
+            "NICARAGUENSE", "225", "HIJO DE EMPLEADO", "LATINO",
         ]);
 
         filteredData.forEach((item) => {
             const raw = item.etnia;
-
             if (raw === null || raw === undefined) return;
-
             const etnia = String(raw).trim().toUpperCase();
-
             if (excluir.has(etnia)) return;
-
             mapa.set(etnia, (mapa.get(etnia) || 0) + (item.total || 0));
         });
 
@@ -505,7 +532,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
-
 
     const datosProgramas = useMemo(() => {
         const mapa = new Map();
@@ -515,7 +541,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                 mapa.set(programa, (mapa.get(programa) || 0) + (item.total || 0));
             }
         });
-        // Eliminar .slice(0, 20) para mostrar todos
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
 
@@ -543,39 +568,22 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
 
     const datosDiscapacidad = useMemo(() => {
         const mapa = new Map();
-
-        // Función para formatear el nombre de la discapacidad
         const formatearDiscapacidad = (texto) => {
             return texto.split(' ')
                 .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1).toLowerCase())
                 .join(' ');
         };
-
-        // Valores a excluir
         const excluir = new Set([
-            "",
-            "null",
-            "No",
-            "NO",
-            "NO DISPONIBLE",
-            "NO APLICA",
-            "NINGUNA",
-            "SIN DISPONIBILIDAD",
-            "SIN REGISTRO",
-            "PUBLICA",
+            "", "null", "No", "NO", "NO DISPONIBLE", "NO APLICA", "NINGUNA",
+            "SIN DISPONIBILIDAD", "SIN REGISTRO", "PUBLICA", "ANEMIA", "ALERGIA A LA PENICILINA",
         ]);
 
         filteredData.forEach((item) => {
             const raw = item.discapacidad;
-
             if (raw === null || raw === undefined) return;
-
             const discOriginal = String(raw).trim();
             const discUpper = discOriginal.toUpperCase();
-
-            // Excluir valores no deseados
             if (excluir.has(discUpper)) return;
-
             const nombreFormateado = formatearDiscapacidad(discOriginal);
             mapa.set(nombreFormateado, (mapa.get(nombreFormateado) || 0) + (item.total || 0));
         });
@@ -593,10 +601,8 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                 mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
             }
         });
-        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => {
-            const order = ["15 AÑOS O MENOS", "15 A 20 AÑOS", "20 A 25 AÑOS", "25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70 AÑOS O MAS"];
-            return order.indexOf(a.nombre) - order.indexOf(b.nombre);
-        });
+        const order = ["15 AÑOS O MENOS", "15 A 20 AÑOS", "20 A 25 AÑOS", "25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70 AÑOS O MAS"];
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
     }, [filteredData]);
 
     const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
@@ -621,7 +627,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         { key: "anio", label: "Año", options: aniosDisponibles },
         { key: "departamento", label: "Departamento", options: departamentosDisponibles },
         { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: " SEDE", options: sedesDisponibles },
+        { key: "sede", label: "SEDE", options: sedesDisponibles },
         { key: "administracion", label: "Administración", options: administracionesDisponibles },
         { key: "gradoacademico", label: "Grado Académico", options: gradosDisponibles },
     ];
@@ -629,13 +635,8 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
     return (
         <Box>
             {/* Filtros */}
-            <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                sx={{ mb: 3 }}
-            >
-                <Grid item size={{ xs: 12, md: 12 }} >
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
@@ -651,14 +652,14 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => onFilterChange(filter.key, e.target.value)}
+                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
+            {/* El resto del JSX igual... */}
             <Grid container spacing={3}>
-
                 {/* Mapa */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
@@ -685,13 +686,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                 )}
                             </Box>
                         </StyledCardContent>
-                        <Box sx={{
-                            position: "absolute",
-                            top: 20,
-                            left: 20,
-                            zIndex: 10,  // Reducir z-index para que no se salga
-                            maxWidth: "calc(100% - 40px)", // Evitar que se salga horizontalmente
-                        }}>
+                        <Box sx={{ position: "absolute", top: 20, left: 20, zIndex: 10, maxWidth: "calc(100% - 40px)" }}>
                             <StyledCard sx={{ background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`, width: 200 }}>
                                 <StyledCardContent>
                                     <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
@@ -717,7 +712,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                 <AccountBalanceIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Universidad</Typography>
                             </Stack>
-
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosUniversidades.length === 0 ? (
@@ -740,12 +734,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <WcRoundedIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
@@ -786,7 +775,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                             return [`${value?.toLocaleString()} (${percent}%)`, name];
                                         }} />
                                         <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -826,9 +814,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Diversity3Icon sx={{ color: color.primary }} />
-                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>
-                                    Por Etnia
-                                </Typography>
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Etnia</Typography>
                                 <Tooltip title="Distribución por grupo étnico">
                                     <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
@@ -840,46 +826,21 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             ) : (
                                 <Box sx={{ height: 400, overflowY: "auto" }}>
                                     <ResponsiveContainer width="100%" height={Math.max(datosEtnia.length * 30, 400)}>
-                                        <BarChart
-                                            data={datosEtnia}
-                                            layout="vertical"
-                                            margin={{ top: 10, right: 10, left: 2, bottom: 10 }}
-                                        >
+                                        <BarChart data={datosEtnia} layout="vertical" margin={{ top: 10, right: 10, left: 2, bottom: 10 }}>
                                             <XAxis hide type="number" />
-                                            <YAxis
-                                                dataKey="nombre"
-                                                type="category"
-                                                width={120}
-                                                tick={{ fontSize: 10 }}
-                                            />
-                                            <RechartsTooltip
-                                                formatter={(value) => [value?.toLocaleString(), "Matrícula"]}
-                                            />
-                                            <Bar
-                                                dataKey="valor"
-                                                fill={color.secondary}
-                                                radius={[0, 4, 4, 0]}
-                                                label={(props) => {
-                                                    const { x, y, width, height, value } = props;
-
-                                                    // Si la barra es suficientemente grande
-                                                    const inside = width > 60;
-
-                                                    return (
-                                                        <text
-                                                            x={inside ? x + width - 8 : x + width + 5}
-                                                            y={y + height / 2}
-                                                            fill={inside ? "#fff" : color.contrastText}
-                                                            textAnchor={inside ? "end" : "start"}
-                                                            dominantBaseline="middle"
-                                                            fontSize={11}
-                                                            fontWeight="bold"
-                                                        >
-                                                            {value?.toLocaleString()}
-                                                        </text>
-                                                    );
-                                                }}
-                                            />
+                                            <YAxis dataKey="nombre" type="category" width={120} tick={{ fontSize: 10 }} />
+                                            <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
+                                            <Bar dataKey="valor" fill={color.secondary} radius={[0, 4, 4, 0]} label={(props) => {
+                                                const { x, y, width, height, value } = props;
+                                                const inside = width > 60;
+                                                return (
+                                                    <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                        fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                        dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                        {value?.toLocaleString()}
+                                                    </text>
+                                                );
+                                            }} />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </Box>
@@ -893,13 +854,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     <StyledCard>
                         <StyledCardContent>
                             <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Programa</Typography>
-                            <SimpleTable
-                                data={datosProgramas}
-                                nameKey="nombre"
-                                valueKey="valor"
-                                title="Programa"
-                                loading={loading}
-                            />
+                            <SimpleTable data={datosProgramas} nameKey="nombre" valueKey="valor" title="Programa" loading={loading} />
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
@@ -908,34 +863,11 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
-                                <AccountBalanceRoundedIcon
-                                    sx={{ color: color.primary }}
-                                />
-                                <Typography
-                                    variant="h6"
-                                    sx={{
-                                        color: color.primary,
-                                        fontWeight: "bold",
-                                        flex: 1,
-                                    }}
-                                >
-                                    Por Administración
-                                </Typography>
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <AccountBalanceRoundedIcon sx={{ color: color.primary }} />
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Administración</Typography>
                                 <Tooltip title="Distribución por tipo de administración">
-                                    <Info
-                                        sx={{
-                                            fontSize: 18,
-                                            color: color.primary,
-                                            opacity: 0.7,
-                                            cursor: "help",
-                                        }}
-                                    />
+                                    <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
                             </Stack>
                             {loading ? (
@@ -948,17 +880,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                         <XAxis dataKey="nombre" width={100} tick={{ fill: color.contrastText, fontSize: 11 }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.secondary}
-                                            radius={[4, 4, 0, 0]}
-                                            label={{
-                                                position: "top",
-                                                formatter: (value) => value?.toLocaleString(),
-                                                fontSize: 11,
-                                                fontWeight: "bold",
-                                            }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.secondary} radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (value) => value?.toLocaleString(), fontSize: 11, fontWeight: "bold" }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -972,24 +894,11 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <BlindRoundedIcon sx={{ color: color.primary }} />
-                                <Typography
-                                    variant="h6"
-                                    sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}
-                                >
-                                    Por Tipo de Discapacidad
-                                </Typography>
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Tipo de Discapacidad</Typography>
                                 <Tooltip title="Distribución por tipo de discapacidad">
-                                    <Info
-                                        sx={{
-                                            fontSize: 18,
-                                            color: color.primary,
-                                            opacity: 0.7,
-                                            cursor: "help",
-                                        }}
-                                    />
+                                    <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
                             </Stack>
-
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosDiscapacidad.length === 0 ? (
@@ -1007,16 +916,13 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
+
                 {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >                        <Timeline sx={{ color: color.primary }} />
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <Timeline sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Periodo</Typography>
                             </Stack>
                             {loading ? (
@@ -1025,18 +931,21 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                 <EmptyState onClearFilters={onClearFilters} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="total"
-                                            stroke={color.primary}
-                                            strokeWidth={3}
-                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }}
-                                            activeDot={{ r: 7 }}
-                                            label={{ position: "top", fill: "#666", fontSize: 11, fontWeight: "bold", formatter: (v) => v?.toLocaleString() }}
+                                        <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
+                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }}
+                                            label={!isMobile ? (props) => {
+                                                const { x, y, value, index } = props;
+                                                const isTop = index % 2 === 0;
+                                                return (
+                                                    <text x={x} y={isTop ? y - 10 : y + 20} fill={color.third} fontSize={11} textAnchor="middle">
+                                                        {value.toLocaleString()}
+                                                    </text>
+                                                );
+                                            } : undefined}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>
@@ -1049,12 +958,8 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >                        <ElderlyWomanIcon sx={{ color: color.primary }} />
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <ElderlyWomanIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Rango Etario</Typography>
                             </Stack>
                             {loading ? (
@@ -1088,22 +993,97 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
+    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
+    const filtrarExcluyendo = useCallback((excluirKey) => {
+        if (!data.length) return [];
+        
+        return data.filter(item => {
+            return Object.entries(filtros).every(([key, value]) => {
+                if (key === excluirKey || value === "Todos") return true;
+                
+                const fieldMap = {
+                    anio: "anio",
+                    departamento: "departamento",
+                    institucion: "institucion",
+                    sede: "sede"
+                };
+                
+                const campo = fieldMap[key];
+                if (!campo) return true;
+                
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null") return true;
+                
+                return normalizar(itemValue) === normalizar(value);
+            });
+        });
+    }, [data, filtros]);
 
-    // Verificar si hay filtros activos
+    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
+    const aniosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("anio");
+        const aniosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.anio) aniosSet.add(String(item.anio));
+        });
+        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
+    }, [filtrarExcluyendo]);
+
+    const departamentosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("departamento");
+        const deptosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
+        });
+        return ["Todos", ...Array.from(deptosSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const institucionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("institucion");
+        const instSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
+        });
+        return ["Todos", ...Array.from(instSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const sedesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("sede");
+        const sedeSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
+        });
+        return ["Todos", ...Array.from(sedeSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
+    const handleFilterChangeWithReset = useCallback((key, value) => {
+        onFilterChange(key, value);
+        
+        // Resetear filtros dependientes
+        if (key === "departamento") {
+            onFilterChange("sede", "Todos");
+            onFilterChange("institucion", "Todos");
+        }
+        if (key === "institucion") {
+            onFilterChange("sede", "Todos");
+        }
+    }, [onFilterChange]);
+
+    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
-    // Eliminar un filtro específico
     const handleRemoveFilter = (key) => {
         onFilterChange(key, "Todos");
     };
 
-    // Limpiar todos los filtros
     const handleClearAllFilters = () => {
         onClearFilters();
     };
 
+    // ==================== FILTRAR DATOS PRINCIPALES ====================
     useEffect(() => {
         if (!data.length) {
             setFilteredData([]);
@@ -1136,34 +1116,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         setDatosMapa(datosMapaTemp);
     }, [data, filtros]);
 
-
-    // Opciones para filtros
-    const aniosDisponibles = useMemo(() => {
-        const aniosSet = new Set();
-        data.forEach((item) => { if (item.anio) aniosSet.add(String(item.anio)); });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [data]);
-
-    const sedesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.sede && item.sede !== "null") instSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => { if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento); });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
-
-    const institucionesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => { if (item.institucion && item.institucion !== "null") instSet.add(item.institucion); });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
+    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -1173,7 +1126,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                 if (!mapa.has(inst)) {
                     mapa.set(inst, {
                         nombre: inst,
-                        siglas: item.siglas || inst, // Usar siglas del item o el nombre completo
+                        siglas: item.siglas || inst,
                         valor: 0
                     });
                 }
@@ -1203,23 +1156,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
 
     const datosJornada = useMemo(() => {
         const mapa = new Map();
-
-        const excluir = new Set([
-            "X",
-            "NULL",
-            "",
-            "NO APLICA",
-        ]);
+        const excluir = new Set(["X", "NULL", "", "NO APLICA"]);
 
         filteredData.forEach((item) => {
             const raw = item.jornada;
-
             if (raw === null || raw === undefined) return;
-
             const jornada = String(raw).trim().toUpperCase();
-
             if (excluir.has(jornada)) return;
-
             mapa.set(jornada, (mapa.get(jornada) || 0) + (item.total || 0));
         });
 
@@ -1248,28 +1191,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
 
     const datosExpresion = useMemo(() => {
         const mapa = new Map();
-
-        const excluir = new Set([
-            "NO",
-            "NULL",
-            "",
-            "NO APLICA",
-            "SIN DATOS",
-            "NADA",
-            "MESTIZO",
-            "NINGUNA",
-            "41611035"
-        ]);
+        const excluir = new Set(["NO", "NULL", "", "NO APLICA", "SIN DATOS", "NADA", "MESTIZO", "NINGUNA", "41611035"]);
 
         filteredData.forEach((item) => {
             const raw = item.expresion;
-
             if (raw === null || raw === undefined) return;
-
             const expresion = String(raw).trim().toUpperCase();
-
             if (excluir.has(expresion)) return;
-
             mapa.set(expresion, (mapa.get(expresion) || 0) + (item.total || 0));
         });
 
@@ -1280,25 +1208,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
 
     const datosTipoIngreso = useMemo(() => {
         const mapa = new Map();
-
-        const excluir = new Set([
-            "X",
-            "NULL",
-            "",
-            "NO APLICA",
-            "SIN DATOS",
-            "NADA",
-        ]);
+        const excluir = new Set(["X", "NULL", "", "NO APLICA", "SIN DATOS", "NADA"]);
 
         filteredData.forEach((item) => {
             const raw = item.tipoingreso;
-
             if (raw === null || raw === undefined) return;
-
             const tipoIngreso = String(raw).trim().toUpperCase();
-
             if (excluir.has(tipoIngreso)) return;
-
             mapa.set(tipoIngreso, (mapa.get(tipoIngreso) || 0) + (item.total || 0));
         });
 
@@ -1307,12 +1223,8 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
             .sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
 
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "Sede", options: sedesDisponibles },
-    ];
+    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
+    const hasData = filteredData.length > 0;
 
     // Medir dimensiones del mapa
     useEffect(() => {
@@ -1328,19 +1240,18 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         window.addEventListener("resize", updateDimensions);
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
 
-    const hasData = filteredData.length > 0;
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: aniosDisponibles },
+        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
+        { key: "institucion", label: "Institución", options: institucionesDisponibles },
+        { key: "sede", label: "SEDE", options: sedesDisponibles },
+    ];
 
     return (
         <Box>
-            <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                sx={{ mb: 3 }}
-            >
-                <Grid item size={{ xs: 12, md: 12 }} >
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
@@ -1355,7 +1266,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => onFilterChange(filter.key, e.target.value)}
+                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
@@ -1368,9 +1279,9 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 2 }}>
                                 <MapIcon sx={{ color: color.primary }} />
-                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}> Por Departamento</Typography>
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Departamento</Typography>
                             </Stack>
-                            <Box id="map-container-graduados" sx={{ width: "100%", height: dimensions.height }}>
+                            <Box id="map-container-modalidad" sx={{ width: "100%", height: dimensions.height }}>
                                 {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={onClearFilters} /> : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
@@ -1432,7 +1343,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-
                 {/* Grado Académico - Barras */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
@@ -1440,55 +1350,28 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <School sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Grado Académico</Typography>
-                            </Stack>                            {loading ? (
+                            </Stack>
+                            {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosGradoAcademico.length === 0 ? (
                                 <EmptyState onClearFilters={onClearFilters} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
-                                    <BarChart
-                                        data={datosGradoAcademico}
-                                        layout="vertical"
-                                        margin={{ top: 10, right: 10, bottom: 10 }}
-                                    >
+                                    <BarChart data={datosGradoAcademico} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }}>
                                         <XAxis hide type="number" />
-
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={100}
-                                            tick={{ fontSize: 10 }}
-                                        />
-
-                                        <RechartsTooltip
-                                            formatter={(value) => [value?.toLocaleString(), "Matrícula"]}
-                                        />
-
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[0, 4, 4, 0]}
-                                            label={(props) => {
-                                                const { x, y, width, height, value } = props;
-
-                                                // Si la barra es suficientemente grande
-                                                const inside = width > 60;
-
-                                                return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 5}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
-                                                        {value?.toLocaleString()}
-                                                    </text>
-                                                );
-                                            }}
-                                        />
+                                        <YAxis dataKey="nombre" type="category" width={100} tick={{ fontSize: 10 }} />
+                                        <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
+                                        <Bar dataKey="valor" fill={color.primary} radius={[0, 4, 4, 0]} label={(props) => {
+                                            const { x, y, width, height, value } = props;
+                                            const inside = width > 60;
+                                            return (
+                                                <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                    fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                    dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                    {value?.toLocaleString()}
+                                                </text>
+                                            );
+                                        }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -1500,12 +1383,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <WcRoundedIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
@@ -1516,26 +1394,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
-                                        <Pie
-                                            data={datosGenero}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius="60%"
-                                            outerRadius="90%"
-                                            paddingAngle={5}
-                                            labelLine={false}
-                                            label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                                        <Pie data={datosGenero} dataKey="value" cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" paddingAngle={5}
+                                            labelLine={false} label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
                                                 const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
                                                 const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
                                                 const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                                                return (
-                                                    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">
-                                                        {`${(percent * 100).toFixed(2)}%`}
-                                                    </text>
-                                                );
-                                            }}
-                                        >
+                                                return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
+                                            }}>
                                             {datosGenero.map((entry, idx) => (
                                                 <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
                                             ))}
@@ -1546,7 +1411,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                             return [`${value?.toLocaleString()} (${percent}%)`, name];
                                         }} />
                                         <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -1561,39 +1425,23 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Brightness4Icon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Jornada</Typography>
-
                             </Stack>
-
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={datosJornada} layout="vertical" margin={{ left: 10 }}>
                                         <XAxis hide type="number" />
                                         <YAxis dataKey="nombre" type="category" width={100} tick={{ fill: color.contrastText, fontSize: 11 }} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[0, 4, 4, 0]}
-                                            label={(props) => {
-                                                const { x, y, width, height, value } = props;
-
-                                                // Si la barra es suficientemente grande
-                                                const inside = width > 60;
-
-                                                return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 5}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
-                                                        {value?.toLocaleString()}
-                                                    </text>
-                                                );
-                                            }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.primary} radius={[0, 4, 4, 0]} label={(props) => {
+                                            const { x, y, width, height, value } = props;
+                                            const inside = width > 60;
+                                            return (
+                                                <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                    fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                    dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                    {value?.toLocaleString()}
+                                                </text>
+                                            );
+                                        }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -1609,43 +1457,23 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                 <ComputerIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Modalidad</Typography>
                             </Stack>
-
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={400}>
                                     <BarChart data={datosModalidad} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }}>
                                         <XAxis hide type="number" />
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={100}
-                                            tick={{ fontSize: 10 }}
-                                        />
+                                        <YAxis dataKey="nombre" type="category" width={100} tick={{ fontSize: 10 }} />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[0, 4, 4, 0]}
-                                            label={(props) => {
-                                                const { x, y, width, height, value } = props;
-
-                                                // Si la barra es suficientemente grande
-                                                const inside = width > 60;
-
-                                                return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 5}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
-                                                        {value?.toLocaleString()}
-                                                    </text>
-                                                );
-                                            }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.primary} radius={[0, 4, 4, 0]} label={(props) => {
+                                            const { x, y, width, height, value } = props;
+                                            const inside = width > 60;
+                                            return (
+                                                <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                    fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                    dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                    {value?.toLocaleString()}
+                                                </text>
+                                            );
+                                        }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -1667,35 +1495,19 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={datosTipoIngreso} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }}>
                                         <XAxis hide type="number" />
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={80}
-                                            tick={{ fontSize: 10 }}
-                                        />
+                                        <YAxis dataKey="nombre" type="category" width={80} tick={{ fontSize: 10 }} />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.secondary}
-                                            radius={[0, 4, 4, 0]}
-                                            label={(props) => {
-                                                const { x, y, width, height, value } = props;
-                                                const inside = width > 60;
-                                                return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 5}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
-                                                        {value?.toLocaleString()}
-                                                    </text>
-                                                );
-                                            }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.secondary} radius={[0, 4, 4, 0]} label={(props) => {
+                                            const { x, y, width, height, value } = props;
+                                            const inside = width > 60;
+                                            return (
+                                                <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                    fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                    dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                    {value?.toLocaleString()}
+                                                </text>
+                                            );
+                                        }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -1713,40 +1525,21 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={400}>
-                                    <BarChart data={datosExpresion} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }} barSize={15}   >
+                                    <BarChart data={datosExpresion} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }} barSize={15}>
                                         <XAxis hide type="number" />
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={100}
-                                            tick={{ fontSize: 10 }}
-                                        />
+                                        <YAxis dataKey="nombre" type="category" width={100} tick={{ fontSize: 10 }} />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[0, 4, 4, 0]}
-                                            label={(props) => {
-                                                const { x, y, width, height, value } = props;
-
-                                                // Si la barra es suficientemente grande
-                                                const inside = width > 60;
-
-                                                return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 5}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
-                                                        {value?.toLocaleString()}
-                                                    </text>
-                                                );
-                                            }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.primary} radius={[0, 4, 4, 0]} label={(props) => {
+                                            const { x, y, width, height, value } = props;
+                                            const inside = width > 60;
+                                            return (
+                                                <text x={inside ? x + width - 8 : x + width + 5} y={y + height / 2}
+                                                    fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                    dominantBaseline="middle" fontSize={11} fontWeight="bold">
+                                                    {value?.toLocaleString()}
+                                                </text>
+                                            );
+                                        }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -1754,34 +1547,27 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-
-
+                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Timeline sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Periodo</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="total"
-                                            stroke={color.primary}
-                                            strokeWidth={3}
-                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }}
-                                            activeDot={{ r: 7 }}
-                                            label={{ position: "top", fill: "#666", fontSize: 11, fontWeight: "bold", formatter: (v) => v?.toLocaleString() }}
+                                        <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
+                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }}
+                                            label={!isMobile ? (props) => {
+                                                const { x, y, value, index } = props;
+                                                const isTop = index % 2 === 0;
+                                                return <text x={x} y={isTop ? y - 10 : y + 20} fill={color.third} fontSize={11} textAnchor="middle">{value.toLocaleString()}</text>;
+                                            } : undefined}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>
@@ -1806,21 +1592,134 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-    // Verificar si hay filtros activos
+    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
+    const filtrarExcluyendo = useCallback((excluirKey) => {
+        if (!data.length) return [];
+        
+        return data.filter(item => {
+            return Object.entries(filtros).every(([key, value]) => {
+                if (key === excluirKey || value === "Todos") return true;
+                
+                const fieldMap = {
+                    anio: "anio",
+                    departamento: "departamento",
+                    institucion: "institucion",
+                    sede: "sede",
+                    campoamplio: "campoamplio",
+                    campoespecifico: "campoespecifico",
+                    campodetallado: "campodetallado"
+                };
+                
+                const campo = fieldMap[key];
+                if (!campo) return true;
+                
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null") return true;
+                
+                return normalizar(itemValue) === normalizar(value);
+            });
+        });
+    }, [data, filtros]);
+
+    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
+    const aniosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("anio");
+        const aniosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.anio) aniosSet.add(String(item.anio));
+        });
+        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
+    }, [filtrarExcluyendo]);
+
+    const departamentosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("departamento");
+        const deptosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
+        });
+        return ["Todos", ...Array.from(deptosSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const institucionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("institucion");
+        const instSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
+        });
+        return ["Todos", ...Array.from(instSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const sedesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("sede");
+        const sedeSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
+        });
+        return ["Todos", ...Array.from(sedeSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const campoAmplioDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("campoamplio");
+        const campoSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.campoamplio && item.campoamplio !== "null") campoSet.add(item.campoamplio);
+        });
+        return ["Todos", ...Array.from(campoSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const campoEspecificoDisponible = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("campoespecifico");
+        const campoSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.campoespecifico && item.campoespecifico !== "null") campoSet.add(item.campoespecifico);
+        });
+        return ["Todos", ...Array.from(campoSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const campoDetalladoDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("campodetallado");
+        const campoSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.campodetallado && item.campodetallado !== "null") campoSet.add(item.campodetallado);
+        });
+        return ["Todos", ...Array.from(campoSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
+    const handleFilterChangeWithReset = useCallback((key, value) => {
+        onFilterChange(key, value);
+        
+        // Resetear filtros dependientes
+        if (key === "departamento") {
+            onFilterChange("sede", "Todos");
+            onFilterChange("institucion", "Todos");
+        }
+        if (key === "institucion") {
+            onFilterChange("sede", "Todos");
+        }
+        if (key === "campoamplio") {
+            onFilterChange("campoespecifico", "Todos");
+            onFilterChange("campodetallado", "Todos");
+        }
+        if (key === "campoespecifico") {
+            onFilterChange("campodetallado", "Todos");
+        }
+    }, [onFilterChange]);
+
+    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
-    // Eliminar un filtro específico
     const handleRemoveFilter = (key) => {
         onFilterChange(key, "Todos");
     };
 
-    // Limpiar todos los filtros
     const handleClearAllFilters = () => {
         onClearFilters();
     };
 
+    // ==================== FILTRAR DATOS PRINCIPALES ====================
     useEffect(() => {
         if (!data.length) {
             setFilteredData([]);
@@ -1829,27 +1728,18 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
         }
 
         let filtrado = data.filter((d) => {
-            // Filtros básicos (los que funcionaban)
             const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
             const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
             const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-
-            // Filtros adicionales (agregar con cuidado)
-            const cumpleSede = filtros.sede === "Todos" || !filtros.sede || filtros.sede === "null" || normalizar(d.sede) === normalizar(filtros.sede);
-            const cumpleCampoAmplio = filtros.campoamplio === "Todos" || !filtros.campoamplio || filtros.campoamplio === "null" || normalizar(d.campoamplio) === normalizar(filtros.campoamplio);
-            const cumpleCampoEspecifico = filtros.campoespecifico === "Todos" || !filtros.campoespecifico || filtros.campoespecifico === "null" || normalizar(d.campoespecifico) === normalizar(filtros.campoespecifico);
-            const cumpleCampoDetallado = filtros.campodetallado === "Todos" || !filtros.campodetallado || filtros.campodetallado === "null" || normalizar(d.campodetallado) === normalizar(filtros.campodetallado);
-
-            // Log para depuración - puedes eliminarlo después
-            if (filtros.campoamplio !== "Todos" && filtros.campoamplio) {
-                console.log("Filtrando por campoamplio:", filtros.campoamplio, "Valor del item:", d.campoamplio, "Coincide:", cumpleCampoAmplio);
-            }
-
+            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
+            const cumpleCampoAmplio = filtros.campoamplio === "Todos" || normalizar(d.campoamplio) === normalizar(filtros.campoamplio);
+            const cumpleCampoEspecifico = filtros.campoespecifico === "Todos" || normalizar(d.campoespecifico) === normalizar(filtros.campoespecifico);
+            const cumpleCampoDetallado = filtros.campodetallado === "Todos" || normalizar(d.campodetallado) === normalizar(filtros.campodetallado);
+            
             return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleSede &&
                 cumpleCampoAmplio && cumpleCampoEspecifico && cumpleCampoDetallado;
         });
 
-        console.log("Total filtrado:", filtrado.length);
         setFilteredData(filtrado);
 
         // Datos para el mapa
@@ -1868,58 +1758,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
         setDatosMapa(datosMapaTemp);
     }, [data, filtros]);
 
-    const aniosDisponibles = useMemo(() => {
-        const aniosSet = new Set();
-        data.forEach((item) => { if (item.anio) aniosSet.add(String(item.anio)); });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [data]);
-
-    const sedesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.sede && item.sede !== "null") instSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    const campoAmplioDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.campoamplio && item.campoamplio !== "null") instSet.add(item.campoamplio);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-
-    const campoEspecificoDisponible = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.campoespecifico && item.campoespecifico !== "null") instSet.add(item.campoespecifico);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    const campoDetalladoDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => {
-            if (item.campodetallado && item.campodetallado !== "null") instSet.add(item.campodetallado);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => { if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento); });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
-
-    const institucionesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => { if (item.institucion && item.institucion !== "null") instSet.add(item.institucion); });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    // Datos para tablas
+    // ==================== DATOS PARA GRÁFICOS ====================
     const datosCampoAmplio = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -1947,7 +1786,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
     }, [filteredData]);
 
-    // En MatriculaCampos, corregir datosUniversidades:
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -1957,7 +1795,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                 if (!mapa.has(inst)) {
                     mapa.set(inst, {
                         nombre: inst,
-                        siglas: item.siglas || inst, // Usar siglas del item o el nombre completo
+                        siglas: item.siglas || inst,
                         valor: 0
                     });
                 }
@@ -1989,11 +1827,29 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
     const sortedEspecifico = [...datosCampoEspecifico].sort((a, b) => orderEspecifico === "asc" ? a.valor - b.valor : b.valor - a.valor);
     const sortedDetallado = [...datosCampoDetallado].sort((a, b) => orderDetallado === "asc" ? a.valor - b.valor : b.valor - a.valor);
 
+    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
+    const hasData = filteredData.length > 0;
+
+    // Medir dimensiones del mapa
+    useEffect(() => {
+        const updateDimensions = () => {
+            const container = document.getElementById("map-container-campos");
+            if (container) {
+                const containerWidth = container.clientWidth;
+                let height = isMobile ? containerWidth * 0.5 : isTablet ? 500 : 600;
+                setDimensions({ width: containerWidth, height: Math.max(height, 400) });
+            }
+        };
+        updateDimensions();
+        window.addEventListener("resize", updateDimensions);
+        return () => window.removeEventListener("resize", updateDimensions);
+    }, [isMobile, isTablet]);
+
     const filtersConfig = [
         { key: "anio", label: "Año", options: aniosDisponibles },
         { key: "departamento", label: "Departamento", options: departamentosDisponibles },
         { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "Sede", options: sedesDisponibles },
+        { key: "sede", label: "SEDE", options: sedesDisponibles },
         { key: "campoamplio", label: "Campo Amplio", options: campoAmplioDisponibles },
         { key: "campoespecifico", label: "Campo Específico", options: campoEspecificoDisponible },
         { key: "campodetallado", label: "Campo Detallado", options: campoDetalladoDisponibles },
@@ -2029,34 +1885,10 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
         </TableContainer>
     );
 
-
-    // Medir dimensiones del mapa
-    useEffect(() => {
-        const updateDimensions = () => {
-            const container = document.getElementById("map-container-modalidad");
-            if (container) {
-                const containerWidth = container.clientWidth;
-                let height = isMobile ? containerWidth * 0.5 : isTablet ? 500 : 600;
-                setDimensions({ width: containerWidth, height: Math.max(height, 400) });
-            }
-        };
-        updateDimensions();
-        window.addEventListener("resize", updateDimensions);
-        return () => window.removeEventListener("resize", updateDimensions);
-    }, [isMobile, isTablet]);
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-
-    const hasData = filteredData.length > 0;
-
     return (
         <Box>
-            <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                sx={{ mb: 3 }}
-            >
-                <Grid item size={{ xs: 12, md: 12 }} >
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
@@ -2071,15 +1903,13 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => onFilterChange(filter.key, e.target.value)}
+                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
             <Grid container spacing={3}>
-
-
                 {/* Mapa */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
@@ -2088,7 +1918,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                                 <MapIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Departamento</Typography>
                             </Stack>
-                            <Box id="map-container-desunah" sx={{ width: "100%", height: dimensions.height }}>
+                            <Box id="map-container-campos" sx={{ width: "100%", height: dimensions.height }}>
                                 {loading ? (
                                     <Skeleton variant="rectangular" width="100%" height="100%" />
                                 ) : !hasData ? (
@@ -2110,8 +1940,8 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                             position: "absolute",
                             top: 20,
                             left: 20,
-                            zIndex: 10,  // Reducir z-index para que no se salga
-                            maxWidth: "calc(100% - 40px)", // Evitar que se salga horizontalmente
+                            zIndex: 10,
+                            maxWidth: "calc(100% - 40px)",
                         }}>
                             <StyledCard sx={{ background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`, width: 200 }}>
                                 <StyledCardContent>
@@ -2129,6 +1959,8 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                         </Box>
                     </StyledCard>
                 </Grid>
+
+                {/* Universidades - Barras */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2154,38 +1986,20 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <WcRoundedIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={250} /> : (
                                 <ResponsiveContainer width="100%" height={250}>
                                     <PieChart>
-                                        <Pie
-                                            data={datosGenero}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius="60%"
-                                            outerRadius="90%"
-                                            paddingAngle={5}
-                                            labelLine={false}
-                                            label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                                        <Pie data={datosGenero} dataKey="value" cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" paddingAngle={5}
+                                            labelLine={false} label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
                                                 const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
                                                 const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
                                                 const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                                                return (
-                                                    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">
-                                                        {`${(percent * 100).toFixed(2)}%`}
-                                                    </text>
-                                                );
-                                            }}
-                                        >
+                                                return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
+                                            }}>
                                             {datosGenero.map((entry, idx) => (
                                                 <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
                                             ))}
@@ -2196,7 +2010,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                                             return [`${value?.toLocaleString()} (${percent}%)`, name];
                                         }} />
                                         <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -2204,41 +2017,35 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* * Periodo - Línea  */}
+                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 8 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Timeline sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Periodo</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={250} /> : (
                                 <ResponsiveContainer width="100%" height={250}>
-                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 10 }}>
+                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 10 }}>
                                         <XAxis dataKey="periodo" />
                                         <YAxis hide />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="total"
-                                            stroke={color.primary}
-                                            strokeWidth={3}
-                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }}
-                                            activeDot={{ r: 7 }}
-                                            label={{ position: "top", fill: "#666", fontSize: 11, fontWeight: "bold", formatter: (v) => v?.toLocaleString() }}
-                                        />                                    </LineChart>
+                                        <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
+                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }}
+                                            label={!isMobile ? (props) => {
+                                                const { x, y, value, index } = props;
+                                                const isTop = index % 2 === 0;
+                                                return <text x={x} y={isTop ? y - 10 : y + 20} fill={color.third} fontSize={11} textAnchor="middle">{value.toLocaleString()}</text>;
+                                            } : undefined}
+                                        />
+                                    </LineChart>
                                 </ResponsiveContainer>
                             )}
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
 
-
-                {/* Tablas de Campo Amplio */}
+                {/* Tablas de Campos */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2248,7 +2055,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Tablas de Campos  Específico*/}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2258,7 +2064,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Tablas de Campo Detallado */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2280,21 +2085,179 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-    // Verificar si hay filtros activos
+
+    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
+    const filtrarExcluyendo = useCallback((excluirKey) => {
+        if (!data.length) return [];
+        
+        return data.filter(item => {
+            return Object.entries(filtros).every(([key, value]) => {
+                if (key === excluirKey || value === "Todos") return true;
+                
+                const fieldMap = {
+                    anio: "anio",
+                    departamento: "departamento",
+                    institucion: "institucion",
+                    administracion: "administracion",
+                    sede: "sede",
+                    titulo: "titulo"
+                };
+                
+                const campo = fieldMap[key];
+                if (!campo) return true;
+                
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null") return true;
+                
+                return normalizar(itemValue) === normalizar(value);
+            });
+        });
+    }, [data, filtros]);
+
+      const esFiltroValido = useCallback((key, valor) => {
+        if (valor === "Todos") return true;
+        
+        const datosFiltrados = filtrarExcluyendo(key);
+        const campoMap = {
+            anio: "anio",
+            departamento: "departamento",
+            institucion: "institucion",
+            administracion: "administracion",
+            sede: "sede",
+            titulo: "titulo"
+        };
+        
+        const campo = campoMap[key];
+        return datosFiltrados.some(item => normalizar(item[campo]) === normalizar(valor));
+    }, [filtrarExcluyendo]);
+
+    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
+    const aniosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("anio");
+        const aniosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.anio) aniosSet.add(String(item.anio));
+        });
+        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
+    }, [filtrarExcluyendo]);
+
+    const departamentosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("departamento");
+        const deptosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
+        });
+        return ["Todos", ...Array.from(deptosSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const institucionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("institucion");
+        const instSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
+        });
+        return ["Todos", ...Array.from(instSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const administracionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("administracion");
+        const admSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.administracion && item.administracion !== "null") admSet.add(item.administracion);
+        });
+        return ["Todos", ...Array.from(admSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const sedesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("sede");
+        const sedeSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
+        });
+        return ["Todos", ...Array.from(sedeSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const titulosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("titulo");
+        const titulosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.titulo && item.titulo !== "null") titulosSet.add(item.titulo);
+        });
+        return ["Todos", ...Array.from(titulosSet).sort()];
+    }, [filtrarExcluyendo]);
+
+
+  // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
+    const handleFilterChangeWithReset = useCallback((key, value) => {
+        // Actualizar el filtro
+        onFilterChange(key, value);
+        
+        // Resetear filtros dependientes jerárquicos
+        if (key === "departamento") {
+            onFilterChange("sede", "Todos");
+            onFilterChange("institucion", "Todos");
+        }
+        if (key === "institucion") {
+            onFilterChange("sede", "Todos");
+        }
+        
+        // Cuando cambia sede, verificar si el título actual es válido
+        if (key === "sede" && filtros.titulo !== "Todos") {
+            // Pequeño delay para que el estado se actualice
+            setTimeout(() => {
+                if (!esFiltroValido("titulo", filtros.titulo)) {
+                    onFilterChange("titulo", "Todos");
+                }
+            }, 0);
+        }
+        
+        // Cuando cambia título, verificar si la sede actual es válida
+        if (key === "titulo" && filtros.sede !== "Todos") {
+            setTimeout(() => {
+                if (!esFiltroValido("sede", filtros.sede)) {
+                    onFilterChange("sede", "Todos");
+                }
+            }, 0);
+        }
+    }, [onFilterChange, filtros, esFiltroValido]);
+
+    // ==================== EFECTO PARA VALIDAR FILTROS DESPUÉS DE CAMBIOS ====================
+    useEffect(() => {
+        // Validar que los filtros actuales sean consistentes con los datos
+        if (filtros.sede !== "Todos" && !esFiltroValido("sede", filtros.sede)) {
+            onFilterChange("sede", "Todos");
+        }
+        if (filtros.titulo !== "Todos" && !esFiltroValido("titulo", filtros.titulo)) {
+            onFilterChange("titulo", "Todos");
+        }
+        if (filtros.institucion !== "Todos" && !esFiltroValido("institucion", filtros.institucion)) {
+            onFilterChange("institucion", "Todos");
+        }
+        if (filtros.administracion !== "Todos" && !esFiltroValido("administracion", filtros.administracion)) {
+            onFilterChange("administracion", "Todos");
+        }
+        if (filtros.departamento !== "Todos" && !esFiltroValido("departamento", filtros.departamento)) {
+            onFilterChange("departamento", "Todos");
+        }
+        if (filtros.anio !== "Todos" && !esFiltroValido("anio", filtros.anio)) {
+            onFilterChange("anio", "Todos");
+        }
+    }, [data, filtros, esFiltroValido, onFilterChange]);
+
+    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
-    // Eliminar un filtro específico
     const handleRemoveFilter = (key) => {
         onFilterChange(key, "Todos");
     };
 
-    // Limpiar todos los filtros
     const handleClearAllFilters = () => {
         onClearFilters();
     };
 
+    // ==================== FILTRAR DATOS PRINCIPALES ====================
     useEffect(() => {
         if (!data.length) {
             setFilteredData([]);
@@ -2307,8 +2270,8 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
             const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
             const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
             const cumpleAdministracion = filtros.administracion === "Todos" || normalizar(d.administracion) === normalizar(filtros.administracion);
-            const cumpleSede = filtros.sede === "Todos" || !filtros.sede || filtros.sede === "null" || normalizar(d.sede) === normalizar(filtros.sede);
-            const cumpleTitulo = filtros.titulo === "Todos" || !filtros.titulo || filtros.titulo === "null" || normalizar(d.titulo) === normalizar(filtros.titulo);
+            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
+            const cumpleTitulo = filtros.titulo === "Todos" || normalizar(d.titulo) === normalizar(filtros.titulo);
             return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleAdministracion && cumpleSede && cumpleTitulo;
         });
         setFilteredData(filtrado);
@@ -2327,44 +2290,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
         setDatosMapa(datosMapaTemp);
     }, [data, filtros]);
 
-    const aniosDisponibles = useMemo(() => {
-        const aniosSet = new Set();
-        data.forEach((item) => { if (item.anio) aniosSet.add(String(item.anio)); });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [data]);
-
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => { if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento); });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
-
-    const titulosDisponibles = useMemo(() => {
-        const titulosSet = new Set();
-        data.forEach((item) => { if (item.titulo && item.titulo !== "null") titulosSet.add(item.titulo); });
-        return ["Todos", ...Array.from(titulosSet).sort()];
-    }, [data]);
-
-    const institucionesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => { if (item.institucion && item.institucion !== "null") instSet.add(item.institucion); });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    const administracionesDisponibles = useMemo(() => {
-        const admSet = new Set();
-        data.forEach((item) => { if (item.administracion && item.administracion !== "null") admSet.add(item.administracion); });
-        return ["Todos", ...Array.from(admSet).sort()];
-    }, [data]);
-
-
-    const sedesDisponibles = useMemo(() => {
-        const sedesSet = new Set();
-        data.forEach((item) => { if (item.sede && item.sede !== "null") sedesSet.add(item.sede); });
-        return ["Todos", ...Array.from(sedesSet).sort()];
-    }, [data]);
-
-    // En GraduadosComponent:
+    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -2395,35 +2321,18 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
 
     const datosExpresion = useMemo(() => {
         const mapa = new Map();
-
-        const excluir = new Set([
-            "SIN DATOS",
-            "NULL",
-            "",
-            "NO APLICA",
-            "NO"
-        ]);
+        const excluir = new Set(["SIN DATOS", "NULL", "", "NO APLICA", "NO"]);
 
         filteredData.forEach((item) => {
             const raw = item.expresion;
-
             if (raw === null || raw === undefined) return;
-
             const expresion = String(raw).trim().toUpperCase();
-
             if (excluir.has(expresion)) return;
-
-            mapa.set(
-                expresion,
-                (mapa.get(expresion) || 0) + (item.total || 0)
-            );
+            mapa.set(expresion, (mapa.get(expresion) || 0) + (item.total || 0));
         });
 
-        return Array.from(mapa.entries()).map(([nombre, valor]) => ({
-            nombre,
-            valor,
-        }));
-    }, [filteredData]);;
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
+    }, [filteredData]);
 
     const datosGradoAcademico = useMemo(() => {
         const mapa = new Map();
@@ -2445,25 +2354,15 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
 
     const datosTitulos = useMemo(() => {
         const mapa = new Map();
-
         filteredData.forEach((item) => {
             const titulo = item.titulo;
-
             if (titulo && titulo !== "null" && titulo.trim() !== "") {
-                // Limpiar espacios extra del título
                 const tituloLimpio = titulo.trim().replace(/\s+/g, ' ');
                 mapa.set(tituloLimpio, (mapa.get(tituloLimpio) || 0) + (item.total || 0));
             }
         });
-
-        // Mostrar todos los registros, sin límite
-        return Array.from(mapa.entries())
-            .map(([nombre, valor]) => ({ nombre, valor }))
-            .sort((a, b) => b.valor - a.valor);
-
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
-
-
 
     const datosAdministracion = useMemo(() => {
         const mapa = new Map();
@@ -2489,15 +2388,14 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
             const rango = item.rangoedad;
             if (rango && rango !== "null" && rango !== "") mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
         });
-        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => {
-            const order = ["<18", "18 a 24", "25 a 34", "35 a 44", "45 a 54", "55 a 64", "65+"];
-            return order.indexOf(a.nombre) - order.indexOf(b.nombre);
-        });
+        const order = ["<18", "18 a 24", "25 a 34", "35 a 44", "45 a 54", "55 a 64", "65+"];
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
     }, [filteredData]);
 
     const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
     const hasData = filteredData.length > 0;
 
+    // Medir dimensiones del mapa
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-graduados");
@@ -2516,20 +2414,15 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
         { key: "anio", label: "Año", options: aniosDisponibles },
         { key: "departamento", label: "Departamento", options: departamentosDisponibles },
         { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "Sede", options: sedesDisponibles },
+        { key: "sede", label: "SEDE", options: sedesDisponibles },
         { key: "titulo", label: "Título", options: titulosDisponibles },
         { key: "administracion", label: "Administración", options: administracionesDisponibles },
     ];
 
     return (
         <Box>
-            <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                sx={{ mb: 3 }}
-            >
-                <Grid item size={{ xs: 12, md: 12 }} >
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
@@ -2544,7 +2437,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => onFilterChange(filter.key, e.target.value)}
+                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
@@ -2553,10 +2446,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
             <Grid container spacing={3}>
                 {/* Mapa de Graduados por Departamento */}
                 <Grid item size={{ xs: 12 }}>
-                    <StyledCard sx={{
-                        position: "relative",
-                        overflow: "hidden",
-                    }}>
+                    <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 2 }}>
                                 <MapIcon sx={{ color: color.primary }} />
@@ -2626,29 +2516,18 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                 <WcRoundedIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
-                            {loading ? <ChartSkeleton height={300} /> : (
+                            {loading ? <ChartSkeleton height={300} /> : datosGenero.every(d => d.value === 0) ? (
+                                <EmptyState onClearFilters={onClearFilters} />
+                            ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
-                                        <Pie
-                                            data={datosGenero}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius="60%"
-                                            outerRadius="90%"
-                                            paddingAngle={5}
-                                            labelLine={false}
-                                            label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                                        <Pie data={datosGenero} dataKey="value" cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" paddingAngle={5}
+                                            labelLine={false} label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
                                                 const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
                                                 const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
                                                 const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                                                return (
-                                                    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">
-                                                        {`${(percent * 100).toFixed(2)}%`}
-                                                    </text>
-                                                );
-                                            }}
-                                        >
+                                                return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
+                                            }}>
                                             {datosGenero.map((entry, idx) => (
                                                 <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
                                             ))}
@@ -2659,7 +2538,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                             return [`${value?.toLocaleString()} (${percent}%)`, name];
                                         }} />
                                         <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -2673,18 +2551,11 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <ComputerIcon sx={{ color: color.primary }} />
-                                <Typography
-                                    variant="h6"
-                                    sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}
-                                >
-                                    Por Expresión
-                                </Typography>
-
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Expresión</Typography>
                                 <Tooltip title="Distribución por grupo étnico">
                                     <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
                             </Stack>
-
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosExpresion.length === 0 ? (
@@ -2692,45 +2563,19 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             ) : (
                                 <Box sx={{ width: "100%", height: 350, overflowY: "auto" }}>
                                     <ResponsiveContainer width="100%" height={Math.max(datosExpresion.length * 90, 350)}>
-                                        <BarChart
-                                            data={datosExpresion}
-                                            layout="vertical"
-                                            margin={{ top: 10, right: 20, left: 20, bottom: 10 }}
-                                        >
+                                        <BarChart data={datosExpresion} layout="vertical" margin={{ top: 10, right: 20, left: 20, bottom: 10 }}>
                                             <XAxis hide type="number" />
-
-                                            <YAxis
-                                                dataKey="nombre"
-                                                type="category"
-                                                width={90}
-                                                height={130}
-                                                tick={{ fontSize: 11 }}
-                                            />
-
+                                            <YAxis dataKey="nombre" type="category" width={90} height={130} tick={{ fontSize: 11 }} />
                                             <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-
-                                            <Bar
-                                                dataKey="valor"
-                                                fill={color.secondary}
-                                                radius={[0, 6, 6, 0]}
-                                                barSize={30}
+                                            <Bar dataKey="valor" fill={color.secondary} radius={[0, 6, 6, 0]} barSize={30}
                                                 label={(props) => {
                                                     if (!props) return null;
-
                                                     const { x, y, width, height, value } = props;
                                                     const inside = width > 60;
-
                                                     return (
-                                                        <text
-                                                            x={inside ? x + width - 8 : x + width + 6}
-                                                            y={y + height / 2}
-                                                            fill={inside ? "#fff" : color.contrastText}
-                                                            textAnchor={inside ? "end" : "start"}
-                                                            dominantBaseline="middle"
-                                                            fontSize={11}
-                                                            fontWeight="bold"
-                                                        >
+                                                        <text x={inside ? x + width - 8 : x + width + 6} y={y + height / 2}
+                                                            fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                            dominantBaseline="middle" fontSize={11} fontWeight="bold">
                                                             {value?.toLocaleString()}
                                                         </text>
                                                     );
@@ -2748,34 +2593,11 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
-                                <AccountBalanceRoundedIcon
-                                    sx={{ color: color.primary }}
-                                />
-                                <Typography
-                                    variant="h6"
-                                    sx={{
-                                        color: color.primary,
-                                        fontWeight: "bold",
-                                        flex: 1,
-                                    }}
-                                >
-                                    Por Administración
-                                </Typography>
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <AccountBalanceRoundedIcon sx={{ color: color.primary }} />
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Administración</Typography>
                                 <Tooltip title="Distribución por tipo de administración">
-                                    <Info
-                                        sx={{
-                                            fontSize: 18,
-                                            color: color.primary,
-                                            opacity: 0.7,
-                                            cursor: "help",
-                                        }}
-                                    />
+                                    <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
@@ -2784,13 +2606,8 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                         <XAxis dataKey="nombre" type="category" tick={{ fontSize: 10 }} />
                                         <YAxis hide type="number" />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[4, 4, 0, 0]}
-                                            label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.primary} radius={[4, 4, 0, 0]}
+                                            label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -2805,41 +2622,22 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <School sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Grado Académico</Typography>
-                            </Stack>                            {loading ? <ChartSkeleton height={300} /> : (
+                            </Stack>
+                            {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <BarChart data={datosGradoAcademico} layout="vertical" margin={{ left: 10 }}>
                                         <XAxis hide type="number" />
-
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={100}
-                                            height={130}
-                                            tick={{ fontSize: 11 }}
-                                        />
+                                        <YAxis dataKey="nombre" type="category" width={100} height={130} tick={{ fontSize: 11 }} />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.primary}
-                                            radius={[0, 6, 6, 0]}
-                                            barSize={30}
+                                        <Bar dataKey="valor" fill={color.primary} radius={[0, 6, 6, 0]} barSize={30}
                                             label={(props) => {
                                                 if (!props) return null;
-
                                                 const { x, y, width, height, value } = props;
                                                 const inside = width > 60;
-
                                                 return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 6}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
+                                                    <text x={inside ? x + width - 8 : x + width + 6} y={y + height / 2}
+                                                        fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                        dominantBaseline="middle" fontSize={11} fontWeight="bold">
                                                         {value?.toLocaleString()}
                                                     </text>
                                                 );
@@ -2862,36 +2660,16 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                     <BarChart data={datosModalidad} layout="vertical" margin={{ left: 10 }}>
                                         <XAxis hide type="number" />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-                                        <YAxis
-                                            dataKey="nombre"
-                                            type="category"
-                                            width={120}
-
-                                            tick={{ fontSize: 11 }}
-                                        />
-
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.secondary}
-                                            radius={[0, 6, 6, 0]}
-                                            barSize={30}
+                                        <YAxis dataKey="nombre" type="category" width={120} tick={{ fontSize: 11 }} />
+                                        <Bar dataKey="valor" fill={color.secondary} radius={[0, 6, 6, 0]} barSize={30}
                                             label={(props) => {
                                                 if (!props) return null;
-
                                                 const { x, y, width, height, value } = props;
                                                 const inside = width > 60;
-
                                                 return (
-                                                    <text
-                                                        x={inside ? x + width - 8 : x + width + 6}
-                                                        y={y + height / 2}
-                                                        fill={inside ? "#fff" : color.contrastText}
-                                                        textAnchor={inside ? "end" : "start"}
-                                                        dominantBaseline="middle"
-                                                        fontSize={11}
-                                                        fontWeight="bold"
-                                                    >
+                                                    <text x={inside ? x + width - 8 : x + width + 6} y={y + height / 2}
+                                                        fill={inside ? "#fff" : color.contrastText} textAnchor={inside ? "end" : "start"}
+                                                        dominantBaseline="middle" fontSize={11} fontWeight="bold">
                                                         {value?.toLocaleString()}
                                                     </text>
                                                 );
@@ -2908,41 +2686,25 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Timeline sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Periodo</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={300}>
-                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-                                        <Line
-                                            type="monotone"
-                                            dataKey="total"
-                                            stroke={color.primary}
-                                            strokeWidth={3}
-                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }}
-                                            activeDot={{ r: 7 }}
-                                            label={
-                                                !isMobile
-                                                    ? {
-                                                        position: "top",
-                                                        fill: color.third,
-                                                        fontSize: 11,
-                                                        fontWeight: "bold",
-                                                        formatter: (value) => value.toLocaleString(),
-                                                    }
-                                                    : undefined
-                                            }
-                                        />                                    </LineChart>
+                                        <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
+                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }}
+                                            label={!isMobile ? (props) => {
+                                                const { x, y, value, index } = props;
+                                                const isTop = index % 2 === 0;
+                                                return <text x={x} y={isTop ? y - 10 : y + 20} fill={color.third} fontSize={11} textAnchor="middle">{value.toLocaleString()}</text>;
+                                            } : undefined}
+                                        />
+                                    </LineChart>
                                 </ResponsiveContainer>
                             )}
                         </StyledCardContent>
@@ -2953,12 +2715,8 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >                        <ElderlyWomanIcon sx={{ color: color.primary }} />
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <ElderlyWomanIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Rango Etario</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
@@ -2967,8 +2725,8 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                         <XAxis angle={-45} dataKey="nombre" type="category" tick={{ fontSize: 10 }} textAnchor="end" interval={0} />
                                         <YAxis hide type="number" />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
-
-                                        <Bar dataKey="valor" fill={color.secondary} radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }} />
+                                        <Bar dataKey="valor" fill={color.secondary} radius={[4, 4, 0, 0]}
+                                            label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -2981,13 +2739,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     <StyledCard>
                         <StyledCardContent>
                             <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Títulos</Typography>
-                            <SimpleTable
-                                data={datosTitulos}
-                                nameKey="nombre"
-                                valueKey="valor"
-                                title="Título"
-                                loading={loading}
-                            />
+                            <SimpleTable data={datosTitulos} nameKey="nombre" valueKey="valor" title="Título" loading={loading} />
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
@@ -3005,21 +2757,97 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
 
-    // Verificar si hay filtros activos
+    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
+    const filtrarExcluyendo = useCallback((excluirKey) => {
+        if (!data.length) return [];
+        
+        return data.filter(item => {
+            return Object.entries(filtros).every(([key, value]) => {
+                if (key === excluirKey || value === "Todos") return true;
+                
+                const fieldMap = {
+                    anio: "anio",
+                    departamento: "departamento",
+                    institucion: "institucion",
+                    sede: "sede"
+                };
+                
+                const campo = fieldMap[key];
+                if (!campo) return true;
+                
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null") return true;
+                
+                return normalizar(itemValue) === normalizar(value);
+            });
+        });
+    }, [data, filtros]);
+
+    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
+    const aniosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("anio");
+        const aniosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.anio) aniosSet.add(String(item.anio));
+        });
+        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
+    }, [filtrarExcluyendo]);
+
+    const departamentosDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("departamento");
+        const deptosSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
+        });
+        return ["Todos", ...Array.from(deptosSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const institucionesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("institucion");
+        const instSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
+        });
+        return ["Todos", ...Array.from(instSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    const sedesDisponibles = useMemo(() => {
+        const datosFiltrados = filtrarExcluyendo("sede");
+        const sedeSet = new Set();
+        datosFiltrados.forEach((item) => {
+            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
+        });
+        return ["Todos", ...Array.from(sedeSet).sort()];
+    }, [filtrarExcluyendo]);
+
+    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
+    const handleFilterChangeWithReset = useCallback((key, value) => {
+        onFilterChange(key, value);
+        
+        // Resetear filtros dependientes
+        if (key === "departamento") {
+            onFilterChange("sede", "Todos");
+            onFilterChange("institucion", "Todos");
+        }
+        if (key === "institucion") {
+            onFilterChange("sede", "Todos");
+        }
+    }, [onFilterChange]);
+
+    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
-    // Eliminar un filtro específico
     const handleRemoveFilter = (key) => {
         onFilterChange(key, "Todos");
     };
 
-    // Limpiar todos los filtros
     const handleClearAllFilters = () => {
         onClearFilters();
     };
 
+    // ==================== FILTRAR DATOS PRINCIPALES ====================
     useEffect(() => {
         if (!data.length) {
             setFilteredData([]);
@@ -3050,31 +2878,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         setDatosMapa(datosMapaTemp);
     }, [data, filtros]);
 
-    const aniosDisponibles = useMemo(() => {
-        const aniosSet = new Set();
-        data.forEach((item) => { if (item.anio) aniosSet.add(String(item.anio)); });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [data]);
-
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => { if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento); });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
-
-    const sedesDisponibles = useMemo(() => {
-        const sedesSet = new Set();
-        data.forEach((item) => { if (item.sede && item.sede !== "null") sedesSet.add(item.sede); });
-        return ["Todos", ...Array.from(sedesSet).sort()];
-    }, [data]);
-
-    const institucionesDisponibles = useMemo(() => {
-        const instSet = new Set();
-        data.forEach((item) => { if (item.institucion && item.institucion !== "null") instSet.add(item.institucion); });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [data]);
-
-    // En DocentesComponent:
+    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -3118,10 +2922,8 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
             const rango = item.rangoedad;
             if (rango && rango !== "null" && rango !== "") mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
         });
-        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => {
-            const order = ["25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70+"];
-            return order.indexOf(a.nombre) - order.indexOf(b.nombre);
-        });
+        const order = ["25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70+"];
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
     }, [filteredData]);
 
     const datosPeriodo = useMemo(() => {
@@ -3142,7 +2944,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
     }, [filteredData]);
 
-
     const datosDepartamentos = useMemo(() => {
         const mapa = new Map();
         filteredData.forEach((item) => {
@@ -3151,10 +2952,8 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                 mapa.set(depto, (mapa.get(depto) || 0) + (item.total || 0));
             }
         });
-
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
-
 
     const datosCargo = useMemo(() => {
         const mapa = new Map();
@@ -3164,7 +2963,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                 mapa.set(cargo, (mapa.get(cargo) || 0) + (item.total || 0));
             }
         });
-
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
 
@@ -3177,9 +2975,25 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
     }, [filteredData]);
 
+    const datosContrato = useMemo(() => {
+        const mapa = new Map();
+        const excluir = new Set(["", "null", "SIN DATOS", "NO APLICA", "NINGUNO"]);
+
+        filteredData.forEach((item) => {
+            const raw = item.contrato;
+            if (raw === null || raw === undefined) return;
+            const contrato = String(raw).trim().toUpperCase();
+            if (excluir.has(contrato)) return;
+            mapa.set(contrato, (mapa.get(contrato) || 0) + (item.total || 0));
+        });
+
+        return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
+    }, [filteredData]);
+
     const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
     const hasData = filteredData.length > 0;
 
+    // Medir dimensiones del mapa
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-docentes");
@@ -3198,49 +3012,13 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         { key: "anio", label: "Año", options: aniosDisponibles },
         { key: "departamento", label: "Departamento", options: departamentosDisponibles },
         { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "Sede", options: sedesDisponibles }
+        { key: "sede", label: "SEDE", options: sedesDisponibles }
     ];
-
-
-    // En DocentesComponent, después de datosDedicacion, agregar:
-
-    const datosContrato = useMemo(() => {
-        const mapa = new Map();
-
-        const excluir = new Set([
-            "",
-            "null",
-            "SIN DATOS",
-            "NO APLICA",
-            "NINGUNO",
-        ]);
-
-        filteredData.forEach((item) => {
-            const raw = item.contrato;
-
-            if (raw === null || raw === undefined) return;
-
-            const contrato = String(raw).trim().toUpperCase();
-
-            if (excluir.has(contrato)) return;
-
-            mapa.set(contrato, (mapa.get(contrato) || 0) + (item.total || 0));
-        });
-
-        return Array.from(mapa.entries())
-            .map(([nombre, valor]) => ({ nombre, valor }))
-            .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
 
     return (
         <Box>
-            <Grid
-                container
-                spacing={2}
-                justifyContent="center"
-                sx={{ mb: 3 }}
-            >
-                <Grid item size={{ xs: 12, md: 12 }} >
+            <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+                <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
@@ -3255,7 +3033,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => onFilterChange(filter.key, e.target.value)}
+                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
@@ -3263,10 +3041,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
 
             <Grid container spacing={3}>
                 <Grid item size={{ xs: 12 }}>
-                    <StyledCard sx={{
-                        position: "relative",
-                        overflow: "hidden",
-                    }}>
+                    <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
                             <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 2 }}>
                                 <MapIcon sx={{ color: color.primary }} />
@@ -3334,29 +3109,18 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                 <WcRoundedIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
-                            {loading ? <ChartSkeleton height={300} /> : (
+                            {loading ? <ChartSkeleton height={300} /> : datosGenero.every(d => d.value === 0) ? (
+                                <EmptyState onClearFilters={onClearFilters} />
+                            ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
-                                        <Pie
-                                            data={datosGenero}
-                                            dataKey="value"
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius="60%"
-                                            outerRadius="90%"
-                                            paddingAngle={5}
-                                            labelLine={false}
-                                            label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                                        <Pie data={datosGenero} dataKey="value" cx="50%" cy="50%" innerRadius="60%" outerRadius="90%" paddingAngle={5}
+                                            labelLine={false} label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
                                                 const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
                                                 const x = cx + radius * Math.cos((-midAngle * Math.PI) / 180);
                                                 const y = cy + radius * Math.sin((-midAngle * Math.PI) / 180);
-                                                return (
-                                                    <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">
-                                                        {`${(percent * 100).toFixed(2)}%`}
-                                                    </text>
-                                                );
-                                            }}
-                                        >
+                                                return <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="middle" fontSize={12} fontWeight="bold">{`${(percent * 100).toFixed(2)}%`}</text>;
+                                            }}>
                                             {datosGenero.map((entry, idx) => (
                                                 <Cell key={idx} fill={entry.name === "Femenino" ? color.primary : color.secondary} />
                                             ))}
@@ -3367,7 +3131,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                             return [`${value?.toLocaleString()} (${percent}%)`, name];
                                         }} />
                                         <Legend iconType="circle" verticalAlign="bottom" height={36} wrapperStyle={{ paddingTop: 10 }} />
-
                                     </PieChart>
                                 </ResponsiveContainer>
                             )}
@@ -3379,34 +3142,11 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
-                                <AccountBalanceRoundedIcon
-                                    sx={{ color: color.primary }}
-                                />
-                                <Typography
-                                    variant="h6"
-                                    sx={{
-                                        color: color.primary,
-                                        fontWeight: "bold",
-                                        flex: 1,
-                                    }}
-                                >
-                                    Por Administración
-                                </Typography>
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <AccountBalanceRoundedIcon sx={{ color: color.primary }} />
+                                <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", flex: 1 }}>Por Administración</Typography>
                                 <Tooltip title="Distribución por tipo de administración">
-                                    <Info
-                                        sx={{
-                                            fontSize: 18,
-                                            color: color.primary,
-                                            opacity: 0.7,
-                                            cursor: "help",
-                                        }}
-                                    />
+                                    <Info sx={{ fontSize: 18, color: color.primary, opacity: 0.7, cursor: "help" }} />
                                 </Tooltip>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
@@ -3463,8 +3203,8 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                     <BarChart data={datosDedicacion} margin={{ bottom: 10, left: 40, top: 20 }}>
                                         <XAxis dataKey="nombre" angle={-45} textAnchor="end" height={80} tick={{ fontSize: 10 }} />
                                         <YAxis hide />
+                                        <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Docentes"]} />
                                         <Bar dataKey="valor" fill={color.primary} radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }} />
-
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -3476,26 +3216,24 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >                        <ElderlyWomanIcon sx={{ color: color.primary }} />
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+                                <ElderlyWomanIcon sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Rango Etario</Typography>
-                            </Stack>                            {loading ? <ChartSkeleton height={300} /> : (
+                            </Stack>
+                            {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <BarChart data={datosRangoEtario} margin={{ bottom: 10, left: 50 }}>
                                         <XAxis dataKey="nombre" angle={-45} textAnchor="end" height={80} tick={{ fontSize: 10 }} />
                                         <YAxis hide />
+                                        <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Docentes"]} />
                                         <Bar dataKey="valor" fill={color.secondary} radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 10 }} />
-
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
+
                 {/* Tipo de Contrato - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
@@ -3512,12 +3250,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                         <XAxis dataKey="nombre" angle={-45} textAnchor="end" height={80} tick={{ fontSize: 10 }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Docentes"]} />
-                                        <Bar
-                                            dataKey="valor"
-                                            fill={color.secondary}
-                                            radius={[4, 4, 0, 0]}
-                                            label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 11, fontWeight: "bold" }}
-                                        />
+                                        <Bar dataKey="valor" fill={color.secondary} radius={[4, 4, 0, 0]} label={{ position: "top", formatter: (v) => v?.toLocaleString(), fontSize: 11, fontWeight: "bold" }} />
                                     </BarChart>
                                 </ResponsiveContainer>
                             )}
@@ -3529,38 +3262,23 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
-                            <Stack
-                                direction="row"
-                                alignItems="center"
-                                spacing={1}
-                                sx={{ mb: 2 }}
-                            >
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
                                 <Timeline sx={{ color: color.primary }} />
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Periodo</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={200} /> : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
-                                        <Line
-                                            type="monotone"
-                                            dataKey="total"
-                                            stroke={color.primary}
-                                            strokeWidth={3}
-                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }}
-                                            activeDot={{ r: 7 }}
-                                            label={
-                                                !isMobile
-                                                    ? {
-                                                        position: "top",
-                                                        fill: color.third,
-                                                        fontSize: 11,
-                                                        fontWeight: "bold",
-                                                        formatter: (value) => value.toLocaleString(),
-                                                    }
-                                                    : undefined
-                                            }
+                                        <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Docentes"]} />
+                                        <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
+                                            dot={{ fill: color.primary, r: 5, strokeWidth: 2, stroke: color.white }} activeDot={{ r: 7 }}
+                                            label={!isMobile ? (props) => {
+                                                const { x, y, value, index } = props;
+                                                const isTop = index % 2 === 0;
+                                                return <text x={x} y={isTop ? y - 10 : y + 20} fill={color.third} fontSize={11} textAnchor="middle">{value.toLocaleString()}</text>;
+                                            } : undefined}
                                         />
                                     </LineChart>
                                 </ResponsiveContainer>
@@ -3568,7 +3286,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                         </StyledCardContent>
                     </StyledCard>
                 </Grid>
-
             </Grid>
         </Box>
     );
@@ -3853,7 +3570,7 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
                     </Tooltip>
                 </Stack>
                 <ResponsiveContainer width="100%" height={200}>
-                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                         <YAxis hide />
                         <RechartsTooltip formatter={(value) => [formatearValor(value), name]} />
@@ -3862,17 +3579,35 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
                             type="monotone"
                             dataKey="total"
                             name={name}
-                            stroke={strokeColor || color.primary}
+                            stroke={color.primary}
                             strokeWidth={3}
-                            dot={{ r: 5, fill: strokeColor || color.primary, strokeWidth: 2, stroke: color.white }}
+                            dot={{
+                                fill: color.primary,
+                                r: 5,
+                                strokeWidth: 2,
+                                stroke: color.white,
+                            }}
                             activeDot={{ r: 7 }}
-                            label={!isMobile ? {
-                                position: "top",
-                                fill: "#666",
-                                fontSize: 11,
-                                fontWeight: "bold",
-                                formatter: (value) => formatearValor(value),
-                            } : undefined}
+                            label={
+                                !isMobile
+                                    ? (props) => {
+                                        const { x, y, value, index } = props;
+                                        // Alternar posición: arriba para índices pares, abajo para impares
+                                        const isTop = index % 2 === 0;
+                                        return (
+                                            <text
+                                                x={x}
+                                                y={isTop ? y - 10 : y + 20}
+                                                fill={color.third}
+                                                fontSize={11}
+                                                textAnchor="middle"
+                                            >
+                                                {value.toLocaleString()}
+                                            </text>
+                                        );
+                                    }
+                                    : undefined
+                            }
                         />
                     </LineChart>
                 </ResponsiveContainer>
@@ -4328,19 +4063,19 @@ const IndicadoresComponent = ({
                         label={sub.label}
                         onClick={() => setActiveSubmetric(sub.id)}
                         sx={{
-                                    transition: "all 0.2s ease",
-                                    backgroundColor:activeSubmetric === sub.id ? color.secondary : "transparent",
-                                    color:activeSubmetric === sub.id ? color.white : color.secondary,
-                                    border:"none",
-                                    "& .MuiChip-icon": {
-                                        color:activeSubmetric === sub.id ? color.white : color.secondary,
-                                    },
-                                    "&:hover": {
-                                        transform: "translateY(-2px)",
-                                        boxShadow: 1,
-                                        backgroundColor:activeSubmetric === sub.id ? color.secondary : `${color.secondary}15`,
-                                    },
-                                }}
+                            transition: "all 0.2s ease",
+                            backgroundColor: activeSubmetric === sub.id ? color.secondary : "transparent",
+                            color: activeSubmetric === sub.id ? color.white : color.secondary,
+                            border: "none",
+                            "& .MuiChip-icon": {
+                                color: activeSubmetric === sub.id ? color.white : color.secondary,
+                            },
+                            "&:hover": {
+                                transform: "translateY(-2px)",
+                                boxShadow: 1,
+                                backgroundColor: activeSubmetric === sub.id ? color.secondary : `${color.secondary}15`,
+                            },
+                        }}
                     />
                 ))}
             </Stack>
@@ -4644,7 +4379,7 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                                     transition: "all 0.2s ease",
                                     backgroundColor: selectedSubmetric === sub.id ? color.secondary : "transparent",
                                     color: selectedSubmetric === sub.id ? color.white : color.secondary,
-                                    border:"none",
+                                    border: "none",
                                     "& .MuiChip-icon": {
                                         color: selectedSubmetric === sub.id ? color.white : color.secondary,
                                     },

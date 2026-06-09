@@ -12,16 +12,15 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material";
 import { useUser } from '../../../components/UserContext';
-import ModalRol from './RolyPermisos'; // <-- Importa tu modal aquí
+import ModalRol from './RolyPermisos';
 import color from "../../../components/color";
 
 const RolesTable = () => {
   const [roles, setRoles] = useState([]);
   const { permissions } = useUser();
 
-  // Modal
   const [openModal, setOpenModal] = useState(false);
-  const [rolId, setRolId] = useState(null); // null = crear, número = editar
+  const [rolId, setRolId] = useState(null);
 
   const fetchRoles = async () => {
     try {
@@ -59,11 +58,14 @@ const RolesTable = () => {
         <>
           {tienePermiso(5) && (
             <IconButton
-              sx={{ color: color.white }}
+              sx={{ 
+                color: color.primary,
+                "&:hover": { backgroundColor: `${color.primary}15` }
+              }}
               onClick={(e) => {
                 e.stopPropagation();
-                setRolId(params.row.idrol); // <-- setear rol a editar
-                setOpenModal(true); // <-- abrir modal
+                setRolId(params.row.idrol);
+                setOpenModal(true);
               }}
             >
               <EditOutlinedIcon />
@@ -71,6 +73,10 @@ const RolesTable = () => {
           )}
           <IconButton
             size="small"
+            sx={{ 
+              color: color.contrastText,
+              "&:hover": { backgroundColor: `${color.primary}15` }
+            }}
             onClick={(e) => {
               e.stopPropagation();
               toggleExpand(params.row.idrol);
@@ -89,7 +95,7 @@ const RolesTable = () => {
       headerName: "Estado",
       width: 100,
       renderCell: (params) => (
-        <span style={{ color: params.row.estado ? 'green' : 'red' }}>
+        <span style={{ color: params.row.estado ? '#4caf50' : '#f44336', fontWeight: 'bold' }}>
           {params.row.estado ? "Activo" : "Inactivo"}
         </span>
       )
@@ -99,7 +105,7 @@ const RolesTable = () => {
 
   const CustomRow = ({ row }) => (
     <>
-      <TableRow>
+      <TableRow hover>
         {columns.map((column) => {
           const value = row[column.field];
           return (
@@ -112,36 +118,45 @@ const RolesTable = () => {
       <TableRow>
         <TableCell style={{ padding: 0 }} colSpan={columns.length}>
           <Collapse in={row.isExpanded} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom>
+            <Box sx={{ margin: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
+              <Typography variant="h6" gutterBottom sx={{ color: color.primary, fontWeight: "bold" }}>
                 Permisos
               </Typography>
-              <TableContainer component={Paper}>
+              <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: "hidden" }}>
                 <Table size="small">
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: color.white }}>
-                      <TableCell sx={{ color: 'white' }}>Módulo</TableCell>
-                      <TableCell sx={{ color: 'white' }} align="center">Consultar</TableCell>
-                      <TableCell sx={{ color: 'white' }} align="center">Insertar</TableCell>
-                      <TableCell sx={{ color: 'white' }} align="center">Actualizar</TableCell>
+                    <TableRow sx={{ backgroundColor: color.primary }}>
+                      <TableCell sx={{ color: color.white, fontWeight: "bold" }}>Módulo</TableCell>
+                      <TableCell sx={{ color: color.white, fontWeight: "bold" }} align="center">Consultar</TableCell>
+                      <TableCell sx={{ color: color.white, fontWeight: "bold" }} align="center">Insertar</TableCell>
+                      <TableCell sx={{ color: color.white, fontWeight: "bold" }} align="center">Actualizar</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {row.permisos?.map((permiso, index) => (
-                      <TableRow key={index}>
+                      <TableRow key={index} hover>
                         <TableCell>{permiso.modulo}</TableCell>
                         <TableCell align="center">
-                          <span style={{ color: permiso.consultar ? 'green' : 'red' }}>
+                          <span style={{ 
+                            color: permiso.consultar ? '#4caf50' : '#f44336', 
+                            fontWeight: "bold" 
+                          }}>
                             {permiso.consultar ? "SI" : "NO"}
                           </span>
                         </TableCell>
                         <TableCell align="center">
-                          <span style={{ color: permiso.insertar ? 'green' : 'red' }}>
+                          <span style={{ 
+                            color: permiso.insertar ? '#4caf50' : '#f44336', 
+                            fontWeight: "bold" 
+                          }}>
                             {permiso.insertar ? "SI" : "NO"}
                           </span>
                         </TableCell>
                         <TableCell align="center">
-                          <span style={{ color: permiso.actualizar ? 'green' : 'red' }}>
+                          <span style={{ 
+                            color: permiso.actualizar ? '#4caf50' : '#f44336', 
+                            fontWeight: "bold" 
+                          }}>
                             {permiso.actualizar ? "SI" : "NO"}
                           </span>
                         </TableCell>
@@ -158,28 +173,32 @@ const RolesTable = () => {
   );
 
   return (
-    <Box component={Paper} sx={{ p: 5 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', color: color.white }}>
+    <Box component={Paper} sx={{ p: 3, backgroundColor: "#f5f7fa", borderRadius: 2, boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: color.primary }}>
           Roles y Permisos
         </Typography>
         {tienePermisoIn(5) && (
           <Button
             variant="contained"
             startIcon={<AddIcon />}
-            sx={{ backgroundColor: color.white }}
-            onClick={() => { setRolId(null); setOpenModal(true); }} // <-- abrir modal para crear
+            sx={{ 
+              backgroundColor: color.primary,
+              color: color.white,
+              "&:hover": { backgroundColor: color.primary + "CC" }
+            }}
+            onClick={() => { setRolId(null); setOpenModal(true); }}
           >
-            Nuevo
+            Nuevo Rol
           </Button>
         )}
       </Box>
-      <TableContainer>
+      <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: "hidden" }}>
         <Table>
           <TableHead>
-            <TableRow>
+            <TableRow sx={{ backgroundColor: color.primary }}>
               {columns.map((column) => (
-                <TableCell key={column.field} sx={{ fontWeight: 'bold' }}>
+                <TableCell key={column.field} sx={{ fontWeight: 'bold', color: color.white }}>
                   {column.headerName}
                 </TableCell>
               ))}
@@ -191,7 +210,6 @@ const RolesTable = () => {
         </Table>
       </TableContainer>
 
-      {/* Modal Crear/Editar Rol */}
       <ModalRol
         open={openModal}
         onClose={() => setOpenModal(false)}

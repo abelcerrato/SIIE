@@ -27,15 +27,15 @@ import InfoIcon from "@mui/icons-material/Info";
 import MapaDinamico from "./MapaDinamico.jsx";
 import color from "../../../components/color";
 import {
-    StyledCard,
-    StyledCardContent,
-    AnimatedCounter,
-    ScrollReveal,
-    FiltrosActivos,
-    FiltroSelect,
-    EmptyState,
-    normalizar,
-    ChartSkeleton,
+  StyledCard,
+  StyledCardContent,
+  AnimatedCounter,
+  ScrollReveal,
+  FiltrosActivos,
+  FiltroSelect,
+  EmptyState,
+  normalizar,
+  ChartSkeleton,
 } from "../../../components/shared/index.js";
 // ==================== URLs DE LAS APIS ====================
 const API_URLS = {
@@ -62,22 +62,22 @@ const INSTITUCIONES = ["SEDUC", "INFOP", "CONEANFO", "DESUNAH"];
 const procesarSEDUC = (data) => {
   const resultados = [];
   const mapaPorDepto = new Map();
-  
+
   data.forEach(item => {
     const anio = item.periodo;
     const departamento = item.departamento;
     const valor = parseInt(item.MatriculaInicialTotalSEDUC) || 0;
-    
+
     if (!departamento || departamento === "Total") return;
-    
+
     const key = `${anio}|${departamento}`;
-    
+
     if (!mapaPorDepto.has(key)) {
       mapaPorDepto.set(key, { anio, departamento, total: 0 });
     }
     mapaPorDepto.get(key).total += valor;
   });
-  
+
   for (const entry of mapaPorDepto.values()) {
     resultados.push({
       anio: entry.anio,
@@ -87,7 +87,7 @@ const procesarSEDUC = (data) => {
       matriculaInicial: entry.total,
     });
   }
-  
+
   console.log(`📊 SEDUC: ${resultados.length} registros, Total: ${resultados.reduce((sum, r) => sum + r.matriculaInicial, 0).toLocaleString()}`);
   return resultados;
 };
@@ -96,22 +96,22 @@ const procesarSEDUC = (data) => {
 const procesarINFOP = (data) => {
   const resultados = [];
   const mapaPorDepto = new Map();
-  
+
   data.forEach(item => {
     const anio = item.periodo;
     const departamento = item.departamento;
     const valor = parseInt(item.MatriculaInicialTotalINFOP) || 0;
-    
+
     if (!departamento || departamento === "Total") return;
-    
+
     const key = `${anio}|${departamento}`;
-    
+
     if (!mapaPorDepto.has(key)) {
       mapaPorDepto.set(key, { anio, departamento, total: 0 });
     }
     mapaPorDepto.get(key).total += valor;
   });
-  
+
   for (const entry of mapaPorDepto.values()) {
     resultados.push({
       anio: entry.anio,
@@ -121,7 +121,7 @@ const procesarINFOP = (data) => {
       matriculaInicial: entry.total,
     });
   }
-  
+
   console.log(`📊 INFOP: ${resultados.length} registros, Total: ${resultados.reduce((sum, r) => sum + r.matriculaInicial, 0).toLocaleString()}`);
   return resultados;
 };
@@ -130,17 +130,17 @@ const procesarINFOP = (data) => {
 const procesarCONEANFO = (data) => {
   const resultados = [];
   let totalGeneral = 0;
-  
+
   data.forEach(item => {
     const anio = item.periodo;
     const departamento = item.departamento;
-    
+
     // Saltar si no hay departamento
     if (!departamento) return;
-    
+
     // Solo sumar AtencionesInicialTotalCONEANFO
     const valor = parseInt(item.AtencionesInicialTotalCONEANFO) || 0;
-    
+
     if (valor > 0) {
       totalGeneral += valor;
       resultados.push({
@@ -153,10 +153,10 @@ const procesarCONEANFO = (data) => {
       });
     }
   });
-  
+
   console.log(`📊 CONEANFO: ${resultados.length} registros procesados`);
   console.log(`📊 CONEANFO Total Atenciones: ${totalGeneral.toLocaleString()}`);
-  
+
   return resultados;
 };
 
@@ -164,22 +164,22 @@ const procesarCONEANFO = (data) => {
 const procesarDESUNAH = (data) => {
   const resultados = [];
   const mapaPorDepto = new Map();
-  
+
   data.forEach(item => {
     const anio = item.anio;
     const departamento = item.departamento;
     const valor = parseInt(item.matriculades) || 0;
-    
+
     if (!departamento || departamento === "Total") return;
-    
+
     const key = `${anio}|${departamento}`;
-    
+
     if (!mapaPorDepto.has(key)) {
       mapaPorDepto.set(key, { anio, departamento, total: 0 });
     }
     mapaPorDepto.get(key).total += valor;
   });
-  
+
   for (const entry of mapaPorDepto.values()) {
     resultados.push({
       anio: entry.anio,
@@ -190,7 +190,7 @@ const procesarDESUNAH = (data) => {
       matriculades: entry.total,
     });
   }
-  
+
   console.log(`📊 DESUNAH: ${resultados.length} registros, Total: ${resultados.reduce((sum, r) => sum + r.matriculaInicial, 0).toLocaleString()}`);
   return resultados;
 };
@@ -200,7 +200,6 @@ const BaseTableroInicio = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
   const [loading, setLoading] = useState(true);
   const [datosDepto, setDatosDepto] = useState({});
   const [totalesPorInstitucion, setTotalesPorInstitucion] = useState({});
@@ -239,7 +238,7 @@ const BaseTableroInicio = () => {
   useEffect(() => {
     const cargarDatos = async () => {
       setLoading(true);
-      
+
       const totales = {};
       const datosPorInstitucion = {};
       const añosSet = new Set();
@@ -249,7 +248,7 @@ const BaseTableroInicio = () => {
       for (const inst of INSTITUCIONES) {
         try {
           const url = API_URLS[inst];
-          
+
           if (!url) {
             console.warn(`No hay URL configurada para ${inst}`);
             totales[inst] = 0;
@@ -260,12 +259,12 @@ const BaseTableroInicio = () => {
           console.log(`📡 Cargando ${inst} desde: ${url}`);
           const response = await fetch(url);
           const result = await response.json();
-          
+
           // Extraer el array de datos (puede venir como array directamente o dentro de .data)
           const data = Array.isArray(result) ? result : (result.data || []);
-          
+
           let datosProcesados = [];
-          
+
           // Procesar según la institución
           if (inst === "SEDUC") {
             datosProcesados = procesarSEDUC(data);
@@ -276,31 +275,31 @@ const BaseTableroInicio = () => {
           } else if (inst === "DESUNAH") {
             datosProcesados = procesarDESUNAH(data);
           }
-          
+
           console.log(`✅ ${inst}: ${datosProcesados.length} registros procesados`);
-          
+
           // Calcular total y recolectar años/departamentos
           let totalInst = 0;
           datosProcesados.forEach(row => {
             const valor = getValor(row, inst);
             totalInst += valor;
-            
+
             const año = row.anio;
             if (año && año !== "Todos" && año !== "Total") {
               añosSet.add(String(año));
             }
-            
+
             const depto = row.departamento;
             if (depto && depto !== "Todos" && depto !== "Total" && depto !== "") {
               deptosSet.add(depto);
             }
           });
-          
+
           totales[inst] = totalInst;
           datosPorInstitucion[inst] = datosProcesados;
-          
+
           console.log(`📊 Total ${inst} (${CONFIG_INSTITUCIONES[inst].metrica}): ${totalInst.toLocaleString()}`);
-          
+
           // Acumular para el mapa (sumar por departamento)
           datosProcesados.forEach(row => {
             const depto = row.departamento;
@@ -313,18 +312,18 @@ const BaseTableroInicio = () => {
               datosMapaGlobal[clave].valor += valor;
             }
           });
-          
+
         } catch (error) {
           console.error(`Error cargando ${inst}:`, error);
           totales[inst] = 0;
           datosPorInstitucion[inst] = [];
         }
       }
-      
+
       console.log("📊 Totales por institución:", totales);
       console.log("📊 Total General:", Object.values(totales).reduce((a, b) => a + b, 0).toLocaleString());
       console.log("📊 Datos para el mapa:", Object.keys(datosMapaGlobal).length, "departamentos");
-      
+
       setTotalesPorInstitucion(totales);
       setDatosOriginales(datosPorInstitucion);
       setDatosDepto(datosMapaGlobal);
@@ -332,28 +331,40 @@ const BaseTableroInicio = () => {
       setDeptosDisponibles(["Todos", ...Array.from(deptosSet).sort()]);
       setLoading(false);
     };
-    
+
     cargarDatos();
   }, []);
 
   // Filtrar datos cuando cambian los filtros
   useEffect(() => {
     if (Object.keys(datosOriginales).length === 0) return;
-    
+
+    // Recalcular totales por institución según filtros
+    const nuevosTotales = {};
     const datosMapaFiltrado = {};
-    
+
     for (const inst of INSTITUCIONES) {
       const datos = datosOriginales[inst] || [];
-      
+      let totalInst = 0;
+
       const datosFiltrados = datos.filter(row => {
-        const cumpleAnio = filtros.anio === "Todos" || 
+        const cumpleAnio = filtros.anio === "Todos" ||
           String(row.anio) === String(filtros.anio);
-        const cumpleDepto = filtros.departamento === "Todos" || 
+        const cumpleDepto = filtros.departamento === "Todos" ||
           normalizar(row.departamento) === normalizar(filtros.departamento);
-        
+
         return cumpleAnio && cumpleDepto;
       });
-      
+
+      // Calcular total para esta institución
+      datosFiltrados.forEach(row => {
+        const valor = getValor(row, inst);
+        totalInst += valor;
+      });
+
+      nuevosTotales[inst] = totalInst;
+
+      // Acumular para el mapa (por departamento, no por municipio)
       datosFiltrados.forEach(row => {
         const depto = row.departamento;
         if (depto && depto !== "Todos" && depto !== "Total" && depto !== "") {
@@ -366,9 +377,11 @@ const BaseTableroInicio = () => {
         }
       });
     }
-    
+
+    setTotalesPorInstitucion(nuevosTotales);
     setDatosDepto(datosMapaFiltrado);
   }, [filtros, datosOriginales]);
+
 
   // Calcular total general
   const totalGeneral = Object.values(totalesPorInstitucion).reduce((a, b) => a + b, 0);
@@ -440,7 +453,7 @@ const BaseTableroInicio = () => {
                       datosDepto={datosDepto}
                       dimensions={dimensions}
                       isMobile={isMobile}
-                      filtroDepartamento={filtros.departamento}
+                      filtroDepartamento="Todos"
                       filtroMunicipio="Todos"
                       esCentroEducativo={false}
                       modoSimple={true}

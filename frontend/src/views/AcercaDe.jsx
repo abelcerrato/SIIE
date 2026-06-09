@@ -119,15 +119,19 @@ export default function AcercaDe() {
       nombre: "Martha Yanina Isaula Hernandez",
       puesto: "Asistente Ejecutiva",
     },
-    { nombre: "Karen Noelia Elvir Rodriguez", puesto: "Coordinadora de UPEG" },
+    
+    { nombre: "Martha Alicia García Casco", puesto: "Asesora Legal" }, 
+     { nombre: "Saudy Skarleth Herrera Andino", puesto: "Talento Humano" }, 
+    
+    { nombre: "Olman Abel Baquedano Flores", puesto: "Coordinadoro de UPEG" },
+    { nombre: "Karen Noelia Elvir Rodriguez", puesto: " UPEG" },
     {
       nombre: "Melany Lizzeth Ordoñez Cruz",
       puesto: "Asistente Técnico de Desarrollo Profesional Docente",
     },
 
     { nombre: "Emma Guadalupe Oyuela Rivera", puesto: "Coordinadora de EFTP" },
- 
-    { nombre: "Martha Alicia García Casco", puesto: "Asesora Legal" },
+
 
 
     { nombre: "Digna Carelia Murillo Escobar", puesto: "Administradora" },
@@ -564,7 +568,7 @@ export default function AcercaDe() {
         </Grid>
 
         <Grid item size={{ xs: 12, md: 12 }}>
-          {selectedInstitution ? (
+  {/*         {selectedInstitution ? (
             <ScrollReveal delay={0.2} direction="none">
               <Grid container spacing={4} mb={4}>
                 <Grid
@@ -671,7 +675,7 @@ export default function AcercaDe() {
                 </Grid>
               </Grid>
             </ScrollReveal>
-          ) : (
+          ) : ( */}
             <Grid container spacing={4} justifyContent="center">
               {instituciones.map((inst, index) => (
                 <Grid item size={{ xs: 12, sm: 6, md: 4 }} key={inst.name}>
@@ -733,7 +737,7 @@ export default function AcercaDe() {
                         </Typography>
                       </Box>
 
-                      <Box
+                      {/* <Box
                         className="overlay"
                         sx={{
                           position: "absolute",
@@ -831,13 +835,13 @@ export default function AcercaDe() {
                         >
                           Ver más
                         </Typography>
-                      </Box>
+                      </Box> */}
                     </Box>
                   </ScrollReveal>
                 </Grid>
               ))}
             </Grid>
-          )}
+        {/*   )} */}
         </Grid>
       </Grid>
 
@@ -987,7 +991,7 @@ rafael.nunez@coned.gob.hn
 
       {/* Coordinador del Proyecto | Desarrolladores */}
       <Grid container spacing={3} sx={{ mt: 8 }}>
-        {/* Columna izquierda - Coordinadores */}
+        {/* Columna izquierda - Coordinadores
         <Grid item size={{ xs: 12, md: 5 }}>
           <Grid container spacing={3}>
             <Grid item size={{ xs: 12, sm: 6, md: 12 }}>
@@ -1085,8 +1089,8 @@ rafael.nunez@coned.gob.hn
             </Grid>
           </Grid>
         </Grid>
-
-        {/* Columna derecha - Desarrolladores */}
+ */}
+        {/* Columna derecha - Desarrolladores 
         <Grid item size={{ xs: 12, md: 7 }}>
           <ScrollReveal delay={0.3} direction="left">
             <Box
@@ -1216,7 +1220,7 @@ rafael.nunez@coned.gob.hn
               </Grid>
             </Box>
           </ScrollReveal>
-        </Grid>
+        </Grid>*/}
       </Grid>
 
       {/* Modal */}

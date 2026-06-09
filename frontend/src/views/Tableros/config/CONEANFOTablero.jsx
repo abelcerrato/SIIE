@@ -252,70 +252,123 @@ const BaseTableroConeanfo = ({ titulo }) => {
         procesoeducativo: "Todos",
     });
 
-    // ==================== OBTENER OPCIONES ÚNICAS ====================
-    const periodosDisponibles = useMemo(() => {
-        const periodosSet = new Set();
-        data.forEach((item) => {
-            if (item.periodo) periodosSet.add(String(item.periodo));
-        });
-        return ["Todos", ...Array.from(periodosSet).sort((a, b) => b - a)];
-    }, [data]);
+   // ==================== OPCIONES DINÁMICAS DEPENDIENTES ====================
 
-    const departamentosDisponibles = useMemo(() => {
-        const deptosSet = new Set();
-        data.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") {
-                deptosSet.add(item.departamento);
-            }
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [data]);
+// Función auxiliar para filtrar datos según filtros activos (excepto uno específico)
+const getFilteredDataForOptions = (excludeFilter = null) => {
+    let datosFiltrados = data;
+    
+    const filterConditions = [
+        { key: "periodo", condition: filtros.periodo !== "Todos" },
+        { key: "departamento", condition: filtros.departamento !== "Todos" },
+        { key: "discapacidad", condition: filtros.discapacidad !== "Todos" },
+        { key: "etnia", condition: filtros.etnia !== "Todos" },
+        { key: "rangoetario", condition: filtros.rangoetario !== "Todos" },
+        { key: "procesoeducativo", condition: filtros.procesoeducativo !== "Todos" && selectedProject !== "general" }
+    ];
+    
+    filterConditions.forEach(({ key, condition }) => {
+        if (condition && key !== excludeFilter) {
+            datosFiltrados = datosFiltrados.filter(d => 
+                normalizar(d[key]) === normalizar(filtros[key])
+            );
+        }
+    });
+    
+    return datosFiltrados;
+};
 
+// Periodos disponibles (considerando otros filtros)
+const periodosDisponibles = useMemo(() => {
+    const datosFiltrados = getFilteredDataForOptions("periodo");
+    const periodosSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.periodo) periodosSet.add(String(item.periodo));
+    });
+    return ["Todos", ...Array.from(periodosSet).sort((a, b) => b - a)];
+}, [data, filtros.departamento, filtros.discapacidad, filtros.etnia, filtros.rangoetario, filtros.procesoeducativo]);
 
-    // Discapacidades - solo desde los datos de la API
-    const discapacidadesDisponibles = useMemo(() => {
-        const discSet = new Set();
-        data.forEach((item) => {
-            if (item.discapacidad && item.discapacidad !== "null" && item.discapacidad !== "") {
-                discSet.add(item.discapacidad);
-            }
-        });
-        const disponibles = Array.from(discSet).sort();
-        return ["Todos", ...disponibles];
-    }, [data]);
+// Departamentos disponibles (considerando otros filtros)
+const departamentosDisponibles = useMemo(() => {
+    const datosFiltrados = getFilteredDataForOptions("departamento");
+    const deptosSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.departamento && item.departamento !== "null") {
+            deptosSet.add(item.departamento);
+        }
+    });
+    return ["Todos", ...Array.from(deptosSet).sort()];
+}, [data, filtros.periodo, filtros.discapacidad, filtros.etnia, filtros.rangoetario, filtros.procesoeducativo]);
 
-    // Etnias - solo desde los datos de la API
-    const etniasDisponibles = useMemo(() => {
-        const etniasSet = new Set();
-        data.forEach((item) => {
-            if (item.etnia && item.etnia !== "null" && item.etnia !== "") {
-                etniasSet.add(item.etnia);
-            }
-        });
-        const disponibles = Array.from(etniasSet).sort();
-        return ["Todos", ...disponibles];
-    }, [data]);
+// Discapacidades disponibles (considerando otros filtros)
+const discapacidadesDisponibles = useMemo(() => {
+    const datosFiltrados = getFilteredDataForOptions("discapacidad");
+    const discSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.discapacidad && item.discapacidad !== "null" && item.discapacidad !== "") {
+            discSet.add(item.discapacidad);
+        }
+    });
+    const disponibles = Array.from(discSet).sort();
+    return ["Todos", ...disponibles];
+}, [data, filtros.periodo, filtros.departamento, filtros.etnia, filtros.rangoetario, filtros.procesoeducativo]);
 
-    // Rango etario - solo desde los datos de la API
-    const rangosEtariosDisponibles = useMemo(() => {
-        const rangosSet = new Set();
-        data.forEach((item) => {
-            if (item.rangoetario && item.rangoetario !== "null" && item.rangoetario !== "") {
-                rangosSet.add(item.rangoetario);
-            }
-        });
-        return ["Todos", ...Array.from(rangosSet).sort()];
-    }, [data]);
+// Etnias disponibles (considerando otros filtros)
+const etniasDisponibles = useMemo(() => {
+    const datosFiltrados = getFilteredDataForOptions("etnia");
+    const etniasSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.etnia && item.etnia !== "null" && item.etnia !== "") {
+            etniasSet.add(item.etnia);
+        }
+    });
+    const disponibles = Array.from(etniasSet).sort();
+    return ["Todos", ...disponibles];
+}, [data, filtros.periodo, filtros.departamento, filtros.discapacidad, filtros.rangoetario, filtros.procesoeducativo]);
 
-    const procesosEducativosDisponibles = useMemo(() => {
-        const procesosSet = new Set();
-        data.forEach((item) => {
-            if (item.procesoeducativo && item.procesoeducativo !== "null" && item.procesoeducativo !== "") {
-                procesosSet.add(item.procesoeducativo);
-            }
-        });
-        return ["Todos", ...Array.from(procesosSet).sort()];
-    }, [data]);
+// Rangos etarios disponibles (considerando otros filtros)
+const rangosEtariosDisponibles = useMemo(() => {
+    const datosFiltrados = getFilteredDataForOptions("rangoetario");
+    const rangosSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.rangoetario && item.rangoetario !== "null" && item.rangoetario !== "") {
+            rangosSet.add(item.rangoetario);
+        }
+    });
+    const rangosOrdenados = Array.from(rangosSet).sort((a, b) => {
+        const inicioA = parseInt(a.match(/\d+/)?.[0] || 0, 10);
+        const inicioB = parseInt(b.match(/\d+/)?.[0] || 0, 10);
+        return inicioA - inicioB;
+    });
+    return ["Todos", ...rangosOrdenados];
+}, [data, filtros.periodo, filtros.departamento, filtros.discapacidad, filtros.etnia, filtros.procesoeducativo]);
+
+// Procesos educativos disponibles (solo para proyectos específicos)
+const procesosEducativosDisponibles = useMemo(() => {
+    if (selectedProject === "general") return ["Todos"];
+    
+    const datosFiltrados = getFilteredDataForOptions("procesoeducativo");
+    const procesosSet = new Set();
+    datosFiltrados.forEach((item) => {
+        if (item.procesoeducativo && item.procesoeducativo !== "null" && item.procesoeducativo !== "") {
+            procesosSet.add(item.procesoeducativo);
+        }
+    });
+    return ["Todos", ...Array.from(procesosSet).sort()];
+}, [data, selectedProject, filtros.periodo, filtros.departamento, filtros.discapacidad, filtros.etnia, filtros.rangoetario]);
+
+// ==================== HANDLER MEJORADO ====================
+const handleFilterChange = useCallback((key, value) => {
+    setFiltros(prev => {
+        const nuevosFiltros = { ...prev, [key]: value };
+        
+        // IMPORTANTE: Cuando cambia un filtro, los demás se mantienen
+        // pero el sistema automáticamente actualizará sus opciones
+        // gracias a los useMemo que dependen de todos los filtros
+        
+        return nuevosFiltros;
+    });
+}, []);
 
     // ==================== CARGAR DATOS PRINCIPALES ====================
     useEffect(() => {
@@ -400,13 +453,12 @@ const BaseTableroConeanfo = ({ titulo }) => {
         let filtrado = data.filter((d) => {
             const cumplePeriodo = filtros.periodo === "Todos" || String(d.periodo) === String(filtros.periodo);
             const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleMunicipio = filtros.municipio === "Todos" || normalizar(d.municipio) === normalizar(filtros.municipio);
             const cumpleDiscapacidad = filtros.discapacidad === "Todos" || normalizar(d.discapacidad) === normalizar(filtros.discapacidad);
             const cumpleEtnia = filtros.etnia === "Todos" || normalizar(d.etnia) === normalizar(filtros.etnia);
             const cumpleRangoetario = filtros.rangoetario === "Todos" || normalizar(d.rangoetario) === normalizar(filtros.rangoetario);
             const cumpleProceso = filtros.procesoeducativo === "Todos" || normalizar(d.procesoeducativo) === normalizar(filtros.procesoeducativo);
 
-            return cumplePeriodo && cumpleDepartamento && cumpleMunicipio && cumpleDiscapacidad && cumpleEtnia && cumpleRangoetario && cumpleProceso;
+            return cumplePeriodo && cumpleDepartamento && cumpleDiscapacidad && cumpleEtnia && cumpleRangoetario && cumpleProceso;
         });
 
         setFilteredData(filtrado);
@@ -590,10 +642,7 @@ const BaseTableroConeanfo = ({ titulo }) => {
     const hasData = useMemo(() => filteredData.length > 0, [filteredData]);
     const hasGenderData = useMemo(() => datosGenero.some((item) => item.value > 0), [datosGenero]);
 
-    // ==================== HANDLERS ====================
-    const handleFilterChange = useCallback((key, value) => {
-        setFiltros((prev) => ({ ...prev, [key]: value }));
-    }, []);
+   
 
     const handleRemoveFilter = useCallback((key) => {
         setFiltros((prev) => ({ ...prev, [key]: "Todos" }));
@@ -983,7 +1032,7 @@ const BaseTableroConeanfo = ({ titulo }) => {
                                     <EmptyState onClearFilters={handleClearAllFilters} />
                                 ) : (
                                     <ResponsiveContainer width="100%" height={300}>
-                                        <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                        <LineChart    data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                             <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                             <YAxis
                                                 hide

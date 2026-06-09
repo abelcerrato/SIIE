@@ -18,6 +18,7 @@ import {
   TableRow,
   IconButton,
   Tooltip,
+  TableSortLabel,
   Stack,
   useMediaQuery,
   useTheme,
@@ -1294,7 +1295,8 @@ const BaseTablero = ({ titulo }) => {
   const [filteredData, setFilteredData] = useState([]);
   const [datosDepto, setDatosDepto] = useState({});
   const [dimensions, setDimensions] = useState({ width: 1000, height: 500 });
-
+  const [zonaOrderBy, setZonaOrderBy] = useState("periodo");
+  const [zonaOrderDirection, setZonaOrderDirection] = useState("desc");
   const [selectedMetric, setSelectedMetric] = useState(
     () => Object.keys(METRICAS_SEDUC)[0] || "",
   );
@@ -1314,17 +1316,6 @@ const BaseTablero = ({ titulo }) => {
     [],
   );
 
-  const añosDisponibles = useMemo(() => {
-    const añosSet = new Set();
-    data.forEach((item) => {
-      if (item.anio) añosSet.add(String(item.anio));
-    });
-    dataServiciosBasicos.forEach((item) => {
-      if (item.periodo) añosSet.add(String(item.periodo));
-    });
-    return ["Todos", ...Array.from(añosSet).sort((a, b) => b - a)];
-  }, [data, dataServiciosBasicos]);
-
   const deptosDisponibles = useMemo(
     () => [
       "Todos",
@@ -1335,6 +1326,7 @@ const BaseTablero = ({ titulo }) => {
     [data],
   );
 
+  // Municipios dependen del departamento seleccionado
   const municipiosDisponibles = useMemo(() => {
     if (filtros.departamento === "Todos") return ["Todos"];
     return [
@@ -1353,6 +1345,19 @@ const BaseTablero = ({ titulo }) => {
       ).sort(),
     ];
   }, [data, filtros.departamento]);
+
+  // Años disponibles dependen de los datos cargados
+  const añosDisponibles = useMemo(() => {
+    const añosSet = new Set();
+    data.forEach((item) => {
+      if (item.anio) añosSet.add(String(item.anio));
+    });
+    dataServiciosBasicos.forEach((item) => {
+      if (item.periodo) añosSet.add(String(item.periodo));
+    });
+    return ["Todos", ...Array.from(añosSet).sort((a, b) => b - a)];
+  }, [data, dataServiciosBasicos]);
+
 
   const administracionesDisponibles = useMemo(
     () => [
@@ -1639,24 +1644,53 @@ const BaseTablero = ({ titulo }) => {
     loadIndicadores();
   }, [selectedMetric]);
 
-  const datosGenero = useMemo(() => {
-    const agrupado = { Femenino: 0, Masculino: 0 };
-    filteredData.forEach((item) => {
-      if (selectedMetric === "discapacidad") {
-        agrupado.Femenino += item.NiñasConDiscapacidad || 0;
-        agrupado.Masculino += item.NiñosConDiscapacidad || 0;
-      } else if (selectedMetric === "docentes") {
-        if (item.genero === "Femenino") agrupado.Femenino += item.docentes || 0;
-        else if (item.genero === "Masculino")
-          agrupado.Masculino += item.docentes || 0;
-      } else if (item.genero === "Femenino" || item.genero === "Masculino")
-        agrupado[item.genero] += item[selectedMetric] || 0;
-    });
-    return [
-      { name: "Femenino", value: agrupado.Femenino },
-      { name: "Masculino", value: agrupado.Masculino },
-    ];
-  }, [filteredData, selectedMetric]);
+const datosGenero = useMemo(() => {
+  // Siempre inicializar ambos géneros con 0
+  const agrupado = { Femenino: 0, Masculino: 0 };
+
+  // Usar data (datos originales) en lugar de filteredData
+  // para evitar el filtro de género
+  let datos = data;
+  
+  // Aplicar filtros que NO sean de género
+  const datosFiltrados = datos.filter((d) => {
+    const cumpleAnio = filtros.anio === "Todos" || d.anio === filtros.anio || d.periodo === filtros.anio;
+    const cumpleDepto = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
+    const cumpleMunicipio = filtros.municipio === "Todos" || normalizar(d.municipio) === normalizar(filtros.municipio);
+    const cumpleZona = filtros.zona === "Todos" || d.zona === filtros.zona;
+    const cumpleAdmin = filtros.administracion === "Todos" || d.administracion === filtros.administracion;
+    
+    let nivelData = "";
+    const nivelOriginal = d.niveleducativo?.toUpperCase() || "";
+    if (nivelOriginal.includes("PREBASICA")) nivelData = "Prebásica";
+    else if (nivelOriginal.includes("BÁSICA") || nivelOriginal.includes("BASICA")) nivelData = "Básica";
+    else if (nivelOriginal.includes("MEDIA")) nivelData = "Media";
+    const cumpleNivel = filtros.nivel === "Todos" || nivelData === filtros.nivel;
+    
+    return cumpleAnio && cumpleDepto && cumpleMunicipio && cumpleZona && cumpleAdmin && cumpleNivel;
+  });
+
+  datosFiltrados.forEach((item) => {
+    if (selectedMetric === "discapacidad") {
+      agrupado.Femenino += item.NiñasConDiscapacidad || 0;
+      agrupado.Masculino += item.NiñosConDiscapacidad || 0;
+    } else if (selectedMetric === "docentes") {
+      if (item.genero === "Femenino") {
+        agrupado.Femenino += item.docentes || 0;
+      } else if (item.genero === "Masculino") {
+        agrupado.Masculino += item.docentes || 0;
+      }
+    } else if (item.genero === "Femenino" || item.genero === "Masculino") {
+      agrupado[item.genero] += item[selectedMetric] || 0;
+    }
+  });
+
+  // Siempre devolver ambos géneros
+  return [
+    { name: "Femenino", value: agrupado.Femenino },
+    { name: "Masculino", value: agrupado.Masculino },
+  ];
+}, [data, filtros, selectedMetric]);
 
   const datosAdministracion = useMemo(() => {
     const agrupado = {};
@@ -1912,6 +1946,63 @@ const BaseTablero = ({ titulo }) => {
       setFiltros((prev) => ({ ...prev, municipio: "Todos" }));
   }, [filtros.departamento]);
 
+
+  const handleZonaSort = (field) => {
+    if (zonaOrderBy === field) {
+      // Si es el mismo campo, cambiar dirección
+      setZonaOrderDirection(zonaOrderDirection === "asc" ? "desc" : "asc");
+    } else {
+      // Si es campo nuevo, ordenar descendente por defecto
+      setZonaOrderBy(field);
+      setZonaOrderDirection("desc");
+    }
+  };
+
+  const getSortedZonaData = () => {
+    if (!datosZonaPorPeriodo || datosZonaPorPeriodo.length === 0) return [];
+
+    return [...datosZonaPorPeriodo].sort((a, b) => {
+      let aValue, bValue;
+
+      // Determinar el campo por el que ordenar
+      switch (zonaOrderBy) {
+        case "periodo":
+          aValue = a.periodo;
+          bValue = b.periodo;
+          // Orden alfabético/numérico para periodo
+          if (zonaOrderDirection === "asc") {
+            return String(aValue).localeCompare(String(bValue));
+          } else {
+            return String(bValue).localeCompare(String(aValue));
+          }
+
+        case "rural":
+          aValue = a.rural || 0;
+          bValue = b.rural || 0;
+          break;
+
+        case "urbana":
+          aValue = a.urbana || 0;
+          bValue = b.urbana || 0;
+          break;
+
+        case "total":
+        default:
+          aValue = a.total || 0;
+          bValue = b.total || 0;
+          break;
+      }
+
+      // Orden numérico
+      if (zonaOrderDirection === "desc") {
+        return aValue - bValue;
+      } else {
+        return bValue - aValue;
+      }
+    });
+  };
+
+  const sortedZonaData = getSortedZonaData();
   const hasData = loading ? true : filteredData.length > 0;
   const hasGenderData = datosGenero.some((i) => i.value > 0);
 
@@ -2240,87 +2331,98 @@ const BaseTablero = ({ titulo }) => {
                       ) : !hasGenderData ? (
                         <EmptyState onClearFilters={handleClearAllFilters} />
                       ) : (
-                        <ResponsiveContainer width="100%" height={280}>
-                          <PieChart>
-                            <Pie
-                              data={datosGenero}
-                              dataKey="value"
-                              cx="50%"
-                              cy="50%"
-                              innerRadius="60%"
-                              outerRadius="90%"
-                              paddingAngle={5}
-                              labelLine={false}
-                              label={({
-                                name,
-                                percent,
-                                cx,
-                                cy,
-                                midAngle,
-                                innerRadius,
-                                outerRadius,
-                              }) => {
-                                const radius =
-                                  innerRadius +
-                                  (outerRadius - innerRadius) * 0.5;
-                                const x =
-                                  cx +
-                                  radius *
-                                  Math.cos((-midAngle * Math.PI) / 180);
-                                const y =
-                                  cy +
-                                  radius *
-                                  Math.sin((-midAngle * Math.PI) / 180);
-                                return (
-                                  <text
-                                    x={x}
-                                    y={y}
-                                    fill="white"
-                                    textAnchor="middle"
-                                    dominantBaseline="middle"
-                                    fontSize={12}
-                                    fontWeight="bold"
-                                  >
-                                    {`${(percent * 100).toFixed(2)}%`}
-                                  </text>
-                                );
-                              }}
-                            >
-                              {datosGenero.map((entry, idx) => (
-                                <Cell
-                                  key={idx}
-                                  fill={
-                                    entry.name === "Femenino"
-                                      ? color.primary
-                                      : color.secondary
-                                  }
-                                />
-                              ))}
-                            </Pie>
-                            <RechartsTooltip
-                              formatter={(value, name) => {
-                                const total = datosGenero.reduce(
-                                  (sum, d) => sum + d.value,
-                                  0,
-                                );
-                                const percent =
-                                  total > 0
-                                    ? ((value / total) * 100).toFixed(2)
-                                    : 0;
-                                return [
-                                  `${value?.toLocaleString()} (${percent}%)`,
-                                  name,
-                                ];
-                              }}
-                            />
-                            <Legend
-                              iconType="circle"
-                              verticalAlign="bottom"
-                              height={36}
-                              wrapperStyle={{ paddingTop: 10 }}
-                            />
-                          </PieChart>
-                        </ResponsiveContainer>
+                      <ResponsiveContainer width="100%" height={280}>
+  <PieChart>
+    <Pie
+      data={datosGenero}
+      dataKey="value"
+      cx="50%"
+      cy="50%"
+      innerRadius="60%"
+      outerRadius="90%"
+      paddingAngle={5}
+      labelLine={false}
+      label={({
+        name,
+        percent,
+        cx,
+        cy,
+        midAngle,
+        innerRadius,
+        outerRadius,
+      }) => {
+        // Solo mostrar label en el género seleccionado o si no hay filtro
+        const isSelected = filtros.genero === "Todos" || filtros.genero === name;
+        if (percent === 0 || !isSelected) return null;
+        
+        const radius =
+          innerRadius +
+          (outerRadius - innerRadius) * 0.5;
+        const x =
+          cx +
+          radius *
+          Math.cos((-midAngle * Math.PI) / 180);
+        const y =
+          cy +
+          radius *
+          Math.sin((-midAngle * Math.PI) / 180);
+        
+        return (
+          <text
+            x={x}
+            y={y}
+            fill="white"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize={12}
+            fontWeight="bold"
+          >
+            {`${(percent * 100).toFixed(2)}%`}
+          </text>
+        );
+      }}
+    >
+      {datosGenero.map((entry, idx) => {
+        // Determinar si este género está seleccionado en el filtro
+        const isSelected = filtros.genero === "Todos" || filtros.genero === entry.name;
+        
+        return (
+          <Cell
+            key={idx}
+            fill={
+              entry.name === "Femenino"
+                ? isSelected ? color.primary : "#e0e0e0"
+                : isSelected ? color.secondary : "#e0e0e0"
+            }
+            opacity={isSelected ? 1 : 0.5}
+          />
+        );
+      })}
+    </Pie>
+    <RechartsTooltip
+      formatter={(value, name) => {
+        const total = datosGenero.reduce(
+          (sum, d) => sum + d.value,
+          0,
+        );
+        const percent =
+          total > 0
+            ? ((value / total) * 100).toFixed(2)
+            : 0;
+        return [
+          `${value?.toLocaleString()} (${percent}%)`,
+          name,
+        ];
+      }}
+    />
+    <Legend
+      iconType="circle"
+      verticalAlign="bottom"
+      height={36}
+      wrapperStyle={{ paddingTop: 10 }}
+    />
+  </PieChart>
+</ResponsiveContainer>
                       )}
                     </StyledCardContent>
                   </StyledCard>
@@ -2352,27 +2454,116 @@ const BaseTablero = ({ titulo }) => {
                       ) : !hasData ? (
                         <EmptyState onClearFilters={handleClearAllFilters} />
                       ) : (
-                        <TableContainer
-                          component={Paper}
-                          sx={{ maxHeight: 400 }}
-                        >
+                        <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
                           <Table stickyHeader size="small">
                             <TableHead>
                               <TableRow>
-                                <StyledTableCell>Periodo</StyledTableCell>
-                                <StyledTableCell align="right">
-                                  Rural
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                  Urbana
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                  Total
-                                </StyledTableCell>
+                                {/* Columna Periodo */}
+                                <TableCell
+                                  sx={{
+                                    fontWeight: "bold",
+                                    backgroundColor: zonaOrderBy === "periodo" ? color.secondary : color.primary,
+                                    color: color.white,
+                                    position: "sticky",
+                                    top: 0
+                                  }}
+                                >
+                                  <TableSortLabel
+                                    active={zonaOrderBy === "periodo"}
+                                    direction={zonaOrderBy === "periodo" ? zonaOrderDirection : "desc"}
+                                    onClick={() => handleZonaSort("periodo")}
+                                    sx={{
+                                      color: `${color.white} !important`,
+                                      "& .MuiTableSortLabel-icon": {
+                                        color: `${color.white} !important`,
+                                      },
+                                    }}
+                                  >
+                                    Periodo
+                                  </TableSortLabel>
+                                </TableCell>
+
+                                {/* Columna Rural */}
+                                <TableCell
+                                  align="right"
+                                  sx={{
+                                    fontWeight: "bold",
+                                    backgroundColor: zonaOrderBy === "rural" ? color.secondary : color.primary,
+                                    color: color.white,
+                                    position: "sticky",
+                                    top: 0
+                                  }}
+                                >
+                                  <TableSortLabel
+                                    active={zonaOrderBy === "rural"}
+                                    direction={zonaOrderBy === "rural" ? zonaOrderDirection : "desc"}
+                                    onClick={() => handleZonaSort("rural")}
+                                    sx={{
+                                      color: `${color.white} !important`,
+                                      "& .MuiTableSortLabel-icon": {
+                                        color: `${color.white} !important`,
+                                      },
+                                    }}
+                                  >
+                                    Rural
+                                  </TableSortLabel>
+                                </TableCell>
+
+                                {/* Columna Urbana */}
+                                <TableCell
+                                  align="right"
+                                  sx={{
+                                    fontWeight: "bold",
+                                    backgroundColor: zonaOrderBy === "urbana" ? color.secondary : color.primary,
+                                    color: color.white,
+                                    position: "sticky",
+                                    top: 0
+                                  }}
+                                >
+                                  <TableSortLabel
+                                    active={zonaOrderBy === "urbana"}
+                                    direction={zonaOrderBy === "urbana" ? zonaOrderDirection : "desc"}
+                                    onClick={() => handleZonaSort("urbana")}
+                                    sx={{
+                                      color: `${color.white} !important`,
+                                      "& .MuiTableSortLabel-icon": {
+                                        color: `${color.white} !important`,
+                                      },
+                                    }}
+                                  >
+                                    Urbana
+                                  </TableSortLabel>
+                                </TableCell>
+
+                                {/* Columna Total */}
+                                <TableCell
+                                  align="right"
+                                  sx={{
+                                    fontWeight: "bold",
+                                    backgroundColor: zonaOrderBy === "total" ? color.secondary : color.primary,
+                                    color: color.white,
+                                    position: "sticky",
+                                    top: 0
+                                  }}
+                                >
+                                  <TableSortLabel
+                                    active={zonaOrderBy === "total"}
+                                    direction={zonaOrderBy === "total" ? zonaOrderDirection : "desc"}
+                                    onClick={() => handleZonaSort("total")}
+                                    sx={{
+                                      color: `${color.white} !important`,
+                                      "& .MuiTableSortLabel-icon": {
+                                        color: `${color.white} !important`,
+                                      },
+                                    }}
+                                  >
+                                    Total
+                                  </TableSortLabel>
+                                </TableCell>
                               </TableRow>
                             </TableHead>
                             <TableBody>
-                              {datosZonaPorPeriodo.map((row) => (
+                              {sortedZonaData.map((row) => (
                                 <StyledTableRow key={row.periodo} hover>
                                   <TableCell>{row.periodo}</TableCell>
                                   <TableCell align="right">
@@ -2381,10 +2572,7 @@ const BaseTablero = ({ titulo }) => {
                                   <TableCell align="right">
                                     {row.urbana.toLocaleString()}
                                   </TableCell>
-                                  <TableCell
-                                    align="right"
-                                    sx={{ fontWeight: "bold" }}
-                                  >
+                                  <TableCell align="right" sx={{ fontWeight: "bold" }}>
                                     {row.total.toLocaleString()}
                                   </TableCell>
                                 </StyledTableRow>
@@ -2447,7 +2635,7 @@ const BaseTablero = ({ titulo }) => {
                   ) : (
                     <ResponsiveContainer width="100%" height={375}>
                       <LineChart
-                        data={datosLineaPeriodo}
+                        data={[...datosLineaPeriodo].reverse()}
                         margin={{ top: 30, right: 40, left: 40, bottom: 20 }}
                       >
                         <XAxis
@@ -2460,7 +2648,7 @@ const BaseTablero = ({ titulo }) => {
                         <RechartsTooltip
                           formatter={(value) => [
                             value.toLocaleString(),
-                            "Matrícula Inicial",
+                            "Total",
                           ]}
                         />
                         <Line
@@ -2477,11 +2665,20 @@ const BaseTablero = ({ titulo }) => {
                           activeDot={{ r: 7 }}
                           label={
                             !isMobile
-                              ? {
-                                position: "top",
-                                fill: color.third,
-                                fontSize: 11,
-                                formatter: (v) => v.toLocaleString(),
+                              ? (props) => {
+                                const { x, y, value, index } = props;
+                                const isTop = index % 2 === 0;
+                                return (
+                                  <text
+                                    x={x}
+                                    y={isTop ? y - 10 : y + 20}
+                                    fill={color.third}
+                                    fontSize={11}
+                                    textAnchor="middle"
+                                  >
+                                    {value.toLocaleString()}
+                                  </text>
+                                );
                               }
                               : undefined
                           }
