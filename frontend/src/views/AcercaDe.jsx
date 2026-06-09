@@ -362,7 +362,7 @@ export default function AcercaDe() {
               >
                 El SIIE es una plataforma web que centraliza, organiza y pone a
                 disposición la información proveniente de cuatro instituciones
-                clave del sector educativo: INFOP, CONEANFO, SEDUC y UNAH. Su
+                clave del sector educativo: INFOP, CONEANFO, SEDUC y DES-UNAH. Su
                 principal objetivo es presentar datos confiables y actualizados
                 de manera clara, accesible e intuitiva mediante representaciones
                 estadísticas interactivas.
