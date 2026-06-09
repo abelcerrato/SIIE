@@ -184,41 +184,59 @@ const RANGOS_EDAD_DISPONIBLES = [
   "DE 50 A 54 AÑOS", "DE 55 A 59 AÑOS", "DE 60 A 64 AÑOS", "DE 65 Y MÁS AÑOS", "60 Y MAS",
 ];
 
-// ==================== FUNCIÓN PARA OBTENER VALOR DE MÉTRICA ====================
+// ==================== FUNCIÓN PARA OBTENER VALOR DE MÉTRICA (CORREGIDA) ====================
 const getMetricValue = (row, metric, forMap = false) => {
+  // Para el mapa, usar finalizados si está disponible
   if (forMap && row.finalizados !== undefined && metric === "horas") {
-    return row.finalizados || 0;
+    return Number(row.finalizados) || 0;
   }
 
+  let value;
+  
   switch (metric) {
     case "matriculaInicial":
       if (row.tasa_matriculaInicial !== undefined && row.tasa_matriculaInicial !== null) {
-        return row.tasa_matriculaInicial;
+        value = row.tasa_matriculaInicial;
+      } else {
+        value = row.matriculados_total ?? row.matriculaInicial ?? row.MatriculaInicialTotal ?? 0;
       }
-      return row.matriculados_total || row.matriculaInicial || 0;
+      break;
     case "aprobados":
       if (row.tasa_aprobados !== undefined && row.tasa_aprobados !== null) {
-        return row.tasa_aprobados;
+        value = row.tasa_aprobados;
+      } else {
+        value = row.aprobados_total ?? row.aprobados ?? row.AprobadosTotal ?? 0;
       }
-      return row.aprobados_total || row.aprobados || 0;
+      break;
     case "reprobados":
       if (row.tasa_reprobados !== undefined && row.tasa_reprobados !== null) {
-        return row.tasa_reprobados;
+        value = row.tasa_reprobados;
+      } else {
+        value = row.reprobados_total ?? row.reprobados ?? row.ReprobadosTotal ?? 0;
       }
-      return row.reprobados_total || row.reprobados || 0;
+      break;
     case "desercion":
       if (row.tasa_desercion !== undefined && row.tasa_desercion !== null) {
-        return row.tasa_desercion;
+        value = row.tasa_desercion;
+      } else {
+        value = row.desertores_total ?? row.desercion ?? row.DesercionTotal ?? 0;
       }
-      return row.desertores_total || row.desercion || 0;
+      break;
     case "accionesFormativas":
-      return row.horas_accion_formativa || 0;
+      value = row.horas_accion_formativa ?? 0;
+      break;
     case "horas":
-      return row.horas || row.horas_impartidas || row.horas_accion_formativa || 0;
+      value = row.horas ?? row.horas_impartidas ?? row.horas_accion_formativa ?? 0;
+      break;
     default:
-      return 0;
+      value = 0;
   }
+  
+  // 🔥 CONVERSIÓN CRÍTICA: Asegurar que sea número
+  const numericValue = Number(value);
+  return isNaN(numericValue) ? 0 : numericValue;
 };
+
 
 // ==================== FUNCIÓN PARA NORMALIZAR DATOS ====================
 const asignarCamposComunes = (obj, item) => {
@@ -610,56 +628,56 @@ const BaseTableroInfop = ({ titulo }) => {
     });
   }, [isTasaMode, selectedDimension]);
 
-  // ==================== DATOS PARA GRÁFICO DE GÉNERO (SIN filtro de género) ====================
-  const datosGeneroCompletos = useMemo(() => {
-    const filtrosSinGenero = { ...filtros, genero: "Todos" };
-    let datosFiltrados = aplicarFiltrosBase(data, filtrosSinGenero);
-    if (!datosFiltrados.length) return [];
-    
-    let femenino = 0, masculino = 0, count = 0;
+// ==================== DATOS PARA GRÁFICO DE GÉNERO (CORREGIDO para unidadCurso) ====================
+const datosGeneroCompletos = useMemo(() => {
+  const filtrosSinGenero = { ...filtros, genero: "Todos" };
+  let datosFiltrados = aplicarFiltrosBase(data, filtrosSinGenero);
+  if (!datosFiltrados.length) return [];
+  
+  let femenino = 0, masculino = 0, count = 0;
 
-    datosFiltrados.forEach((item) => {
-      if (isTasaMode && DIMENSIONES_CON_TASA.includes(selectedDimension)) {
-        if (selectedMetric === "matriculaInicial" || selectedMetric === "aprobados") {
-          masculino += item.tasa_aprobados_hombre || item.aprobados_hombre || 0;
-          femenino += item.tasa_aprobados_mujer || item.aprobados_mujer || 0;
-        } else if (selectedMetric === "desercion") {
-          masculino += item.tasa_desercion_hombre || item.desertores_hombre || 0;
-          femenino += item.tasa_desercion_mujer || item.desertores_mujer || 0;
-        } else if (selectedMetric === "reprobados") {
-          masculino += item.tasa_reprobados_hombre || item.reprobados_hombre || 0;
-          femenino += item.tasa_reprobados_mujer || item.reprobados_mujer || 0;
-        }
-      } else {
-        if (selectedMetric === "matriculaInicial") {
-          masculino += item.matriculados_hombre || 0;
-          femenino += item.matriculados_mujer || 0;
-        } else if (selectedMetric === "aprobados") {
-          masculino += item.aprobados_hombre || 0;
-          femenino += item.aprobados_mujer || 0;
-        } else if (selectedMetric === "desercion") {
-          masculino += item.desertores_hombre || 0;
-          femenino += item.desertores_mujer || 0;
-        } else if (selectedMetric === "reprobados") {
-          masculino += item.reprobados_hombre || 0;
-          femenino += item.reprobados_mujer || 0;
-        }
+  datosFiltrados.forEach((item) => {
+    if (isTasaMode && DIMENSIONES_CON_TASA.includes(selectedDimension)) {
+      if (selectedMetric === "matriculaInicial" || selectedMetric === "aprobados") {
+        masculino += Number(item.tasa_aprobados_hombre) || Number(item.aprobados_hombre) || 0;
+        femenino += Number(item.tasa_aprobados_mujer) || Number(item.aprobados_mujer) || 0;
+      } else if (selectedMetric === "desercion") {
+        masculino += Number(item.tasa_desercion_hombre) || Number(item.desertores_hombre) || 0;
+        femenino += Number(item.tasa_desercion_mujer) || Number(item.desertores_mujer) || 0;
+      } else if (selectedMetric === "reprobados") {
+        masculino += Number(item.tasa_reprobados_hombre) || Number(item.reprobados_hombre) || 0;
+        femenino += Number(item.tasa_reprobados_mujer) || Number(item.reprobados_mujer) || 0;
       }
-      count++;
-    });
-
-    if (isTasaMode && DIMENSIONES_CON_TASA.includes(selectedDimension) && count > 0) {
-      return [
-        { name: "Femenino", value: femenino / count, valueOriginal: femenino },
-        { name: "Masculino", value: masculino / count, valueOriginal: masculino },
-      ];
+    } else {
+      // 🔥 IMPORTANTE: Usar Number() explícitamente y asegurar que los campos existen
+      if (selectedMetric === "matriculaInicial") {
+        masculino += Number(item.matriculados_hombre) || Number(item.MatriculaInicialHombres) || 0;
+        femenino += Number(item.matriculados_mujer) || Number(item.MatriculaIncialMujeres) || 0;
+      } else if (selectedMetric === "aprobados") {
+        masculino += Number(item.aprobados_hombre) || Number(item.AprobadosHombres) || 0;
+        femenino += Number(item.aprobados_mujer) || Number(item.AprobadosMujer) || 0;
+      } else if (selectedMetric === "desercion") {
+        masculino += Number(item.desertores_hombre) || Number(item.DesercionHombres) || 0;
+        femenino += Number(item.desertores_mujer) || Number(item.DesercionMujeres) || 0;
+      } else if (selectedMetric === "reprobados") {
+        masculino += Number(item.reprobados_hombre) || Number(item.ReprobadosHombres) || 0;
+        femenino += Number(item.reprobados_mujer) || Number(item.ReprobadasMujeres) || 0;
+      }
     }
-    return [
-      { name: "Femenino", value: femenino, valueOriginal: femenino },
-      { name: "Masculino", value: masculino, valueOriginal: masculino },
-    ];
-  }, [data, filtros, selectedMetric, isTasaMode, selectedDimension, aplicarFiltrosBase]);
+    count++;
+  });
 
+  if (isTasaMode && DIMENSIONES_CON_TASA.includes(selectedDimension) && count > 0) {
+    return [
+      { name: "Femenino", value: femenino / count, valueOriginal: femenino },
+      { name: "Masculino", value: masculino / count, valueOriginal: masculino },
+    ];
+  }
+  return [
+    { name: "Femenino", value: femenino, valueOriginal: femenino },
+    { name: "Masculino", value: masculino, valueOriginal: masculino },
+  ];
+}, [data, filtros, selectedMetric, isTasaMode, selectedDimension, aplicarFiltrosBase]);
   // ==================== FILTRAR DATOS PRINCIPALES (CON filtro de género) ====================
   useEffect(() => {
     if (!data.length) {
