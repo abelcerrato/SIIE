@@ -294,7 +294,7 @@ const CONFIGURACION_GRAFICOS = {
 
       return edades.map((edad, idx) => ({
         key: `edad_${edad}`,
-        label: `${edad} años`,
+        label: `${edad}`,
         color: coloresEdades[idx % coloresEdades.length],
       }));
     },

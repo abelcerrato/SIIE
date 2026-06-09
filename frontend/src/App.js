@@ -22,6 +22,7 @@ import SEDUCD from "./views/Descargas/SEDUC-D";
 import INFOPD from "./views/Descargas/INFOP-D";
 import DESUNAHD from "./views/Descargas/DESUNAH-D";
 import CONEANFOD from "./views/Descargas/CONEANFO-D";
+import Dashboard from "./components/Dashboard";
 import "./App.css";
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
           }
         >
           <Route path="CambiarContrasena" element={<CambiarContraPage />} />
-
+  <Route index element={<Dashboard />} />
           <Route path="Administracion/Usuarios" element={<Usuarios />} />
           <Route
             path="Administracion/RolesyPermisos"

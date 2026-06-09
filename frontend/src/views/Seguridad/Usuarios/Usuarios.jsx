@@ -182,7 +182,7 @@ export default function ModalUsuario({ open, onClose, usuarioId, onSaved }) {
       </DialogContent>
       <DialogActions>
 
-        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: color.white }}>
+        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: color.primary }}>
           Guardar
         </Button>
       </DialogActions>

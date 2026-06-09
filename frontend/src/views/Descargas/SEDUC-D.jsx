@@ -45,7 +45,6 @@ const toBase64 = async (url) => {
     });
 };
 
-
 const ReportesSeduc = () => {
     const [reporteSeleccionado, setReporteSeleccionado] = useState("");
     const [data, setData] = useState([]);
@@ -55,7 +54,6 @@ const ReportesSeduc = () => {
     const [page, setPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(50);
     const { permissions } = useUser();
-
 
     // Configuración específica para cada reporte
     const reportes = [
@@ -133,8 +131,6 @@ const ReportesSeduc = () => {
                     "MatriculaNeta",
                     "EdadMatriculatotal",
                 ],
-
-
                 encabezados: {
                     "Año": "Año",
                     "Departamento": "Departamento",
@@ -149,12 +145,9 @@ const ReportesSeduc = () => {
                     "ICicloBruta": "I Ciclo Bruta",
                     "IICicloBruta": "II Ciclo Bruta",
                     "IIICicloGruta": "III Ciclo Bruta",
-
-
                     "ICicloNeta": "I Ciclo Neta",
                     "IICicloNeta": "II Ciclo Neta",
                     "IIICicloNeta": "III Ciclo Neta",
-
                     "ICicloEdadOportuna": "I Ciclo Edad Oportuna",
                     "IICicloEdadOportuna": "II Ciclo Edad Oportuna",
                     "IIICicloEdadOportuna": "III Ciclo Edad Oportuna",
@@ -272,7 +265,6 @@ const ReportesSeduc = () => {
                     "17": "17 años",
                     ">18": "Mayor a 18 años"
                 },
-
             }
         },
         {
@@ -337,7 +329,6 @@ const ReportesSeduc = () => {
                     "17": "17 años",
                     ">18": "Mayor a 18 años"
                 },
-
             }
         },
         {
@@ -359,7 +350,6 @@ const ReportesSeduc = () => {
                     "EvacuacionAguas": "Evacuación Aguas",
                     "Zona": "Zona"
                 },
-
                 filtrosTexto: ["Plantel", "CodigoSACE"]
             }
         },
@@ -385,7 +375,6 @@ const ReportesSeduc = () => {
                     "TOTALDOCENTES": "Total Docentes"
                 },
                 filtrosTexto: ["CODIGOCENTRO"],
-
             }
         },
         {
@@ -408,10 +397,10 @@ const ReportesSeduc = () => {
         },
         {
             value: "seduccoberturanetabrutaniveleseducativos",
-            label: "Tasa de Cobertura Bruta  y Neta por Niveles Educativos",
+            label: "Tasa de Cobertura Bruta y Neta por Niveles Educativos",
             endpoint: "/seduccoberturanetabrutaniveleseducativos",
             config: {
-                titulo: "Tasa de Cobertura Bruta  y Neta por Niveles Educativos",
+                titulo: "Tasa de Cobertura Bruta y Neta por Niveles Educativos",
                 filtros: ["Año", "nivel",],
                 columnasBase: ["Año", "nivel", "matricula_bruta", "poblacion_bruta", "tasa_cobertura_bruta", "matricula_neta", "poblacion_neta", "tasa_cobertura_neta"],
                 encabezados: {
@@ -420,7 +409,6 @@ const ReportesSeduc = () => {
                     "matricula_bruta": "Matrícula Bruta",
                     "poblacion_bruta": "Población Bruta",
                     "tasa_cobertura_bruta": "Tasa de Cobertura Bruta",
-
                     "matricula_neta": "Matrícula Neta",
                     "poblacion_neta": "Población Neta",
                     "tasa_cobertura_neta": "Tasa de Cobertura Neta",
@@ -441,7 +429,6 @@ const ReportesSeduc = () => {
                     "Matricula_Bruta": "Matrícula Bruta",
                     "Poblacion_Bruta": "Población Bruta",
                     "tasa_acceso_3_prebasica_bruta": "Tasa de Acceso a 3° de Prebásica Bruta",
-
                     "Matricula_Neta": "Matrícula Neta",
                     "Poblacion_Neta": "Población Neta",
                     "tasa_acceso_3_prebasica_neta": "Tasa de Acceso a 3° de Prebásica Neta",
@@ -462,7 +449,6 @@ const ReportesSeduc = () => {
                     "Matricula_Bruta": "Matrícula Bruta",
                     "Poblacion_Bruta": "Población Bruta",
                     "tasa_acceso_primer_grado_bruta": "Tasa de Acceso a Primer Grado Bruta",
-
                     "Matricula_Neta": "Matrícula Neta",
                     "Poblacion_Neta": "Población Neta",
                     "tasa_acceso_primer_grado_neta": "Tasa de Acceso a Primer Grado Neta",
@@ -480,23 +466,18 @@ const ReportesSeduc = () => {
                     "MatriculaICiclo_Bruta",
                     "EdadOportunaICiclo_Bruta",
                     "tasa_bruta_ciclo_I",
-
                     "MatriculaICiclo_Neta",
                     "EdadOportunaICiclo_Neta",
                     "tasa_neta_ciclo_I",
-
                     "MatriculaIICiclo_Bruta",
                     "EdadOportunaIICiclo_Bruta",
                     "tasa_bruta_ciclo_II",
-
                     "MatriculaIICiclo_Neta",
                     "EdadOportunaIICiclo_Neta",
                     "tasa_neta_ciclo_II",
-
                     "MatriculaIIICiclo_Bruta",
                     "EdadOportunaIIICiclo_Bruta",
                     "tasa_bruta_ciclo_III",
-
                     "MatriculaIIICiclo_Neta",
                     "EdadOportunaIIICiclo_Neta",
                     "tasa_neta_ciclo_III",
@@ -535,193 +516,147 @@ const ReportesSeduc = () => {
                     "MatriculaPrebasica3_Bruta",
                     "EdadOportunaPrebasica3_Bruta",
                     "tasa_bruta_matricula_prebasica3",
-
                     "MatriculaPrebasica3_Neta",
                     "EdadOportunaPrebasica3_Neta",
                     "tasa_neta_matricula_prebasica3",
-
                     "MatriculaGrado1_Bruta",
                     "EdadOportunaGrado1_Bruta",
                     "tasa_bruta_matricula_grado1",
-
                     "MatriculaGrado1_Neta",
                     "EdadOportunaGrado1_Neta",
                     "tasa_neta_matricula_grado1",
-
                     "MatriculaGrado2_Bruta",
                     "EdadOportunaGrado2_Bruta",
                     "tasa_bruta_matricula_grado2",
-
                     "MatriculaGrado2_Neta",
                     "EdadOportunaGrado2_Neta",
                     "tasa_neta_matricula_grado2",
-
                     "MatriculaGrado3_Bruta",
                     "EdadOportunaGrado3_Bruta",
                     "tasa_bruta_matricula_grado3",
-
                     "MatriculaGrado3_Neta",
                     "EdadOportunaGrado3_Neta",
                     "tasa_neta_matricula_grado3",
-
                     "MatriculaGrado4_Bruta",
                     "EdadOportunaGrado4_Bruta",
                     "tasa_bruta_matricula_grado4",
-
                     "MatriculaGrado4_Neta",
                     "EdadOportunaGrado4_Neta",
                     "tasa_neta_matricula_grado4",
-
                     "MatriculaGrado5_Bruta",
                     "EdadOportunaGrado5_Bruta",
                     "tasa_bruta_matricula_grado5",
-
                     "MatriculaGrado5_Neta",
                     "EdadOportunaGrado5_Neta",
                     "tasa_neta_matricula_grado5",
-
                     "MatriculaGrado6_Bruta",
                     "EdadOportunaGrado6_Bruta",
                     "tasa_bruta_matricula_grado6",
-
                     "MatriculaGrado6_Neta",
                     "EdadOportunaGrado6_Neta",
                     "tasa_neta_matricula_grado6",
-
                     "MatriculaGrado7_Bruta",
                     "EdadOportunaGrado7_Bruta",
                     "tasa_bruta_matricula_grado7",
-
                     "MatriculaGrado7_Neta",
                     "EdadOportunaGrado7_Neta",
                     "tasa_neta_matricula_grado7",
-
                     "MatriculaGrado8_Bruta",
                     "EdadOportunaGrado8_Bruta",
                     "tasa_bruta_matricula_grado8",
-
                     "MatriculaGrado8_Neta",
                     "EdadOportunaGrado8_Neta",
                     "tasa_neta_matricula_grado8",
-
                     "MatriculaGrado9_Bruta",
                     "EdadOportunaGrado9_Bruta",
                     "tasa_bruta_matricula_grado9",
-
                     "MatriculaGrado9_Neta",
                     "EdadOportunaGrado9_Neta",
                     "tasa_neta_matricula_grado9",
-
                     "MatriculaGrado10_Bruta",
                     "EdadOportunaGrado10_Bruta",
                     "tasa_bruta_matricula_grado10",
-
                     "MatriculaGrado10_Neta",
                     "EdadOportunaGrado10_Neta",
                     "tasa_neta_matricula_grado10",
-
                     "MatriculaGrado11_Bruta",
                     "EdadOportunaGrado11_Bruta",
                     "tasa_bruta_matricula_grado11",
-
                     "MatriculaGrado11_Neta",
                     "EdadOportunaGrado11_Neta",
                     "tasa_neta_matricula_grado11",
                 ],
                 encabezados: {
                     "Periodo": "Periodo",
-                    "MatriculaPrebasica3_Bruta": "Matrícula Prebásica 3° Bruta",    
-                    "EdadOportunaPrebasica3_Bruta": "Edad Oportuna Prebásica 3° Bruta", 
-                    "tasa_bruta_matricula_prebasica3": "Tasa Bruta Matrícula Prebásica 3°",  
-
-                    "MatriculaPrebasica3_Neta": "Matrícula Prebásica 3° Neta", 
-                    "EdadOportunaPrebasica3_Neta": "Edad Oportuna Prebásica 3° Neta",  
-                    "tasa_neta_matricula_prebasica3": "Tasa Neta Matrícula Prebásica 3°",   
-
+                    "MatriculaPrebasica3_Bruta": "Matrícula Prebásica 3° Bruta",
+                    "EdadOportunaPrebasica3_Bruta": "Edad Oportuna Prebásica 3° Bruta",
+                    "tasa_bruta_matricula_prebasica3": "Tasa Bruta Matrícula Prebásica 3°",
+                    "MatriculaPrebasica3_Neta": "Matrícula Prebásica 3° Neta",
+                    "EdadOportunaPrebasica3_Neta": "Edad Oportuna Prebásica 3° Neta",
+                    "tasa_neta_matricula_prebasica3": "Tasa Neta Matrícula Prebásica 3°",
                     "MatriculaGrado1_Bruta": "Matrícula 1er Grado Bruta",
                     "EdadOportunaGrado1_Bruta": "Edad Oportuna 1er Grado Bruta",
                     "tasa_bruta_matricula_grado1": "Tasa Bruta Matrícula 1er Grado",
-
                     "MatriculaGrado1_Neta": "Matrícula 1er Grado Neta",
                     "EdadOportunaGrado1_Neta": "Edad Oportuna 1er Grado Neta",
                     "tasa_neta_matricula_grado1": "Tasa Neta Matrícula 1er Grado",
-
-                    "MatriculaGrado2_Bruta": "Matrícula 2do Grado Bruta",   
+                    "MatriculaGrado2_Bruta": "Matrícula 2do Grado Bruta",
                     "EdadOportunaGrado2_Bruta": "Edad Oportuna 2do Grado Bruta",
                     "tasa_bruta_matricula_grado2": "Tasa Bruta Matrícula 2do Grado",
-
                     "MatriculaGrado2_Neta": "Matrícula 2do Grado Neta",
                     "EdadOportunaGrado2_Neta": "Edad Oportuna 2do Grado Neta",
                     "tasa_neta_matricula_grado2": "Tasa Neta Matrícula 2do Grado",
-
                     "MatriculaGrado3_Bruta": "Matrícula 3er Grado Bruta",
                     "EdadOportunaGrado3_Bruta": "Edad Oportuna 3er Grado Bruta",
                     "tasa_bruta_matricula_grado3": "Tasa Bruta Matrícula 3er Grado",
-
                     "MatriculaGrado3_Neta": "Matrícula 3er Grado Neta",
                     "EdadOportunaGrado3_Neta": "Edad Oportuna 3er Grado Neta",
                     "tasa_neta_matricula_grado3": "Tasa Neta Matrícula 3er Grado",
-
                     "MatriculaGrado4_Bruta": "Matrícula 4to Grado Bruta",
                     "EdadOportunaGrado4_Bruta": "Edad Oportuna 4to Grado Bruta",
                     "tasa_bruta_matricula_grado4": "Tasa Bruta Matrícula 4to Grado",
-
                     "MatriculaGrado4_Neta": "Matrícula 4to Grado Neta",
                     "EdadOportunaGrado4_Neta": "Edad Oportuna 4to Grado Neta",
                     "tasa_neta_matricula_grado4": "Tasa Neta Matrícula 4to Grado",
-
                     "MatriculaGrado5_Bruta": "Matrícula 5to Grado Bruta",
                     "EdadOportunaGrado5_Bruta": "Edad Oportuna 5to Grado Bruta",
                     "tasa_bruta_matricula_grado5": "Tasa Bruta Matrícula 5to Grado",
-
                     "MatriculaGrado5_Neta": "Matrícula 5to Grado Neta",
                     "EdadOportunaGrado5_Neta": "Edad Oportuna 5to Grado Neta",
                     "tasa_neta_matricula_grado5": "Tasa Neta Matrícula 5to Grado",
-
                     "MatriculaGrado6_Bruta": "Matrícula 6to Grado Bruta",
                     "EdadOportunaGrado6_Bruta": "Edad Oportuna 6to Grado Bruta",
                     "tasa_bruta_matricula_grado6": "Tasa Bruta Matrícula 6to Grado",
-
                     "MatriculaGrado6_Neta": "Matrícula 6to Grado Neta",
                     "EdadOportunaGrado6_Neta": "Edad Oportuna 6to Grado Neta",
                     "tasa_neta_matricula_grado6": "Tasa Neta Matrícula 6to Grado",
-
-                    "MatriculaGrado7_Bruta": "Matrícula 7mo Grado Bruta",   
+                    "MatriculaGrado7_Bruta": "Matrícula 7mo Grado Bruta",
                     "EdadOportunaGrado7_Bruta": "Edad Oportuna 7mo Grado Bruta",
                     "tasa_bruta_matricula_grado7": "Tasa Bruta Matrícula 7mo Grado",
-
                     "MatriculaGrado7_Neta": "Matrícula 7mo Grado Neta",
                     "EdadOportunaGrado7_Neta": "Edad Oportuna 7mo Grado Neta",
                     "tasa_neta_matricula_grado7": "Tasa Neta Matrícula 7mo Grado",
-
                     "MatriculaGrado8_Bruta": "Matrícula 8vo Grado Bruta",
                     "EdadOportunaGrado8_Bruta": "Edad Oportuna 8vo Grado Bruta",
                     "tasa_bruta_matricula_grado8": "Tasa Bruta Matrícula 8vo Grado",
-
                     "MatriculaGrado8_Neta": "Matrícula 8vo Grado Neta",
                     "EdadOportunaGrado8_Neta": "Edad Oportuna 8vo Grado Neta",
                     "tasa_neta_matricula_grado8": "Tasa Neta Matrícula 8vo Grado",
-
                     "MatriculaGrado9_Bruta": "Matrícula 9no Grado Bruta",
                     "EdadOportunaGrado9_Bruta": "Edad Oportuna 9no Grado Bruta",
                     "tasa_bruta_matricula_grado9": "Tasa Bruta Matrícula 9no Grado",
-
                     "MatriculaGrado9_Neta": "Matrícula 9no Grado Neta",
                     "EdadOportunaGrado9_Neta": "Edad Oportuna 9no Grado Neta",
                     "tasa_neta_matricula_grado9": "Tasa Neta Matrícula 9no Grado",
-
                     "MatriculaGrado10_Bruta": "Matrícula 10mo Grado Bruta",
                     "EdadOportunaGrado10_Bruta": "Edad Oportuna 10mo Grado Bruta",
                     "tasa_bruta_matricula_grado10": "Tasa Bruta Matrícula 10mo Grado",
-
                     "MatriculaGrado10_Neta": "Matrícula 10mo Grado Neta",
                     "EdadOportunaGrado10_Neta": "Edad Oportuna 10mo Grado Neta",
                     "tasa_neta_matricula_grado10": "Tasa Neta Matrícula 10mo Grado",
-
                     "MatriculaGrado11_Bruta": "Matrícula 11mo Grado Bruta",
                     "EdadOportunaGrado11_Bruta": "Edad Oportuna 11mo Grado Bruta",
                     "tasa_bruta_matricula_grado11": "Tasa Bruta Matrícula 11mo Grado",
-
                     "MatriculaGrado11_Neta": "Matrícula 11mo Grado Neta",
                     "EdadOportunaGrado11_Neta": "Edad Oportuna 11mo Grado Neta",
                     "tasa_neta_matricula_grado11": "Tasa Neta Matrícula 11mo Grado",
@@ -730,18 +665,15 @@ const ReportesSeduc = () => {
         },
     ];
 
-    // Obtener configuración del reporte actual
     const getConfigReporte = () => {
         return reportes.find(r => r.value === reporteSeleccionado)?.config || {};
     };
 
-    // Función para obtener el encabezado formateado
     const getEncabezado = (columna) => {
         const config = getConfigReporte();
         return config.encabezados?.[columna] || columna;
     };
 
-    // Inicializar filtros cuando se selecciona un reporte
     useEffect(() => {
         if (reporteSeleccionado) {
             const config = getConfigReporte();
@@ -765,7 +697,6 @@ const ReportesSeduc = () => {
         }
     }, [reporteSeleccionado]);
 
-    // Obtener datos de la API
     useEffect(() => {
         if (reporteSeleccionado) {
             const fetchData = async () => {
@@ -788,23 +719,16 @@ const ReportesSeduc = () => {
         }
     }, [reporteSeleccionado]);
 
-
-    // Obtener valores únicos para los filtros
     const getValoresUnicos = (campo) => {
         let datosFiltrados = data;
-
-        // Aplicar filtros existentes excepto el campo actual
         const filtrosAplicar = { ...filters };
         delete filtrosAplicar[campo];
 
-        // Normalizar el campo actual
         const campoNormalizado = campo.toLowerCase();
         const config = getConfigReporte();
 
-        // Si estamos obteniendo municipios y hay un departamento seleccionado, aplicar ese filtro primero
         if (campoNormalizado === 'municipio') {
             const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
-
             if (campoDepartamento && filters[campoDepartamento]) {
                 datosFiltrados = data.filter(item =>
                     item[campoDepartamento] === filters[campoDepartamento]
@@ -812,7 +736,6 @@ const ReportesSeduc = () => {
             }
         }
 
-        // Si estamos obteniendo aldeas y hay municipio o departamento seleccionado, aplicar esos filtros
         if (campoNormalizado === 'aldea') {
             const campoMunicipio = config.filtros?.find(f => f.toLowerCase() === 'municipio');
             const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
@@ -828,7 +751,6 @@ const ReportesSeduc = () => {
             }
         }
 
-        // Aplicar otros filtros existentes
         Object.keys(filtrosAplicar).forEach(key => {
             if (filtrosAplicar[key] && key !== 'valor') {
                 datosFiltrados = datosFiltrados.filter(item =>
@@ -841,15 +763,12 @@ const ReportesSeduc = () => {
             .filter(val => val != null && val !== "")
             .sort();
     };
-    // Función específica para obtener municipios basados en departamento
 
     const getMunicipiosFiltrados = (campoMunicipio = 'municipio') => {
-        // Encontrar el campo de departamento correspondiente
         const config = getConfigReporte();
         const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
 
         if (campoDepartamento && filters[campoDepartamento]) {
-            // Filtrar municipios por departamento seleccionado
             const municipiosPorDepartamento = data
                 .filter(item => item[campoDepartamento] === filters[campoDepartamento])
                 .map(item => item[campoMunicipio]);
@@ -858,14 +777,11 @@ const ReportesSeduc = () => {
                 .filter(val => val != null && val !== "")
                 .sort();
         } else {
-            // Si no hay departamento seleccionado, mostrar todos los municipios
             return [...new Set(data.map(item => item[campoMunicipio]))]
                 .filter(val => val != null && val !== "")
                 .sort();
         }
     };
-
-    // Función específica para obtener aldeas basadas en municipio
 
     const getAldeasFiltradas = () => {
         const config = getConfigReporte();
@@ -873,20 +789,17 @@ const ReportesSeduc = () => {
         const campoDepartamento = config.filtros?.find(f => f.toLowerCase() === 'departamento');
         const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
 
-        if (!campoAldea) return []; // Si el reporte no tiene campo aldea, retornar vacío
+        if (!campoAldea) return [];
 
         if (filters[campoMunicipio]) {
-            // Filtrar aldeas por municipio seleccionado
             let datosFiltrados = data;
 
-            // Aplicar filtro de departamento si existe
             if (filters[campoDepartamento]) {
                 datosFiltrados = datosFiltrados.filter(item =>
                     item[campoDepartamento] === filters[campoDepartamento]
                 );
             }
 
-            // Aplicar filtro de municipio
             const aldeasPorMunicipio = datosFiltrados
                 .filter(item => item[campoMunicipio] === filters[campoMunicipio])
                 .map(item => item[campoAldea]);
@@ -895,10 +808,8 @@ const ReportesSeduc = () => {
                 .filter(val => val != null && val !== "")
                 .sort();
         } else {
-            // Si no hay municipio seleccionado, mostrar todas las aldeas
             let datosFiltrados = data;
 
-            // Aplicar filtro de departamento si existe
             if (filters[campoDepartamento]) {
                 datosFiltrados = datosFiltrados.filter(item =>
                     item[campoDepartamento] === filters[campoDepartamento]
@@ -911,14 +822,11 @@ const ReportesSeduc = () => {
         }
     };
 
-
-
-    // ========== LÓGICA ESPECÍFICA PARA NIVELES ACADÉMICOS ==========
+    // Lógica para niveles académicos
     const niveles = ["", "Prebasica", "Basica", "Media", "General"];
     const categorias = ["", "Matricula", "Desercion", "Cancelacion", "MatriculaFinal", "Reprobados", "Aprobados", "Repitencias"];
     const sexos = ["", "Mujer", "Hombre", "Total"];
 
-    // Función para determinar qué columnas mostrar para niveles académicos
     const getColumnasAMostrarNiveles = () => {
         const columnasBase = ["Periodo", "Departamento"];
 
@@ -953,7 +861,6 @@ const ReportesSeduc = () => {
             });
         } else if (filters.categoria) {
             Object.keys(data[0] || {}).forEach(col => {
-                // CORRECCIÓN: Separar Matricula de MatriculaFinal
                 if (filters.categoria === "Matricula") {
                     if (col.startsWith("Matricula") && !col.startsWith("MatriculaFinal")) {
                         columnasFiltradas.push(col);
@@ -989,8 +896,6 @@ const ReportesSeduc = () => {
         return [...new Set(columnasFiltradas)];
     };
 
-
-    // Función para agrupar columnas por categoría y nivel
     const getEstructuraColumnasNiveles = () => {
         const estructura = {};
         const columnasAMostrar = getColumnasAMostrarNiveles();
@@ -1000,18 +905,14 @@ const ReportesSeduc = () => {
 
             let categoria, sexo, nivel;
 
-            // Manejar columnas que terminan con "General"
             if (columna.endsWith("TotalGeneral")) {
                 categoria = columna.replace("TotalGeneral", "");
                 sexo = "Total";
                 nivel = "General";
-            }
-            // Manejar columnas de MatriculaFinal (ej: "MatriculaFinalMujerPrebasica")
-            else if (columna.startsWith("MatriculaFinal")) {
+            } else if (columna.startsWith("MatriculaFinal")) {
                 categoria = "MatriculaFinal";
                 const resto = columna.replace("MatriculaFinal", "");
 
-                // Buscar el nivel en el resto de la cadena
                 for (const niv of niveles.filter(n => n && n !== "General")) {
                     if (resto.endsWith(niv)) {
                         nivel = niv;
@@ -1020,14 +921,11 @@ const ReportesSeduc = () => {
                     }
                 }
 
-                // Si no se encontró nivel específico, es General
                 if (!nivel) {
                     nivel = "General";
                     sexo = resto;
                 }
-            }
-            // Manejar otras categorías normales
-            else {
+            } else {
                 for (const cat of categorias.filter(c => c && c !== "MatriculaFinal")) {
                     if (columna.startsWith(cat)) {
                         categoria = cat;
@@ -1041,7 +939,6 @@ const ReportesSeduc = () => {
                             }
                         }
 
-                        // Si no se encontró nivel específico, es General
                         if (!nivel && resto === "TotalGeneral") {
                             nivel = "General";
                             sexo = "Total";
@@ -1059,7 +956,6 @@ const ReportesSeduc = () => {
             if (!estructura[categoria]) estructura[categoria] = {};
             if (!estructura[categoria][nivel]) estructura[categoria][nivel] = [];
 
-            // Evitar duplicados
             if (!estructura[categoria][nivel].some(item => item.columna === columna)) {
                 estructura[categoria][nivel].push({ columna, sexo });
             }
@@ -1068,7 +964,6 @@ const ReportesSeduc = () => {
         return estructura;
     };
 
-    // Filtrar datos para niveles académicos
     const aplicarFiltroValorNiveles = (item) => {
         if (!filters.valor) return true;
 
@@ -1084,7 +979,6 @@ const ReportesSeduc = () => {
     };
 
     const filteredDataNiveles = data.filter(item => {
-        // Validar que el item y sus propiedades existen
         if (!item) return false;
 
         const matchesPeriodo = !filters.periodo || (item.Periodo && item.Periodo.includes(filters.periodo));
@@ -1094,51 +988,34 @@ const ReportesSeduc = () => {
         return matchesPeriodo && matchesDepartamento && matchesValor;
     });
 
-    // ========== LÓGICA PARA OTROS REPORTES ==========
-
     const filteredData = data.filter(item => {
         return Object.keys(filters).every(key => {
-            // Si no hay filtro o es 'valor', no aplicar
             if (key === "valor" || !filters[key]) return true;
 
             const valor = item[key];
             if (valor == null || valor === "") return false;
 
-            // Normalizamos ambos valores
             const valorStr = valor.toString().trim().toLowerCase();
             const filtroStr = filters[key].toString().trim().toLowerCase();
 
-            //  Comparación exacta para todos los casos
             return valorStr === filtroStr;
         });
     });
 
-
-
-    // Actualizar la función handleFilterChange para manejar diferentes capitalizaciones
-
     const handleFilterChange = (field, value) => {
         setFilters(prev => {
             const nuevosFiltros = { ...prev, [field]: value };
-
-            // Normalizar el nombre del campo para las comparaciones
             const campoNormalizado = field.toLowerCase();
             const config = getConfigReporte();
 
-            // Limpiar dependencias cuando se cambia el filtro padre
             if (campoNormalizado === 'departamento') {
-                // Encontrar los campos correspondientes (pueden estar en mayúsculas)
                 const campoMunicipio = config.filtros?.find(f => f.toLowerCase() === 'municipio');
                 const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
 
-                // Si cambia el departamento, limpiar municipio y aldea
                 if (campoMunicipio) nuevosFiltros[campoMunicipio] = "";
                 if (campoAldea) nuevosFiltros[campoAldea] = "";
             } else if (campoNormalizado === 'municipio') {
-                // Encontrar el campo de aldea correspondiente
                 const campoAldea = config.filtros?.find(f => f.toLowerCase() === 'aldea');
-
-                // Si cambia el municipio, limpiar aldea
                 if (campoAldea) nuevosFiltros[campoAldea] = "";
             }
 
@@ -1146,7 +1023,6 @@ const ReportesSeduc = () => {
         });
         setPage(1);
     };
-
 
     const clearFilters = () => {
         const config = getConfigReporte();
@@ -1170,8 +1046,6 @@ const ReportesSeduc = () => {
         setPage(1);
     };
 
-
-    // Paginación
     const getPaginatedData = () => {
         const dataToUse = reporteSeleccionado === "niveles" ? filteredDataNiveles : filteredData;
         const startIndex = (page - 1) * rowsPerPage;
@@ -1188,7 +1062,6 @@ const ReportesSeduc = () => {
     const paginatedData = getPaginatedData();
     const dataToUse = reporteSeleccionado === "niveles" ? filteredDataNiveles : filteredData;
 
-
     const downloadExcel = async () => {
         let datosParaExcel = [];
         let nombreArchivo = "";
@@ -1201,7 +1074,6 @@ const ReportesSeduc = () => {
             timeStyle: "short",
         });
 
-        // 🔹 Reporte de niveles
         if (reporteSeleccionado === "niveles") {
             const columnasAMostrar = getColumnasAMostrarNiveles();
             datosParaExcel = filteredDataNiveles.map((item) => {
@@ -1213,7 +1085,6 @@ const ReportesSeduc = () => {
             nombreHoja = "Niveles Académicos";
             tituloReporte = "Reporte de Niveles Académicos";
         } else {
-            // 🔹 Reporte general
             const reporte = reportes.find((r) => r.value === reporteSeleccionado);
             const configReporte = getConfigReporte();
             const columnasAMostrar = configReporte.columnasBase;
@@ -1232,14 +1103,12 @@ const ReportesSeduc = () => {
             tituloReporte = reporte.label;
         }
 
-        // 🧾 Crear workbook y hoja
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet(nombreHoja);
 
         const image1Base64 = await toBase64(LogoCONED);
         const image2Base64 = await toBase64(LogoSIIE);
 
-        // Agregar imágenes
         const image1 = workbook.addImage({
             base64: image1Base64,
             extension: "png",
@@ -1249,17 +1118,13 @@ const ReportesSeduc = () => {
             extension: "png",
         });
 
-        // Insertar las imágenes en el archivo Excel
         worksheet.addImage(image1, "A1:B9");
         worksheet.addImage(image2, "F2:H8");
-
-
-
 
         worksheet.mergeCells("C5", "E5");
         const titleCell = worksheet.getCell("C5");
         titleCell.value = tituloReporte;
-        titleCell.font = { size: 16, bold: true, color: { argb: "88CFE0" } };
+        titleCell.font = { size: 16, bold: true, color: { argb: color.primary.replace("#", "") } };
         titleCell.alignment = { horizontal: "center", vertical: "middle" };
 
         worksheet.mergeCells("C6", "E6");
@@ -1270,7 +1135,6 @@ const ReportesSeduc = () => {
         worksheet.addRow([]);
         worksheet.addRow([]);
 
-        // 🧱 Agregar encabezados de tabla
         if (datosParaExcel.length > 0) {
             const headers = Object.keys(datosParaExcel[0]);
             const headerRow = worksheet.addRow(headers);
@@ -1280,7 +1144,7 @@ const ReportesSeduc = () => {
                 cell.fill = {
                     type: "pattern",
                     pattern: "solid",
-                    fgColor: { argb: "88CFE0" },
+                    fgColor: { argb: color.primary.replace("#", "") },
                 };
                 cell.alignment = { horizontal: "center", vertical: "middle" };
                 cell.border = {
@@ -1291,7 +1155,6 @@ const ReportesSeduc = () => {
                 };
             });
 
-            // 📊 Agregar datos
             datosParaExcel.forEach((fila) => {
                 const filaData = worksheet.addRow(Object.values(fila));
                 filaData.eachCell((cell) => {
@@ -1305,8 +1168,6 @@ const ReportesSeduc = () => {
                 });
             });
 
-            // Ajuste de ancho de columnas automático
-
             worksheet.columns.forEach((column) => {
                 let maxLength = 0;
                 column.eachCell({ includeEmpty: true }, (cell) => {
@@ -1316,39 +1177,38 @@ const ReportesSeduc = () => {
                 column.width = maxLength < 12 ? 12 : maxLength + 2;
             });
 
-            // Asegurar ancho fijo del bloque del título
-            worksheet.getColumn(3).width = 25; // C
-            worksheet.getColumn(4).width = 25; // D
-            worksheet.getColumn(5).width = 25; // E
-
+            worksheet.getColumn(3).width = 25;
+            worksheet.getColumn(4).width = 25;
+            worksheet.getColumn(5).width = 25;
         }
 
-        // 💾 Generar archivo
         const buffer = await workbook.xlsx.writeBuffer();
         saveAs(new Blob([buffer]), "SEDUC_" + nombreArchivo);
     };
 
-
     const activeFiltersCount = Object.values(filters).filter(val => val !== "").length;
 
-
-    // Renderizar filtros dinámicamente para reportes normales
     const renderFiltros = () => {
         const config = getConfigReporte();
 
         return config.filtros?.map(filtro => {
-            // Verificar si hay opciones predefinidas para este filtro
             const opcionesPredefinidas = config.opcionesFiltros?.[filtro];
 
             if (opcionesPredefinidas) {
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                         <FormControl fullWidth size="small">
-                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                             <Select
                                 value={filters[filtro] || ""}
                                 onChange={(e) => handleFilterChange(filtro, e.target.value)}
                                 label={getEncabezado(filtro)}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 {opcionesPredefinidas.map(opcion => (
                                     <MenuItem key={opcion.value} value={opcion.value}>
@@ -1361,7 +1221,6 @@ const ReportesSeduc = () => {
                 );
             }
 
-            // Para filtros de texto
             if (config.filtrosTexto?.includes(filtro)) {
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
@@ -1372,15 +1231,19 @@ const ReportesSeduc = () => {
                             value={filters[filtro] || ""}
                             onChange={(e) => handleFilterChange(filtro, e.target.value)}
                             placeholder={`Buscar ${getEncabezado(filtro).toLowerCase()}...`}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    "&:hover fieldset": { borderColor: color.primary },
+                                    "&.Mui-focused fieldset": { borderColor: color.primary }
+                                }
+                            }}
                         />
                     </Grid>
                 );
             }
 
-            // Normalizar el nombre del campo para comparaciones
             const campoNormalizado = filtro.toLowerCase();
 
-            // Para DEPARTAMENTO (en cualquier capitalización) - siempre mostrar todos los departamentos disponibles
             if (campoNormalizado === 'departamento') {
                 const departamentosUnicos = [...new Set(data.map(item => item[filtro]))]
                     .filter(val => val != null && val !== "")
@@ -1389,11 +1252,17 @@ const ReportesSeduc = () => {
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                         <FormControl fullWidth size="small">
-                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                             <Select
                                 value={filters[filtro] || ""}
                                 onChange={(e) => handleFilterChange(filtro, e.target.value)}
                                 label={getEncabezado(filtro)}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 <MenuItem value="">Todos</MenuItem>
                                 {departamentosUnicos.map(departamento => (
@@ -1407,24 +1276,24 @@ const ReportesSeduc = () => {
                 );
             }
 
-            // Manejo especial para municipio (depende de departamento) - en cualquier capitalización
             if (campoNormalizado === 'municipio' && config.filtros?.some(f => f.toLowerCase() === 'departamento')) {
                 const municipiosFiltrados = getMunicipiosFiltrados(filtro);
-                const todosLosMunicipios = [...new Set(data.map(item => item[filtro]))]
-                    .filter(val => val != null && val !== "")
-                    .sort();
-
-                // Encontrar el campo de departamento correspondiente (puede estar en mayúsculas)
                 const campoDepartamento = config.filtros.find(f => f.toLowerCase() === 'departamento');
 
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                         <FormControl fullWidth size="small">
-                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                             <Select
                                 value={filters[filtro] || ""}
                                 onChange={(e) => handleFilterChange(filtro, e.target.value)}
                                 label={getEncabezado(filtro)}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 <MenuItem value="">Todos</MenuItem>
                                 {municipiosFiltrados.map(municipio => (
@@ -1435,7 +1304,7 @@ const ReportesSeduc = () => {
                             </Select>
                         </FormControl>
                         {filters[campoDepartamento] && (
-                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                            <Typography variant="caption" sx={{ color: color.contrastText, mt: 0.5, display: 'block' }}>
                                 {municipiosFiltrados.length} municipio(s) en {filters[campoDepartamento]}
                             </Typography>
                         )}
@@ -1443,26 +1312,26 @@ const ReportesSeduc = () => {
                 );
             }
 
-            // Manejo especial para aldea (depende de municipio y departamento) - MANTENIDO para otros reportes
             if (campoNormalizado === 'aldea' && config.filtros?.some(f => f.toLowerCase() === 'municipio')) {
                 const aldeasFiltradas = getAldeasFiltradas();
-                const todasLasAldeas = [...new Set(data.map(item => item[filtro]))]
-                    .filter(val => val != null && val !== "")
-                    .sort();
-
-                // Encontrar los campos correspondientes
                 const campoMunicipio = config.filtros.find(f => f.toLowerCase() === 'municipio');
                 const campoDepartamento = config.filtros.find(f => f.toLowerCase() === 'departamento');
 
                 return (
                     <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                         <FormControl fullWidth size="small">
-                            <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                             <Select
                                 value={filters[filtro] || ""}
                                 onChange={(e) => handleFilterChange(filtro, e.target.value)}
                                 label={getEncabezado(filtro)}
                                 disabled={aldeasFiltradas.length === 0}
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 <MenuItem value="">Todas</MenuItem>
                                 {aldeasFiltradas.map(aldea => (
@@ -1473,7 +1342,7 @@ const ReportesSeduc = () => {
                             </Select>
                         </FormControl>
                         {(filters[campoDepartamento] || filters[campoMunicipio]) && (
-                            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                            <Typography variant="caption" sx={{ color: color.contrastText, mt: 0.5, display: 'block' }}>
                                 {aldeasFiltradas.length} aldea(s) disponibles
                             </Typography>
                         )}
@@ -1481,17 +1350,22 @@ const ReportesSeduc = () => {
                 );
             }
 
-            // Filtro dinámico basado en datos (para otros campos)
             const valoresUnicos = getValoresUnicos(filtro);
 
             return (
                 <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={filtro}>
                     <FormControl fullWidth size="small">
-                        <InputLabel>{getEncabezado(filtro)}</InputLabel>
+                        <InputLabel sx={{ color: color.contrastText }}>{getEncabezado(filtro)}</InputLabel>
                         <Select
                             value={filters[filtro] || ""}
                             onChange={(e) => handleFilterChange(filtro, e.target.value)}
                             label={getEncabezado(filtro)}
+                            sx={{
+                                "& .MuiOutlinedInput-root": {
+                                    "&:hover fieldset": { borderColor: color.primary },
+                                    "&.Mui-focused fieldset": { borderColor: color.primary }
+                                }
+                            }}
                         >
                             <MenuItem value="">Todos</MenuItem>
                             {valoresUnicos.map(valor => (
@@ -1504,17 +1378,15 @@ const ReportesSeduc = () => {
         });
     };
 
-    // Renderizar vista de niveles académicos
     const renderNivelesAcademicos = () => {
         const periodos = [...new Set(data.map(item => item.Periodo))].sort();
         const departamentos = [...new Set(data.map(item => item.Departamento))].sort();
         const estructuraColumnas = getEstructuraColumnasNiveles();
 
-
         if (loading) {
             return (
                 <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: color.primary }} />
                 </Box>
             );
         }
@@ -1528,34 +1400,34 @@ const ReportesSeduc = () => {
         }
 
         return (
-            <Paper sx={{ p: 3 }}>
+            <Paper sx={{ p: 3, backgroundColor: color.white, borderRadius: 2 }}>
                 <Tooltip title="Volver">
                     <IconButton
                         aria-label="Volver"
-
                         onClick={() => {
                             setReporteSeleccionado("");
                             setData([]);
                             setFilters({});
-                        }}>
-                        <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
+                        }}
+                        sx={{ color: color.secondary }}
+                    >
+                        <ArrowCircleLeftOutlined sx={{ fontSize: 40 }} />
                     </IconButton>
                 </Tooltip>
 
-                <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", color: color.white, textAlign: 'center' }}>
+                <Typography variant="h4" component="h1" sx={{ fontWeight: "bold", color: color.primary, textAlign: 'center', mb: 3 }}>
                     Niveles Académicos por Departamento
                 </Typography>
 
-                {/* Filtros para niveles académicos */}
-                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5" }}>
+                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                        <FilterList sx={{ mr: 1 }} />
-                        <Typography variant="h6">Filtros</Typography>
+                        <FilterList sx={{ mr: 1, color: color.primary }} />
+                        <Typography variant="h6" sx={{ color: color.primary }}>Filtros</Typography>
                         {activeFiltersCount > 0 && (
                             <Chip
                                 label={`${activeFiltersCount} activos`}
                                 size="small"
-                                sx={{ ml: 1 }}
+                                sx={{ ml: 1, backgroundColor: color.secondary, color: color.white }}
                                 onDelete={clearFilters}
                             />
                         )}
@@ -1564,11 +1436,17 @@ const ReportesSeduc = () => {
                     <Grid container spacing={2}>
                         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Periodo</InputLabel>
+                                <InputLabel sx={{ color: color.contrastText }}>Periodo</InputLabel>
                                 <Select
                                     value={filters.periodo || ""}
                                     onChange={(e) => handleFilterChange("periodo", e.target.value)}
                                     label="Periodo"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": { borderColor: color.primary },
+                                            "&.Mui-focused fieldset": { borderColor: color.primary }
+                                        }
+                                    }}
                                 >
                                     <MenuItem value="">Todos</MenuItem>
                                     {periodos.map(periodo => (
@@ -1580,11 +1458,17 @@ const ReportesSeduc = () => {
 
                         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Departamento</InputLabel>
+                                <InputLabel sx={{ color: color.contrastText }}>Departamento</InputLabel>
                                 <Select
                                     value={filters.departamento || ""}
                                     onChange={(e) => handleFilterChange("departamento", e.target.value)}
                                     label="Departamento"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": { borderColor: color.primary },
+                                            "&.Mui-focused fieldset": { borderColor: color.primary }
+                                        }
+                                    }}
                                 >
                                     <MenuItem value="">Todos</MenuItem>
                                     {departamentos.map(depto => (
@@ -1596,11 +1480,17 @@ const ReportesSeduc = () => {
 
                         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Nivel</InputLabel>
+                                <InputLabel sx={{ color: color.contrastText }}>Nivel</InputLabel>
                                 <Select
                                     value={filters.nivel || ""}
                                     onChange={(e) => handleFilterChange("nivel", e.target.value)}
                                     label="Nivel"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": { borderColor: color.primary },
+                                            "&.Mui-focused fieldset": { borderColor: color.primary }
+                                        }
+                                    }}
                                 >
                                     <MenuItem value="">Todos</MenuItem>
                                     {niveles.filter(n => n).map(nivel => (
@@ -1614,11 +1504,17 @@ const ReportesSeduc = () => {
 
                         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Categoría</InputLabel>
+                                <InputLabel sx={{ color: color.contrastText }}>Categoría</InputLabel>
                                 <Select
                                     value={filters.categoria || ""}
                                     onChange={(e) => handleFilterChange("categoria", e.target.value)}
                                     label="Categoría"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": { borderColor: color.primary },
+                                            "&.Mui-focused fieldset": { borderColor: color.primary }
+                                        }
+                                    }}
                                 >
                                     <MenuItem value="">Todas</MenuItem>
                                     {categorias.filter(c => c).map(categoria => (
@@ -1630,11 +1526,17 @@ const ReportesSeduc = () => {
 
                         <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel>Sexo</InputLabel>
+                                <InputLabel sx={{ color: color.contrastText }}>Sexo</InputLabel>
                                 <Select
                                     value={filters.sexo || ""}
                                     onChange={(e) => handleFilterChange("sexo", e.target.value)}
                                     label="Sexo"
+                                    sx={{
+                                        "& .MuiOutlinedInput-root": {
+                                            "&:hover fieldset": { borderColor: color.primary },
+                                            "&.Mui-focused fieldset": { borderColor: color.primary }
+                                        }
+                                    }}
                                 >
                                     <MenuItem value="">Todos</MenuItem>
                                     {sexos.filter(s => s).map(sexo => (
@@ -1643,23 +1545,19 @@ const ReportesSeduc = () => {
                                 </Select>
                             </FormControl>
                         </Grid>
-
-
                     </Grid>
                 </Paper>
 
-                {/* Controles */}
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 2 }}>
                     <Box>
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                        <Typography variant="body2" sx={{ color: color.contrastText }}>
                             Mostrando {filteredDataNiveles.length} registros • Página {page} de {totalPages}
                         </Typography>
-
                     </Box>
 
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         <FormControl size="small" sx={{ minWidth: 120 }}>
-                            <InputLabel>Filas por página</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>Filas por página</InputLabel>
                             <Select
                                 value={rowsPerPage}
                                 onChange={(e) => {
@@ -1667,6 +1565,12 @@ const ReportesSeduc = () => {
                                     setPage(1);
                                 }}
                                 label="Filas por página"
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 <MenuItem value={10}>10</MenuItem>
                                 <MenuItem value={25}>25</MenuItem>
@@ -1680,14 +1584,13 @@ const ReportesSeduc = () => {
                             variant="contained"
                             startIcon={<Download />}
                             onClick={downloadExcel}
-                            sx={{ backgroundColor: "#2e7d32", "&:hover": { backgroundColor: "#1b5e20" } }}
+                            sx={{ backgroundColor: color.secondary, "&:hover": { backgroundColor: color.primary } }}
                         >
                             Descargar Excel
                         </Button>
                     </Box>
                 </Box>
 
-                {/* Paginación superior */}
                 {totalPages > 1 && (
                     <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                         <Pagination
@@ -1697,38 +1600,47 @@ const ReportesSeduc = () => {
                             color="primary"
                             showFirstButton
                             showLastButton
+                            sx={{
+                                "& .MuiPaginationItem-root": {
+                                    "&.Mui-selected": {
+                                        backgroundColor: color.primary,
+                                        color: color.white
+                                    }
+                                }
+                            }}
                         />
                     </Box>
                 )}
 
-                {/* Tabla con encabezado segmentado */}
                 <TableContainer sx={{ maxHeight: 600, overflow: 'auto' }}>
                     <Table stickyHeader size="small">
                         <TableHead>
-                            {/* Fila 1: Categorías */}
                             <TableRow>
-                                <TableCell rowSpan={3} sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", minWidth: 120 }}>Periodo</TableCell>
-                                <TableCell rowSpan={3} sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5", minWidth: 150 }}>Departamento</TableCell>
+                                <TableCell rowSpan={3} sx={{ fontWeight: "bold", backgroundColor: color.primary, color: color.white, minWidth: 120 }}>
+                                    Periodo
+                                </TableCell>
+                                <TableCell rowSpan={3} sx={{ fontWeight: "bold", backgroundColor: color.primary, color: color.white, minWidth: 150 }}>
+                                    Departamento
+                                </TableCell>
 
                                 {Object.keys(estructuraColumnas).map(categoria => (
                                     <TableCell
                                         key={categoria}
                                         colSpan={Object.values(estructuraColumnas[categoria]).reduce((total, nivel) => total + nivel.length, 0)}
-                                        sx={{ fontWeight: "bold", backgroundColor: "#e3f2fd", textAlign: "center" }}
+                                        sx={{ fontWeight: "bold", backgroundColor: color.primary, color: color.white, textAlign: "center" }}
                                     >
                                         {categoria}
                                     </TableCell>
                                 ))}
                             </TableRow>
 
-                            {/* Fila 2: Niveles */}
                             <TableRow>
                                 {Object.keys(estructuraColumnas).map(categoria =>
                                     Object.keys(estructuraColumnas[categoria]).map(nivel => (
                                         <TableCell
                                             key={`${categoria}-${nivel}`}
                                             colSpan={estructuraColumnas[categoria][nivel].length}
-                                            sx={{ fontWeight: "bold", backgroundColor: "#f3e5f5", textAlign: "center" }}
+                                            sx={{ fontWeight: "bold", backgroundColor: color.secondary, color: color.white, textAlign: "center" }}
                                         >
                                             {nivel === "Prebasica" ? "Prebásica" : nivel === "Basica" ? "Básica" : nivel}
                                         </TableCell>
@@ -1736,14 +1648,13 @@ const ReportesSeduc = () => {
                                 )}
                             </TableRow>
 
-                            {/* Fila 3: Sexos */}
                             <TableRow>
                                 {Object.keys(estructuraColumnas).map(categoria =>
                                     Object.keys(estructuraColumnas[categoria]).map(nivel =>
                                         estructuraColumnas[categoria][nivel].map(({ columna, sexo }) => (
                                             <TableCell
                                                 key={columna}
-                                                sx={{ fontWeight: "bold", backgroundColor: "#f8f8f8", textAlign: "center" }}
+                                                sx={{ fontWeight: "bold", backgroundColor: color.third, color: color.white, textAlign: "center" }}
                                             >
                                                 {sexo}
                                             </TableCell>
@@ -1776,16 +1687,15 @@ const ReportesSeduc = () => {
 
                 {filteredDataNiveles.length === 0 && (
                     <Box textAlign="center" py={4}>
-                        <Typography variant="h6" color="text.secondary">
+                        <Typography variant="h6" sx={{ color: color.contrastText }}>
                             No se encontraron resultados con los filtros aplicados
                         </Typography>
                     </Box>
                 )}
 
-                {/* Paginación inferior */}
                 {filteredDataNiveles.length > 0 && totalPages > 1 && (
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2 }}>
-                        <Typography variant="body2" color="text.secondary">
+                        <Typography variant="body2" sx={{ color: color.contrastText }}>
                             Mostrando {((page - 1) * rowsPerPage) + 1}-{Math.min(page * rowsPerPage, filteredDataNiveles.length)} de {filteredDataNiveles.length} registros
                         </Typography>
 
@@ -1796,6 +1706,14 @@ const ReportesSeduc = () => {
                             color="primary"
                             showFirstButton
                             showLastButton
+                            sx={{
+                                "& .MuiPaginationItem-root": {
+                                    "&.Mui-selected": {
+                                        backgroundColor: color.primary,
+                                        color: color.white
+                                    }
+                                }
+                            }}
                         />
 
                         <Box sx={{ display: "flex", gap: 1 }}>
@@ -1804,6 +1722,7 @@ const ReportesSeduc = () => {
                                 disabled={page === 1}
                                 onClick={() => setPage(page - 1)}
                                 startIcon={<ChevronLeft />}
+                                sx={{ color: color.primary }}
                             >
                                 Anterior
                             </Button>
@@ -1812,6 +1731,7 @@ const ReportesSeduc = () => {
                                 disabled={page === totalPages}
                                 onClick={() => setPage(page + 1)}
                                 endIcon={<ChevronRight />}
+                                sx={{ color: color.primary }}
                             >
                                 Siguiente
                             </Button>
@@ -1822,7 +1742,6 @@ const ReportesSeduc = () => {
         );
     };
 
-    // Renderizar vista para reportes normales
     const renderReporteNormal = () => {
         const config = getConfigReporte();
         const columnasAMostrar = config.columnasBase;
@@ -1830,7 +1749,7 @@ const ReportesSeduc = () => {
         if (loading) {
             return (
                 <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-                    <CircularProgress />
+                    <CircularProgress sx={{ color: color.primary }} />
                 </Box>
             );
         }
@@ -1844,10 +1763,7 @@ const ReportesSeduc = () => {
         }
 
         return (
-
             <>
-                {/* 🔹 Encabezado con botón volver y título */}
-
                 <Tooltip title="Volver">
                     <IconButton
                         aria-label="Volver"
@@ -1856,8 +1772,9 @@ const ReportesSeduc = () => {
                             setData([]);
                             setFilters({});
                         }}
+                        sx={{ color: color.secondary }}
                     >
-                        <ArrowCircleLeftOutlined sx={{ fontSize: 40, color: "red" }} />
+                        <ArrowCircleLeftOutlined sx={{ fontSize: 40 }} />
                     </IconButton>
                 </Tooltip>
 
@@ -1866,7 +1783,7 @@ const ReportesSeduc = () => {
                     component="h1"
                     sx={{
                         fontWeight: "bold",
-                        color: color.white,
+                        color: color.primary,
                         textAlign: "center",
                         wordWrap: "break-word",
                         mb: 2
@@ -1875,17 +1792,16 @@ const ReportesSeduc = () => {
                     {config.titulo}
                 </Typography>
 
-                {/* 🔹 Filtros */}
-                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f1f1f1ff" }}>
+                <Paper sx={{ p: 2, mb: 2, backgroundColor: "#f5f5f5", borderRadius: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                        <FilterList sx={{ mr: 1 }} />
-                        <Typography variant="h6">Filtros</Typography>
+                        <FilterList sx={{ mr: 1, color: color.primary }} />
+                        <Typography variant="h6" sx={{ color: color.primary }}>Filtros</Typography>
 
                         {activeFiltersCount > 0 && (
                             <Chip
                                 label={`${activeFiltersCount} activos`}
                                 size="small"
-                                sx={{ ml: 1 }}
+                                sx={{ ml: 1, backgroundColor: color.secondary, color: color.white }}
                                 onDelete={clearFilters}
                             />
                         )}
@@ -1894,24 +1810,18 @@ const ReportesSeduc = () => {
                     <Grid container spacing={2}>{renderFiltros()}</Grid>
                 </Paper>
 
-                {/* 🔹 Contenedor del botón de descarga */}
                 <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 2 }}>
                     <Button
                         variant="contained"
                         startIcon={<Download />}
                         onClick={downloadExcel}
-                        sx={{
-                            backgroundColor: color.white,
-                            "&:hover": { backgroundColor: "#ff0000ff" },
-                        }}
+                        sx={{ backgroundColor: color.secondary, "&:hover": { backgroundColor: color.primary } }}
                     >
                         Descargar Excel
                     </Button>
                 </Box>
 
-                {/* 🔹 Tabla con controles */}
-                <Paper sx={{ p: 3 }}>
-                    {/* Controles superiores */}
+                <Paper sx={{ p: 3, borderRadius: 2, backgroundColor: color.white }}>
                     <Box
                         sx={{
                             display: "flex",
@@ -1922,12 +1832,12 @@ const ReportesSeduc = () => {
                             mb: 2,
                         }}
                     >
-                        <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                        <Typography variant="body2" sx={{ color: color.contrastText }}>
                             Mostrando {dataToUse.length} registros • Página {page} de {totalPages}
                         </Typography>
 
                         <FormControl variant="standard" size="small" sx={{ minWidth: 120 }}>
-                            <InputLabel>Filas por página</InputLabel>
+                            <InputLabel sx={{ color: color.contrastText }}>Filas por página</InputLabel>
                             <Select
                                 value={rowsPerPage}
                                 onChange={(e) => {
@@ -1935,6 +1845,12 @@ const ReportesSeduc = () => {
                                     setPage(1);
                                 }}
                                 label="Filas por página"
+                                sx={{
+                                    "& .MuiOutlinedInput-root": {
+                                        "&:hover fieldset": { borderColor: color.primary },
+                                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                                    }
+                                }}
                             >
                                 {[10, 25, 50, 100, 200].map((num) => (
                                     <MenuItem key={num} value={num}>
@@ -1945,7 +1861,6 @@ const ReportesSeduc = () => {
                         </FormControl>
                     </Box>
 
-                    {/* Paginación superior */}
                     {totalPages > 1 && (
                         <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
                             <Pagination
@@ -1955,11 +1870,18 @@ const ReportesSeduc = () => {
                                 color="primary"
                                 showFirstButton
                                 showLastButton
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        "&.Mui-selected": {
+                                            backgroundColor: color.primary,
+                                            color: color.white
+                                        }
+                                    }
+                                }}
                             />
                         </Box>
                     )}
 
-                    {/* Tabla */}
                     <TableContainer sx={{ maxHeight: 600, overflow: "auto" }}>
                         <Table stickyHeader size="small">
                             <TableHead>
@@ -1967,7 +1889,7 @@ const ReportesSeduc = () => {
                                     {columnasAMostrar.map((columna) => (
                                         <TableCell
                                             key={columna}
-                                            sx={{ fontWeight: "bold", backgroundColor: "#f5f5f5" }}
+                                            sx={{ fontWeight: "bold", backgroundColor: color.primary, color: color.white }}
                                         >
                                             {getEncabezado(columna)}
                                         </TableCell>
@@ -1984,7 +1906,7 @@ const ReportesSeduc = () => {
                                                 valor === null || valor === undefined
                                                     ? "-"
                                                     : esTasa
-                                                        ? `${(valor * 100).toFixed(2)} %`  // convierte 0.85 → 85.00 %
+                                                        ? `${(valor * 100).toFixed(2)} %`
                                                         : valor;
 
                                             return (
@@ -1996,19 +1918,17 @@ const ReportesSeduc = () => {
                                     </TableRow>
                                 ))}
                             </TableBody>
-
                         </Table>
                     </TableContainer>
 
                     {dataToUse.length === 0 && (
                         <Box textAlign="center" py={4}>
-                            <Typography variant="h6" color="text.secondary">
+                            <Typography variant="h6" sx={{ color: color.contrastText }}>
                                 No se encontraron resultados con los filtros aplicados
                             </Typography>
                         </Box>
                     )}
 
-                    {/* Paginación inferior */}
                     {dataToUse.length > 0 && totalPages > 1 && (
                         <Box
                             sx={{
@@ -2020,7 +1940,7 @@ const ReportesSeduc = () => {
                                 gap: 2,
                             }}
                         >
-                            <Typography variant="body2" color="text.secondary">
+                            <Typography variant="body2" sx={{ color: color.contrastText }}>
                                 Mostrando {((page - 1) * rowsPerPage) + 1}-
                                 {Math.min(page * rowsPerPage, dataToUse.length)} de{" "}
                                 {dataToUse.length} registros
@@ -2033,6 +1953,14 @@ const ReportesSeduc = () => {
                                 color="primary"
                                 showFirstButton
                                 showLastButton
+                                sx={{
+                                    "& .MuiPaginationItem-root": {
+                                        "&.Mui-selected": {
+                                            backgroundColor: color.primary,
+                                            color: color.white
+                                        }
+                                    }
+                                }}
                             />
 
                             <Box sx={{ display: "flex", gap: 1 }}>
@@ -2041,6 +1969,7 @@ const ReportesSeduc = () => {
                                     disabled={page === 1}
                                     onClick={() => setPage(page - 1)}
                                     startIcon={<ChevronLeft />}
+                                    sx={{ color: color.primary }}
                                 >
                                     Anterior
                                 </Button>
@@ -2049,6 +1978,7 @@ const ReportesSeduc = () => {
                                     disabled={page === totalPages}
                                     onClick={() => setPage(page + 1)}
                                     endIcon={<ChevronRight />}
+                                    sx={{ color: color.primary }}
                                 >
                                     Siguiente
                                 </Button>
@@ -2057,27 +1987,23 @@ const ReportesSeduc = () => {
                     )}
                 </Paper>
             </>
-
         );
     };
 
-
     const tienePermiso = (idmodulo) => permissions?.find(p => p.idmodulo === idmodulo)?.consultar;
+
     return (
         <>
             {tienePermiso(1) && (
-                <Paper sx={{ p: 3, background: "#f5f7fa", boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
-
-                    {/* Selección de Reporte */}
+                <Paper sx={{ p: 3, backgroundColor: "#f5f7fa", borderRadius: 2, boxShadow: "0px 4px 20px rgba(0,0,0,0.08)" }}>
                     {!reporteSeleccionado && (
                         <Box
                             sx={{
                                 p: 3,
-
                                 display: "flex",
-                                justifyContent: "center",   // centra horizontalmente
-                                alignItems: "center",       // centra verticalmente
-                                minHeight: "70vh",          // altura mínima para centrar verticalmente
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: "70vh",
                             }}
                         >
                             <Grid container spacing={2} justifyContent="center">
@@ -2088,13 +2014,15 @@ const ReportesSeduc = () => {
                                                 cursor: "pointer",
                                                 borderRadius: 2,
                                                 transition: "all 0.3s",
-                                                backgroundColor: "#fff",
+                                                backgroundColor: color.white,
                                                 width: 250,
                                                 height: 250,
+                                                border: `1px solid ${color.primary}20`,
                                                 "&:hover": {
                                                     transform: "translateY(-5px)",
-                                                    backgroundColor: color.white,
-                                                    color: "#fff"
+                                                    backgroundColor: color.primary,
+                                                    color: color.white,
+                                                    boxShadow: "0px 8px 25px rgba(0,0,0,0.15)"
                                                 }
                                             }}
                                             onClick={() => setReporteSeleccionado(reporte.value)}
@@ -2109,15 +2037,13 @@ const ReportesSeduc = () => {
                                                     textAlign: "center",
                                                 }}
                                             >
-
-                                                <Typography variant="h6" component="div" gutterBottom >
+                                                <Typography variant="h6" component="div" gutterBottom sx={{ fontWeight: "bold" }}>
                                                     {reporte.label}
                                                 </Typography>
-                                                <Typography variant="body2" color="text.secondary">
+                                                <Typography variant="body2" sx={{ color: "inherit" }}>
                                                     Generar reporte
                                                 </Typography>
                                             </CardContent>
-
                                         </Card>
                                     </Grid>
                                 ))}
@@ -2125,10 +2051,7 @@ const ReportesSeduc = () => {
                         </Box>
                     )}
 
-                    {/* Vista del Reporte de Niveles Académicos */}
                     {reporteSeleccionado === "niveles" && renderNivelesAcademicos()}
-
-                    {/* Vista para otros reportes */}
                     {reporteSeleccionado && reporteSeleccionado !== "niveles" && renderReporteNormal()}
                 </Paper>
             )}

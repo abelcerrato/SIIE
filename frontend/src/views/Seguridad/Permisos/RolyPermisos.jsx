@@ -53,14 +53,11 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     }
   }, [user]);
 
-
-  // Obtener módulos
   useEffect(() => {
     const fetchModulos = async () => {
       try {
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/modulos`);
 
-        // Inicializar permisos si es creación
         if (!rolId) {
           setFormData((prev) => ({
             ...prev,
@@ -80,12 +77,10 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     fetchModulos();
   }, [rolId]);
 
-
   useEffect(() => {
     const initForm = async () => {
       if (!user) return;
       if (rolId) {
-        // Edición: traer datos del rol
         try {
           const res = await axios.get(`${process.env.REACT_APP_API_URL}/permiso/${rolId}`);
           const permissionsArray = res.data;
@@ -125,7 +120,6 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
           console.error("Error al obtener rol:", err);
         }
       } else {
-        // Creación: resetear campos y permisos
         try {
           const res = await axios.get(`${process.env.REACT_APP_API_URL}/modulos`);
           setFormData({
@@ -139,7 +133,6 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
               insertar: false,
               actualizar: false,
             })),
-
           });
         } catch (err) {
           console.error("Error al obtener módulos:", err);
@@ -150,7 +143,6 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     initForm();
   }, [rolId, user]);
 
-  // Manejo de cambios
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -209,7 +201,6 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
     }));
   };
 
-  // Guardar rol
   const handleSave = async () => {
     try {
       const permisosFormateados = formData.permisos.reduce((acc, p) => {
@@ -224,7 +215,6 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
         permisos: permisosFormateados,
         ...(rolId ? { modificadopor: user?.id || 0, idrol: rolId } : { creadopor: user?.id || 0 }),
       };
-
 
       if (rolId) {
         await axios.put(`${process.env.REACT_APP_API_URL}/permisos`, dataToSend);
@@ -243,29 +233,65 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-      <DialogTitle>
-        <Grid container justifyContent="space-between">
-          {rolId ? "Editar Rol" : "Nuevo Rol"}
-          <Button onClick={onClose} sx={{ color: "red", minWidth: "auto" }} startIcon={<CloseIcon />} />
+      <DialogTitle sx={{ backgroundColor: color.primary, color: color.white }}>
+        <Grid container justifyContent="space-between" alignItems="center">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            {rolId ? "Editar Rol" : "Nuevo Rol"}
+          </Typography>
+          <Button onClick={onClose} sx={{ color: color.white, minWidth: "auto" }} startIcon={<CloseIcon />} />
         </Grid>
       </DialogTitle>
-      <DialogContent>
-
-        <Grid container spacing={2} sx={{ mt: 1 }}>
+      <DialogContent sx={{ p: 3 }}>
+        <Grid container spacing={3} sx={{ mt: 1 }}>
           <Grid size={{ xs: 12, md: 3 }}>
-            <Grid container spacing={2} mt={19}>
+            <Grid container spacing={2}>
               <Grid size={{ xs: 12, md: 12 }}>
-                <TextField label="Rol" name="rol" value={formData.rol} onChange={handleChange} fullWidth />
+                <TextField 
+                  label="Rol" 
+                  name="rol" 
+                  value={formData.rol} 
+                  onChange={handleChange} 
+                  fullWidth 
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": { borderColor: color.primary },
+                      "&.Mui-focused fieldset": { borderColor: color.primary }
+                    }
+                  }}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 12 }}>
-                <TextField label="Descripción" name="descripcion" value={formData.descripcion} onChange={handleChange} fullWidth
+                <TextField 
+                  label="Descripción" 
+                  name="descripcion" 
+                  value={formData.descripcion} 
+                  onChange={handleChange} 
+                  fullWidth
                   multiline
-                  rows={3} />
+                  rows={3}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&:hover fieldset": { borderColor: color.primary },
+                      "&.Mui-focused fieldset": { borderColor: color.primary }
+                    }
+                  }}
+                />
               </Grid>
               <Grid size={{ xs: 12, md: 12 }}>
                 <FormControl fullWidth>
-                  <InputLabel>Estado</InputLabel>
-                  <Select label="Estado" name="estado" value={formData.estado} onChange={handleChange}>
+                  <InputLabel sx={{ color: color.contrastText }}>Estado</InputLabel>
+                  <Select 
+                    label="Estado" 
+                    name="estado" 
+                    value={formData.estado} 
+                    onChange={handleChange}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "&:hover fieldset": { borderColor: color.primary },
+                        "&.Mui-focused fieldset": { borderColor: color.primary }
+                      }
+                    }}
+                  >
                     <MenuItem value={true}>Activo</MenuItem>
                     <MenuItem value={false}>Inactivo</MenuItem>
                   </Select>
@@ -274,43 +300,100 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
             </Grid>
           </Grid>
           <Grid size={{ xs: 12, md: 9 }}>
-
-
-
             <Box sx={{ mb: 2, display: "flex", gap: 2, flexWrap: "wrap" }}>
-
-
-              <Button variant="text" onClick={handleToggleAllPermissions} startIcon={allPermissionsActive() ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsActive() ? "red" : color.white }}>
+              <Button 
+                variant="outlined" 
+                onClick={handleToggleAllPermissions} 
+                startIcon={allPermissionsActive() ? <CancelIcon /> : <CheckCircleIcon />} 
+                sx={{ 
+                  borderColor: allPermissionsActive() ? color.secondary : color.primary,
+                  color: allPermissionsActive() ? color.secondary : color.primary,
+                  "&:hover": { 
+                    backgroundColor: allPermissionsActive() ? `${color.secondary}15` : `${color.primary}15`,
+                    borderColor: allPermissionsActive() ? color.secondary : color.primary
+                  }
+                }}
+              >
                 {allPermissionsActive() ? "Desactivar Todos" : "Activar Todos"}
               </Button>
               {["consultar", "insertar", "actualizar"].map(tipo => (
-                <Button key={tipo} variant="text" onClick={() => handleTogglePermissionType(tipo)} startIcon={allPermissionsOfTypeActive(tipo) ? <CancelIcon /> : <CheckCircleIcon />} sx={{ color: allPermissionsOfTypeActive(tipo) ? "red" : color.white }}>
+                <Button 
+                  key={tipo} 
+                  variant="outlined" 
+                  onClick={() => handleTogglePermissionType(tipo)} 
+                  startIcon={allPermissionsOfTypeActive(tipo) ? <CancelIcon /> : <CheckCircleIcon />} 
+                  sx={{ 
+                    borderColor: allPermissionsOfTypeActive(tipo) ? color.secondary : color.primary,
+                    color: allPermissionsOfTypeActive(tipo) ? color.secondary : color.primary,
+                    "&:hover": { 
+                      backgroundColor: allPermissionsOfTypeActive(tipo) ? `${color.secondary}15` : `${color.primary}15`,
+                      borderColor: allPermissionsOfTypeActive(tipo) ? color.secondary : color.primary
+                    }
+                  }}
+                >
                   {allPermissionsOfTypeActive(tipo) ? `Desactivar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}` : `Activar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`}
                 </Button>
               ))}
             </Box>
 
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: "hidden" }}>
               <Table>
                 <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: "bold" }}>Módulo</TableCell>
-                    <TableCell align="center" sx={{ fontWeight: "bold" }}>Todo</TableCell>
-                    <TableCell align="center" sx={{ fontWeight: "bold" }}>Consultar</TableCell>
-                    <TableCell align="center" sx={{ fontWeight: "bold" }}>Insertar</TableCell>
-                    <TableCell align="center" sx={{ fontWeight: "bold" }}>Actualizar</TableCell>
+                  <TableRow sx={{ backgroundColor: color.primary }}>
+                    <TableCell sx={{ fontWeight: "bold", color: color.white }}>Módulo</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: "bold", color: color.white }}>Todo</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: "bold", color: color.white }}>Consultar</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: "bold", color: color.white }}>Insertar</TableCell>
+                    <TableCell align="center" sx={{ fontWeight: "bold", color: color.white }}>Actualizar</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {formData.permisos.map((permiso) => {
                     const allModuleActive = permiso.consultar && permiso.insertar && permiso.actualizar;
                     return (
-                      <TableRow key={permiso.idmodulo}>
+                      <TableRow key={permiso.idmodulo} hover>
                         <TableCell>{permiso.modulo}</TableCell>
-                        <TableCell align="center"><Checkbox checked={allModuleActive} onChange={() => handleToggleModule(permiso.idmodulo)} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.consultar} onChange={() => handlePermissionChange(permiso.idmodulo, "consultar")} disabled={permiso.insertar || permiso.actualizar} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.insertar} onChange={() => handlePermissionChange(permiso.idmodulo, "insertar")} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
-                        <TableCell align="center"><Checkbox checked={permiso.actualizar} onChange={() => handlePermissionChange(permiso.idmodulo, "actualizar")} sx={{ "&.Mui-checked": { color: color.white } }} /></TableCell>
+                        <TableCell align="center">
+                          <Checkbox 
+                            checked={allModuleActive} 
+                            onChange={() => handleToggleModule(permiso.idmodulo)} 
+                            sx={{ 
+                              "&.Mui-checked": { color: color.primary },
+                              "&:hover": { backgroundColor: `${color.primary}15` }
+                            }} 
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Checkbox 
+                            checked={permiso.consultar} 
+                            onChange={() => handlePermissionChange(permiso.idmodulo, "consultar")} 
+                            disabled={permiso.insertar || permiso.actualizar}
+                            sx={{ 
+                              "&.Mui-checked": { color: color.primary },
+                              "&:hover": { backgroundColor: `${color.primary}15` }
+                            }} 
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Checkbox 
+                            checked={permiso.insertar} 
+                            onChange={() => handlePermissionChange(permiso.idmodulo, "insertar")} 
+                            sx={{ 
+                              "&.Mui-checked": { color: color.primary },
+                              "&:hover": { backgroundColor: `${color.primary}15` }
+                            }} 
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Checkbox 
+                            checked={permiso.actualizar} 
+                            onChange={() => handlePermissionChange(permiso.idmodulo, "actualizar")} 
+                            sx={{ 
+                              "&.Mui-checked": { color: color.primary },
+                              "&:hover": { backgroundColor: `${color.primary}15` }
+                            }} 
+                          />
+                        </TableCell>
                       </TableRow>
                     )
                   })}
@@ -319,15 +402,32 @@ export default function ModalRol({ open, onClose, rolId, onSaved }) {
             </TableContainer>
           </Grid>
         </Grid>
-
-
       </DialogContent>
 
-      <DialogActions>
-        <Button variant="contained" startIcon={<SaveIcon />} onClick={handleSave} sx={{ backgroundColor: color.white }}>
+      <DialogActions sx={{ p: 3, gap: 2 }}>
+        <Button 
+          variant="contained" 
+          startIcon={<SaveIcon />} 
+          onClick={handleSave} 
+          sx={{ 
+            backgroundColor: color.primary, 
+            color: color.white,
+            "&:hover": { backgroundColor: color.primary + "CC" }
+          }}
+        >
           Guardar
         </Button>
-
+        <Button 
+          variant="outlined" 
+          onClick={onClose} 
+          sx={{ 
+            borderColor: color.secondary, 
+            color: color.secondary,
+            "&:hover": { backgroundColor: `${color.secondary}15`, borderColor: color.secondary }
+          }}
+        >
+          Cancelar
+        </Button>
       </DialogActions>
     </Dialog>
   );
