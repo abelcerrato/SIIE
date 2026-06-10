@@ -436,7 +436,7 @@ const BaseTableroInicio = () => {
                 <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 2 }}>
                   <MapIcon sx={{ color: color.primary }} />
                   <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>
-                    {filtros.departamento !== "Todos" ? "Por Municipio" : "Por Departamento"}
+                  Por Departamento
                   </Typography>
                 </Stack>
                 <Tooltip title="Mapa de totales por departamento">

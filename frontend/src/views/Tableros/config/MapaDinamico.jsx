@@ -19,8 +19,8 @@ const MapaDinamico = ({
   esMetricaDocente,
   modoSimple = false,
   selectedDimension,
-  formatValue, // NUEVA PROP: función para formatear el valor (para modo Tasa)
-  isTasaMode = false, // NUEVA PROP: indica si estamos en modo Tasa
+  formatValue,
+  isTasaMode = false,
 }) => {
   const svgRef = useRef();
   const containerRef = useRef();
@@ -32,7 +32,6 @@ const MapaDinamico = ({
     y: 0,
   });
 
-  // Función para formatear el valor (usa la prop formatValue si existe)
   const formatearValor = (valor) => {
     if (formatValue) {
       return formatValue(valor);
@@ -46,31 +45,25 @@ const MapaDinamico = ({
   useEffect(() => {
     if (!dimensions.width || !dimensions.height) return;
 
-    // Determinar qué mapa cargar
     let mapaActual;
     let objetoMapa;
 
-    // Para dimensiones que requieren mapa por región (usar mapa de Honduras)
     if (selectedDimension === "region" || selectedDimension === "modoFormacion" || selectedDimension === "sectorEconomico" || selectedDimension === "programa" || selectedDimension === "centroFormacion") {
       mapaActual = obtenerMapa("Todos");
       objetoMapa = obtenerObjetoMapa(mapaActual, "Todos");
     }
-    // Para centros educativos, siempre mostrar mapa de departamentos
     else if (esCentroEducativo || esServiciosBasicos) {
       mapaActual = obtenerMapa("Todos");
       objetoMapa = obtenerObjetoMapa(mapaActual, "Todos");
     }
-    // Si hay municipio seleccionado, mostrar el mapa del departamento
     else if (filtroMunicipio && filtroMunicipio !== "Todos") {
       mapaActual = obtenerMapa(filtroDepartamento);
       objetoMapa = obtenerObjetoMapa(mapaActual, filtroDepartamento);
     }
-    // Si hay departamento seleccionado, mostrar mapa de municipios
     else if (filtroDepartamento && filtroDepartamento !== "Todos") {
       mapaActual = obtenerMapa(filtroDepartamento);
       objetoMapa = obtenerObjetoMapa(mapaActual, filtroDepartamento);
     }
-    // Mostrar mapa de departamentos
     else {
       mapaActual = obtenerMapa("Todos");
       objetoMapa = obtenerObjetoMapa(mapaActual, "Todos");
@@ -92,11 +85,9 @@ const MapaDinamico = ({
         .fitSize([dimensions.width, dimensions.height], geoData);
       const path = d3.geoPath().projection(projection);
 
-      // Función para obtener el valor de datos
       const obtenerValor = (nombreDepartamento) => {
         if (!nombreDepartamento) return 0;
         
-        // Para dimensiones que usan región, buscar por región
         if (selectedDimension === "region" || selectedDimension === "modoFormacion" || selectedDimension === "sectorEconomico" || selectedDimension === "programa" || selectedDimension === "centroFormacion") {
           const region = obtenerRegionPorDepartamento(nombreDepartamento);
           if (region) {
@@ -106,64 +97,47 @@ const MapaDinamico = ({
           return 0;
         }
         
-        // Para modo departamento normal, buscar por nombre del departamento
         const nombreNormalizado = normalizar(nombreDepartamento);
         return datosDepto[nombreNormalizado]?.valor || 0;
       };
 
-      // Determinar si estamos en modo región
       const esModoRegion = selectedDimension === "region" || selectedDimension === "modoFormacion" || selectedDimension === "sectorEconomico" || selectedDimension === "programa" || selectedDimension === "centroFormacion";
-      
-      // Verificar si hay un filtro de región seleccionado
       const hayFiltroRegion = filtroDepartamento && filtroDepartamento !== "Todos" && esModoRegion;
 
-// Función para obtener el color original (sin hover)
-const obtenerColorOriginal = (nombreRegion) => {
-  if (esModoRegion) {
-    const region = obtenerRegionPorDepartamento(nombreRegion);
-    const colorRegion = obtenerColorRegion(region);
-    
-    // Si hay un filtro de región seleccionado
-    if (hayFiltroRegion) {
-      const esRegionSeleccionada = region === filtroDepartamento;
-      if (esRegionSeleccionada) {
-        // Región seleccionada: mostrar su color
-        return colorRegion;
-      } else {
-        // Otras regiones: gris
-        return "#e0e0e0";
-      }
-    }
-    
-    // Sin filtro: mostrar color de región
-    return colorRegion;
-  }
-  
-  // Modo departamento normal
-  const tieneDatos = obtenerValor(nombreRegion) > 0;
-  
-  // Si estamos en mapa de municipios (hay filtro de municipio o departamento con municipios)
-  if (filtroMunicipio && filtroMunicipio !== "Todos") {
-    // Mapa de municipios: solo colorear el municipio seleccionado si tiene datos
-    const esMunicipioSeleccionado = normalizar(nombreRegion) === normalizar(filtroMunicipio);
-    if (esMunicipioSeleccionado) {
-      return tieneDatos ? color.primary : "#e0e0e0";
-    }
-    return "#e0e0e0";
-  }
-  
-  // Si hay departamento seleccionado pero NO municipio (vista de municipios del departamento)
-  if (filtroDepartamento && filtroDepartamento !== "Todos") {
-    // Es mapa de municipios (mostrando todos los municipios del departamento)
-    // Colorear TODOS los municipios que tengan datos
-    return tieneDatos ? color.primary : "#e0e0e0";
-  }
-  
-  // Mapa de departamentos (sin filtro o "Todos"): mostrar todos los departamentos con datos
-  return tieneDatos ? color.primary : "#e0e0e0";
-};
+      const obtenerColorOriginal = (nombreRegion) => {
+        if (esModoRegion) {
+          const region = obtenerRegionPorDepartamento(nombreRegion);
+          const colorRegion = obtenerColorRegion(region);
+          
+          if (hayFiltroRegion) {
+            const esRegionSeleccionada = region === filtroDepartamento;
+            if (esRegionSeleccionada) {
+              return colorRegion;
+            } else {
+              return "#e0e0e0";
+            }
+          }
+          
+          return colorRegion;
+        }
+        
+        const tieneDatos = obtenerValor(nombreRegion) > 0;
+        
+        if (filtroMunicipio && filtroMunicipio !== "Todos") {
+          const esMunicipioSeleccionado = normalizar(nombreRegion) === normalizar(filtroMunicipio);
+          if (esMunicipioSeleccionado) {
+            return tieneDatos ? color.primary : "#e0e0e0";
+          }
+          return "#e0e0e0";
+        }
+        
+        if (filtroDepartamento && filtroDepartamento !== "Todos") {
+          return tieneDatos ? color.primary : "#e0e0e0";
+        }
+        
+        return tieneDatos ? color.primary : "#e0e0e0";
+      };
 
-      // Dibujar el mapa
       svg
         .attr("width", dimensions.width)
         .attr("height", dimensions.height)
@@ -191,7 +165,9 @@ const obtenerColorOriginal = (nombreRegion) => {
           if (!nombreRegion && d.properties.NOMBRE_DEP) nombreRegion = d.properties.NOMBRE_DEP;
           
           const valor = obtenerValor(nombreRegion);
-          const [mouseX, mouseY] = d3.pointer(event, svgRef.current);
+          
+          // Obtener coordenadas del mouse relativas al SVG (sin viewBox)
+          const [mouseX, mouseY] = d3.pointer(event);
           
           let tooltipText = nombreRegion;
           if (esModoRegion) {
@@ -201,7 +177,6 @@ const obtenerColorOriginal = (nombreRegion) => {
             }
           }
           
-          // Cambiar color al hover - color.secondary
           d3.select(this)
             .attr("fill", color.secondary)
             .attr("stroke-width", isMobile ? 1.5 : 2.5);
@@ -219,7 +194,6 @@ const obtenerColorOriginal = (nombreRegion) => {
           if (!nombreRegion && d.properties.NOMBRE_MUN) nombreRegion = d.properties.NOMBRE_MUN;
           if (!nombreRegion && d.properties.NOMBRE_DEP) nombreRegion = d.properties.NOMBRE_DEP;
           
-          // Restaurar color original
           const originalColor = obtenerColorOriginal(nombreRegion);
           
           d3.select(this)
@@ -230,7 +204,7 @@ const obtenerColorOriginal = (nombreRegion) => {
         })
         .on("mousemove", (event) => {
           if (tooltip.visible) {
-            const [mouseX, mouseY] = d3.pointer(event, svgRef.current);
+            const [mouseX, mouseY] = d3.pointer(event);
             setTooltip((prev) => ({
               ...prev,
               x: mouseX,
@@ -239,7 +213,7 @@ const obtenerColorOriginal = (nombreRegion) => {
           }
         });
 
-      // Agregar etiquetas (solo en desktop)
+      // Resto del código de etiquetas...
       if (!isMobile) {
         const centroides = geoData.features
           .map((feature) => {
@@ -322,21 +296,56 @@ const obtenerColorOriginal = (nombreRegion) => {
     selectedDimension,
   ]);
 
-  // Calcular posición del tooltip
-  const tooltipWidth = 200;
-  const tooltipHeight = 80;
-  let left = tooltip.x + 10;
-  let top = tooltip.y - 30;
+  // Calcular posición del tooltip - AHORA usando coordenadas relativas al contenedor
+  const calcularPosicionTooltip = () => {
+    if (!containerRef.current || !svgRef.current) return { left: 10, top: 10 };
 
-  if (left + tooltipWidth > window.innerWidth) {
-    left = tooltip.x - tooltipWidth - 10;
-  }
-  if (top + tooltipHeight > window.innerHeight) {
-    top = tooltip.y - tooltipHeight - 10;
-  }
-  if (top < 0) {
-    top = tooltip.y + 20;
-  }
+    const tooltipWidth = 200;
+    const tooltipHeight = 80;
+    const offset = 15;
+    
+    // Obtener el rectángulo del SVG
+    const svgRect = svgRef.current.getBoundingClientRect();
+    const containerRect = containerRef.current.getBoundingClientRect();
+    
+    // tooltip.x y tooltip.y son coordenadas relativas al SVG (sin viewBox)
+    // Convertir a coordenadas absolutas del viewport
+    const absoluteX = svgRect.left + tooltip.x;
+    const absoluteY = svgRect.top + tooltip.y;
+    
+    // Convertir a coordenadas relativas al contenedor
+    let relativeX = absoluteX - containerRect.left;
+    let relativeY = absoluteY - containerRect.top;
+    
+    // Posición inicial (cerca del cursor)
+    let left = relativeX + offset;
+    let top = relativeY - tooltipHeight / 2;
+    
+    // Ajustar horizontalmente para no salirse del contenedor
+    if (left + tooltipWidth > containerRect.width) {
+      left = relativeX - tooltipWidth - offset;
+    }
+    
+    // Ajustar verticalmente para no salirse del contenedor
+    if (top + tooltipHeight > containerRect.height) {
+      top = containerRect.height - tooltipHeight - offset;
+    }
+    if (top < 0) {
+      top = offset;
+    }
+    
+    // Asegurar que no se salga por los bordes izquierdo y derecho
+    if (left < 0) {
+      left = offset;
+    }
+    if (left + tooltipWidth > containerRect.width) {
+      left = containerRect.width - tooltipWidth - offset;
+    }
+    
+    return { left, top };
+  };
+
+  const tooltipPosition = tooltip.visible ? calcularPosicionTooltip() : { left: 0, top: 0 };
 
   return (
     <Box
@@ -357,8 +366,8 @@ const obtenerColorOriginal = (nombreRegion) => {
         <Box
           sx={{
             position: "absolute",
-            left: left,
-            top: top,
+            left: tooltipPosition.left,
+            top: tooltipPosition.top,
             background: `linear-gradient(135deg, ${color.white} 0%, #f5f5f5 100%)`,
             p: { xs: 1, sm: 1.5 },
             borderRadius: 2,
@@ -370,6 +379,7 @@ const obtenerColorOriginal = (nombreRegion) => {
             zIndex: 1000,
             whiteSpace: "normal",
             wordWrap: "break-word",
+            transition: "all 0.1s ease",
           }}
         >
           <Typography

@@ -1470,17 +1470,27 @@ const BaseTablero = ({ titulo }) => {
     loadData();
   }, [selectedMetric]);
 
+
+  // ==================== MEDIR DIMENSIONES DEL MAPA ====================
   useEffect(() => {
     const updateDimensions = () => {
       const container = document.getElementById("map-container");
       if (container) {
         const w = container.clientWidth;
+
+        const calculatedHeight = isMobile
+          ? Math.max(300, w * 0.7)
+          : isTablet
+            ? Math.min(500, Math.max(350, w * 0.6))
+            : Math.min(700, Math.max(500, w * 0.55)); 
+
         setDimensions({
           width: w,
-          height: isMobile ? w * 0.5 : isTablet ? 500 : 600,
+          height: calculatedHeight,
         });
       }
     };
+
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
@@ -1644,53 +1654,53 @@ const BaseTablero = ({ titulo }) => {
     loadIndicadores();
   }, [selectedMetric]);
 
-const datosGenero = useMemo(() => {
-  // Siempre inicializar ambos géneros con 0
-  const agrupado = { Femenino: 0, Masculino: 0 };
+  const datosGenero = useMemo(() => {
+    // Siempre inicializar ambos géneros con 0
+    const agrupado = { Femenino: 0, Masculino: 0 };
 
-  // Usar data (datos originales) en lugar de filteredData
-  // para evitar el filtro de género
-  let datos = data;
-  
-  // Aplicar filtros que NO sean de género
-  const datosFiltrados = datos.filter((d) => {
-    const cumpleAnio = filtros.anio === "Todos" || d.anio === filtros.anio || d.periodo === filtros.anio;
-    const cumpleDepto = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-    const cumpleMunicipio = filtros.municipio === "Todos" || normalizar(d.municipio) === normalizar(filtros.municipio);
-    const cumpleZona = filtros.zona === "Todos" || d.zona === filtros.zona;
-    const cumpleAdmin = filtros.administracion === "Todos" || d.administracion === filtros.administracion;
-    
-    let nivelData = "";
-    const nivelOriginal = d.niveleducativo?.toUpperCase() || "";
-    if (nivelOriginal.includes("PREBASICA")) nivelData = "Prebásica";
-    else if (nivelOriginal.includes("BÁSICA") || nivelOriginal.includes("BASICA")) nivelData = "Básica";
-    else if (nivelOriginal.includes("MEDIA")) nivelData = "Media";
-    const cumpleNivel = filtros.nivel === "Todos" || nivelData === filtros.nivel;
-    
-    return cumpleAnio && cumpleDepto && cumpleMunicipio && cumpleZona && cumpleAdmin && cumpleNivel;
-  });
+    // Usar data (datos originales) en lugar de filteredData
+    // para evitar el filtro de género
+    let datos = data;
 
-  datosFiltrados.forEach((item) => {
-    if (selectedMetric === "discapacidad") {
-      agrupado.Femenino += item.NiñasConDiscapacidad || 0;
-      agrupado.Masculino += item.NiñosConDiscapacidad || 0;
-    } else if (selectedMetric === "docentes") {
-      if (item.genero === "Femenino") {
-        agrupado.Femenino += item.docentes || 0;
-      } else if (item.genero === "Masculino") {
-        agrupado.Masculino += item.docentes || 0;
+    // Aplicar filtros que NO sean de género
+    const datosFiltrados = datos.filter((d) => {
+      const cumpleAnio = filtros.anio === "Todos" || d.anio === filtros.anio || d.periodo === filtros.anio;
+      const cumpleDepto = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
+      const cumpleMunicipio = filtros.municipio === "Todos" || normalizar(d.municipio) === normalizar(filtros.municipio);
+      const cumpleZona = filtros.zona === "Todos" || d.zona === filtros.zona;
+      const cumpleAdmin = filtros.administracion === "Todos" || d.administracion === filtros.administracion;
+
+      let nivelData = "";
+      const nivelOriginal = d.niveleducativo?.toUpperCase() || "";
+      if (nivelOriginal.includes("PREBASICA")) nivelData = "Prebásica";
+      else if (nivelOriginal.includes("BÁSICA") || nivelOriginal.includes("BASICA")) nivelData = "Básica";
+      else if (nivelOriginal.includes("MEDIA")) nivelData = "Media";
+      const cumpleNivel = filtros.nivel === "Todos" || nivelData === filtros.nivel;
+
+      return cumpleAnio && cumpleDepto && cumpleMunicipio && cumpleZona && cumpleAdmin && cumpleNivel;
+    });
+
+    datosFiltrados.forEach((item) => {
+      if (selectedMetric === "discapacidad") {
+        agrupado.Femenino += item.NiñasConDiscapacidad || 0;
+        agrupado.Masculino += item.NiñosConDiscapacidad || 0;
+      } else if (selectedMetric === "docentes") {
+        if (item.genero === "Femenino") {
+          agrupado.Femenino += item.docentes || 0;
+        } else if (item.genero === "Masculino") {
+          agrupado.Masculino += item.docentes || 0;
+        }
+      } else if (item.genero === "Femenino" || item.genero === "Masculino") {
+        agrupado[item.genero] += item[selectedMetric] || 0;
       }
-    } else if (item.genero === "Femenino" || item.genero === "Masculino") {
-      agrupado[item.genero] += item[selectedMetric] || 0;
-    }
-  });
+    });
 
-  // Siempre devolver ambos géneros
-  return [
-    { name: "Femenino", value: agrupado.Femenino },
-    { name: "Masculino", value: agrupado.Masculino },
-  ];
-}, [data, filtros, selectedMetric]);
+    // Siempre devolver ambos géneros
+    return [
+      { name: "Femenino", value: agrupado.Femenino },
+      { name: "Masculino", value: agrupado.Masculino },
+    ];
+  }, [data, filtros, selectedMetric]);
 
   const datosAdministracion = useMemo(() => {
     const agrupado = {};
@@ -2116,16 +2126,28 @@ const datosGenero = useMemo(() => {
                 sx={{
                   position: "relative",
                   overflow: "visible",
-                  height: "885px",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: { xs: "auto", md: "885px" }, // Altura fija solo en desktop
                 }}
               >
-                <StyledCardContent sx={{ position: "relative" }}>
+                <StyledCardContent
+                  sx={{
+                    position: "relative",
+                    display: "flex",
+                    flexDirection: "column",
+                    flex: 1,
+                    p: { xs: 2, sm: 3 },
+                    height: "100%",
+                  }}
+                >
+                  {/* Título */}
                   <Stack
                     direction="row"
                     alignItems="center"
                     justifyContent="center"
                     spacing={1}
-                    sx={{ mb: 2 }}
+                    sx={{ mb: 2, flexShrink: 0 }}
                   >
                     <MapIcon sx={{ color: color.primary }} />
                     <Typography
@@ -2141,148 +2163,161 @@ const datosGenero = useMemo(() => {
                           : "Por Departamento"}
                     </Typography>
                   </Stack>
-                  <Box id="map-container" sx={{ width: "100%" }}>
-                    {loading ? (
-                      <Skeleton
-                        variant="rectangular"
-                        width="100%"
-                        height={dimensions.height || 700}
-                        sx={{ borderRadius: 2 }}
-                        animation="wave"
-                      />
-                    ) : !hasData ? (
-                      <EmptyState onClearFilters={handleClearAllFilters} />
-                    ) : (
-                      <MapaDinamico
-                        datosDepto={datosDepto}
-                        dimensions={dimensions}
-                        isMobile={isMobile}
-                        filtroDepartamento={filtros.departamento}
-                        filtroMunicipio={filtros.municipio}
-                        esCentroEducativo={selectedMetric === "centroeducativo"}
-                        esMetricaDocente={selectedMetric === "docentes"}
-                        modoSimple={false}
-                        esServiciosBasicos={
-                          selectedMetric === "serviciosbasicos"
-                        }
-                      />
-                    )}
-                  </Box>
-                </StyledCardContent>
-                <Box
-                  sx={{
-                    position: "absolute",
-                    top: { xs: 50, sm: 50, md: 60, lg: 20 },
-                    left: 20,
-                    zIndex: 1300,
-                    width: {
-                      xs: "calc(100% - 40px)",
-                      sm: "100px",
-                      md: "250px",
-                    },
-                  }}
-                >
-                  {selectedMetric !== "serviciosbasicos" && (
-                    <ScrollReveal direction="left" delay={0.4}>
-                      <StyledCard
-                        sx={{
-                          background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`,
-                          width: "220px",
-                        }}
-                      >
-                        <StyledCardContent>
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            spacing={1}
-                            sx={{ mb: 1 }}
-                          >
-                            <DataExplorationRoundedIcon
-                              sx={{ color: color.primary, fontSize: 32 }}
-                            />
-                            <Typography
-                              variant="subtitle2"
-                              sx={{ color: color.primary, fontWeight: "bold" }}
-                            >
-                              Total{" "}
-                              {METRICAS_LIST.find(
-                                (m) => m.id === selectedMetric,
-                              )?.label || selectedMetric}
-                            </Typography>
-                          </Stack>
-                          <Typography
-                            variant="h3"
+
+                  {/* Contenedor para organizar el orden */}
+                  <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+
+                    {/* OVERLAY - PRIMERO en móvil (arriba del mapa) */}
+                    <Box
+                      sx={{
+                        position: { xs: "relative", md: "absolute" },
+                        top: { md: 20 },
+                        left: { md: 20 },
+                        zIndex: { xs: 1, md: 1300 },
+                        order: { xs: -1, md: 0 }, 
+                        mb: { xs: 2, md: 0 }, 
+                        width: "220px",
+                        pointerEvents: { md: "none" },
+                        "& > *": {
+                          pointerEvents: "auto",
+                        },
+                      }}
+                    >
+                      {selectedMetric !== "serviciosbasicos" && (
+                        <ScrollReveal direction="left" delay={0.4}>
+                          <StyledCard
                             sx={{
-                              color: color.secondary,
-                              fontWeight: "bold",
-                              fontSize: "clamp(2rem, 6vw, 2rem)",
-                              mb: 1,
+
+                              background: `linear-gradient(135deg, ${color.primary}15 0%, ${color.secondary}05 100%)`,
+                              backdropFilter: "blur(8px)",
+                              boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
                             }}
                           >
-                            {loading ? (
-                              <Skeleton width="80%" />
-                            ) : (
-                              <AnimatedCounter value={totalGeneral} />
-                            )}
-                          </Typography>
-                          {(filtros.municipio !== "Todos" ||
-                            filtros.departamento !== "Todos") && (
-                              <Chip
-                                label={
-                                  filtros.municipio !== "Todos"
-                                    ? filtros.municipio
-                                    : filtros.departamento
-                                }
-                                size="small"
+                            <StyledCardContent sx={{ p: 2 }}>
+                              <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                                <DataExplorationRoundedIcon
+                                  sx={{ color: color.primary, fontSize: 32 }}
+                                />
+                                <Typography
+                                  variant="subtitle2"
+                                  sx={{ color: color.primary, fontWeight: "bold" }}
+                                >
+                                  Total{" "}
+                                  {METRICAS_LIST.find(
+                                    (m) => m.id === selectedMetric,
+                                  )?.label || selectedMetric}
+                                </Typography>
+                              </Stack>
+                              <Typography
+                                variant="h3"
                                 sx={{
-                                  mt: 1,
-                                  bgcolor: color.secondary,
-                                  color: "white",
+                                  color: color.secondary,
+                                  fontWeight: "bold",
+                                  fontSize: "clamp(2rem, 6vw, 2rem)",
+                                  mb: 1,
                                 }}
-                              />
-                            )}
-                        </StyledCardContent>
-                      </StyledCard>
-                    </ScrollReveal>
-                  )}
-                  {selectedMetric === "serviciosbasicos" && (
-                    <>
-                      <ScrollReveal direction="left" delay={0.4}>
-                        <Chip
-                          icon={
-                            <School
-                              sx={{ color: color.primary, fontSize: 18 }}
+                              >
+                                {loading ? (
+                                  <Skeleton width="80%" />
+                                ) : (
+                                  <AnimatedCounter value={totalGeneral} />
+                                )}
+                              </Typography>
+                              {(filtros.municipio !== "Todos" ||
+                                filtros.departamento !== "Todos") && (
+                                  <Chip
+                                    label={
+                                      filtros.municipio !== "Todos"
+                                        ? filtros.municipio
+                                        : filtros.departamento
+                                    }
+                                    size="small"
+                                    sx={{
+                                      mt: 1,
+                                      bgcolor: color.secondary,
+                                      color: "white",
+                                    }}
+                                  />
+                                )}
+                            </StyledCardContent>
+                          </StyledCard>
+                        </ScrollReveal>
+                      )}
+                      {selectedMetric === "serviciosbasicos" && (
+                        <Stack spacing={2}>
+                          <ScrollReveal direction="left" delay={0.4}>
+                            <Chip
+                              icon={<School sx={{ color: color.primary, fontSize: 18 }} />}
+                              label={`Centros Educativos: ${loading ? "..." : (datosServiciosGrafico.totalCodigoSACE || 0).toLocaleString()}`}
+                              sx={{
+                                bgcolor: alpha(color.primary, 0.9),
+                                color: color.white,
+                                fontWeight: "bold",
+                                py: 2,
+                                backdropFilter: "blur(4px)",
+                                width: { xs: "100%", md: "auto" },
+                              }}
                             />
-                          }
-                          label={`Centros Educativos: ${loading ? "..." : (datosServiciosGrafico.totalCodigoSACE || 0).toLocaleString()}`}
-                          sx={{
-                            bgcolor: alpha(color.primary, 0.1),
-                            color: color.primary,
-                            fontWeight: "bold",
-                            py: 2,
-                            mb: 2,
-                          }}
-                        />
-                      </ScrollReveal>
-                      <ScrollReveal direction="left" delay={0.5}>
-                        <Chip
-                          icon={
-                            <ElectricalServicesIcon
-                              sx={{ color: color.primary, fontSize: 18 }}
+                          </ScrollReveal>
+                          <ScrollReveal direction="left" delay={0.5}>
+                            <Chip
+                              icon={<ElectricalServicesIcon sx={{ color: color.white, fontSize: 18 }} />}
+                              label={`Planteles con Servicios: ${loading ? "..." : (datosServiciosGrafico.totalPlanteles || 0).toLocaleString()}`}
+                              sx={{
+                                bgcolor: alpha(color.primary, 0.9),
+                                color: color.white,
+                                fontWeight: "bold",
+                                py: 2,
+                                backdropFilter: "blur(4px)",
+                                width: { xs: "100%", md: "auto" },
+                              }}
                             />
-                          }
-                          label={`Planteles con Servicios: ${loading ? "..." : (datosServiciosGrafico.totalPlanteles || 0).toLocaleString()}`}
-                          sx={{
-                            bgcolor: alpha(color.primary, 0.1),
-                            color: color.primary,
-                            fontWeight: "bold",
-                            py: 2,
-                          }}
+                          </ScrollReveal>
+                        </Stack>
+                      )}
+                    </Box>
+
+                    {/* MAPA - SEGUNDO en móvil (debajo de la card) */}
+                    <Box
+                      id="map-container"
+                      sx={{
+                        width: "100%",
+                        flex: 1,
+                        minHeight: 400,
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        order: { xs: 0, md: 1 }, // En móvil va después del overlay
+                        mt: { xs: 0, sm: 0, md: 0 },
+                      }}
+                    >
+                      {loading ? (
+                        <Skeleton
+                          variant="rectangular"
+                          width="100%"
+                          height={dimensions.height || 700}
+                          sx={{ borderRadius: 2 }}
+                          animation="wave"
                         />
-                      </ScrollReveal>
-                    </>
-                  )}
-                </Box>
+                      ) : !hasData ? (
+                        <EmptyState onClearFilters={handleClearAllFilters} />
+                      ) : (
+                        <MapaDinamico
+                          datosDepto={datosDepto}
+                          dimensions={dimensions}
+                          isMobile={isMobile}
+                          filtroDepartamento={filtros.departamento}
+                          filtroMunicipio={filtros.municipio}
+                          esCentroEducativo={selectedMetric === "centroeducativo"}
+                          esMetricaDocente={selectedMetric === "docentes"}
+                          modoSimple={false}
+                          esServiciosBasicos={selectedMetric === "serviciosbasicos"}
+                        />
+                      )}
+                    </Box>
+                  </Box>
+                </StyledCardContent>
               </StyledCard>
             </ScrollReveal>
           </Grid>
@@ -2331,98 +2366,98 @@ const datosGenero = useMemo(() => {
                       ) : !hasGenderData ? (
                         <EmptyState onClearFilters={handleClearAllFilters} />
                       ) : (
-                      <ResponsiveContainer width="100%" height={280}>
-  <PieChart>
-    <Pie
-      data={datosGenero}
-      dataKey="value"
-      cx="50%"
-      cy="50%"
-      innerRadius="60%"
-      outerRadius="90%"
-      paddingAngle={5}
-      labelLine={false}
-      label={({
-        name,
-        percent,
-        cx,
-        cy,
-        midAngle,
-        innerRadius,
-        outerRadius,
-      }) => {
-        // Solo mostrar label en el género seleccionado o si no hay filtro
-        const isSelected = filtros.genero === "Todos" || filtros.genero === name;
-        if (percent === 0 || !isSelected) return null;
-        
-        const radius =
-          innerRadius +
-          (outerRadius - innerRadius) * 0.5;
-        const x =
-          cx +
-          radius *
-          Math.cos((-midAngle * Math.PI) / 180);
-        const y =
-          cy +
-          radius *
-          Math.sin((-midAngle * Math.PI) / 180);
-        
-        return (
-          <text
-            x={x}
-            y={y}
-            fill="white"
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fontSize={12}
-            fontWeight="bold"
-          >
-            {`${(percent * 100).toFixed(2)}%`}
-          </text>
-        );
-      }}
-    >
-      {datosGenero.map((entry, idx) => {
-        // Determinar si este género está seleccionado en el filtro
-        const isSelected = filtros.genero === "Todos" || filtros.genero === entry.name;
-        
-        return (
-          <Cell
-            key={idx}
-            fill={
-              entry.name === "Femenino"
-                ? isSelected ? color.secondary : "#e0e0e0"
-                : isSelected ? color.primary : "#e0e0e0"
-            }
-            opacity={isSelected ? 1 : 0.5}
-          />
-        );
-      })}
-    </Pie>
-    <RechartsTooltip
-      formatter={(value, name) => {
-        const total = datosGenero.reduce(
-          (sum, d) => sum + d.value,
-          0,
-        );
-        const percent =
-          total > 0
-            ? ((value / total) * 100).toFixed(2)
-            : 0;
-        return [
-          `${value?.toLocaleString()} (${percent}%)`,
-          name,
-        ];
-      }}
-    />
-    <Legend
-      iconType="circle"
-      verticalAlign="bottom"
-      height={36}
-      wrapperStyle={{ paddingTop: 10 }}
-    />
-  </PieChart>
-</ResponsiveContainer>
+                        <ResponsiveContainer width="100%" height={280}>
+                          <PieChart>
+                            <Pie
+                              data={datosGenero}
+                              dataKey="value"
+                              cx="50%"
+                              cy="50%"
+                              innerRadius="60%"
+                              outerRadius="90%"
+                              paddingAngle={5}
+                              labelLine={false}
+                              label={({
+                                name,
+                                percent,
+                                cx,
+                                cy,
+                                midAngle,
+                                innerRadius,
+                                outerRadius,
+                              }) => {
+                                // Solo mostrar label en el género seleccionado o si no hay filtro
+                                const isSelected = filtros.genero === "Todos" || filtros.genero === name;
+                                if (percent === 0 || !isSelected) return null;
+
+                                const radius =
+                                  innerRadius +
+                                  (outerRadius - innerRadius) * 0.5;
+                                const x =
+                                  cx +
+                                  radius *
+                                  Math.cos((-midAngle * Math.PI) / 180);
+                                const y =
+                                  cy +
+                                  radius *
+                                  Math.sin((-midAngle * Math.PI) / 180);
+
+                                return (
+                                  <text
+                                    x={x}
+                                    y={y}
+                                    fill="white"
+                                    textAnchor="middle"
+                                    dominantBaseline="middle"
+                                    fontSize={12}
+                                    fontWeight="bold"
+                                  >
+                                    {`${(percent * 100).toFixed(2)}%`}
+                                  </text>
+                                );
+                              }}
+                            >
+                              {datosGenero.map((entry, idx) => {
+                                // Determinar si este género está seleccionado en el filtro
+                                const isSelected = filtros.genero === "Todos" || filtros.genero === entry.name;
+
+                                return (
+                                  <Cell
+                                    key={idx}
+                                    fill={
+                                      entry.name === "Femenino"
+                                        ? isSelected ? color.secondary : "#e0e0e0"
+                                        : isSelected ? color.primary : "#e0e0e0"
+                                    }
+                                    opacity={isSelected ? 1 : 0.5}
+                                  />
+                                );
+                              })}
+                            </Pie>
+                            <RechartsTooltip
+                              formatter={(value, name) => {
+                                const total = datosGenero.reduce(
+                                  (sum, d) => sum + d.value,
+                                  0,
+                                );
+                                const percent =
+                                  total > 0
+                                    ? ((value / total) * 100).toFixed(2)
+                                    : 0;
+                                return [
+                                  `${value?.toLocaleString()} (${percent}%)`,
+                                  name,
+                                ];
+                              }}
+                            />
+                            <Legend
+                              iconType="circle"
+                              verticalAlign="bottom"
+                              height={36}
+                              wrapperStyle={{ paddingTop: 10 }}
+                            />
+                          </PieChart>
+                        </ResponsiveContainer>
                       )}
                     </StyledCardContent>
                   </StyledCard>
@@ -2635,7 +2670,7 @@ const datosGenero = useMemo(() => {
                   ) : (
                     <ResponsiveContainer width="100%" height={375}>
                       <LineChart
-                        data={[...datosLineaPeriodo].reverse()}
+                        data={datosLineaPeriodo}
                         margin={{ top: 30, right: 40, left: 40, bottom: 20 }}
                       >
                         <XAxis

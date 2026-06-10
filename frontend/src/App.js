@@ -23,6 +23,7 @@ import INFOPD from "./views/Descargas/INFOP-D";
 import DESUNAHD from "./views/Descargas/DESUNAH-D";
 import CONEANFOD from "./views/Descargas/CONEANFO-D";
 import Dashboard from "./components/Dashboard";
+import ViewCounter from "./components/ViewCounter";
 import "./App.css";
 
 function App() {
@@ -38,13 +39,13 @@ function App() {
   ];
 
   const mostrarLayoutPublico = rutasConLayoutPublico.includes(
-    location.pathname
+    location.pathname,
   );
 
   return (
     <div className="app">
       {mostrarLayoutPublico && <Navbar />}
-
+     {mostrarLayoutPublico && <ViewCounter />}
       <Routes>
         {/* Rutas públicas */}
         <Route path="/" element={<INICIO />} />
@@ -65,7 +66,7 @@ function App() {
           }
         >
           <Route path="CambiarContrasena" element={<CambiarContraPage />} />
-  <Route index element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
           <Route path="Administracion/Usuarios" element={<Usuarios />} />
           <Route
             path="Administracion/RolesyPermisos"
