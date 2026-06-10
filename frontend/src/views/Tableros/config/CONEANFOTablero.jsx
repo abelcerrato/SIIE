@@ -1032,7 +1032,7 @@ const handleFilterChange = useCallback((key, value) => {
                                     <EmptyState onClearFilters={handleClearAllFilters} />
                                 ) : (
                                     <ResponsiveContainer width="100%" height={300}>
-                                        <LineChart    data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                        <LineChart    data={datosPeriodo} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                             <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                             <YAxis
                                                 hide

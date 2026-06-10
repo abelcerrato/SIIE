@@ -931,7 +931,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                 <EmptyState onClearFilters={onClearFilters} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
@@ -1557,7 +1557,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Matrícula"]} />
@@ -2027,7 +2027,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                             </Stack>
                             {loading ? <ChartSkeleton height={250} /> : (
                                 <ResponsiveContainer width="100%" height={250}>
-                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 10 }}>
+                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 10 }}>
                                         <XAxis dataKey="periodo" />
                                         <YAxis hide />
                                         <Line type="monotone" dataKey="total" stroke={color.primary} strokeWidth={3}
@@ -2692,7 +2692,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : (
                                 <ResponsiveContainer width="100%" height={300}>
-                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Graduados"]} />
@@ -3268,7 +3268,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                             </Stack>
                             {loading ? <ChartSkeleton height={200} /> : (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                                         <YAxis hide />
                                         <RechartsTooltip formatter={(value) => [value?.toLocaleString(), "Docentes"]} />
@@ -3570,7 +3570,7 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
                     </Tooltip>
                 </Stack>
                 <ResponsiveContainer width="100%" height={200}>
-                    <LineChart data={[...datosPeriodo].reverse()} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
+                    <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
                         <XAxis dataKey="periodo" tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                         <YAxis hide />
                         <RechartsTooltip formatter={(value) => [formatearValor(value), name]} />
