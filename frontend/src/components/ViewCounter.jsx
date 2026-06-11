@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// components/ViewCounter.jsx - Versión alternativa
+import React, { useState } from "react";
+import SiteViews from "react-siteviews";
 import {
   Box,
   Paper,
@@ -13,53 +15,11 @@ import {
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CloseIcon from '@mui/icons-material/Close';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-// Define los colores
-const color = {
-  primary: '#244e9e',
-  secondary: '#ad8411',
-  third: '#231f20',
-  white: '#FFFFFF',
-  contrastText: '#747474',
-};
+import color from "./color";
 
-const ViewCounter = () => {
+// Componente que envuelve a SiteViews y mantiene el diseño
+const ViewsWrapper = ({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [views, setViews] = useState(0);
-  const [loading, setLoading] = useState(true);
-
-  // Usar CountAPI que funciona localmente
-  useEffect(() => {
-    const fetchViews = async () => {
-      try {
-        const pageId = "siie-coned";
-        
-        // Verificar si ya se contó esta visita
-        const hasVisited = sessionStorage.getItem(`visited_${pageId}`);
-        
-        if (!hasVisited) {
-          // Incrementar contador
-          const response = await fetch(`https://api.countapi.xyz/hit/${pageId}/visits`);
-          const data = await response.json();
-          setViews(data.value);
-          sessionStorage.setItem(`visited_${pageId}`, 'true');
-        } else {
-          // Solo obtener valor actual
-          const response = await fetch(`https://api.countapi.xyz/get/${pageId}/visits`);
-          const data = await response.json();
-          setViews(data.value || 0);
-        }
-        setLoading(false);
-      } catch (error) {
-        console.error("Error con contador:", error);
-        // Fallback a contador local
-        const localViews = localStorage.getItem('local_views') || 0;
-        setViews(parseInt(localViews));
-        setLoading(false);
-      }
-    };
-
-    fetchViews();
-  }, []);
 
   if (!isVisible) {
     return (
@@ -104,7 +64,34 @@ const ViewCounter = () => {
         }}
       >
         <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-      
+          <Badge
+            badgeContent={
+              <Box sx={{ 
+                bgcolor: color.secondary, 
+                borderRadius: "50%", 
+                width: 14, 
+                height: 14,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <TrendingUpIcon sx={{ fontSize: 8, color: color.white }} />
+              </Box>
+            }
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            sx={{
+              "& .MuiBadge-badge": {
+                right: -2,
+                bottom: -2,
+                padding: 0,
+                minWidth: 'auto',
+                height: 'auto',
+              },
+            }}
+          >
             <Box
               sx={{
                 bgcolor: `${color.primary}15`,
@@ -118,7 +105,7 @@ const ViewCounter = () => {
             >
               <VisibilityIcon sx={{ color: color.primary }} />
             </Box>
-         
+          </Badge>
 
           <Box>
             <Typography
@@ -141,11 +128,7 @@ const ViewCounter = () => {
                 fontSize: "1.25rem",
               }}
             >
-              {loading ? (
-                <CircularProgress size={20} sx={{ color: color.primary }} />
-              ) : (
-                views.toLocaleString()
-              )}
+              {children}
             </Typography>
           </Box>
 
@@ -164,6 +147,23 @@ const ViewCounter = () => {
         </Box>
       </Paper>
     </Fade>
+  );
+};
+
+const ViewCounter = () => {
+  return (
+    <SiteViews
+      projectName="SIIE-CONED"
+      refresh="10"
+      suppressLogs
+      placeHolder={<CircularProgress size={20} sx={{ color: color.primary }} />}
+    >
+      {(views) => (
+        <ViewsWrapper>
+          {views !== undefined ? views.toLocaleString() : 0}
+        </ViewsWrapper>
+      )}
+    </SiteViews>
   );
 };
 
