@@ -23,7 +23,7 @@ import INFOPD from "./views/Descargas/INFOP-D";
 import DESUNAHD from "./views/Descargas/DESUNAH-D";
 import CONEANFOD from "./views/Descargas/CONEANFO-D";
 import Dashboard from "./components/Dashboard";
-import ViewCounter from "./components/ViewCounter";
+
 import "./App.css";
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
   return (
     <div className="app">
       {mostrarLayoutPublico && <Navbar />}
-     {mostrarLayoutPublico && <ViewCounter />}
+    
       <Routes>
         {/* Rutas públicas */}
         <Route path="/" element={<INICIO />} />
