@@ -34,11 +34,9 @@ import {
     Handshake,
     ChildCare,
     Psychology,
-
     PieChart as PieChartIcon,
     TableChart,
     Map as MapIcon,
-
     Users,
     TrendingUp,
 } from "@mui/icons-material";
@@ -174,11 +172,10 @@ const SUBMETRICAS_CONFIG = {
     },
 };
 
-// ==================== FUNCIONES AUXILIARES CORREGIDAS ====================
+// ==================== FUNCIONES AUXILIARES ====================
 const normalizarDatos = (datos, config = {}) => {
     if (!datos || !Array.isArray(datos)) return [];
     return datos.map((item) => {
-        // Función auxiliar para asegurar número
         const toNumber = (val) => {
             if (val === undefined || val === null || val === "") return 0;
             const num = Number(val);
@@ -188,7 +185,6 @@ const normalizarDatos = (datos, config = {}) => {
         return {
             ...item,
             anio: item.anio || item.AÑO,
-            // Convertir a número correctamente
             total: toNumber(item.matriculades) || toNumber(item.docentesdes) || toNumber(item.graduados) ||
                 toNumber(item["CANTIDAD DE EGRESADOS"]) ||
                 toNumber(item["TOTAL DE ESTUDIANTES DE PRIMER TÍTULO"]) ||
@@ -214,6 +210,126 @@ const cargarDatosGenerales = async (apiUrl) => {
     }
 };
 
+// ==================== HOOK PERSONALIZADO PARA FILTROS CONECTADOS ====================
+const useFiltrosConectados = (data, initialFilters, fieldMapping) => {
+    const [filtros, setFiltros] = useState(initialFilters);
+    const [opcionesDisponibles, setOpcionesDisponibles] = useState({});
+
+    // Función para obtener datos filtrados con los filtros actuales
+    const obtenerDatosFiltrados = useCallback((filtrosActuales) => {
+        if (!data.length) return [];
+
+
+        const resultado = data.filter(item => {
+            const pasaFiltros = Object.entries(filtrosActuales).every(([key, value]) => {
+                if (value === "Todos") return true;
+                const campo = fieldMapping[key];
+                if (!campo) return true;
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null" || itemValue === "") return true;
+                const coincide = normalizar(itemValue) === normalizar(value);
+                return coincide;
+            });
+
+
+            return pasaFiltros;
+        });
+
+        return resultado;
+    }, [data, fieldMapping]);
+
+    // Función para obtener opciones de un filtro específico basado en otros filtros
+    const obtenerOpcionesParaFiltro = useCallback((filtroKey, filtrosActuales) => {
+        if (!data.length) return ["Todos"];
+
+        // Construir filtros excluyendo el filtro actual
+        const otrosFiltros = {};
+        Object.entries(filtrosActuales).forEach(([key, value]) => {
+            if (key !== filtroKey && value !== "Todos") {
+                otrosFiltros[key] = value;
+            }
+        });
+
+        // Filtrar datos con los otros filtros
+        let datosFiltrados = data;
+        Object.entries(otrosFiltros).forEach(([key, value]) => {
+            const campo = fieldMapping[key];
+            if (campo) {
+                datosFiltrados = datosFiltrados.filter(item => {
+                    const itemValue = item[campo];
+                    return itemValue && itemValue !== "null" && normalizar(itemValue) === normalizar(value);
+                });
+            }
+        });
+
+        // Obtener valores únicos para el filtro actual
+        const campoActual = fieldMapping[filtroKey];
+        const opcionesSet = new Set();
+        datosFiltrados.forEach(item => {
+            const valor = item[campoActual];
+            if (valor && valor !== "null" && valor !== "") {
+                opcionesSet.add(valor);
+            }
+        });
+
+        const opciones = ["Todos", ...Array.from(opcionesSet).sort((a, b) => {
+            if (!isNaN(a) && !isNaN(b)) return Number(b) - Number(a);
+            return String(a).localeCompare(String(b));
+        })];
+
+        return opciones;
+    }, [data, fieldMapping]);
+
+    // Actualizar todas las opciones
+    const actualizarTodasOpciones = useCallback((filtrosActuales) => {
+        const nuevasOpciones = {};
+        Object.keys(fieldMapping).forEach(key => {
+            nuevasOpciones[key] = obtenerOpcionesParaFiltro(key, filtrosActuales);
+        });
+        setOpcionesDisponibles(nuevasOpciones);
+    }, [fieldMapping, obtenerOpcionesParaFiltro]);
+
+    // Cambiar un filtro
+    const cambiarFiltro = useCallback((key, value) => {
+        setFiltros(prev => {
+            const nuevosFiltros = { ...prev, [key]: value };
+            // Actualizar opciones después del cambio
+            actualizarTodasOpciones(nuevosFiltros);
+            return nuevosFiltros;
+        });
+    }, [actualizarTodasOpciones]);
+
+    // Limpiar todos los filtros
+    const limpiarFiltros = useCallback(() => {
+        const filtrosLimpios = {};
+        Object.keys(initialFilters).forEach(key => {
+            filtrosLimpios[key] = "Todos";
+        });
+        setFiltros(filtrosLimpios);
+        actualizarTodasOpciones(filtrosLimpios);
+    }, [initialFilters, actualizarTodasOpciones]);
+
+    // Inicializar opciones cuando cambian los datos
+    useEffect(() => {
+        if (data.length) {
+            actualizarTodasOpciones(filtros);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data]);
+
+    // Datos filtrados - calcular solo cuando cambian filtros o data
+    const datosFiltrados = useMemo(() => {
+        return obtenerDatosFiltrados(filtros);
+    }, [filtros, obtenerDatosFiltrados]);
+
+    return {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    };
+};
 
 // ==================== COMPONENTE DE TABLA SIMPLE ====================
 const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, loading, nameWidth = "auto" }) => {
@@ -264,7 +380,7 @@ const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, l
                             color: color.white,
                             position: "sticky",
                             top: 0,
-                            width: nameWidth,  // Ancho personalizado para la columna del título
+                            width: nameWidth,
                             maxWidth: nameWidth,
                             minWidth: nameWidth === "auto" ? undefined : nameWidth
                         }}>
@@ -276,7 +392,7 @@ const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, l
                             color: color.white,
                             position: "sticky",
                             top: 0,
-                            width: 120  // Ancho fijo para la columna de total
+                            width: 120
                         }}>
                             <TableSortLabel
                                 active={true}
@@ -298,8 +414,8 @@ const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, l
                     {sortedData.map((item, idx) => (
                         <TableRow key={idx} sx={{ "&:nth-of-type(odd)": { backgroundColor: "#f5f5f5" } }}>
                             <TableCell sx={{
-                                wordBreak: "break-word",  // Permite que el texto se rompa
-                                whiteSpace: "normal",     // Permite múltiples líneas
+                                wordBreak: "break-word",
+                                whiteSpace: "normal",
                                 maxWidth: nameWidth !== "auto" ? nameWidth : 300,
                                 minWidth: nameWidth !== "auto" ? nameWidth : undefined
                             }}>
@@ -315,167 +431,64 @@ const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, l
 };
 
 // ==================== COMPONENTE PARA MÉTRICA MATRÍCULA - DEPARTAMENTO ====================
-const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClearFilters, nombreMetrica }) => {
+const MatriculaDepartamento = ({ data, loading, nombreMetrica }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
     const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-    const [filteredData, setFilteredData] = useState([]);
-    const [datosMapa, setDatosMapa] = useState({});
 
-    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
-    const filtrarExcluyendo = useCallback((excluirKey) => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (key === excluirKey || value === "Todos") return true;
-                
-                const fieldMap = {
-                    anio: "anio",
-                    departamento: "departamento",
-                    institucion: "institucion",
-                    administracion: "administracion",
-                    gradoacademico: "gradoacademico",
-                    sede: "sede"
-                };
-                
-                const campo = fieldMap[key];
-                if (!campo) return true;
-                
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null") return true;
-                
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros]);
+    const fieldMapping = {
+        anio: "anio",
+        departamento: "departamento",
+        institucion: "institucion",
+        sede: "sede",
+        administracion: "administracion",
+        gradoacademico: "gradoacademico"
+    };
 
-    // ==================== OPCIONES DE FILTROS CONEXADAS ====================
-    const aniosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("anio");
-        const aniosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [filtrarExcluyendo]);
+    const initialFilters = {
+        anio: "Todos",
+        departamento: "Todos",
+        institucion: "Todos",
+        sede: "Todos",
+        administracion: "Todos",
+        gradoacademico: "Todos"
+    };
 
-    const departamentosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("departamento");
-        const deptosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [filtrarExcluyendo]);
+    const {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    } = useFiltrosConectados(data, initialFilters, fieldMapping);
 
-    const institucionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("institucion");
-        const instSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const sedesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("sede");
-        const sedeSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(sedeSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const administracionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("administracion");
-        const admSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.administracion && item.administracion !== "null") admSet.add(item.administracion);
-        });
-        return ["Todos", ...Array.from(admSet).sort()];
-    }, [filtrarExcluyendo]);
-
-   const gradosDisponibles = useMemo(() => {
-    // Usa filtrarExcluyendo con "gradoacademico" - esto EXCLUYE el filtro de grado
-    // por lo tanto, el grado seleccionado NO afecta a los grados disponibles
-    const datosFiltrados = filtrarExcluyendo("gradoacademico");
-    const gradoSet = new Set();
-    datosFiltrados.forEach((item) => {
-        if (item.gradoacademico && item.gradoacademico !== "null") gradoSet.add(item.gradoacademico);
-    });
-    return ["Todos", ...Array.from(gradoSet).sort()];
-}, [filtrarExcluyendo]);
-
-    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
-    const handleFilterChangeWithReset = useCallback((key, value) => {
-        // Actualizar el filtro
-        onFilterChange(key, value);
-        
-        // Resetear filtros dependientes cuando cambia un filtro padre
-        if (key === "departamento") {
-            onFilterChange("sede", "Todos");
-            onFilterChange("institucion", "Todos");
-        }
-        if (key === "institucion") {
-            onFilterChange("sede", "Todos");
-        }
-        // Nota: No se resetean otros filtros para mantener la independencia de cada uno
-    }, [onFilterChange]);
-
-    // ==================== FILTRAR DATOS PRINCIPALES ====================
-    useEffect(() => {
-        if (!data.length) {
-            setFilteredData([]);
-            setDatosMapa({});
-            return;
-        }
-
-        let filtrado = data.filter((d) => {
-            const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
-            const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-            const cumpleAdministracion = filtros.administracion === "Todos" || normalizar(d.administracion) === normalizar(filtros.administracion);
-            const cumpleGrado = filtros.gradoacademico === "Todos" || normalizar(d.gradoacademico) === normalizar(filtros.gradoacademico);
-            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
-            return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleAdministracion && cumpleGrado && cumpleSede;
-        });
-
-        setFilteredData(filtrado);
-
-        // Datos para el mapa
-        const datosMapaTemp = {};
-        filtrado.forEach((row) => {
-            const clave = row.departamento;
-            if (clave && clave !== "Todos" && clave !== "null") {
-                const claveNormalizada = normalizar(clave);
-                if (!datosMapaTemp[claveNormalizada]) {
-                    datosMapaTemp[claveNormalizada] = { valor: 0, nombre: clave };
-                }
-                datosMapaTemp[claveNormalizada].valor += (row.total || 0);
-            }
-        });
-        setDatosMapa(datosMapaTemp);
-    }, [data, filtros]);
-
-    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
     const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
+        cambiarFiltro(key, "Todos");
     };
 
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
+    const datosMapa = useMemo(() => {
+        const mapa = {};
+        datosFiltrados.forEach((row) => {
+            const clave = row.departamento;
+            if (clave && clave !== "Todos" && clave !== "null") {
+                const claveNormalizada = normalizar(clave);
+                if (!mapa[claveNormalizada]) {
+                    mapa[claveNormalizada] = { valor: 0, nombre: clave };
+                }
+                mapa[claveNormalizada].valor += (row.total || 0);
+            }
+        });
+        return mapa;
+    }, [datosFiltrados]);
 
-    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const inst = item.institucion;
             if (inst && inst !== "null") {
                 const valor = Number(item.total) || 0;
@@ -490,27 +503,27 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
             }
         });
         return Array.from(mapa.values()).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGenero = useMemo(() => {
         let mujeres = 0, hombres = 0;
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             mujeres += item.femenino || 0;
             hombres += item.masculino || 0;
         });
         return [{ name: "Femenino", value: mujeres }, { name: "Masculino", value: hombres }];
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGradoAcademico = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const grado = item.gradoacademico;
             if (grado && grado !== "null") {
                 mapa.set(grado, (mapa.get(grado) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosEtnia = useMemo(() => {
         const mapa = new Map();
@@ -520,7 +533,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
             "NICARAGUENSE", "225", "HIJO DE EMPLEADO", "LATINO",
         ]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.etnia;
             if (raw === null || raw === undefined) return;
             const etnia = String(raw).trim().toUpperCase();
@@ -531,40 +544,40 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         return Array.from(mapa.entries())
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosProgramas = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const programa = item.programa;
             if (programa && programa !== "null") {
                 mapa.set(programa, (mapa.get(programa) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosAdministracion = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const adm = item.administracion;
             if (adm && adm !== "null") {
                 mapa.set(adm, (mapa.get(adm) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosPeriodo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const anio = item.anio;
             if (anio) {
                 mapa.set(anio, (mapa.get(anio) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([periodo, total]) => ({ periodo, total })).sort((a, b) => a.periodo - b.periodo);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosDiscapacidad = useMemo(() => {
         const mapa = new Map();
@@ -578,7 +591,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
             "SIN DISPONIBILIDAD", "SIN REGISTRO", "PUBLICA", "ANEMIA", "ALERGIA A LA PENICILINA",
         ]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.discapacidad;
             if (raw === null || raw === undefined) return;
             const discOriginal = String(raw).trim();
@@ -591,11 +604,11 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         return Array.from(mapa.entries())
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosRangoEtario = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const rango = item.rangoedad;
             if (rango && rango !== "null" && rango !== "") {
                 mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
@@ -603,12 +616,20 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         });
         const order = ["15 AÑOS O MENOS", "15 A 20 AÑOS", "20 A 25 AÑOS", "25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70 AÑOS O MAS"];
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-    const hasData = filteredData.length > 0;
+    const totalGeneral = useMemo(() => datosFiltrados.reduce((sum, item) => sum + (item.total || 0), 0), [datosFiltrados]);
+    const hasData = datosFiltrados.length > 0;
 
-    // Medir dimensiones del mapa
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: opcionesDisponibles.anio || ["Todos"] },
+        { key: "departamento", label: "Departamento", options: opcionesDisponibles.departamento || ["Todos"] },
+        { key: "institucion", label: "Institución", options: opcionesDisponibles.institucion || ["Todos"] },
+        { key: "sede", label: "SEDE", options: opcionesDisponibles.sede || ["Todos"] },
+        { key: "administracion", label: "Administración", options: opcionesDisponibles.administracion || ["Todos"] },
+        { key: "gradoacademico", label: "Grado Académico", options: opcionesDisponibles.gradoacademico || ["Todos"] },
+    ];
+
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-desunah");
@@ -623,25 +644,15 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
 
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "SEDE", options: sedesDisponibles },
-        { key: "administracion", label: "Administración", options: administracionesDisponibles },
-        { key: "gradoacademico", label: "Grado Académico", options: gradosDisponibles },
-    ];
-
     return (
         <Box>
-            {/* Filtros */}
             <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
                 <Grid item size={{ xs: 12, md: 12 }}>
                     {hasActiveFilters && (
                         <FiltrosActivos
                             filtros={filtros}
                             onRemoveFilter={handleRemoveFilter}
-                            onClearAll={handleClearAllFilters}
+                            onClearAll={limpiarFiltros}
                         />
                     )}
                 </Grid>
@@ -652,15 +663,13 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
+                            onChange={(e) => cambiarFiltro(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
-            {/* El resto del JSX igual... */}
             <Grid container spacing={3}>
-                {/* Mapa */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
@@ -672,7 +681,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                                 {loading ? (
                                     <Skeleton variant="rectangular" width="100%" height="100%" />
                                 ) : !hasData ? (
-                                    <EmptyState onClearFilters={onClearFilters} />
+                                    <EmptyState onClearFilters={limpiarFiltros} />
                                 ) : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
@@ -704,7 +713,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Universidades - Barras */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -715,7 +723,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosUniversidades.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={200}>
                                     <BarChart data={datosUniversidades} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
@@ -730,7 +738,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Género - Pie */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -741,7 +748,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosGenero.every(d => d.value === 0) ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
@@ -782,7 +789,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Grado Académico - Barras */}
                 <Grid item size={{ xs: 12, md: 8 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -793,7 +799,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosGradoAcademico.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <BarChart data={datosGradoAcademico} margin={{ top: 10, right: 10, left: 30, bottom: 20 }}>
@@ -808,7 +814,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Etnia - Barras horizontales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -822,7 +827,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosEtnia.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <Box sx={{ height: 400, overflowY: "auto" }}>
                                     <ResponsiveContainer width="100%" height={Math.max(datosEtnia.length * 30, 400)}>
@@ -849,7 +854,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Programas - Tabla */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -859,7 +863,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Administración - Barras */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -873,7 +876,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosAdministracion.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={datosAdministracion}>
@@ -888,7 +891,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Discapacidad - Barras */}
                 <Grid item size={{ xs: 12, md: 8 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -902,7 +904,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosDiscapacidad.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <BarChart data={datosDiscapacidad} margin={{ top: 10, right: 10, left: 10, bottom: 25 }}>
@@ -917,7 +919,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -928,7 +929,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={200} />
                             ) : datosPeriodo.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={200}>
                                     <LineChart data={datosPeriodo} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
@@ -954,7 +955,6 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                     </StyledCard>
                 </Grid>
 
-                {/* Rango Etario - Barras */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -965,7 +965,7 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosRangoEtario.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={400}>
                                     <BarChart data={datosRangoEtario} margin={{ top: 10, right: 10, left: 40, bottom: 10 }}>
@@ -985,141 +985,60 @@ const MatriculaDepartamento = ({ data, loading, filtros, onFilterChange, onClear
 };
 
 // ==================== COMPONENTE PARA MATRÍCULA - MODALIDAD/CINE/INGRESO ====================
-const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange, onClearFilters }) => {
-    const [filteredData, setFilteredData] = useState([]);
-    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-    const [datosMapa, setDatosMapa] = useState({});
+const MatriculaModalidadCineIngreso = ({ data, loading }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
 
-    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
-    const filtrarExcluyendo = useCallback((excluirKey) => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (key === excluirKey || value === "Todos") return true;
-                
-                const fieldMap = {
-                    anio: "anio",
-                    departamento: "departamento",
-                    institucion: "institucion",
-                    sede: "sede"
-                };
-                
-                const campo = fieldMap[key];
-                if (!campo) return true;
-                
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null") return true;
-                
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros]);
+    const fieldMapping = {
+        anio: "anio",
+        departamento: "departamento",
+        institucion: "institucion",
+        sede: "sede"
+    };
 
-    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
-    const aniosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("anio");
-        const aniosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [filtrarExcluyendo]);
+    const initialFilters = {
+        anio: "Todos",
+        departamento: "Todos",
+        institucion: "Todos",
+        sede: "Todos"
+    };
 
-    const departamentosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("departamento");
-        const deptosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [filtrarExcluyendo]);
+    const {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    } = useFiltrosConectados(data, initialFilters, fieldMapping);
 
-    const institucionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("institucion");
-        const instSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const sedesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("sede");
-        const sedeSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(sedeSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
-    const handleFilterChangeWithReset = useCallback((key, value) => {
-        onFilterChange(key, value);
-        
-        // Resetear filtros dependientes
-        if (key === "departamento") {
-            onFilterChange("sede", "Todos");
-            onFilterChange("institucion", "Todos");
-        }
-        if (key === "institucion") {
-            onFilterChange("sede", "Todos");
-        }
-    }, [onFilterChange]);
-
-    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
     const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
+        cambiarFiltro(key, "Todos");
     };
 
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
-
-    // ==================== FILTRAR DATOS PRINCIPALES ====================
-    useEffect(() => {
-        if (!data.length) {
-            setFilteredData([]);
-            setDatosMapa({});
-            return;
-        }
-
-        let filtrado = data.filter((d) => {
-            const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
-            const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
-            return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleSede;
-        });
-        setFilteredData(filtrado);
-
-        // Datos para el mapa
-        const datosMapaTemp = {};
-        filtrado.forEach((row) => {
+    const datosMapa = useMemo(() => {
+        const mapa = {};
+        datosFiltrados.forEach((row) => {
             const clave = row.departamento;
             if (clave && clave !== "Todos" && clave !== "null") {
                 const claveNormalizada = normalizar(clave);
-                const valor = Number(row.total) || 0;
-                if (!datosMapaTemp[claveNormalizada]) {
-                    datosMapaTemp[claveNormalizada] = { valor: 0, nombre: clave };
+                if (!mapa[claveNormalizada]) {
+                    mapa[claveNormalizada] = { valor: 0, nombre: clave };
                 }
-                datosMapaTemp[claveNormalizada].valor += valor;
+                mapa[claveNormalizada].valor += (row.total || 0);
             }
         });
-        setDatosMapa(datosMapaTemp);
-    }, [data, filtros]);
+        return mapa;
+    }, [datosFiltrados]);
 
-    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const inst = item.institucion;
             if (inst && inst !== "null") {
                 const valor = Number(item.total) || 0;
@@ -1134,31 +1053,31 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
             }
         });
         return Array.from(mapa.values()).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGenero = useMemo(() => {
         let mujeres = 0, hombres = 0;
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             mujeres += item.femenino || 0;
             hombres += item.masculino || 0;
         });
         return [{ name: "Femenino", value: mujeres }, { name: "Masculino", value: hombres }];
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGradoAcademico = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const grado = item.gradoacademico;
             if (grado && grado !== "null") mapa.set(grado, (mapa.get(grado) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosJornada = useMemo(() => {
         const mapa = new Map();
         const excluir = new Set(["X", "NULL", "", "NO APLICA"]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.jornada;
             if (raw === null || raw === undefined) return;
             const jornada = String(raw).trim().toUpperCase();
@@ -1169,31 +1088,31 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         return Array.from(mapa.entries())
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosPeriodo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const anio = item.anio;
             if (anio) mapa.set(anio, (mapa.get(anio) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([periodo, total]) => ({ periodo, total })).sort((a, b) => a.periodo - b.periodo);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosModalidad = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const modalidad = item.modalidad;
             if (modalidad && modalidad !== "null") mapa.set(modalidad, (mapa.get(modalidad) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosExpresion = useMemo(() => {
         const mapa = new Map();
         const excluir = new Set(["NO", "NULL", "", "NO APLICA", "SIN DATOS", "NADA", "MESTIZO", "NINGUNA", "41611035"]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.expresion;
             if (raw === null || raw === undefined) return;
             const expresion = String(raw).trim().toUpperCase();
@@ -1204,13 +1123,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         return Array.from(mapa.entries())
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosTipoIngreso = useMemo(() => {
         const mapa = new Map();
         const excluir = new Set(["X", "NULL", "", "NO APLICA", "SIN DATOS", "NADA"]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.tipoingreso;
             if (raw === null || raw === undefined) return;
             const tipoIngreso = String(raw).trim().toUpperCase();
@@ -1221,12 +1140,18 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         return Array.from(mapa.entries())
             .map(([nombre, valor]) => ({ nombre, valor }))
             .sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-    const hasData = filteredData.length > 0;
+    const totalGeneral = useMemo(() => datosFiltrados.reduce((sum, item) => sum + (item.total || 0), 0), [datosFiltrados]);
+    const hasData = datosFiltrados.length > 0;
 
-    // Medir dimensiones del mapa
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: opcionesDisponibles.anio || ["Todos"] },
+        { key: "departamento", label: "Departamento", options: opcionesDisponibles.departamento || ["Todos"] },
+        { key: "institucion", label: "Institución", options: opcionesDisponibles.institucion || ["Todos"] },
+        { key: "sede", label: "SEDE", options: opcionesDisponibles.sede || ["Todos"] },
+    ];
+
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-modalidad");
@@ -1241,13 +1166,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
 
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "SEDE", options: sedesDisponibles },
-    ];
-
     return (
         <Box>
             <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
@@ -1256,7 +1174,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                         <FiltrosActivos
                             filtros={filtros}
                             onRemoveFilter={handleRemoveFilter}
-                            onClearAll={handleClearAllFilters}
+                            onClearAll={limpiarFiltros}
                         />
                     )}
                 </Grid>
@@ -1266,14 +1184,13 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
+                            onChange={(e) => cambiarFiltro(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
             <Grid container spacing={3}>
-                {/* Mapa */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
@@ -1282,7 +1199,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Por Departamento</Typography>
                             </Stack>
                             <Box id="map-container-modalidad" sx={{ width: "100%", height: dimensions.height }}>
-                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={onClearFilters} /> : (
+                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={limpiarFiltros} /> : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
                                         dimensions={dimensions}
@@ -1321,7 +1238,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Universidades - Barras */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1343,7 +1259,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Grado Académico - Barras */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1354,7 +1269,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosGradoAcademico.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <BarChart data={datosGradoAcademico} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }}>
@@ -1379,7 +1294,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Género - Pie */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1390,7 +1304,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosGenero.every(d => d.value === 0) ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
@@ -1418,7 +1332,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Jornada - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1449,7 +1362,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Modalidad - Barras Horizontales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1481,7 +1393,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Tipo de Ingreso - Barras Horizontales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1490,7 +1401,7 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Tipo de Ingreso</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : datosTipoIngreso.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={datosTipoIngreso} layout="vertical" margin={{ top: 10, right: 10, bottom: 10 }}>
@@ -1515,7 +1426,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Expresión - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1547,7 +1457,6 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
                     </StyledCard>
                 </Grid>
 
-                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1581,214 +1490,96 @@ const MatriculaModalidadCineIngreso = ({ data, loading, filtros, onFilterChange,
 };
 
 // ==================== COMPONENTE PARA MATRÍCULA - CAMPOS ====================
-const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilters }) => {
-    const [filteredData, setFilteredData] = useState([]);
-    const [orderAmplio, setOrderAmplio] = useState("desc");
-    const [orderEspecifico, setOrderEspecifico] = useState("desc");
-    const [orderDetallado, setOrderDetallado] = useState("desc");
-    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-    const [datosMapa, setDatosMapa] = useState({});
+const MatriculaCampos = ({ data, loading }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
+    const [orderAmplio, setOrderAmplio] = useState("desc");
+    const [orderEspecifico, setOrderEspecifico] = useState("desc");
+    const [orderDetallado, setOrderDetallado] = useState("desc");
 
-    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
-    const filtrarExcluyendo = useCallback((excluirKey) => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (key === excluirKey || value === "Todos") return true;
-                
-                const fieldMap = {
-                    anio: "anio",
-                    departamento: "departamento",
-                    institucion: "institucion",
-                    sede: "sede",
-                    campoamplio: "campoamplio",
-                    campoespecifico: "campoespecifico",
-                    campodetallado: "campodetallado"
-                };
-                
-                const campo = fieldMap[key];
-                if (!campo) return true;
-                
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null") return true;
-                
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros]);
+    const fieldMapping = {
+        anio: "anio",
+        departamento: "departamento",
+        institucion: "institucion",
+        sede: "sede",
+        campoamplio: "campoamplio",
+        campoespecifico: "campoespecifico",
+        campodetallado: "campodetallado"
+    };
 
-    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
-    const aniosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("anio");
-        const aniosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [filtrarExcluyendo]);
+    const initialFilters = {
+        anio: "Todos",
+        departamento: "Todos",
+        institucion: "Todos",
+        sede: "Todos",
+        campoamplio: "Todos",
+        campoespecifico: "Todos",
+        campodetallado: "Todos"
+    };
 
-    const departamentosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("departamento");
-        const deptosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [filtrarExcluyendo]);
+    const {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    } = useFiltrosConectados(data, initialFilters, fieldMapping);
 
-    const institucionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("institucion");
-        const instSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const sedesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("sede");
-        const sedeSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(sedeSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const campoAmplioDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("campoamplio");
-        const campoSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.campoamplio && item.campoamplio !== "null") campoSet.add(item.campoamplio);
-        });
-        return ["Todos", ...Array.from(campoSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const campoEspecificoDisponible = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("campoespecifico");
-        const campoSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.campoespecifico && item.campoespecifico !== "null") campoSet.add(item.campoespecifico);
-        });
-        return ["Todos", ...Array.from(campoSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const campoDetalladoDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("campodetallado");
-        const campoSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.campodetallado && item.campodetallado !== "null") campoSet.add(item.campodetallado);
-        });
-        return ["Todos", ...Array.from(campoSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
-    const handleFilterChangeWithReset = useCallback((key, value) => {
-        onFilterChange(key, value);
-        
-        // Resetear filtros dependientes
-        if (key === "departamento") {
-            onFilterChange("sede", "Todos");
-            onFilterChange("institucion", "Todos");
-        }
-        if (key === "institucion") {
-            onFilterChange("sede", "Todos");
-        }
-        if (key === "campoamplio") {
-            onFilterChange("campoespecifico", "Todos");
-            onFilterChange("campodetallado", "Todos");
-        }
-        if (key === "campoespecifico") {
-            onFilterChange("campodetallado", "Todos");
-        }
-    }, [onFilterChange]);
-
-    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
     const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
+        cambiarFiltro(key, "Todos");
     };
 
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
-
-    // ==================== FILTRAR DATOS PRINCIPALES ====================
-    useEffect(() => {
-        if (!data.length) {
-            setFilteredData([]);
-            setDatosMapa({});
-            return;
-        }
-
-        let filtrado = data.filter((d) => {
-            const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
-            const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
-            const cumpleCampoAmplio = filtros.campoamplio === "Todos" || normalizar(d.campoamplio) === normalizar(filtros.campoamplio);
-            const cumpleCampoEspecifico = filtros.campoespecifico === "Todos" || normalizar(d.campoespecifico) === normalizar(filtros.campoespecifico);
-            const cumpleCampoDetallado = filtros.campodetallado === "Todos" || normalizar(d.campodetallado) === normalizar(filtros.campodetallado);
-            
-            return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleSede &&
-                cumpleCampoAmplio && cumpleCampoEspecifico && cumpleCampoDetallado;
-        });
-
-        setFilteredData(filtrado);
-
-        // Datos para el mapa
-        const datosMapaTemp = {};
-        filtrado.forEach((row) => {
+    const datosMapa = useMemo(() => {
+        const mapa = {};
+        datosFiltrados.forEach((row) => {
             const clave = row.departamento;
             if (clave && clave !== "Todos" && clave !== "null") {
                 const claveNormalizada = normalizar(clave);
-                const valor = Number(row.total) || 0;
-                if (!datosMapaTemp[claveNormalizada]) {
-                    datosMapaTemp[claveNormalizada] = { valor: 0, nombre: clave };
+                if (!mapa[claveNormalizada]) {
+                    mapa[claveNormalizada] = { valor: 0, nombre: clave };
                 }
-                datosMapaTemp[claveNormalizada].valor += valor;
+                mapa[claveNormalizada].valor += (row.total || 0);
             }
         });
-        setDatosMapa(datosMapaTemp);
-    }, [data, filtros]);
+        return mapa;
+    }, [datosFiltrados]);
 
-    // ==================== DATOS PARA GRÁFICOS ====================
     const datosCampoAmplio = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const campo = item.campoamplio;
             if (campo && campo !== "null") mapa.set(campo, (mapa.get(campo) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosCampoEspecifico = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const campo = item.campoespecifico;
             if (campo && campo !== "null") mapa.set(campo, (mapa.get(campo) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosCampoDetallado = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const campo = item.campodetallado;
             if (campo && campo !== "null") mapa.set(campo, (mapa.get(campo) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const inst = item.institucion;
             if (inst && inst !== "null") {
                 const valor = Number(item.total) || 0;
@@ -1803,34 +1594,43 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
             }
         });
         return Array.from(mapa.values()).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGenero = useMemo(() => {
         let mujeres = 0, hombres = 0;
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             mujeres += item.femenino || 0;
             hombres += item.masculino || 0;
         });
         return [{ name: "Femenino", value: mujeres }, { name: "Masculino", value: hombres }];
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosPeriodo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const anio = item.anio;
             if (anio) mapa.set(anio, (mapa.get(anio) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([periodo, total]) => ({ periodo, total })).sort((a, b) => a.periodo - b.periodo);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const sortedAmplio = [...datosCampoAmplio].sort((a, b) => orderAmplio === "asc" ? a.valor - b.valor : b.valor - a.valor);
     const sortedEspecifico = [...datosCampoEspecifico].sort((a, b) => orderEspecifico === "asc" ? a.valor - b.valor : b.valor - a.valor);
     const sortedDetallado = [...datosCampoDetallado].sort((a, b) => orderDetallado === "asc" ? a.valor - b.valor : b.valor - a.valor);
 
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-    const hasData = filteredData.length > 0;
+    const totalGeneral = useMemo(() => datosFiltrados.reduce((sum, item) => sum + (item.total || 0), 0), [datosFiltrados]);
+    const hasData = datosFiltrados.length > 0;
 
-    // Medir dimensiones del mapa
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: opcionesDisponibles.anio || ["Todos"] },
+        { key: "departamento", label: "Departamento", options: opcionesDisponibles.departamento || ["Todos"] },
+        { key: "institucion", label: "Institución", options: opcionesDisponibles.institucion || ["Todos"] },
+        { key: "sede", label: "SEDE", options: opcionesDisponibles.sede || ["Todos"] },
+        { key: "campoamplio", label: "Campo Amplio", options: opcionesDisponibles.campoamplio || ["Todos"] },
+        { key: "campoespecifico", label: "Campo Específico", options: opcionesDisponibles.campoespecifico || ["Todos"] },
+        { key: "campodetallado", label: "Campo Detallado", options: opcionesDisponibles.campodetallado || ["Todos"] },
+    ];
+
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-campos");
@@ -1844,16 +1644,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
         window.addEventListener("resize", updateDimensions);
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
-
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "SEDE", options: sedesDisponibles },
-        { key: "campoamplio", label: "Campo Amplio", options: campoAmplioDisponibles },
-        { key: "campoespecifico", label: "Campo Específico", options: campoEspecificoDisponible },
-        { key: "campodetallado", label: "Campo Detallado", options: campoDetalladoDisponibles },
-    ];
 
     const renderTable = (data, title, valueKey, order, setOrder) => (
         <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
@@ -1893,7 +1683,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                         <FiltrosActivos
                             filtros={filtros}
                             onRemoveFilter={handleRemoveFilter}
-                            onClearAll={handleClearAllFilters}
+                            onClearAll={limpiarFiltros}
                         />
                     )}
                 </Grid>
@@ -1903,14 +1693,13 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
+                            onChange={(e) => cambiarFiltro(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
             <Grid container spacing={3}>
-                {/* Mapa */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
@@ -1922,7 +1711,7 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                                 {loading ? (
                                     <Skeleton variant="rectangular" width="100%" height="100%" />
                                 ) : !hasData ? (
-                                    <EmptyState onClearFilters={onClearFilters} />
+                                    <EmptyState onClearFilters={limpiarFiltros} />
                                 ) : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
@@ -1960,7 +1749,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Universidades - Barras */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -1982,7 +1770,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Género - Pie Chart */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2017,7 +1804,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 8 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2045,7 +1831,6 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
                     </StyledCard>
                 </Grid>
 
-                {/* Tablas de Campos */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2078,222 +1863,64 @@ const MatriculaCampos = ({ data, loading, filtros, onFilterChange, onClearFilter
 };
 
 // ==================== COMPONENTE PARA GRADUADOS ====================
-const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFilters }) => {
-    const [filteredData, setFilteredData] = useState([]);
-    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-    const [datosMapa, setDatosMapa] = useState({});
+const GraduadosComponent = ({ data, loading }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
 
-    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
-    const filtrarExcluyendo = useCallback((excluirKey) => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (key === excluirKey || value === "Todos") return true;
-                
-                const fieldMap = {
-                    anio: "anio",
-                    departamento: "departamento",
-                    institucion: "institucion",
-                    administracion: "administracion",
-                    sede: "sede",
-                    titulo: "titulo"
-                };
-                
-                const campo = fieldMap[key];
-                if (!campo) return true;
-                
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null") return true;
-                
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros]);
+    const fieldMapping = {
+        anio: "anio",
+        departamento: "departamento",
+        institucion: "institucion",
+        administracion: "administracion",
+        sede: "sede",
+        titulo: "titulo"
+    };
 
-      const esFiltroValido = useCallback((key, valor) => {
-        if (valor === "Todos") return true;
-        
-        const datosFiltrados = filtrarExcluyendo(key);
-        const campoMap = {
-            anio: "anio",
-            departamento: "departamento",
-            institucion: "institucion",
-            administracion: "administracion",
-            sede: "sede",
-            titulo: "titulo"
-        };
-        
-        const campo = campoMap[key];
-        return datosFiltrados.some(item => normalizar(item[campo]) === normalizar(valor));
-    }, [filtrarExcluyendo]);
+    const initialFilters = {
+        anio: "Todos",
+        departamento: "Todos",
+        institucion: "Todos",
+        administracion: "Todos",
+        sede: "Todos",
+        titulo: "Todos"
+    };
 
-    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
-    const aniosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("anio");
-        const aniosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [filtrarExcluyendo]);
+    const {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    } = useFiltrosConectados(data, initialFilters, fieldMapping);
 
-    const departamentosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("departamento");
-        const deptosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const institucionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("institucion");
-        const instSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const administracionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("administracion");
-        const admSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.administracion && item.administracion !== "null") admSet.add(item.administracion);
-        });
-        return ["Todos", ...Array.from(admSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const sedesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("sede");
-        const sedeSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(sedeSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const titulosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("titulo");
-        const titulosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.titulo && item.titulo !== "null") titulosSet.add(item.titulo);
-        });
-        return ["Todos", ...Array.from(titulosSet).sort()];
-    }, [filtrarExcluyendo]);
-
-
-  // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
-    const handleFilterChangeWithReset = useCallback((key, value) => {
-        // Actualizar el filtro
-        onFilterChange(key, value);
-        
-        // Resetear filtros dependientes jerárquicos
-        if (key === "departamento") {
-            onFilterChange("sede", "Todos");
-            onFilterChange("institucion", "Todos");
-        }
-        if (key === "institucion") {
-            onFilterChange("sede", "Todos");
-        }
-        
-        // Cuando cambia sede, verificar si el título actual es válido
-        if (key === "sede" && filtros.titulo !== "Todos") {
-            // Pequeño delay para que el estado se actualice
-            setTimeout(() => {
-                if (!esFiltroValido("titulo", filtros.titulo)) {
-                    onFilterChange("titulo", "Todos");
-                }
-            }, 0);
-        }
-        
-        // Cuando cambia título, verificar si la sede actual es válida
-        if (key === "titulo" && filtros.sede !== "Todos") {
-            setTimeout(() => {
-                if (!esFiltroValido("sede", filtros.sede)) {
-                    onFilterChange("sede", "Todos");
-                }
-            }, 0);
-        }
-    }, [onFilterChange, filtros, esFiltroValido]);
-
-    // ==================== EFECTO PARA VALIDAR FILTROS DESPUÉS DE CAMBIOS ====================
-    useEffect(() => {
-        // Validar que los filtros actuales sean consistentes con los datos
-        if (filtros.sede !== "Todos" && !esFiltroValido("sede", filtros.sede)) {
-            onFilterChange("sede", "Todos");
-        }
-        if (filtros.titulo !== "Todos" && !esFiltroValido("titulo", filtros.titulo)) {
-            onFilterChange("titulo", "Todos");
-        }
-        if (filtros.institucion !== "Todos" && !esFiltroValido("institucion", filtros.institucion)) {
-            onFilterChange("institucion", "Todos");
-        }
-        if (filtros.administracion !== "Todos" && !esFiltroValido("administracion", filtros.administracion)) {
-            onFilterChange("administracion", "Todos");
-        }
-        if (filtros.departamento !== "Todos" && !esFiltroValido("departamento", filtros.departamento)) {
-            onFilterChange("departamento", "Todos");
-        }
-        if (filtros.anio !== "Todos" && !esFiltroValido("anio", filtros.anio)) {
-            onFilterChange("anio", "Todos");
-        }
-    }, [data, filtros, esFiltroValido, onFilterChange]);
-
-    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
     const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
+        cambiarFiltro(key, "Todos");
     };
 
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
-
-    // ==================== FILTRAR DATOS PRINCIPALES ====================
-    useEffect(() => {
-        if (!data.length) {
-            setFilteredData([]);
-            setDatosMapa({});
-            return;
-        }
-
-        let filtrado = data.filter((d) => {
-            const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
-            const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-            const cumpleAdministracion = filtros.administracion === "Todos" || normalizar(d.administracion) === normalizar(filtros.administracion);
-            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
-            const cumpleTitulo = filtros.titulo === "Todos" || normalizar(d.titulo) === normalizar(filtros.titulo);
-            return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleAdministracion && cumpleSede && cumpleTitulo;
-        });
-        setFilteredData(filtrado);
-
-        const datosMapaTemp = {};
-        filtrado.forEach((row) => {
+    const datosMapa = useMemo(() => {
+        const mapa = {};
+        datosFiltrados.forEach((row) => {
             const clave = row.departamento;
             if (clave && clave !== "Todos" && clave !== "null") {
                 const claveNormalizada = normalizar(clave);
-                if (!datosMapaTemp[claveNormalizada]) {
-                    datosMapaTemp[claveNormalizada] = { valor: 0, nombre: clave };
+                if (!mapa[claveNormalizada]) {
+                    mapa[claveNormalizada] = { valor: 0, nombre: clave };
                 }
-                datosMapaTemp[claveNormalizada].valor += (row.total || 0);
+                mapa[claveNormalizada].valor += (row.total || 0);
             }
         });
-        setDatosMapa(datosMapaTemp);
-    }, [data, filtros]);
+        return mapa;
+    }, [datosFiltrados]);
 
-    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const inst = item.institucion;
             if (inst && inst !== "null") {
                 const valor = Number(item.total) || 0;
@@ -2308,22 +1935,22 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
             }
         });
         return Array.from(mapa.values()).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGenero = useMemo(() => {
         let mujeres = 0, hombres = 0;
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             mujeres += item.femenino || 0;
             hombres += item.masculino || 0;
         });
         return [{ name: "Femenino", value: mujeres }, { name: "Masculino", value: hombres }];
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosExpresion = useMemo(() => {
         const mapa = new Map();
         const excluir = new Set(["SIN DATOS", "NULL", "", "NO APLICA", "NO"]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.expresion;
             if (raw === null || raw === undefined) return;
             const expresion = String(raw).trim().toUpperCase();
@@ -2332,29 +1959,29 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
         });
 
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGradoAcademico = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const grado = item.gradoacademico;
             if (grado && grado !== "null") mapa.set(grado, (mapa.get(grado) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosModalidad = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const modalidad = item.modalidad;
             if (modalidad && modalidad !== "null") mapa.set(modalidad, (mapa.get(modalidad) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosTitulos = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const titulo = item.titulo;
             if (titulo && titulo !== "null" && titulo.trim() !== "") {
                 const tituloLimpio = titulo.trim().replace(/\s+/g, ' ');
@@ -2362,40 +1989,48 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosAdministracion = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const adm = item.administracion;
             if (adm && adm !== "null") mapa.set(adm, (mapa.get(adm) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosPeriodo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const anio = item.anio;
             if (anio) mapa.set(anio, (mapa.get(anio) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([periodo, total]) => ({ periodo, total })).sort((a, b) => a.periodo - b.periodo);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosRangoEtario = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const rango = item.rangoedad;
             if (rango && rango !== "null" && rango !== "") mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
         });
         const order = ["<18", "18 a 24", "25 a 34", "35 a 44", "45 a 54", "55 a 64", "65+"];
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-    const hasData = filteredData.length > 0;
+    const totalGeneral = useMemo(() => datosFiltrados.reduce((sum, item) => sum + (item.total || 0), 0), [datosFiltrados]);
+    const hasData = datosFiltrados.length > 0;
 
-    // Medir dimensiones del mapa
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: opcionesDisponibles.anio || ["Todos"] },
+        { key: "departamento", label: "Departamento", options: opcionesDisponibles.departamento || ["Todos"] },
+        { key: "institucion", label: "Institución", options: opcionesDisponibles.institucion || ["Todos"] },
+        { key: "sede", label: "SEDE", options: opcionesDisponibles.sede || ["Todos"] },
+        { key: "titulo", label: "Título", options: opcionesDisponibles.titulo || ["Todos"] },
+        { key: "administracion", label: "Administración", options: opcionesDisponibles.administracion || ["Todos"] },
+    ];
+
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-graduados");
@@ -2410,15 +2045,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
 
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "SEDE", options: sedesDisponibles },
-        { key: "titulo", label: "Título", options: titulosDisponibles },
-        { key: "administracion", label: "Administración", options: administracionesDisponibles },
-    ];
-
     return (
         <Box>
             <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
@@ -2427,7 +2053,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                         <FiltrosActivos
                             filtros={filtros}
                             onRemoveFilter={handleRemoveFilter}
-                            onClearAll={handleClearAllFilters}
+                            onClearAll={limpiarFiltros}
                         />
                     )}
                 </Grid>
@@ -2437,14 +2063,13 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
+                            onChange={(e) => cambiarFiltro(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
             </Grid>
 
             <Grid container spacing={3}>
-                {/* Mapa de Graduados por Departamento */}
                 <Grid item size={{ xs: 12 }}>
                     <StyledCard sx={{ position: "relative", overflow: "hidden" }}>
                         <StyledCardContent>
@@ -2453,7 +2078,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Graduados por Departamento</Typography>
                             </Stack>
                             <Box id="map-container-graduados" sx={{ width: "100%", height: dimensions.height }}>
-                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={onClearFilters} /> : (
+                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={limpiarFiltros} /> : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
                                         dimensions={dimensions}
@@ -2486,7 +2111,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Universidades - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2508,7 +2132,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Género - Pie Chart */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2517,7 +2140,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : datosGenero.every(d => d.value === 0) ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
@@ -2545,7 +2168,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Expresión - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2559,7 +2181,7 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                             {loading ? (
                                 <ChartSkeleton height={300} />
                             ) : datosExpresion.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <Box sx={{ width: "100%", height: 350, overflowY: "auto" }}>
                                     <ResponsiveContainer width="100%" height={Math.max(datosExpresion.length * 90, 350)}>
@@ -2589,7 +2211,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Administración - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2615,7 +2236,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Grado Académico - Barras Horizontales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2650,7 +2270,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Modalidad - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2682,7 +2301,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Por Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2711,7 +2329,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Rango Etario - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2734,7 +2351,6 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
                     </StyledCard>
                 </Grid>
 
-                {/* Títulos - Tabla */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -2749,139 +2365,60 @@ const GraduadosComponent = ({ data, loading, filtros, onFilterChange, onClearFil
 };
 
 // ==================== COMPONENTE PARA DOCENTES ====================
-const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilters }) => {
-    const [filteredData, setFilteredData] = useState([]);
-    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
-    const [datosMapa, setDatosMapa] = useState({});
+const DocentesComponent = ({ data, loading }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
+    const [dimensions, setDimensions] = useState({ width: 1000, height: 600 });
 
-    // ==================== FUNCIÓN PARA FILTRAR DATOS EXCLUYENDO UN FILTRO ====================
-    const filtrarExcluyendo = useCallback((excluirKey) => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (key === excluirKey || value === "Todos") return true;
-                
-                const fieldMap = {
-                    anio: "anio",
-                    departamento: "departamento",
-                    institucion: "institucion",
-                    sede: "sede"
-                };
-                
-                const campo = fieldMap[key];
-                if (!campo) return true;
-                
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null") return true;
-                
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros]);
+    const fieldMapping = {
+        anio: "anio",
+        departamento: "departamento",
+        institucion: "institucion",
+        sede: "sede"
+    };
 
-    // ==================== OPCIONES DE FILTROS CONECTADAS ====================
-    const aniosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("anio");
-        const aniosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.anio) aniosSet.add(String(item.anio));
-        });
-        return ["Todos", ...Array.from(aniosSet).sort((a, b) => b - a)];
-    }, [filtrarExcluyendo]);
+    const initialFilters = {
+        anio: "Todos",
+        departamento: "Todos",
+        institucion: "Todos",
+        sede: "Todos"
+    };
 
-    const departamentosDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("departamento");
-        const deptosSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.departamento && item.departamento !== "null") deptosSet.add(item.departamento);
-        });
-        return ["Todos", ...Array.from(deptosSet).sort()];
-    }, [filtrarExcluyendo]);
+    const {
+        filtros,
+        opcionesDisponibles,
+        cambiarFiltro,
+        limpiarFiltros,
+        datosFiltrados
+    } = useFiltrosConectados(data, initialFilters, fieldMapping);
 
-    const institucionesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("institucion");
-        const instSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.institucion && item.institucion !== "null") instSet.add(item.institucion);
-        });
-        return ["Todos", ...Array.from(instSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    const sedesDisponibles = useMemo(() => {
-        const datosFiltrados = filtrarExcluyendo("sede");
-        const sedeSet = new Set();
-        datosFiltrados.forEach((item) => {
-            if (item.sede && item.sede !== "null") sedeSet.add(item.sede);
-        });
-        return ["Todos", ...Array.from(sedeSet).sort()];
-    }, [filtrarExcluyendo]);
-
-    // ==================== HANDLER CON RESETEO DE DEPENDIENTES ====================
-    const handleFilterChangeWithReset = useCallback((key, value) => {
-        onFilterChange(key, value);
-        
-        // Resetear filtros dependientes
-        if (key === "departamento") {
-            onFilterChange("sede", "Todos");
-            onFilterChange("institucion", "Todos");
-        }
-        if (key === "institucion") {
-            onFilterChange("sede", "Todos");
-        }
-    }, [onFilterChange]);
-
-    // ==================== VERIFICAR FILTROS ACTIVOS ====================
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtros).some(value => value !== "Todos");
     }, [filtros]);
 
     const handleRemoveFilter = (key) => {
-        onFilterChange(key, "Todos");
+        cambiarFiltro(key, "Todos");
     };
 
-    const handleClearAllFilters = () => {
-        onClearFilters();
-    };
-
-    // ==================== FILTRAR DATOS PRINCIPALES ====================
-    useEffect(() => {
-        if (!data.length) {
-            setFilteredData([]);
-            setDatosMapa({});
-            return;
-        }
-
-        let filtrado = data.filter((d) => {
-            const cumpleAnio = filtros.anio === "Todos" || String(d.anio) === String(filtros.anio);
-            const cumpleDepartamento = filtros.departamento === "Todos" || normalizar(d.departamento) === normalizar(filtros.departamento);
-            const cumpleInstitucion = filtros.institucion === "Todos" || normalizar(d.institucion) === normalizar(filtros.institucion);
-            const cumpleSede = filtros.sede === "Todos" || normalizar(d.sede) === normalizar(filtros.sede);
-            return cumpleAnio && cumpleDepartamento && cumpleInstitucion && cumpleSede;
-        });
-        setFilteredData(filtrado);
-
-        const datosMapaTemp = {};
-        filtrado.forEach((row) => {
+    const datosMapa = useMemo(() => {
+        const mapa = {};
+        datosFiltrados.forEach((row) => {
             const clave = row.departamento;
             if (clave && clave !== "Todos" && clave !== "null") {
                 const claveNormalizada = normalizar(clave);
-                if (!datosMapaTemp[claveNormalizada]) {
-                    datosMapaTemp[claveNormalizada] = { valor: 0, nombre: clave };
+                if (!mapa[claveNormalizada]) {
+                    mapa[claveNormalizada] = { valor: 0, nombre: clave };
                 }
-                datosMapaTemp[claveNormalizada].valor += (row.total || 0);
+                mapa[claveNormalizada].valor += (row.total || 0);
             }
         });
-        setDatosMapa(datosMapaTemp);
-    }, [data, filtros]);
+        return mapa;
+    }, [datosFiltrados]);
 
-    // ==================== DATOS PARA GRÁFICOS ====================
     const datosUniversidades = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const inst = item.institucion;
             if (inst && inst !== "null") {
                 const valor = Number(item.total) || 0;
@@ -2896,90 +2433,90 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
             }
         });
         return Array.from(mapa.values()).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGenero = useMemo(() => {
         let mujeres = 0, hombres = 0;
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             mujeres += item.femenino || 0;
             hombres += item.masculino || 0;
         });
         return [{ name: "Femenino", value: mujeres }, { name: "Masculino", value: hombres }];
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosAdministracion = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const adm = item.administracion;
             if (adm && adm !== "null") mapa.set(adm, (mapa.get(adm) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosRangoEtario = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const rango = item.rangoedad;
             if (rango && rango !== "null" && rango !== "") mapa.set(rango, (mapa.get(rango) || 0) + (item.total || 0));
         });
         const order = ["25 A 30 AÑOS", "30 A 35 AÑOS", "35 A 40 AÑOS", "40 A 45 AÑOS", "45 A 50 AÑOS", "50 A 55 AÑOS", "55 A 60 AÑOS", "60 A 65 AÑOS", "65 A 70 AÑOS", "70+"];
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => order.indexOf(a.nombre) - order.indexOf(b.nombre));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosPeriodo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const anio = item.anio;
             if (anio) mapa.set(anio, (mapa.get(anio) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([periodo, total]) => ({ periodo, total })).sort((a, b) => a.periodo - b.periodo);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosDedicacion = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const dedicacion = item.dedicacion;
             if (dedicacion && dedicacion !== "null") mapa.set(dedicacion, (mapa.get(dedicacion) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor }));
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosDepartamentos = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const depto = item.nombredepartamento;
             if (depto && depto !== "null" && depto !== "") {
                 mapa.set(depto, (mapa.get(depto) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosCargo = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const cargo = item.cargoprincipal;
             if (cargo && cargo !== "null" && cargo !== "") {
                 mapa.set(cargo, (mapa.get(cargo) || 0) + (item.total || 0));
             }
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosGradoPrograma = useMemo(() => {
         const mapa = new Map();
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const grado = item.gradoprogramaprincipal;
             if (grado && grado !== "null" && grado !== "") mapa.set(grado, (mapa.get(grado) || 0) + (item.total || 0));
         });
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
     const datosContrato = useMemo(() => {
         const mapa = new Map();
         const excluir = new Set(["", "null", "SIN DATOS", "NO APLICA", "NINGUNO"]);
 
-        filteredData.forEach((item) => {
+        datosFiltrados.forEach((item) => {
             const raw = item.contrato;
             if (raw === null || raw === undefined) return;
             const contrato = String(raw).trim().toUpperCase();
@@ -2988,12 +2525,18 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         });
 
         return Array.from(mapa.entries()).map(([nombre, valor]) => ({ nombre, valor })).sort((a, b) => b.valor - a.valor);
-    }, [filteredData]);
+    }, [datosFiltrados]);
 
-    const totalGeneral = useMemo(() => filteredData.reduce((sum, item) => sum + (item.total || 0), 0), [filteredData]);
-    const hasData = filteredData.length > 0;
+    const totalGeneral = useMemo(() => datosFiltrados.reduce((sum, item) => sum + (item.total || 0), 0), [datosFiltrados]);
+    const hasData = datosFiltrados.length > 0;
 
-    // Medir dimensiones del mapa
+    const filtersConfig = [
+        { key: "anio", label: "Año", options: opcionesDisponibles.anio || ["Todos"] },
+        { key: "departamento", label: "Departamento", options: opcionesDisponibles.departamento || ["Todos"] },
+        { key: "institucion", label: "Institución", options: opcionesDisponibles.institucion || ["Todos"] },
+        { key: "sede", label: "SEDE", options: opcionesDisponibles.sede || ["Todos"] }
+    ];
+
     useEffect(() => {
         const updateDimensions = () => {
             const container = document.getElementById("map-container-docentes");
@@ -3008,13 +2551,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
         return () => window.removeEventListener("resize", updateDimensions);
     }, [isMobile, isTablet]);
 
-    const filtersConfig = [
-        { key: "anio", label: "Año", options: aniosDisponibles },
-        { key: "departamento", label: "Departamento", options: departamentosDisponibles },
-        { key: "institucion", label: "Institución", options: institucionesDisponibles },
-        { key: "sede", label: "SEDE", options: sedesDisponibles }
-    ];
-
     return (
         <Box>
             <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
@@ -3023,7 +2559,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                         <FiltrosActivos
                             filtros={filtros}
                             onRemoveFilter={handleRemoveFilter}
-                            onClearAll={handleClearAllFilters}
+                            onClearAll={limpiarFiltros}
                         />
                     )}
                 </Grid>
@@ -3033,7 +2569,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                             label={filter.label}
                             value={filtros[filter.key] || "Todos"}
                             options={filter.options}
-                            onChange={(e) => handleFilterChangeWithReset(filter.key, e.target.value)}
+                            onChange={(e) => cambiarFiltro(filter.key, e.target.value)}
                         />
                     </Grid>
                 ))}
@@ -3048,7 +2584,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold" }}>Docentes por Departamento</Typography>
                             </Stack>
                             <Box id="map-container-docentes" sx={{ width: "100%", height: dimensions.height }}>
-                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={onClearFilters} /> : (
+                                {loading ? <Skeleton variant="rectangular" width="100%" height="100%" /> : !hasData ? <EmptyState onClearFilters={limpiarFiltros} /> : (
                                     <MapaDinamico
                                         datosDepto={datosMapa}
                                         dimensions={dimensions}
@@ -3079,7 +2615,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Universidad - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3101,7 +2636,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Género - Pie Chart */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3110,7 +2644,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Género</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : datosGenero.every(d => d.value === 0) ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={350}>
                                     <PieChart>
@@ -3138,7 +2672,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Administración - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3163,7 +2696,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Departamentos - Tabla */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3173,7 +2705,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Cargo Principal - Tabla */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3183,7 +2714,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Grado Programa Principal - Tabla */}
                 <Grid item size={{ xs: 12, md: 4 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3193,7 +2723,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Dedicación - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3212,7 +2741,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Rango Etario - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 6 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3234,7 +2762,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Tipo de Contrato - Barras Verticales */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3243,7 +2770,7 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>Por Tipo de Contrato</Typography>
                             </Stack>
                             {loading ? <ChartSkeleton height={300} /> : datosContrato.length === 0 ? (
-                                <EmptyState onClearFilters={onClearFilters} />
+                                <EmptyState onClearFilters={limpiarFiltros} />
                             ) : (
                                 <ResponsiveContainer width="100%" height={300}>
                                     <BarChart data={datosContrato} margin={{ bottom: 80, left: 30, top: 20 }}>
@@ -3258,7 +2785,6 @@ const DocentesComponent = ({ data, loading, filtros, onFilterChange, onClearFilt
                     </StyledCard>
                 </Grid>
 
-                {/* Periodo - Línea */}
                 <Grid item size={{ xs: 12, md: 12 }}>
                     <StyledCard>
                         <StyledCardContent>
@@ -3337,7 +2863,6 @@ const IndicadorTasaMatricula = ({ dataBruta, dataNeta, loading }) => {
                         {loading ? <ChartSkeleton height={350} /> : (
                             <ResponsiveContainer width="100%" height={350}>
                                 <LineChart data={datosCombinados} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
-
                                     <XAxis dataKey="anio" />
                                     <YAxis tickFormatter={(value) => `${(value * 100).toFixed(0)}%`} domain={[0, 'auto']} hide />
                                     <RechartsTooltip formatter={(value) => formatPercent(value)} />
@@ -3390,14 +2915,13 @@ const IndicadorTasaMatricula = ({ dataBruta, dataNeta, loading }) => {
     );
 };
 
-
-
-// ==================== COMPONENTE PARA INDICADORES CON MÚLTIPLES LÍNEAS CORREGIDO ====================
+// ==================== COMPONENTE PARA INDICADORES CON MÚLTIPLES LÍNEAS ====================
 const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO", loading }) => {
     const [processedData, setProcessedData] = useState([]);
     const [lines, setLines] = useState([]);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
     useEffect(() => {
         if (!data || !data.length) {
             setProcessedData([]);
@@ -3405,21 +2929,17 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
             return;
         }
 
-        // Agrupar por año y por categoría
         const grupos = new Map();
         const categorias = new Set();
 
         data.forEach(item => {
             let anio = item[xKey] || item.anio;
             const categoria = item[groupBy];
-            // Asegurar que el valor es número
             let valor = Number(item[valueKey]) || 0;
 
-            // Para datos de graduados, buscar el campo correcto
             if (valueKey === "GRADUADOS" && !valor) {
                 valor = Number(item.graduados) || 0;
             }
-
 
             if (valueKey === "CANTIDAD DE EGRESADOS" && !valor) {
                 valor = Number(item["CANTIDAD DE EGRESADOS"]) || 0;
@@ -3427,9 +2947,7 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
 
             if (!anio || !categoria || valor === 0) return;
 
-            // Limpiar strings con espacios
             categoria.toString().trim();
-
             categorias.add(categoria);
 
             if (!grupos.has(anio)) grupos.set(anio, new Map());
@@ -3437,7 +2955,6 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
             anioMap.set(categoria, (anioMap.get(categoria) || 0) + valor);
         });
 
-        // Convertir a formato para recharts
         const result = Array.from(grupos.entries()).map(([anio, catMap]) => {
             const obj = { [xKey]: anio };
             catMap.forEach((valor, categoria) => {
@@ -3471,7 +2988,6 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
                 <Typography variant="h6" sx={{ color: color.primary, fontWeight: "bold", mb: 2 }}>{title}</Typography>
                 <ResponsiveContainer width="100%" height={350}>
                     <LineChart data={processedData} margin={{ top: 20, right: 30, left: 30, bottom: 20 }}>
-
                         <XAxis dataKey={xKey} tick={{ fill: color.contrastText, fontSize: 12 }} axisLine={{ stroke: color.primary }} />
                         <YAxis hide />
                         <RechartsTooltip formatter={(value) => value?.toLocaleString()} />
@@ -3506,7 +3022,6 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
     );
 };
 
-
 // ==================== COMPONENTE UNIFICADO PARA GRÁFICO DE PERIODO ====================
 const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeColor, name, formatValue = null }) => {
     const theme = useTheme();
@@ -3521,7 +3036,6 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
             let valor = Number(item[valueKey]) || 0;
 
             if (anio && valor > 0) {
-                // Si es el indicador especial, redondear a 6 decimales
                 if (valueKey === "indicador_4_2_por_10000_hab") {
                     valor = Number(valor.toFixed(6));
                 }
@@ -3533,7 +3047,6 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
             .map(([periodo, total]) => ({ periodo, total }))
             .sort((a, b) => a.periodo - b.periodo);
 
-        // Si es el indicador especial, limpiar decimales extra
         if (valueKey === "indicador_4_2_por_10000_hab") {
             result = result.map(item => ({
                 ...item,
@@ -3544,7 +3057,6 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
         return result;
     }, [data, valueKey]);
 
-    // Función para formatear el valor en el tooltip y label
     const formatearValor = (value) => {
         if (value === undefined || value === null) return "N/A";
         if (formatValue) return formatValue(value);
@@ -3592,7 +3104,6 @@ const IndicadorPeriodo = ({ data, loading, title, tooltipText, valueKey, strokeC
                                 !isMobile
                                     ? (props) => {
                                         const { x, y, value, index } = props;
-                                        // Alternar posición: arriba para índices pares, abajo para impares
                                         const isTop = index % 2 === 0;
                                         return (
                                             <text
@@ -3625,8 +3136,6 @@ const IndicadoresComponent = ({
     loading
 }) => {
     const [activeSubmetric, setActiveSubmetric] = useState("tasaMatricula");
-
-    // Estado para filtros comunes
     const [filtrosIndicadores, setFiltrosIndicadores] = useState({
         cine: "Todos",
         sexo: "Todos",
@@ -3641,7 +3150,6 @@ const IndicadoresComponent = ({
         tituloEdMedia: "Todos",
     });
 
-    // Función para obtener opciones únicas de los datos
     const obtenerOpciones = (data, campo) => {
         if (!data || !data.length) return ["Todos"];
         const opciones = new Set();
@@ -3654,7 +3162,6 @@ const IndicadoresComponent = ({
         return ["Todos", ...Array.from(opciones).sort()];
     };
 
-    // Función para filtrar datos según los filtros seleccionados
     const filtrarDatos = (data, filtrosAplicar) => {
         if (!data || !data.length) return [];
 
@@ -3677,7 +3184,6 @@ const IndicadoresComponent = ({
         });
     };
 
-    // Datos filtrados para cada sub-métrica
     const primerTituloFiltrado = useMemo(() => {
         return filtrarDatos(primerTituloData, filtrosIndicadores);
     }, [primerTituloData, filtrosIndicadores]);
@@ -3702,17 +3208,14 @@ const IndicadoresComponent = ({
         return filtrarDatos(estudiantesInternacionalesData, filtrosIndicadores);
     }, [estudiantesInternacionalesData, filtrosIndicadores]);
 
-    // Verificar si hay filtros activos
     const hasActiveFilters = useMemo(() => {
         return Object.values(filtrosIndicadores).some(value => value !== "Todos");
     }, [filtrosIndicadores]);
 
-    // Eliminar un filtro específico
     const handleRemoveFilter = (key) => {
         setFiltrosIndicadores(prev => ({ ...prev, [key]: "Todos" }));
     };
 
-    // Limpiar todos los filtros
     const handleClearAllFilters = () => {
         setFiltrosIndicadores({
             cine: "Todos",
@@ -3729,7 +3232,6 @@ const IndicadoresComponent = ({
         });
     };
 
-    // Definir las sub-métricas
     const submetricas = [
         { id: "tasaMatricula", label: "Tasa de Matrícula" },
         { id: "primerTitulo", label: "Primer Título de Educación Superior" },
@@ -3740,9 +3242,7 @@ const IndicadoresComponent = ({
         { id: "estudiantesInternacionales", label: "Estudiantes Internacionales" },
     ];
 
-    // Componente de filtros
     const FiltrosIndicadores = () => {
-        // Obtener opciones dinámicas según la sub-métrica activa
         const getOpcionesPorSubmetrica = () => {
             let dataSource = [];
             switch (activeSubmetric) {
@@ -3783,7 +3283,6 @@ const IndicadoresComponent = ({
 
         const opciones = getOpcionesPorSubmetrica();
 
-        // Configuración de filtros disponibles por sub-métrica
         const filtrosConfig = [];
 
         if (activeSubmetric === "primerTitulo" || activeSubmetric === "primerTituloXHabitante") {
@@ -3862,12 +3361,10 @@ const IndicadoresComponent = ({
                         />
                     </Grid>
                 ))}
-
             </Grid>
         );
     };
 
-    // Renderizar según la sub-métrica activa
     const renderContent = () => {
         switch (activeSubmetric) {
             case "tasaMatricula":
@@ -4055,7 +3552,6 @@ const IndicadoresComponent = ({
 
     return (
         <Box>
-            {/* Chips de sub-métricas */}
             <Stack direction="row" sx={{ flexWrap: "wrap", justifyContent: "center", gap: 1, mb: 3 }}>
                 {submetricas.map((sub) => (
                     <Chip
@@ -4079,7 +3575,7 @@ const IndicadoresComponent = ({
                     />
                 ))}
             </Stack>
-            {/* Filtros activos - Mostrar solo si hay filtros seleccionados */}
+
             {hasActiveFilters && (
                 <FiltrosActivos
                     filtros={filtrosIndicadores}
@@ -4088,30 +3584,24 @@ const IndicadoresComponent = ({
                 />
             )}
 
-            {/* Filtros dinámicos según la sub-métrica activa */}
             <FiltrosIndicadores />
 
-
-            {/* Contenido dinámico */}
             {renderContent()}
         </Box>
     );
 };
-
 
 // ==================== COMPONENTE PRINCIPAL ====================
 const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
     const [selectedMetric, setSelectedMetric] = useState("matricula");
     const [selectedSubmetric, setSelectedSubmetric] = useState("departamento");
 
-    // Estados para datos
     const [matriculaData, setMatriculaData] = useState([]);
     const [matriculaModCineData, setMatriculaModCineData] = useState([]);
     const [matriculaCamposData, setMatriculaCamposData] = useState([]);
     const [graduadosData, setGraduadosData] = useState([]);
     const [docentesData, setDocentesData] = useState([]);
 
-    // Estados para indicadores
     const [tasaMatriculaBruta, setTasaMatriculaBruta] = useState([]);
     const [tasaMatriculaNeta, setTasaMatriculaNeta] = useState([]);
     const [graduadosIndicadoresData, setGraduadosIndicadoresData] = useState([]);
@@ -4123,20 +3613,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
 
     const [loading, setLoading] = useState(true);
 
-
-    const [filtros, setFiltros] = useState({
-        anio: "Todos",
-        departamento: "Todos",
-        institucion: "Todos",
-        administracion: "Todos",
-        gradoacademico: "Todos",
-        sede: "Todos",
-        campoamplio: "Todos",
-        campoespecifico: "Todos",
-        campodetallado: "Todos",
-    });
-
-    // Cargar datos según métrica seleccionada
     useEffect(() => {
         const loadData = async () => {
             setLoading(true);
@@ -4159,7 +3635,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 const data = await cargarDatosGenerales(`${process.env.REACT_APP_API_URL}/vistaresumendesdocentesdepartamento`);
                 setDocentesData(data);
             } else if (selectedMetric === "indicadores") {
-                // Cargar todos los datos de indicadores
                 const [bruta, neta, graduados, internacionales, ingresan, nuevos, primerTit, primerTitXHab] = await Promise.all([
                     cargarDatosGenerales(SUBMETRICAS_CONFIG.tasaMatricula.subApis.bruta),
                     cargarDatosGenerales(SUBMETRICAS_CONFIG.tasaMatricula.subApis.neta),
@@ -4187,26 +3662,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
         loadData();
     }, [selectedMetric, selectedSubmetric]);
 
-    const handleFilterChange = useCallback((key, value) => {
-        setFiltros(prev => ({ ...prev, [key]: value }));
-    }, []);
-
-    const handleClearFilters = useCallback(() => {
-        setFiltros({
-            anio: "Todos",
-            departamento: "Todos",
-            institucion: "Todos",
-            administracion: "Todos",
-            gradoacademico: "Todos",
-            sede: "Todos",
-            campoamplio: "Todos",
-            campoespecifico: "Todos",
-            campodetallado: "Todos",
-            titulo: "Todos",
-
-        });
-    }, []);
-
     const metricasPrincipales = Object.entries(METRICAS_PRINCIPALES).map(([id, config]) => ({
         id,
         label: config.label,
@@ -4224,8 +3679,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
         return [];
     }, [selectedMetric]);
 
-
-
     const renderContent = () => {
         if (selectedMetric === "matricula") {
             if (selectedSubmetric === "departamento") {
@@ -4233,9 +3686,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                     <MatriculaDepartamento
                         data={matriculaData}
                         loading={loading}
-                        filtros={filtros}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
                         nombreMetrica="Matrícula"
                     />
                 );
@@ -4244,9 +3694,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                     <MatriculaModalidadCineIngreso
                         data={matriculaModCineData}
                         loading={loading}
-                        filtros={filtros}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
                     />
                 );
             } else if (selectedSubmetric === "campos") {
@@ -4254,9 +3701,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                     <MatriculaCampos
                         data={matriculaCamposData}
                         loading={loading}
-                        filtros={filtros}
-                        onFilterChange={handleFilterChange}
-                        onClearFilters={handleClearFilters}
                     />
                 );
             }
@@ -4265,9 +3709,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 <GraduadosComponent
                     data={graduadosData}
                     loading={loading}
-                    filtros={filtros}
-                    onFilterChange={handleFilterChange}
-                    onClearFilters={handleClearFilters}
                 />
             );
         } else if (selectedMetric === "docentes") {
@@ -4275,9 +3716,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 <DocentesComponent
                     data={docentesData}
                     loading={loading}
-                    filtros={filtros}
-                    onFilterChange={handleFilterChange}
-                    onClearFilters={handleClearFilters}
                 />
             );
         } else if (selectedMetric === "indicadores") {
@@ -4298,8 +3736,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
 
         return null;
     };
-
-
 
     return (
         <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
@@ -4331,7 +3767,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 </Typography>
             </ScrollReveal>
 
-            {/* Selector de Métrica Principal */}
             <ScrollReveal direction="left" delay={0.05}>
                 <Stack direction="row" sx={{ flexWrap: "wrap", justifyContent: "center", gap: 1, mb: 2 }}>
                     {metricasPrincipales.map((metric) => (
@@ -4365,7 +3800,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 </Stack>
             </ScrollReveal>
 
-            {/* Selector de Sub-métrica (solo para Matrícula) */}
             {submetricas.length > 0 && (
                 <ScrollReveal direction="left" delay={0.1}>
                     <Stack direction="row" sx={{ flexWrap: "wrap", justifyContent: "center", gap: 1, mb: 3 }}>
@@ -4395,8 +3829,6 @@ const DESUNAHTablero = ({ titulo = "DES-UNAH" }) => {
                 </ScrollReveal>
             )}
 
-
-            {/* Contenido principal */}
             {renderContent()}
         </Box>
     );
