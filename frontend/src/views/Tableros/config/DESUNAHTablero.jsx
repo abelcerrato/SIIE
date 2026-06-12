@@ -210,10 +210,33 @@ const cargarDatosGenerales = async (apiUrl) => {
     }
 };
 
-// ==================== HOOK PERSONALIZADO PARA FILTROS CONECTADOS (VERSIÓN DEFINITIVA) ====================
+// ==================== HOOK PERSONALIZADO PARA FILTROS CONECTADOS ====================
 const useFiltrosConectados = (data, initialFilters, fieldMapping) => {
     const [filtros, setFiltros] = useState(initialFilters);
     const [opcionesDisponibles, setOpcionesDisponibles] = useState({});
+
+    // Función para obtener datos filtrados con los filtros actuales
+    const obtenerDatosFiltrados = useCallback((filtrosActuales) => {
+        if (!data.length) return [];
+
+
+        const resultado = data.filter(item => {
+            const pasaFiltros = Object.entries(filtrosActuales).every(([key, value]) => {
+                if (value === "Todos") return true;
+                const campo = fieldMapping[key];
+                if (!campo) return true;
+                const itemValue = item[campo];
+                if (!itemValue || itemValue === "null" || itemValue === "") return true;
+                const coincide = normalizar(itemValue) === normalizar(value);
+                return coincide;
+            });
+
+
+            return pasaFiltros;
+        });
+
+        return resultado;
+    }, [data, fieldMapping]);
 
     // Función para obtener opciones de un filtro específico basado en otros filtros
     const obtenerOpcionesParaFiltro = useCallback((filtroKey, filtrosActuales) => {
@@ -271,7 +294,7 @@ const useFiltrosConectados = (data, initialFilters, fieldMapping) => {
         setFiltros(prev => {
             const nuevosFiltros = { ...prev, [key]: value };
             // Actualizar opciones después del cambio
-            setTimeout(() => actualizarTodasOpciones(nuevosFiltros), 0);
+            actualizarTodasOpciones(nuevosFiltros);
             return nuevosFiltros;
         });
     }, [actualizarTodasOpciones]);
@@ -294,21 +317,10 @@ const useFiltrosConectados = (data, initialFilters, fieldMapping) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data]);
 
-    // Datos filtrados
+    // Datos filtrados - calcular solo cuando cambian filtros o data
     const datosFiltrados = useMemo(() => {
-        if (!data.length) return [];
-        
-        return data.filter(item => {
-            return Object.entries(filtros).every(([key, value]) => {
-                if (value === "Todos") return true;
-                const campo = fieldMapping[key];
-                if (!campo) return true;
-                const itemValue = item[campo];
-                if (!itemValue || itemValue === "null" || itemValue === "") return true;
-                return normalizar(itemValue) === normalizar(value);
-            });
-        });
-    }, [data, filtros, fieldMapping]);
+        return obtenerDatosFiltrados(filtros);
+    }, [filtros, obtenerDatosFiltrados]);
 
     return {
         filtros,
@@ -318,6 +330,7 @@ const useFiltrosConectados = (data, initialFilters, fieldMapping) => {
         datosFiltrados
     };
 };
+
 // ==================== COMPONENTE DE TABLA SIMPLE ====================
 const SimpleTable = ({ data, nameKey, valueKey, title, onSort, orderDirection, loading, nameWidth = "auto" }) => {
     const [localOrder, setLocalOrder] = useState("desc");
@@ -2908,7 +2921,7 @@ const IndicadorMultipleLineas = ({ data, title, groupBy, valueKey, xKey = "AÑO"
     const [lines, setLines] = useState([]);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    
+
     useEffect(() => {
         if (!data || !data.length) {
             setProcessedData([]);
@@ -3562,7 +3575,7 @@ const IndicadoresComponent = ({
                     />
                 ))}
             </Stack>
-            
+
             {hasActiveFilters && (
                 <FiltrosActivos
                     filtros={filtrosIndicadores}
